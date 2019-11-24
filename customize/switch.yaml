@@ -1,0 +1,15 @@
+  switch.fan:
+    friendly_name: "Bedroom Fan"
+    icon: mdi:fan
+
+  switch.dehumidifier:
+    friendly_name: "Dehumidifier"
+    icon: mdi:fan
+
+  switch.tree:
+    friendly_name: "Christmas Tree"
+    icon: mdi:pine-tree
+
+  switch.bookshelf:
+    friendly_name: "Bookshelf Christmas Lights"
+    icon: mdi:pine-tree

@@ -1,0 +1,83 @@
+  ## Leviton Z-Wave Dimmer Switch -- Kitchen
+- platform: mqtt
+  name: Undercabinet Lights
+  state_topic: "smartthings/Undercabinet Lights/switch"
+  command_topic: "smartthings/Undercabinet Lights/switch"
+  brightness_state_topic: "smartthings/Undercabinet Lights/level"
+  brightness_command_topic: "smartthings/Undercabinet Lights/level"
+  brightness_scale: 101
+  payload_on: "on"
+  payload_off: "off"
+  optimistic: true
+  retain: true
+
+ ## Wemo Lights -> Regular lights
+- platform: switch
+  name: Bookshelf Lamp
+  entity_id: switch.bookshelf_lamp
+
+
+ ### Media Room ###
+- platform: group
+  name: Movie Lights
+  entities:
+    - light.movie_left
+    - light.movie_right
+
+
+ ### Basement Office ###
+- platform: group
+  name: Basement Office
+  entities:
+    - light.ryans_office_lamp
+
+
+ ### Laundry Room ###
+- platform: group
+  name: Laundry Room
+  entities:
+    - light.laundry_light
+
+
+ ### Living Room ###
+- platform: group
+  name: Living Room
+  entities:
+    - light.center_lamp
+    - light.entry_lamp
+    - light.bookshelf_lamp
+
+
+ ### Master Bedroom ###
+- platform: group
+  name: Master Bedroom
+  entities:
+    - light.dresser_lamp
+
+
+ ### Outside ###
+- platform: group
+  name: Outside Lights
+  entities:
+    - light.back_porch
+    - light.front_porch
+
+
+ ### Kitchen ###
+- platform: group
+  name: Kitchen Lights
+  entities:
+    - light.undercabinet_lights
+    - light.kitchen_nook
+
+- platform: group
+  name: Kitchen Nook
+  entities:
+    - light.nook_left
+    - light.nook_right
+
+- platform: group
+  name: Overhead Kitchen Lights
+  entities:
+    - light.kitchen_overhead_one
+    - light.kitchen_overhead_two
