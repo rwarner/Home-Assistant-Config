@@ -58,6 +58,19 @@ fi
 # Function to set LED to specified AP
 led_SetPattern() { 		 
 	ssh $USERNAME@${i} "echo $pattern > /proc/gpio/led_pattern; exit";
+
+        # UAP-AC PRO on 4.69 firmware, suddenly the AP is re-writing the /proc/gpio/led_pattern file
+        # back to it's former state after a few seconds...
+
+        # Changing the /var/etc/persistent/cfg/mgmt file seems to
+        # make it stay and changes the above file automatically
+        if [ "$pattern" -eq "0" ]; then
+            # If pattern is off or 0
+            ssh $USERNAME@${i} "sed -i '/mgmt.led_enabled=true/c\mgmt.led_enabled=false' /var/etc/persistent/cfg/mgmt; exit";
+        else
+            # If pattern is on or 1
+            ssh $USERNAME@${i} "sed -i '/mgmt.led_enabled=false/c\mgmt.led_enabled=true' /var/etc/persistent/cfg/mgmt; exit";
+        fi
 }  
 
 # Get IP address of AP or from cfg file
