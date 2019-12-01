@@ -69,7 +69,7 @@ living_room:
   entities:
     - light.center_lamp
     - light.entry_lamp
-    - switch.bookshelf_lamp
+    - light.bookcase_lamp
     - sensor.living_room_temperature
     - binary_sensor.living_room_occupancy
 master_bedroom:

@@ -46,7 +46,7 @@ media_player:
 wemo:
   static:
     - !secret wemo_ip_1 
-    - !secret wemo_ip_2
+    #- !secret wemo_ip_2
     #If needing to re-setup, launch HASS without switch ON -- plug in Wemo, then restart again
     #almost like you need the switch to be offline when first setting up
     #Still not statically set on network, but required without ports

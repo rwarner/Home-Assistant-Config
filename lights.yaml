@@ -12,9 +12,9 @@
   retain: true
 
  ## Wemo Lights -> Regular lights
-- platform: switch
-  name: Bookshelf Lamp
-  entity_id: switch.bookshelf_lamp
+#- platform: switch
+#  name: Bookshelf Lamp
+#  entity_id: switch.bookshelf_lamp
 
 
  ### Media Room ###
@@ -45,7 +45,7 @@
   entities:
     - light.center_lamp
     - light.entry_lamp
-    - light.bookshelf_lamp
+    - light.bookcase_lamp
 
 
  ### Master Bedroom ###
