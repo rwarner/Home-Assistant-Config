@@ -1,0 +1,59 @@
+- platform: yr
+- platform: sonarr
+  api_key: !secret sonarr_api
+  host: !secret sonarr_ip
+  port: !secret sonarr_port
+  monitored_conditions:
+    - upcoming
+  days: 7
+- platform: radarr
+  api_key: !secret radarr_api
+  host: !secret radarr_ip
+  port: !secret radarr_port
+  monitored_conditions:
+    - upcoming
+    - diskspace
+  days: 7
+- platform: tautulli
+  api_key: !secret tautulli_api
+  host: !secret tautulli_ip
+- platform: template
+  sensors:
+    ryan_status:
+      value_template: '{{ states.input_select.ryan_status_dropdown.state }}'
+      friendly_name: 'Ryan'
+    kelly_status:
+      value_template: '{{ states.input_select.kelly_status_dropdown.state }}'
+      friendly_name: 'Kelly'
+
+## Smart Things Button Pushes
+- platform: mqtt
+  name: Bedroom Fan Button
+  state_topic: "smartthings/Fan Button/button"
+  expire_after: 1
+## Smart Things Button Temperature
+- platform: mqtt
+  name: Bedroom Fan Button Temperature
+  state_topic: "smartthings/Fan Button/temperature"
+  unit_of_measurement: '°F'
+## Smart Things Button Battery
+- platform: mqtt
+  name: Bedroom Fan Button Battery
+  state_topic: "smartthings/Fan Button/battery"
+  unit_of_measurement: '%'
+
+## Smart Things Button Pushes
+- platform: mqtt
+  name: Bedroom Light Button
+  state_topic: "smartthings/Bedroom Light Button/button"
+  expire_after: 1
+## Smart Things Button Temperature
+- platform: mqtt
+  name: Bedroom Light Button Temperature
+  state_topic: "smartthings/Bedroom Light Button/temperature"
+  unit_of_measurement: '°F'
+## Smart Things Button Battery
+- platform: mqtt
+  name: Bedroom Light Button Battery
+  state_topic: "smartthings/Bedroom Light Button/battery"
+  unit_of_measurement: '%'

@@ -77,27 +77,6 @@ discovery:
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
 
-# Enables support for tracking state changes over time.
-history:
-  exclude:
-    domains:
-      - automation
-    entities:
-      - group.sun_based
-      - group.all_devices
-      - group.all_lights
-      - group.all_switches
-      - group.default_view
-      - group.devices_view
-      - group.all_automations
-      - group.kitchen
-      - light.nook_left
-      - light.nook_right
-      - light.kitchen_overhead_one
-      - light.kitchen_overhead_two
-      - light.floor_lamp_left
-      - light.floor_lamp_right
-
 recorder:
   purge_keep_days: 14
 
@@ -106,28 +85,6 @@ logbook:
 
 # Track the sun
 sun:
-
-# Weather Prediction
-sensor:
-  - platform: yr
-  - platform: sonarr
-    api_key: !secret sonarr_api
-    host: !secret sonarr_ip
-    port: !secret sonarr_port
-    monitored_conditions:
-      - upcoming
-    days: 7
-  - platform: radarr
-    api_key: !secret radarr_api
-    host: !secret radarr_ip
-    port: !secret radarr_port
-    monitored_conditions:
-      - upcoming
-      - diskspace
-    days: 7
-  - platform: tautulli
-    api_key: !secret tautulli_api
-    host: !secret tautulli_ip
 
 # Moved to integration
 #  - platform: huesensor
@@ -181,6 +138,28 @@ shell_command:
   unifi_ap_light_on: !secret unifi_ap_light_on #bash scripts/unifiAPLED.sh -i <ip_address> -s on
   unifi_ap_light_off: !secret unifi_ap_light_off #bash scripts/unifiAPLED.sh -i <ip_address> -s off
 
+# Custom home input_select
+input_select:
+  ryan_status_dropdown:
+    name: Ryan
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+    initial: Home
+  kelly_status_dropdown:
+    name: Kelly
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+    initial: Home
+
+
 #External files
 group: !include groups.yaml
 
@@ -189,3 +168,7 @@ automation: !include_dir_merge_list automation
 lock: !include locks.yaml
 
 light: !include lights.yaml
+
+history: !include history.yaml
+
+sensor: !include sensor.yaml

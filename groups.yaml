@@ -21,6 +21,12 @@ devices_view:
     - group.family
     - sensor.radarr_upcoming
 
+people_status:
+  name: People Status
+  entities:
+    - sensor.ryan_status
+    - sensor.kelly_status
+
 family:
   name: Family Group
   entities:
