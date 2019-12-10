@@ -18,7 +18,7 @@ logger:
 
 media_player:
   - platform: yamaha
-    host: !secret yamaha_ip
+    host: !secret yamaha_ip #Not a static ip
     source_ignore:
       - "AUDIO1"
       - "AUDIO2"
@@ -55,9 +55,6 @@ wemo:
 # new as of 0.97+?
 person:
 
-# Moved to integrations also covers device_tracker:
-#unifi:
-
 system_health:
 
 # Enables the frontend
@@ -85,19 +82,6 @@ logbook:
 
 # Track the sun
 sun:
-
-# Moved to integration
-#  - platform: huesensor
-
-#  - platform: template
-#    sensors:
-#      basement_temperature:
-#        friendly_name: 'Basement Temperature'
-#        value_template: "{{ ((states.sensor.basement_laundry_sensor.attributes.temperature | float * (9 / 5)) + 32) | round(1) }}"
-#       unit_of_measurement: °F
-
-#binary_sensor:
-#  - platform: huesensor
 
 # Text to speech
 tts:
@@ -172,3 +156,24 @@ light: !include lights.yaml
 history: !include history.yaml
 
 sensor: !include sensor.yaml
+
+
+
+#### Unused Integration below, either changed or moved to an integration in the UI
+
+# Moved to integrations also covers device_tracker:
+#unifi:
+
+
+# Moved to integration
+#  - platform: huesensor
+
+#  - platform: template
+#    sensors:
+#      basement_temperature:
+#        friendly_name: 'Basement Temperature'
+#        value_template: "{{ ((states.sensor.basement_laundry_sensor.attributes.temperature | float * (9 / 5)) + 32) | round(1) }}"
+#       unit_of_measurement: °F
+
+#binary_sensor:
+#  - platform: huesensor
