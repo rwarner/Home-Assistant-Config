@@ -1,0 +1,7 @@
+variable.ryan_status:
+  friendly_name: Ryan
+  icon: mdi:account
+
+variable.kelly_status:
+  friendly_name: Kelly
+  icon: mdi:account

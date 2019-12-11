@@ -1,0 +1,9 @@
+sensor.bedroom_avg_temp:
+  icon: mdi:thermometer
+
+
+sensor.ryan_status:
+      icon: mdi:account
+
+sensor.kelly_status:
+      icon: mdi:account

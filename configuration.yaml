@@ -126,26 +126,17 @@ shell_command:
   unifi_ap_light_on: !secret unifi_ap_light_on #bash scripts/unifiAPLED.sh -i <ip_address> -s on
   unifi_ap_light_off: !secret unifi_ap_light_off #bash scripts/unifiAPLED.sh -i <ip_address> -s off
 
-# Custom home input_select
-input_select:
-  ryan_status_dropdown:
-    name: Ryan
-    options:
-      - Home
-      - Just Arrived
-      - Just Left
-      - Away
-      - Extended Away
-    initial: Home
-  kelly_status_dropdown:
-    name: Kelly
-    options:
-      - Home
-      - Just Arrived
-      - Just Left
-      - Away
-      - Extended Away
-    initial: Home
+# Custom HACS variable integation
+# https://github.com/rogro82/hass-variables
+# Changed from input_select_dropdown to variables for being
+# able to keep states through restarts
+variable:
+  ryan_status:
+    value: "Unknown"
+    restore: true
+  kelly_status:
+    value: "Unknown"
+    restore: true
 
 
 #External files

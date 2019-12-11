@@ -19,10 +19,10 @@
 - platform: template
   sensors:
     ryan_status:
-      value_template: '{{ states.input_select.ryan_status_dropdown.state }}'
+      value_template: '{{ states.variable.ryan_status.state }}'
       friendly_name: 'Ryan'
     kelly_status:
-      value_template: '{{ states.input_select.kelly_status_dropdown.state }}'
+      value_template: '{{ states.variable.kelly_status.state }}'
       friendly_name: 'Kelly'
 
 # Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
@@ -31,6 +31,16 @@
     ecobee_preset:
       value_template: '{{ states.climate.thermostat.attributes.preset_mode }}'
       friendly_name: "Ecobee Preset"
+  
+  
+- platform: template
+  sensors:
+    bedroom_avg_temp:
+      friendly_name: "Bedroom Temperature"
+      unit_of_measurement: '°F'
+      value_template: >-
+        {{ ((float(states.sensor.bedroom_fan_button_temperature.state) + float(states.sensor.bedroom_light_button_temperature.state))  / 2)  | round(2) }}
+
 
 ## Smart Things Button Pushes
 - platform: mqtt

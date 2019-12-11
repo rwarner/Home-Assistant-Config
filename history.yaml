@@ -37,8 +37,7 @@ include:
     - sensor.thermostat_humidity
     - sensor.basement_laundry_sensor_temperature
     - sensor.living_room_temperature
-    - sensor.bedroom_fan_button_temperature
-    - sensor.bedroom_light_button_temperature
+    - sensor.bedroom_avg_temp
      
     - sensor.glances_cpu_temp
     - sensor.glances_ram_used_percent
