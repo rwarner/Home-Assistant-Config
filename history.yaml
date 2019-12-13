@@ -20,14 +20,14 @@ include:
     - sensor.bedroom_fan_button
     - sensor.bedroom_light_button
     - switch.fan
-    - light.media_room
-    - light.living_room
+    - light.media_room_lights
+    - light.living_room_lights
     - light.kitchen_lights
     - light.movie_lights
-    - light.master_bedroom
+    - light.master_bedroom_lights
     - light.outside_lights
-    - light.laundry_room
-    - light.basement_office
+    - light.laundry_room_lights
+    - light.basement_office_lights
 
     - sensor.bedroom_fan_button_battery
     - sensor.bedroom_light_button_battery

@@ -2,11 +2,11 @@ toggle_dresser_lamp:
   sequence:
     - service: light.toggle
       entity_id: 
-        - light.master_bedroom
+        - light.master_bedroom_lights
     # Only continue if light is on, we want to automate the
     # scene to a dim setting from the Hue app
     - condition: state
-      entity_id: light.master_bedroom
+      entity_id: light.master_bedroom_lights
       state: 'on'
     - service: hue.hue_activate_scene
       data_template:
