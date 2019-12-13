@@ -24,8 +24,15 @@
     - light.movie_left
     - light.movie_right
 
+ ### Media Room ###
+- platform: group
+  name: Media Room
+  entities:
+    - light.movie_left
+    - light.movie_right
+    - light.rear_entry_lamp
 
- ### Basement Office ###
+### Basement Office ###
 - platform: group
   name: Basement Office
   entities:

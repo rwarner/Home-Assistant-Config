@@ -52,6 +52,7 @@ media_room:
   name: Media Room
   entities:
     - group.media_room_movie_lights
+    - light.rear_entry_lamp
 #    - media_player.media_room #Nvidia Shield name
     - media_player.yamaha_receiver
     - lock.back_door
