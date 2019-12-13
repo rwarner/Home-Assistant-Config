@@ -132,10 +132,10 @@ shell_command:
 # able to keep states through restarts
 variable:
   ryan_status:
-    value: "Unknown"
+    #value: "Unknown"
     restore: true
   kelly_status:
-    value: "Unknown"
+    #value: "Unknown"
     restore: true
 
 
