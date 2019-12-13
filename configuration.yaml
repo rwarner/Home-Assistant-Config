@@ -152,6 +152,7 @@ history: !include history.yaml
 
 sensor: !include sensor.yaml
 
+script: !include script.yaml
 
 
 #### Unused Integration below, either changed or moved to an integration in the UI
