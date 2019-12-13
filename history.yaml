@@ -5,22 +5,22 @@ include:
   entities:
     - weather.dark_sky
     - sun.sun
-    - weather.thermostat
+    #- weather.thermostat #Favoring Dark Sky
     #- group.climate # This on / off is solely based on occupancy
     - sensor.ecobee_preset
     - alarm_control_panel.alexa_guard_de7c8
     - group.family
-    - person.kelly
+    #- person.kelly
     - sensor.kelly_status
-    - person.ryan
+    #- person.ryan
     - sensor.ryan_status
     - binary_sensor.living_room_occupancy
     - binary_sensor.thermostat_occupancy
     - binary_sensor.basement_laundry_sensor_motion
     - sensor.bedroom_fan_button
     - sensor.bedroom_light_button
-    - group.media_room
     - switch.fan
+    - light.media_room
     - light.living_room
     - light.kitchen_lights
     - light.movie_lights
