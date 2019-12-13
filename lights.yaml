@@ -26,7 +26,7 @@
 
  ### Media Room ###
 - platform: group
-  name: Media Room
+  name: Media Room Lights
   entities:
     - light.movie_left
     - light.movie_right
@@ -34,21 +34,21 @@
 
 ### Basement Office ###
 - platform: group
-  name: Basement Office
+  name: Basement Office Lights
   entities:
     - light.ryans_office_lamp
 
 
  ### Laundry Room ###
 - platform: group
-  name: Laundry Room
+  name: Laundry Room Lights
   entities:
     - light.laundry_light
 
 
  ### Living Room ###
 - platform: group
-  name: Living Room
+  name: Living Room Lights
   entities:
     - light.center_lamp
     - light.entry_lamp
@@ -57,7 +57,7 @@
 
  ### Master Bedroom ###
 - platform: group
-  name: Master Bedroom
+  name: Master Bedroom Lights
   entities:
     - light.dresser_lamp
 
@@ -78,7 +78,7 @@
     - light.kitchen_nook
 
 - platform: group
-  name: Kitchen Nook
+  name: Kitchen Nook Lights
   entities:
     - light.nook_left
     - light.nook_right
