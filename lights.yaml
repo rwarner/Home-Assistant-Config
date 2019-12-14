@@ -17,19 +17,12 @@
 #  entity_id: switch.bookshelf_lamp
 
 
- ### Media Room ###
-- platform: group
-  name: Movie Lights
-  entities:
-    - light.movie_left
-    - light.movie_right
 
  ### Media Room ###
 - platform: group
   name: Media Room Lights
   entities:
-    - light.movie_left
-    - light.movie_right
+    - light.movie_screen
     - light.rear_entry_lamp
 
 ### Basement Office ###
@@ -77,14 +70,24 @@
     - light.undercabinet_lights
     - light.kitchen_nook
 
+
+
+
+#### SINGLE USE ENTITIES, NOT NAMED "LIGHTS" ###
 - platform: group
-  name: Kitchen Nook Lights
+  name: Kitchen Nook
   entities:
     - light.nook_left
     - light.nook_right
 
 - platform: group
-  name: Overhead Kitchen Lights
+  name: Overhead Kitchen
   entities:
     - light.kitchen_overhead_one
     - light.kitchen_overhead_two
+ 
+- platform: group
+  name: Movie Screen
+  entities:
+    - light.movie_left
+    - light.movie_right
