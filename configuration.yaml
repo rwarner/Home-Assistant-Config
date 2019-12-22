@@ -142,6 +142,37 @@ variable:
     restore: true
 
 
+binary_sensor:
+  - platform: template
+    sensors:
+      device_critical:
+        value_template: >-
+          "{{ is_state('states.sensor.garage_camera','Offline')
+          or is_state('states.sensor.hdhomerun_extend', 'Offline')
+          or is_state('states.sensor.hue_bridge', 'Offline')
+          or is_state('states.sensor.kitchen_tablet', 'Offline')
+          or is_state('states.sensor.logitech_harmony_hub', 'Offline')
+          or is_state('states.sensor.smartthings_hub', 'Offline')
+          or is_state('states.sensor.synology_nas', 'Offline')
+          or is_state('states.sensor.yamaha_receiver', 'Offline') }}"
+        friendly_name: 'Device Critical'
+
+#alert:
+#  device_critical:
+#    name: A device is critical
+#    entity_id: sensor.device_critical
+#    state: 'on'
+#    repeat: 15
+#    can_acknowledge: True
+#    skip_first: True
+#    notifiers:
+#      - ryan
+
+notify:
+  - platform: discord
+    name: discord
+    token: !secret discord_token
+
 #External files
 group: !include groups.yaml
 
