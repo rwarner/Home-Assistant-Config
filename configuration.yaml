@@ -138,7 +138,7 @@ variable:
     #value: "Unknown"
     restore: true
   tautilli_data:
-    #value: "Unknown"
+    value: ""
     restore: true
 
 
