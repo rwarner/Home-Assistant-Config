@@ -35,6 +35,9 @@ include:
     - sensor.thermostat_temperature
     - climate.thermostat
     - sensor.thermostat_humidity
+    - climate.media_room
+    - sensor.media_room_humidity
+    - sensor.media_room_temperature
     - sensor.basement_laundry_sensor_temperature
     - sensor.living_room_temperature
     - sensor.bedroom_avg_temp

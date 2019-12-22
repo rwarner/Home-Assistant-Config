@@ -40,6 +40,9 @@ climate:
     - climate.thermostat
     - sensor.thermostat_humidity
     - sensor.living_room_temperature
+    - climate.media_room
+    - sensor.media_room_humidity
+    - sensor.media_room_temperature
 #    - sensor.basement_laundry_sensor_temperature
     - binary_sensor.thermostat_occupancy
     - binary_sensor.living_room_occupancy
