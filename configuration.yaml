@@ -137,6 +137,9 @@ variable:
   kelly_status:
     #value: "Unknown"
     restore: true
+  tautilli_data:
+    #value: "Unknown"
+    restore: true
 
 
 #External files
