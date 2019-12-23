@@ -5,7 +5,7 @@ toggle_dresser_lamp:
         - light.master_bedroom_lights
     # Only continue if light is on, we want to automate the
     # scene to a dim setting from the Hue app
-    - delay: '00:00:02'
+    - delay: '00:00:01'
     - condition: state
       entity_id: light.master_bedroom_lights
       state: 'on'
@@ -13,9 +13,9 @@ toggle_dresser_lamp:
       data_template:
         group_name: Bedroom
         scene_name: >
-          {% if now().hour > 22 %}
+          {% if now().hour >= 22 %}
             Night lamp
-          {% elif now().hour < 7 %}
+          {% elif now().hour <= 7 %}
             Night lamp
           {% else %}
             Bright
