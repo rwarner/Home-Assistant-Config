@@ -105,6 +105,13 @@ camera:
     port: !secret foscam_port
     username: !secret foscam_user
     password: !secret foscam_pass
+  - platform: generic
+    name: Rear Porch Camera
+    still_image_url: !secret unifi_rear_porch_camera_still
+    stream_source: !secret unifi_rear_porch_camera_source
+    verify_ssl: false
+
+stream:
 
 ecobee:
   api_key: !secret ecobee_api 
