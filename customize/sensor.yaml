@@ -3,7 +3,22 @@ sensor.bedroom_avg_temp:
 
 
 sensor.ryan_status:
-      icon: mdi:account
+  icon: mdi:account
 
 sensor.kelly_status:
-      icon: mdi:account
+  icon: mdi:account
+
+sensor.kitchen_motion_sensor:
+  device_class: occupancy
+
+sensor.kitchen_motion_sensor_temperature:
+  friendly_name: Kitchen Temperature
+
+sensor.kitchen_motion_sensor_battery:
+  device_class: battery
+
+sensor.bedroom_light_button_battery:
+  device_class: battery
+
+sensor.bedroom_fan_button_battery:
+  device_class: battery
