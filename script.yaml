@@ -21,3 +21,10 @@ toggle_dresser_lamp:
             Bright
           {% endif %}
 
+turn_on_kitchen_tablet:
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: homeassistant
+        payload: "wakedevice"
+        qos: 0
