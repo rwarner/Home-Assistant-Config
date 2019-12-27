@@ -74,6 +74,20 @@
   state_topic: "smartthings/Bedroom Light Button/battery"
   unit_of_measurement: '%'
 
+## Smart Things Kitchen Motion Sensor
+- platform: mqtt
+  name: Kitchen Motion Sensor
+  state_topic: "smartthings/Kitchen Motion Sensor/motion"
+## Smart Things Kitchen Motion Sensor
+- platform: mqtt
+  name: Kitchen Motion Sensor Temperature
+  state_topic: "smartthings/Kitchen Motion Sensor/temperature"
+  unit_of_measurement: '°F'
+## Smart Things Kitchen Motion Sensor
+- platform: mqtt
+  name: Kitchen Motion Sensor Battery
+  state_topic: "smartthings/Kitchen Motion Sensor/battery"
+  unit_of_measurement: '%'
 
 
 #### Integral device status ##########
