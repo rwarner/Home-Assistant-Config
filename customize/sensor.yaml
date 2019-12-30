@@ -8,8 +8,11 @@ sensor.ryan_status:
 sensor.kelly_status:
   icon: mdi:account
 
+###### MOTION SENSORS ######
 sensor.kitchen_motion_sensor:
-  device_class: occupancy
+  friendly_name: Kitchen
+  device_class: motion
+#############################
 
 sensor.kitchen_motion_sensor_temperature:
   friendly_name: Kitchen Temperature
@@ -22,3 +25,6 @@ sensor.bedroom_light_button_battery:
 
 sensor.bedroom_fan_button_battery:
   device_class: battery
+
+sensor.basement_laundry_sensor_temperature:
+  friendly_name: Basement Temperature

@@ -1,0 +1,9 @@
+binary_sensor.living_room_occupancy:
+  friendly_name: Living Room
+
+binary_sensor.thermostat_occupancy:
+  friendly_name: Thermostat
+
+binary_sensor.basement_laundry_sensor_motion:
+  friendly_name: Laundry Room
+  device_class: motion
