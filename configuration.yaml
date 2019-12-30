@@ -110,6 +110,11 @@ camera:
     still_image_url: !secret unifi_rear_porch_camera_still
     stream_source: !secret unifi_rear_porch_camera_source
     verify_ssl: false
+  - platform: generic
+    name: Front Door Camera
+    still_image_url: !secret unifi_front_door_camera_still
+    stream_source: !secret unifi_front_door_camera_source
+    verify_ssl: false
 
 stream:
 
