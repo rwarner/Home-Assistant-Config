@@ -42,6 +42,11 @@
         {{ ((float(states.sensor.bedroom_fan_button_temperature.state) + float(states.sensor.bedroom_light_button_temperature.state))  / 2)  | round(2) }}
 
 
+## Folder for mp4 videos
+- platform: folder
+  folder: /tmp/hass
+
+
 ## Smart Things Button Pushes
 - platform: mqtt
   name: Bedroom Fan Button
@@ -105,8 +110,8 @@
       {% endif %}"
       friendly_name: 'Hue Bridge'
     smartthings_hub:
-      value_template: "{% if states.device_tracker.samsung_smartthings_hub %}
-      {% if is_state('device_tracker.samsung_smartthings_hub', 'home') %}
+      value_template: "{% if states.device_tracker.samsung_smartthings_hub_ethernet %}
+      {% if is_state('device_tracker.samsung_smartthings_hub_ethernet', 'home') %}
         Online
       {% else %}
         Offline
@@ -170,18 +175,6 @@
         Unknown
       {% endif %}"
       friendly_name: 'Yamaha Receiver'
-    garage_camera:
-      value_template: "{% if states.device_tracker.foscam_c1_camera %}
-      {% if is_state('device_tracker.foscam_c1_camera', 'home') %}
-        Online
-      {% else %}
-        Offline
-      {% endif %}
-      {% else %}
-        Unknown
-      {% endif %}"
-      friendly_name: 'Garage Camera'
-      icon_template: mdi:cctv
     rear_porch_camera:
       value_template: "{% if states.device_tracker.uvc_g3_flex_d1c0 %}
       {% if is_state('device_tracker.uvc_g3_flex_d1c0', 'home') %}
@@ -205,4 +198,16 @@
         Unknown
       {% endif %}"
       friendly_name: 'Front Door Camera'
+      icon_template: mdi:cctv
+    garage_camera:
+      value_template: "{% if states.device_tracker.garage_camera %}
+      {% if is_state('device_tracker.garage_camera', 'home') %}
+        Online
+      {% else %}
+        Offline
+      {% endif %}
+      {% else %}
+        Unknown
+      {% endif %}"
+      friendly_name: 'Garage Camera'
       icon_template: mdi:cctv

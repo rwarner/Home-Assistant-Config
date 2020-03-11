@@ -1,3 +1,27 @@
+alexa_notify_kitchen:
+  sequence:
+    - service: notify.alexa_media
+      data_template:
+        target: 
+          - media_player.kitchen_echo_show
+        title: "{{ title }}"
+        data:
+          type: announce
+          method: all
+        message: "{{ message }}"
+
+alexa_notify_main_floor:
+  sequence:
+    - service: notify.alexa_media
+      data_template:
+        target: 
+          - media_player.main_floor
+        title: "{{ title }}"
+        data:
+          type: announce
+          method: all
+        message: "{{ message }}"
+
 toggle_dresser_lamp:
   sequence:
     - service: light.toggle
@@ -28,3 +52,32 @@ turn_on_kitchen_tablet:
         topic: homeassistant
         payload: "wakedevice"
         qos: 0
+
+turn_on_tablet_mlbtv:
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: homeassistant
+        payload: "mlbtv"
+        qos: 0
+
+capture_front_door_video:
+  sequence:
+    - delay: '00:00:02'
+    - service: camera.record
+      data:
+        entity_id: camera.front_door_camera
+        filename: '/tmp/hass/front_door_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        duration: 15
+        lookback: 2
+
+capture_rear_porch_video:
+  sequence:
+    - delay: '00:00:02'
+    - service: camera.record
+      data:
+        entity_id: camera.rear_porch_camera
+        filename: '/tmp/hass/rear_porch_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        duration: 15
+        lookback: 2
+

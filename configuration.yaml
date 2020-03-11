@@ -12,6 +12,13 @@ homeassistant:
     - type: homeassistant
     - type: legacy_api_password
       api_password: !secret hass_http_pass
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.1.0/24
+        - 192.168.2.0/24
+        
+  whitelist_external_dirs:
+    - /tmp/hass
 
 logger:
 #  default: critical
@@ -100,11 +107,6 @@ hue:
       allow_hue_groups: false
 
 camera:
-  - platform: foscam
-    ip: !secret foscam_ip
-    port: !secret foscam_port
-    username: !secret foscam_user
-    password: !secret foscam_pass
   - platform: generic
     name: Rear Porch Camera
     still_image_url: !secret unifi_rear_porch_camera_still
@@ -114,6 +116,16 @@ camera:
     name: Front Door Camera
     still_image_url: !secret unifi_front_door_camera_still
     stream_source: !secret unifi_front_door_camera_source
+    verify_ssl: false
+  - platform: generic
+    name: Living Room Camera
+    still_image_url: !secret unifi_living_room_camera_still
+    stream_source: !secret unifi_living_room_camera_source
+    verify_ssl: false
+  - platform: generic
+    name: Garage Camera
+    still_image_url: !secret unifi_garage_camera_still
+    stream_source: !secret unifi_garage_camera_source
     verify_ssl: false
 
 stream:
@@ -137,6 +149,8 @@ pi_hole:
 shell_command:
   unifi_ap_light_on: !secret unifi_ap_light_on #bash scripts/unifiAPLED.sh -i <ip_address> -s on
   unifi_ap_light_off: !secret unifi_ap_light_off #bash scripts/unifiAPLED.sh -i <ip_address> -s off
+  clear_video_directory: !secret clear_video_directory
+  convert_camera_recording: !secret convert_camera_recording
 
 # Custom HACS variable integation
 # https://github.com/rogro82/hass-variables
@@ -152,7 +166,6 @@ variable:
   tautilli_data:
     value: ""
     restore: true
-
 
 binary_sensor:
   - platform: template
@@ -182,21 +195,14 @@ binary_sensor:
     payload_off: 'OFF'
     device_class: motion
 
-#alert:
-#  device_critical:
-#    name: A device is critical
-#    entity_id: sensor.device_critical
-#    state: 'on'
-#    repeat: 15
-#    can_acknowledge: True
-#    skip_first: True
-#    notifiers:
-#      - ryan
 
 notify:
   - platform: discord
     name: discord
     token: !secret discord_token
+
+folder_watcher:
+  - folder: /tmp/hass/
 
 #External files
 group: !include groups.yaml
