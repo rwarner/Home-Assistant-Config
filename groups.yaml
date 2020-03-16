@@ -1,6 +1,5 @@
 # ****Views****
 default_view:
-  view: yes
   icon: mdi:home
   entities:
     - group.climate
@@ -14,7 +13,6 @@ default_view:
     - camera.foscam_camera
 # All devices will not show up in the default_view
 devices_view:
-  view: yes
   icon: mdi:cellphone
   name: Devices
   entities:

@@ -204,6 +204,9 @@ notify:
 folder_watcher:
   - folder: /tmp/hass/
 
+# Support for the home-assistant mobile application
+mobile_app:
+
 #External files
 group: !include groups.yaml
 
