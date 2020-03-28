@@ -5,5 +5,7 @@
     command_topic: "smartthings/Schlage Deadbolt/lock"
     payload_lock: "locked"
     payload_unlock: "unlocked"
+    state_locked: "locked"
+    state_unlocked: "unlocked"
     qos: 1
     retain: true
