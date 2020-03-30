@@ -23,6 +23,76 @@ homeassistant:
 logger:
 #  default: critical
 
+# Enables the Person integration for handling "home and away"
+person:
+
+system_health:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+
+# Checks for available updates
+updater:
+
+# Discover some devices automatically
+discovery:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+# Support for the home-assistant mobile application
+mobile_app:
+
+stream:
+
+recorder:
+  purge_keep_days: 14
+
+# Watches the folder for changes, solely for recording purposes
+folder_watcher:
+  - folder: /tmp/hass/
+
+ecobee:
+  api_key: !secret ecobee_api 
+
+mqtt:
+  broker: !secret mqtt_broker_ip
+
+smartthinq:
+  token: !secret smartthinq_api
+  region: US
+  language: en-US
+
+pi_hole:
+  host: !secret pi_hole_host
+  ssl: false
+  verify_ssl: false
+
+weather:
+  - platform: darksky
+    api_key: !secret dark_sky_api
+
+notify:
+  - platform: discord
+    name: discord
+    token: !secret discord_token
+
+hue:
+  bridges:
+    - host: !secret hue_ip #Static IP set
+      filename: mainhue.conf
+      allow_unreachable: true
+      allow_hue_groups: false
+
+
 media_player:
   - platform: yamaha
     host: !secret yamaha_ip #Not a static ip
@@ -58,54 +128,6 @@ wemo:
     #almost like you need the switch to be offline when first setting up
     #Still not statically set on network, but required without ports
 
-# Enables the Person integration for handling "home and away"
-# new as of 0.97+?
-person:
-
-system_health:
-
-# Enables the frontend
-frontend:
-
-# Enables configuration UI
-config:
-
-http:
-
-# Checks for available updates
-updater:
-
-# Discover some devices automatically
-discovery:
-
-# Allows you to issue voice commands from the frontend in enabled browsers
-conversation:
-
-recorder:
-  purge_keep_days: 14
-
-# View all events in a logbook
-logbook:
-
-# Track the sun
-sun:
-
-weather:
-  - platform: darksky
-    api_key: !secret dark_sky_api
-
-# Text to speech
-tts:
-  platform: google_translate
-
-# This is now required apparently on 0.60.0+ for multiple hue bridges
-hue:
-  bridges:
-    - host: !secret hue_ip # Not a static IP
-      filename: mainhue.conf
-      allow_unreachable: true
-      allow_hue_groups: false
-
 camera:
   - platform: generic
     name: Rear Porch Camera
@@ -128,23 +150,6 @@ camera:
     stream_source: !secret unifi_garage_camera_source
     verify_ssl: false
 
-stream:
-
-ecobee:
-  api_key: !secret ecobee_api 
-
-mqtt:
-  broker: !secret mqtt_broker_ip
-
-smartthinq:
-  token: !secret smartthinq_api
-  region: US
-  language: en-US
-
-pi_hole:
-  host: !secret pi_hole_host
-  ssl: false
-  verify_ssl: false
 
 shell_command:
   unifi_ap_light_on: !secret unifi_ap_light_on #bash scripts/unifiAPLED.sh -i <ip_address> -s on
@@ -158,10 +163,8 @@ shell_command:
 # able to keep states through restarts
 variable:
   ryan_status:
-    #value: "Unknown"
     restore: true
   kelly_status:
-    #value: "Unknown"
     restore: true
   tautilli_data:
     value: ""
@@ -195,19 +198,9 @@ binary_sensor:
     payload_off: 'OFF'
     device_class: motion
 
-
-notify:
-  - platform: discord
-    name: discord
-    token: !secret discord_token
-
-folder_watcher:
-  - folder: /tmp/hass/
-
-# Support for the home-assistant mobile application
-mobile_app:
-
-#External files
+#################################
+##### EXTERNAL FILES BELOW ######
+#################################
 group: !include groups.yaml
 
 automation: !include_dir_merge_list automation
@@ -221,23 +214,3 @@ history: !include history.yaml
 sensor: !include sensor.yaml
 
 script: !include script.yaml
-
-
-#### Unused Integration below, either changed or moved to an integration in the UI
-
-# Moved to integrations also covers device_tracker:
-#unifi:
-
-
-# Moved to integration
-#  - platform: huesensor
-
-#  - platform: template
-#    sensors:
-#      basement_temperature:
-#        friendly_name: 'Basement Temperature'
-#        value_template: "{{ ((states.sensor.basement_laundry_sensor.attributes.temperature | float * (9 / 5)) + 32) | round(1) }}"
-#       unit_of_measurement: °F
-
-#binary_sensor:
-#  - platform: huesensor
