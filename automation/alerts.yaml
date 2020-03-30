@@ -1,3 +1,7 @@
+####################################
+### ALERT / DISCORD AUTOMATIONS  ###
+####################################
+
 - alias: Alert when a critical device goes offline
   trigger:
     - platform: state
