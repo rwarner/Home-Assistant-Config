@@ -98,6 +98,9 @@
     - platform: state
       entity_id: binary_sensor.rear_porch_motion_sensor
       to: 'on'
+    # Only trigger if the back porch light hasn't been turned off/on it hasn't been turned off in the last 30 seconds
+    - condition: template
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.back_porch.last_triggered)) > 30 }}"
   condition:
     - condition: state
       entity_id: light.back_porch
