@@ -1,0 +1,42 @@
+#### Turn on Tablet if someone is in the kitchen 
+- id: kitchen_sensor_turn_on_tablet
+  alias: "KITCHEN - Turn on tablet in kitchen, sensed motion"
+  trigger:
+    - platform: state
+      entity_id: sensor.kitchen_motion_sensor
+      from: 'inactive'
+      to: 'active'
+  condition:
+    # Ignore any turn ons if the tablet turned on in the last 10 minutes (Tablet has 10 min screen time)
+    - condition: template
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.script.turn_on_kitchen_tablet.last_changed)) > 600 }}"
+    - condition: time
+      before: '01:30:00'
+      after: '06:00:00'
+  action:
+    - service: script.turn_on_kitchen_tablet
+
+
+#### Turn on Tablet if someone is in the kitchen 
+- id: mlb_tv_turn_on_tablet
+  alias: "KITCHEN - Turn on tablet in kitchen, mlb tv morning"
+  trigger:
+    - platform: state
+      entity_id: sensor.kitchen_motion_sensor
+      from: 'inactive'
+      to: 'active'
+  condition:
+    - condition: state
+      entity_id: sensor.ryan_status
+      state: 'Home' 
+    - condition: state
+      entity_id: sensor.kelly_status
+      state: 'Away'
+    - condition: time
+      before: '11:00:00'
+      after: '06:30:00'
+    # Only run once within the timeframe
+    - condition: template
+      value_template: "{{ (as_timestamp(now()) - as_timestamp(states.automation.kitchen_turn_on_tablet_in_kitchen_mlb_tv_morning.attributes.last_triggered)) > 16200}}"
+  action:
+    - service: script.turn_on_tablet_mlbtv

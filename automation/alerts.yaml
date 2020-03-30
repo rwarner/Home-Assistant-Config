@@ -1,0 +1,59 @@
+- alias: Alert when a critical device goes offline
+  trigger:
+    - platform: state
+      entity_id: 
+        - sensor.garage_camera
+        - sensor.hdhomerun_extend
+        - sensor.hue_bridge
+        - sensor.kitchen_tablet
+        - sensor.logitech_harmony_hub
+        - sensor.smartthings_hub
+        - sensor.synology_nas
+        - sensor.yamaha_reciever
+      from: 'Online'
+      to: 'Offline'
+      for:
+        minutes: 2
+  condition:
+    condition: and
+    conditions:
+      - condition: template
+        value_template: >
+          {% if states.automation.alert_when_a_critical_device_goes_offline.last_triggered is not none %}
+            {% if as_timestamp(now()) | int - as_timestamp(states.automation.alert_when_a_critical_device_goes_offline.attributes.last_triggered) | int > 3600 %} 
+              true
+            {% else %} 
+              false
+            {% endif %}
+          {% else %}
+            false
+          {% endif %}
+  action:
+    - service: notify.discord
+      data_template:
+        message: '{{trigger.to_state.attributes.friendly_name}} has gone offline. Please check the status of this device as some features may stop functioning.'
+        target: "658174234480082997"
+        title: Device Alert
+
+
+- alias: Send alert when a motion detection video is created
+  trigger:
+    - platform: event
+      event_type: folder_watcher
+      event_data:
+        event_type: created
+  action:
+    - delay: '00:00:02' #Wait until file is done being modified
+    - service: shell_command.convert_camera_recording
+    - delay: '00:00:15' #Wait until file is done being modified
+    - service: notify.discord
+      data_template:
+        message: 'Motion detected'
+        target: "658174234480082997"
+        title: Device Alert
+        data:
+          images:
+            - "/tmp/hass/converted/recording.mp4"
+            #- "{{ trigger.event.data.path }}"
+    - delay: '00:00:10'
+    - service: shell_command.clear_video_directory

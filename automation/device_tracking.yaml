@@ -1,0 +1,92 @@
+###################################
+### DEVICE TRACKING AUTOMATIONS ###
+###################################
+
+
+#
+# For Kelly/Ryan's phone, if you arrive home and the outside lights are off.
+# Turn them on for 10 minutes and then shut them off.
+#
+# e.g. Getting home late or really early in the morning
+#
+
+#- id: device_track_lights_on_10min_on_arrival
+#  alias: "DEVICE_TRACK - When arriving home, turn on back porch for 10 minutes, before/after sun and if outside is not on"
+#  trigger:
+#    - platform: state
+#      entity_id: variable.ryan_status, variable.kelly_status
+#      from: 'Away'
+#      to: 'Just Arrived'
+#  condition:
+#    condition: and
+#    conditions:
+#      - condition: state
+#        entity_id: light.outside_lights
+#        state: 'off'
+#      - condition: or
+#        conditions:
+#          - condition: sun
+#            after: sunset
+#            after_offset: "-00:45:00"
+#          - condition: sun
+#            before: sunrise
+#            before_offset: "00:45:00"
+#  action:
+#    - service: light.turn_on
+#      entity_id: light.back_porch
+#    - delay: 
+#        minutes: 10
+#    - service: light.turn_off
+#      entity_id: light.back_porch
+
+
+- id: nobody_home
+  alias: "DEVICE_TRACK - Nobody home: Lock doors, arm alexa, set Tstat to Away, turn off Lights, etc.."
+  trigger:
+    - platform: state
+      entity_id: group.family
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: lock.lock
+      entity_id: lock.back_door
+    - service: alarm_control_panel.alarm_arm_away
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+    - service: climate.set_preset_mode
+      data:
+        entity_id: climate.thermostat, climate.media_room
+        preset_mode: 'Away'
+    - service: light.turn_off
+      entity_id: all
+    # Only proceed if its dark outside with the following services
+    - condition: or 
+      conditions:
+        - condition: sun
+          after: sunset
+          after_offset: "-00:45:00"
+        - condition: sun
+          before: sunrise
+          before_offset: "+00:45:00"
+    - service: light.turn_on
+      entity_id: group.sun_based_not_home
+
+
+
+- id: someone_arrives_home
+  alias: "DEVICE_TRACK - Someone arrived home, disable alexa guard, set Thermostat to Home"
+  trigger:
+    - platform: state
+      entity_id: group.family
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: alarm_control_panel.alarm_disarm
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      # Only change thermostat when arriving home, if we aren't in "Sleep" mode on Ecobee
+      # will probably be during the night if this is true
+    - condition: template
+      value_template: '{{ states.climate.thermostat.attributes.preset_mode != "Sleep" }}'
+    - service: climate.set_preset_mode
+      data:
+        entity_id: climate.thermostat, climate.media_room
+        preset_mode: 'Home'

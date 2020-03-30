@@ -1,0 +1,45 @@
+- id: MQTT_tautilli_announce_movie
+  alias: "MQTT - Announce movie has been added to Plex on Alexa"
+  trigger:
+    - platform: mqtt
+      topic: homeassistant/tautilli
+      # Optional
+      #payload: ""
+      #encoding: "utf-8"
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.family
+        state: 'home'
+      - condition: time
+        after: '07:00:00'
+        before: '23:30:00'
+  action:
+    - service: script.alexa_notify_kitchen
+      data_template: # !!! MUST BE DEFINED AS DATA_TEMPLATE FOR USING TRIGGER PAYLOAD
+        title: "New Movie Added"
+        message: "{{ trigger.payload_json['body'] }} was recently added to Plex."
+
+- id: MQTT_tautilli_save_for_later
+  alias: "MQTT - Save movie has been added to Plex on Alexa for later"
+  trigger:
+    - platform: mqtt
+      topic: homeassistant/tautilli
+      # Optional
+      #payload: ""
+      #encoding: "utf-8"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: group.family
+        state: 'not_home'
+      - condition: time
+        before: '07:00:00'
+        after: '23:30:00'
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: tautilli_data
+        value: "{{ trigger.payload_json['body'] }}, {{ states.variable.tautilli_data.state }}"

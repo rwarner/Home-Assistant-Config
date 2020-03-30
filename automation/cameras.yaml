@@ -1,0 +1,43 @@
+- alias: Trigger front_door_motion
+  trigger:
+    - platform: state
+      entity_id: 
+        - binary_sensor.front_door_motion_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: group.family 
+      state: 'not_home'
+  action:
+    - service: script.capture_front_door_video
+
+- alias: Trigger rear_porch_motion
+  trigger:
+    - platform: state
+      entity_id: 
+        - binary_sensor.rear_porch_motion_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: group.family 
+      state: 'not_home'
+  action:
+    - service: script.capture_rear_porch_video
+
+- alias: Notify Alexa of Front Door only if Ryan is home
+  trigger:
+    - platform: state
+      entity_id: 
+        - binary_sensor.front_door_motion_sensor
+      to: 'on'
+  condition:
+    - condition: template
+      value_template: "{{ is_state('sensor.ryan_status', 'Home') }}"
+    # Only trigger if it hasn't been triggered in the last five minutes
+    - condition: template
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.notify_alexa_of_front_door_only_if_ryan_is_home.attributes.last_triggered)) > 300 }}"
+  action:
+    - service: script.alexa_notify_main_floor
+      data:
+        title: "Motion detected"
+        message: "Front Door"

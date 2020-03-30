@@ -1,0 +1,27 @@
+############################
+### SEASONAL AUTOMATIONS ###
+############################
+
+
+##### DEHUMIDIFIER ##################
+## This is only useful in the summer, as it's very humid. Winter was showing 36 humidity
+#
+#- id: dehumidifier_on_1130pm
+#  alias: "Turn on dehumidifier at 11:30 p.m."
+#  trigger:
+#    - platform: time
+#      at: '23:30:00'
+#  action:
+#      service: homeassistant.turn_on
+#      entity_id: switch.dehumidifier
+#
+#
+#- id: dehumidifier_off_6am
+#  alias: "Turn off dehumidifier at 6:00 a.m."
+#  trigger:
+#    - platform: time
+#      at: '06:00:00'
+#  action:
+#      service: homeassistant.turn_off
+#      entity_id: switch.dehumidifier
+######################################

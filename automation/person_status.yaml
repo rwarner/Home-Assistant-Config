@@ -1,0 +1,132 @@
+- alias: Mark person as just arrived
+  trigger:
+    - platform: state
+      entity_id: person.ryan
+      from: 'not_home'
+      to: 'home'
+    - platform: state
+      entity_id: person.kelly
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'person.ryan' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: >
+          {% if trigger.entity_id == 'person.ryan' %}
+            {% if states.variable.ryan_status.state == 'Just Left' %}
+              Home
+            {% else %}
+              Just Arrived
+            {% endif %}
+          {% else %}
+            {% if states.variable.kelly_status.state == 'Just Left' %}
+              Home
+            {% else %}
+              Just Arrived
+            {% endif %}
+          {% endif %}
+
+
+- alias: Mark person as home
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: variable.kelly_status
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: variable.ryan_status
+      from: 'Just Left'
+      to: 'Just Arrived'
+    - platform: state
+      entity_id: variable.kelly_status
+      from: 'Just Left'
+      to: 'Just Arrived'
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'variable.ryan_status' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: Home
+ 
+- alias: Mark person as just left
+  trigger:
+    - platform: state
+      entity_id: person.ryan
+      from: 'home'
+      to: 'not_home'
+    - platform: state
+      entity_id: person.kelly
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'person.ryan' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: Just Left
+ 
+- alias: Mark person as not_home
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      to: 'Just Left'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: variable.kelly_status
+      to: 'Just Left'
+      for:
+        minutes: 10
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'variable.ryan_status' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: Away
+ 
+- alias: Mark person as extended not_home
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      to: 'Away'
+      for:
+        hours: 24
+    - platform: state
+      entity_id: variable.kelly_status
+      to: 'Away'
+      for:
+        hours: 24
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'variable.ryan_status' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: Extended Away
