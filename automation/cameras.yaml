@@ -1,3 +1,7 @@
+############################
+### CAMERA AUTOMATIONS   ###
+############################
+
 - alias: Trigger front_door_motion
   trigger:
     - platform: state

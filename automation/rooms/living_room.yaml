@@ -1,3 +1,6 @@
+################################
+### LIVING ROOM AUTOMATIONS  ###
+################################
 
 - id: living_room_off_1100pm
   alias: "LIVING ROOM - Turn off living room at 11:00pm, unless occupancy detected"

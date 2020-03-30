@@ -1,3 +1,7 @@
+############################
+###   MQTT AUTOMATIONS   ###
+############################
+
 - id: MQTT_tautilli_announce_movie
   alias: "MQTT - Announce movie has been added to Plex on Alexa"
   trigger:

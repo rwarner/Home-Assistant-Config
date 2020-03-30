@@ -1,3 +1,7 @@
+############################
+### KITCHEN AUTOMATIONS  ###
+############################
+
 #### Turn on Tablet if someone is in the kitchen 
 - id: kitchen_sensor_turn_on_tablet
   alias: "KITCHEN - Turn on tablet in kitchen, sensed motion"

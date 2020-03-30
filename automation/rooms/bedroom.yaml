@@ -1,3 +1,6 @@
+############################
+### BEDROOM AUTOMATIONS  ###
+############################
 
 - id: fan_off_weekday_ryan_home
   alias: "BEDROOM - Fan off at 7:20 a.m. if just ryan is home during the week"

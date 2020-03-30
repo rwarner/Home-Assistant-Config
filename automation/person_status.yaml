@@ -1,3 +1,7 @@
+################################################
+### PERSON_STATUS CONFIGURATION / AUTOMATION ###
+################################################
+
 - alias: Mark person as just arrived
   trigger:
     - platform: state
