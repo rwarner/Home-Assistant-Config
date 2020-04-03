@@ -50,3 +50,7 @@
       data:
         title: "Motion detected"
         message: "Front Door"
+    - service: script.alexa_notify_basement_office
+      data:
+        title: "Motion detected"
+        message: "Front Door"

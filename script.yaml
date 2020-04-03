@@ -22,6 +22,18 @@ alexa_notify_main_floor:
           method: all
         message: "{{ message }}"
 
+alexa_notify_basement_office:
+  sequence:
+    - service: notify.alexa_media
+      data_template:
+        target: 
+          - media_player.basement_echo_dot
+        title: "{{ title }}"
+        data:
+          type: announce
+          method: all
+        message: "{{ message }}"
+
 toggle_dresser_lamp:
   sequence:
     - service: light.toggle

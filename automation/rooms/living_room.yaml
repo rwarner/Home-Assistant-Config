@@ -12,7 +12,7 @@
       state: 'off'
   action:
     - service: light.turn_off
-      entity_id: lights.living_room_lights
+      entity_id: light.living_room_lights
 
 - alias: LIVING ROOM - Turn off living room early (10:30pm), if living room is not being used
   trigger:
@@ -24,4 +24,4 @@
       state: 'off'
   action:
     - service: light.turn_off
-      entity_id: lights.living_room_lights
+      entity_id: light.living_room_lights

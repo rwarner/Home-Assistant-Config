@@ -21,24 +21,24 @@
 
 
 #### Turn on Tablet if someone is in the kitchen 
-- alias: KITCHEN - Turn on tablet in kitchen, mlb tv morning
-  trigger:
-    - platform: state
-      entity_id: sensor.kitchen_motion_sensor
-      from: 'inactive'
-      to: 'active'
-  condition:
-    - condition: state
-      entity_id: sensor.ryan_status
-      state: 'Home' 
-    - condition: state
-      entity_id: sensor.kelly_status
-      state: 'Away'
-    - condition: time
-      before: '11:00:00'
-      after: '06:30:00'
-    # Only run once within the timeframe
-    - condition: template
-      value_template: "{{ (as_timestamp(now()) - as_timestamp(states.automation.kitchen_turn_on_tablet_in_kitchen_mlb_tv_morning.attributes.last_triggered)) > 16200}}"
-  action:
-    - service: script.turn_on_tablet_mlbtv
+#- alias: KITCHEN - Turn on tablet in kitchen, mlb tv morning
+#  trigger:
+#    - platform: state
+#      entity_id: sensor.kitchen_motion_sensor
+#      from: 'inactive'
+#      to: 'active'
+#  condition:
+#    - condition: state
+#      entity_id: sensor.ryan_status
+#      state: 'Home' 
+#    - condition: state
+#      entity_id: sensor.kelly_status
+#      state: 'Away'
+#    - condition: time
+#      before: '11:00:00'
+#      after: '06:30:00'
+#    # Only run once within the timeframe
+#    - condition: template
+#      value_template: "{{ (as_timestamp(now()) - as_timestamp(states.automation.kitchen_turn_on_tablet_in_kitchen_mlb_tv_morning.attributes.last_triggered)) > 16200}}"
+#  action:
+#    - service: script.turn_on_tablet_mlbtv
