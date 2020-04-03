@@ -77,7 +77,7 @@
   entities:
     - light.back_porch
     - light.front_porch
-    - lights.living_room_lights
+    - light.living_room_lights
 
 ### Sun Based Lights - While we're away ###
 - platform: group
@@ -86,8 +86,6 @@
     - light.back_porch
     - light.front_porch
     - light.entry_lamp
-
-
 
 
 #### SINGLE USE ENTITIES, NOT NAMED "LIGHTS" ###
