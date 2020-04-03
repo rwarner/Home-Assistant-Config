@@ -66,7 +66,7 @@
           before: sunrise
           before_offset: "+00:45:00"
     - service: light.turn_on
-      entity_id: group.sun_based_not_home
+      entity_id: lights.sun_based_not_home
 
 
 

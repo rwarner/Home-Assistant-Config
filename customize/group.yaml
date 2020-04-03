@@ -1,12 +1,3 @@
   group.all_devices:
     hidden: false
     friendly_name: "Who's Home"
-
-  group.kitchen_overhead:
-    hidden: true
-
-  group.kitchen_nook:
-    hidden: true
-
-  group.media_room_movie_lights:
-    hidden: true

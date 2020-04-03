@@ -71,6 +71,23 @@
     - light.kitchen_nook
 
 
+### Sun Based Lights - While we're Home ###
+- platform: group
+  name: Sun Based Lights Home
+  entities:
+    - light.back_porch
+    - light.front_porch
+    - lights.living_room_lights
+
+### Sun Based Lights - While we're away ###
+- platform: group
+  name: Sun Based Lights Away
+  entities:
+    - light.back_porch
+    - light.front_porch
+    - light.entry_lamp
+
+
 
 
 #### SINGLE USE ENTITIES, NOT NAMED "LIGHTS" ###
