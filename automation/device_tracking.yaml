@@ -10,8 +10,7 @@
 # e.g. Getting home late or really early in the morning
 #
 
-#- id: device_track_lights_on_10min_on_arrival
-#  alias: "DEVICE_TRACK - When arriving home, turn on back porch for 10 minutes, before/after sun and if outside is not on"
+#- alias: DEVICE_TRACK - When arriving home, turn on back porch for 10 minutes, before/after sun and if outside is not on
 #  trigger:
 #    - platform: state
 #      entity_id: variable.ryan_status, variable.kelly_status
@@ -40,8 +39,7 @@
 #      entity_id: light.back_porch
 
 
-- id: nobody_home
-  alias: "DEVICE_TRACK - Nobody home: Lock doors, arm alexa, set Tstat to Away, turn off Lights, etc.."
+- alias: DEVICE_TRACK - Nobody home, lock doors, arm alexa, set Tstat to Away, turn off Lights, etc..
   trigger:
     - platform: state
       entity_id: group.family
@@ -72,8 +70,7 @@
 
 
 
-- id: someone_arrives_home
-  alias: "DEVICE_TRACK - Someone arrived home, disable alexa guard, set Thermostat to Home"
+- alias: DEVICE_TRACK - Someone arrived home, disable alexa guard, set Thermostat to Home
   trigger:
     - platform: state
       entity_id: group.family

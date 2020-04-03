@@ -2,7 +2,7 @@
 ### CAMERA AUTOMATIONS   ###
 ############################
 
-- alias: Trigger front_door_motion
+- alias: CAMERAS - Capture on front door motion
   trigger:
     - platform: state
       entity_id: 
@@ -15,7 +15,7 @@
   action:
     - service: script.capture_front_door_video
 
-- alias: Trigger rear_porch_motion
+- alias: CAMERAS - Capture on rear porch motion
   trigger:
     - platform: state
       entity_id: 
@@ -28,7 +28,7 @@
   action:
     - service: script.capture_rear_porch_video
 
-- alias: Notify Alexa of Front Door only if Ryan is home
+- alias: CAMERAS - Notify Alexa of Front Door only if Ryan is home
   trigger:
     - platform: state
       entity_id: 

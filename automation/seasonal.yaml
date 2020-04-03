@@ -6,8 +6,7 @@
 ##### DEHUMIDIFIER ##################
 ## This is only useful in the summer, as it's very humid. Winter was showing 36 humidity
 #
-#- id: dehumidifier_on_1130pm
-#  alias: "Turn on dehumidifier at 11:30 p.m."
+#- alias: SEASONAL - Turn on dehumidifier at 11:30 p.m.
 #  trigger:
 #    - platform: time
 #      at: '23:30:00'

@@ -2,8 +2,7 @@
 ###   MQTT AUTOMATIONS   ###
 ############################
 
-- id: MQTT_tautilli_announce_movie
-  alias: "MQTT - Announce movie has been added to Plex on Alexa"
+- alias: MQTT - Announce movie has been added to Plex on Alexa
   trigger:
     - platform: mqtt
       topic: homeassistant/tautilli
@@ -25,8 +24,7 @@
         title: "New Movie Added"
         message: "{{ trigger.payload_json['body'] }} was recently added to Plex."
 
-- id: MQTT_tautilli_save_for_later
-  alias: "MQTT - Save movie has been added to Plex on Alexa for later"
+- alias: MQTT - Save movie has been added to Plex on Alexa for later
   trigger:
     - platform: mqtt
       topic: homeassistant/tautilli

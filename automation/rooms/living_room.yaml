@@ -2,8 +2,7 @@
 ### LIVING ROOM AUTOMATIONS  ###
 ################################
 
-- id: living_room_off_1100pm
-  alias: "LIVING ROOM - Turn off living room at 11:00pm, unless occupancy detected"
+- alias: LIVING ROOM - Turn off living room at 11:00pm, unless occupancy detected
   trigger:
     - platform: time
       at: '23:00:00'
@@ -15,8 +14,7 @@
     - service: light.turn_off
       entity_id: lights.living_room_lights
 
-- id: livingroom_lamp_off_1030pm_if_not_used
-  alias: "LIVING ROOM - Turn off living room early (10:30pm), if living room is not being used"
+- alias: LIVING ROOM - Turn off living room early (10:30pm), if living room is not being used
   trigger:
     - platform: time
       at: '22:30:00'

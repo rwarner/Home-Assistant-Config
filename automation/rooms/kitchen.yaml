@@ -3,8 +3,7 @@
 ############################
 
 #### Turn on Tablet if someone is in the kitchen 
-- id: kitchen_sensor_turn_on_tablet
-  alias: "KITCHEN - Turn on tablet in kitchen, sensed motion"
+- alias: KITCHEN - Turn on tablet in kitchen, sensed motion
   trigger:
     - platform: state
       entity_id: sensor.kitchen_motion_sensor
@@ -22,8 +21,7 @@
 
 
 #### Turn on Tablet if someone is in the kitchen 
-- id: mlb_tv_turn_on_tablet
-  alias: "KITCHEN - Turn on tablet in kitchen, mlb tv morning"
+- alias: KITCHEN - Turn on tablet in kitchen, mlb tv morning
   trigger:
     - platform: state
       entity_id: sensor.kitchen_motion_sensor

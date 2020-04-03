@@ -2,8 +2,7 @@
 ### LIGHTING AUTOMATIONS ###
 ############################
 
-- id: lights_on_1hr_before_sunset
-  alias: "LIGHTS - Turn on lights 1:30hr before sun sets"
+- alias: LIGHTS - Turn on lights 1:30hr before sun sets
   trigger:
     - platform: sun
       event: sunset
@@ -18,8 +17,7 @@
     - service: light.turn_on
       entity_id: group.sun_based_home
 
-- id: lights_off_at_1130pm
-  alias: "LIGHTS - Turn off outside lights at 11:30pm"
+- alias: LIGHTS - Turn off outside lights at 11:30pm
   trigger:
     - platform: time
       at: '23:30:00'
@@ -27,8 +25,7 @@
       service: light.turn_off
       entity_id: light.outside_lights
 
-- id: lights_off_at_9pm_all_home
-  alias: "LIGHTS - Outside lights off 9:00pm, both home during week"
+- alias: LIGHTS - Outside lights off 9:00pm, both home during week
   trigger:
     - platform: time
       at: '21:00:00'
@@ -53,8 +50,7 @@
 
 
 # Turn off Unifi AP's LEDs at night
-- id: unifi_light_off_1100pm
-  alias: "LIGHTS - Turn off Unifi AP LED at 11:00pm"
+- alias: LIGHTS - Turn off Unifi AP LED at 11:00pm
   trigger:
     - platform: time
       at: '23:00:00'
@@ -62,8 +58,7 @@
     - service: shell_command.unifi_ap_light_off
 
 # Turn on Unifi AP's LEDs in morning
-- id: unifi_light_on_morning
-  alias: "LIGHTS - Turn on Unifi AP LED in the morning"
+- alias: LIGHTS - Turn on Unifi AP LED in the morning
   trigger:
     - platform: sun
       event: sunrise
@@ -72,8 +67,7 @@
     - service: shell_command.unifi_ap_light_on
 
 
-- id: front_door_motion_light
-  alias: "LIGHTS - Turn on Front Porch Light, if motion detected"
+- alias: LIGHTS - Turn on Front Porch Light, if motion detected
   trigger:
     - platform: state
       entity_id: binary_sensor.front_door_motion_sensor
@@ -92,8 +86,7 @@
     - service: light.turn_off
       entity_id: light.front_porch
 
-- id: rear_porch_motion_light
-  alias: "LIGHTS - Turn on Rear Porch Light, if motion detected"
+- alias: LIGHTS - Turn on Rear Porch Light, if motion detected
   trigger:
     - platform: state
       entity_id: binary_sensor.rear_porch_motion_sensor

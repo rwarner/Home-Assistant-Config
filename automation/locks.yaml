@@ -6,8 +6,7 @@
 # Checking for if Ryan / Kelly / All_devices has changed within the last 10 minutes
 # or if group.family is "not_home" and our phones haven't connected to WiFi yet
 # Only if after 45 minutes before sunset, or 45 minutes before sunrise
-- id: turn_on_lights_coming_inside
-  alias: "LOCKS - When unlocking the door, turn on lights inside if before/after sun and nobody is home"
+- alias: LOCKS - When unlocking the door, turn on lights inside if before/after sun and nobody is home
   trigger:
     - platform: state
       entity_id: lock.back_door
@@ -48,8 +47,7 @@
       entity_id: light.rear_entry_lamp
 
 
-- id: lock_door_at_1230
-  alias: "LOCKS - Lock door at 12:30 a.m."
+- alias: LOCKS - Lock door at 12:30 a.m.
   trigger:
     - platform: time
       at: '00:30:00'
@@ -59,8 +57,7 @@
 
 
 #### Turn on Tablet when unlocking door, assuming you're coming inside
-- id: auto_locks_turn_on_tablet
-  alias: "LOCKS - When unlocking the door, turn on tablet for use, Alexa welcome home"
+- alias: LOCKS - When unlocking the door, turn on tablet for use, Alexa welcome home
   trigger:
     - platform: state
       entity_id: lock.back_door

@@ -2,7 +2,7 @@
 ### ALERT / DISCORD AUTOMATIONS  ###
 ####################################
 
-- alias: Alert when a critical device goes offline
+- alias: ALERT - When a critical device goes offline
   trigger:
     - platform: state
       entity_id: 
@@ -40,7 +40,7 @@
         title: Device Alert
 
 
-- alias: Send alert when a motion detection video is created
+- alias: ALERT - When a motion detection video is created
   trigger:
     - platform: event
       event_type: folder_watcher

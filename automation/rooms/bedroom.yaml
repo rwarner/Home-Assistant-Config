@@ -2,8 +2,7 @@
 ### BEDROOM AUTOMATIONS  ###
 ############################
 
-- id: fan_off_weekday_ryan_home
-  alias: "BEDROOM - Fan off at 7:20 a.m. if just ryan is home during the week"
+- alias: BEDROOM - Fan off at 7:20 a.m. if just ryan is home during the week
   trigger:
     - platform: time
       at: '07:20:00'
@@ -26,7 +25,7 @@
       entity_id: switch.fan
 
 ##### Bedroom Light Button
-- alias: Turn on light in Bedroom
+- alias: BEDROOM - Turn on light in Bedroom
   trigger:
     - platform: state
       entity_id: sensor.bedroom_light_button
@@ -34,7 +33,7 @@
   action:
       service: script.toggle_dresser_lamp
 
-- alias: Turn on fan from light button in Bedroom
+- alias: BEDROOM - Turn on fan from light button in Bedroom
   trigger:
     - platform: state
       entity_id: sensor.bedroom_light_button
@@ -44,7 +43,7 @@
       entity_id: 
         - switch.fan
 
-- alias: Turn on fan and light in Bedroom
+- alias: BEDROOM - Turn on fan and light in Bedroom
   trigger:
     - platform: state
       entity_id: sensor.bedroom_light_button
@@ -59,7 +58,7 @@
 
 ##### Bedroom Fan Button
 
-- alias: Turn on light in Bedroom (Ryan Button)
+- alias: BEDROOM - Turn on light in Bedroom (Ryan Button)
   trigger:
     - platform: state
       entity_id: sensor.bedroom_fan_button
@@ -67,7 +66,7 @@
   action:
       service: script.toggle_dresser_lamp
 
-- alias: Turn on fan in Bedroom (Ryan Button)
+- alias: BEDROOM - Turn on fan in Bedroom (Ryan Button)
   trigger:
     - platform: state
       entity_id: sensor.bedroom_fan_button

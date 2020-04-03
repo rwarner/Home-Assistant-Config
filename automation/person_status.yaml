@@ -2,7 +2,7 @@
 ### PERSON_STATUS CONFIGURATION / AUTOMATION ###
 ################################################
 
-- alias: Mark person as just arrived
+- alias: PERSON - Mark person as just arrived
   trigger:
     - platform: state
       entity_id: person.ryan
@@ -37,7 +37,7 @@
           {% endif %}
 
 
-- alias: Mark person as home
+- alias: PERSON - Mark person as home
   trigger:
     - platform: state
       entity_id: variable.ryan_status
@@ -68,7 +68,7 @@
           {% endif %}
         value: Home
  
-- alias: Mark person as just left
+- alias: PERSON - Mark person as just left
   trigger:
     - platform: state
       entity_id: person.ryan
@@ -89,7 +89,7 @@
           {% endif %}
         value: Just Left
  
-- alias: Mark person as not_home
+- alias: PERSON - Mark person as not_home
   trigger:
     - platform: state
       entity_id: variable.ryan_status
@@ -112,7 +112,7 @@
           {% endif %}
         value: Away
  
-- alias: Mark person as extended not_home
+- alias: PERSON - Mark person as extended not_home
   trigger:
     - platform: state
       entity_id: variable.ryan_status
