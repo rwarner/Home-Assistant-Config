@@ -202,16 +202,16 @@ binary_sensor:
 #################################
 ##### EXTERNAL FILES BELOW ######
 #################################
-group: !include groups.yaml
+group: !include ./configuration/groups.yaml
 
-automation: !include_dir_merge_list automation
+automation: !include_dir_merge_list ./configuration/automation
 
-lock: !include locks.yaml
+lock: !include ./configuration/locks.yaml
 
-light: !include lights.yaml
+light: !include ./configuration/lights.yaml
 
-history: !include history.yaml
+history: !include ./configuration/history.yaml
 
-sensor: !include sensor.yaml
+sensor: !include ./configuration/sensor.yaml
 
-script: !include script.yaml
+script: !include ./configuration/script.yaml
