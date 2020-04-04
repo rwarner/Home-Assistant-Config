@@ -61,6 +61,8 @@
   entities:
     - light.back_porch
     - light.front_porch
+    - light.driveway_flood
+    - light.porch_flood
 
 
  ### Kitchen ###
