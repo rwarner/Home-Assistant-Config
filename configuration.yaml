@@ -156,13 +156,6 @@ camera:
     stream_source: !secret unifi_garage_camera_source
     verify_ssl: false
 
-
-shell_command:
-  unifi_ap_light_on: !secret unifi_ap_light_on #bash scripts/unifiAPLED.sh -i <ip_address> -s on
-  unifi_ap_light_off: !secret unifi_ap_light_off #bash scripts/unifiAPLED.sh -i <ip_address> -s off
-  clear_video_directory: !secret clear_video_directory
-  convert_camera_recording: !secret convert_camera_recording
-
 # Custom HACS variable integation
 # https://github.com/rogro82/hass-variables
 # Changed from input_select_dropdown to variables for being
@@ -222,3 +215,5 @@ sensor: !include configuration/sensor.yaml
 script: !include configuration/script.yaml
 
 input_select: !include configuration/input_select.yaml
+
+shell_command: !include configuration/shell_command.yaml
