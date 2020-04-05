@@ -94,6 +94,13 @@ capture_rear_porch_video:
         lookback: 2
 
 
+pull_changes_restart_homeassistant:
+  sequence:
+    - service: shell_command.git_pull
+    - delay: '00:00:02'
+    - service: shell_command.homeassistant_restart
+
+
 
 #### Harmony Hub ####
 harmony_shield_tv:
