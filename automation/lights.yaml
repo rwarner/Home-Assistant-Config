@@ -119,7 +119,13 @@
       before: '5:00:00'
   action:
     - service: light.turn_on
-      entity_id: light.back_porch
+      entity_id: 
+        - light.back_porch
+        - light.porch_flood
+        - light.driveway_flood
     - delay: '00:03:00'
     - service: light.turn_off
-      entity_id: light.back_porch
+      entity_id: 
+        - light.back_porch
+        - light.porch_flood
+        - light.driveway_flood
