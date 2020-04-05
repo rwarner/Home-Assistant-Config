@@ -41,6 +41,12 @@
       value_template: >-
         {{ ((float(states.sensor.bedroom_fan_button_temperature.state) + float(states.sensor.bedroom_light_button_temperature.state))  / 2)  | round(2) }}
 
+# Harmony Remote sensor for current activity
+- platform: template
+  sensors:
+      harmony_hub_activity:
+        value_template: '{{ state_attr("remote.harmony_hub", "current_activity") }}'
+        friendly_name: 'Media Room'
 
 ## Folder for mp4 videos
 - platform: folder

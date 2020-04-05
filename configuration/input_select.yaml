@@ -1,0 +1,8 @@
+harmony_hub:
+  name: Harmony Hub
+  options:
+    - Select Input
+    - Watch Android TV
+    - Play Switch
+    - Power Off
+  icon: mdi:monitor

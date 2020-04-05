@@ -93,3 +93,33 @@ capture_rear_porch_video:
         duration: 15
         lookback: 2
 
+
+
+#### Harmony Hub ####
+harmony_shield_tv:
+  sequence:
+    - service: remote.turn_on
+      entity_id: remote.harmony_hub
+      data:
+        activity: "Watch Shield TV"
+
+harmony_xbox_one:
+  sequence:
+    - service: remote.turn_on
+      entity_id: remote.harmony_hub
+      data:
+        activity: "Play Xbox One"
+
+harmony_switch:
+  sequence:
+    - service: remote.turn_on
+      entity_id: remote.harmony_hub
+      data:
+        activity: "Play Switch" 
+
+harmony_poweroff:
+  sequence:
+    - service: remote.turn_on
+      entity_id: remote.harmony_hub
+      data:
+        activity: "PowerOff" 

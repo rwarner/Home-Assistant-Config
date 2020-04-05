@@ -93,6 +93,11 @@ hue:
       allow_unreachable: true
       allow_hue_groups: false
 
+remote:
+  - platform: harmony
+    name: Harmony Hub
+    host: !secret harmony_ip
+    activity: Watch Shield TV
 
 media_player:
   - platform: yamaha
@@ -215,3 +220,5 @@ history: !include configuration/history.yaml
 sensor: !include configuration/sensor.yaml
 
 script: !include configuration/script.yaml
+
+input_select: !include configuration/input_select.yaml
