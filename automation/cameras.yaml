@@ -45,8 +45,9 @@
          (as_timestamp(now())-as_timestamp(states.automation.notify_alexa_of_front_door_only_if_ryan_is_home.attributes.last_triggered)) > 300 }}"
     # If the front porch light hasn't been turned off/on in the last 15 seconds
     # was causing a notification when you turned the light on/off
+    # "last_changed", must be used for light entity not "last_triggered" like automations
     - condition: template
-      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.front_porch.last_triggered)) > 15 }}"
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.front_porch.last_changed)) > 15 }}"
   action:
     - service: script.alexa_notify_main_floor
       data:
