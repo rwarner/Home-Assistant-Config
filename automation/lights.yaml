@@ -4,7 +4,7 @@
 
 
 # Turn on Living room lights to 90%, Outside to 100%
-# turn off unneeded lights if nobodoy is home
+# turn off unneeded lights if nobody is home: center lamp, bookcase lamp, undercabinet kitchen lights
 - alias: LIGHTS - Turn on lights 1:30hr before sun sets
   trigger:
     - platform: sun
@@ -15,6 +15,7 @@
       data:
         entity_id: 
           - light.living_room_lights
+          - light.kitchen_lights
         brightness_pct: 90
         transition: 10
     - service: light.turn_on
@@ -32,6 +33,7 @@
       entity_id: 
         - light.center_lamp
         - light.bookcase_lamp
+        - light.undercabinet_lights
 
 - alias: LIGHTS - Turn off outside lights at 11:30pm
   trigger:
