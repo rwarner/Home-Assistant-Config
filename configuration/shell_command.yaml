@@ -2,5 +2,5 @@ unifi_ap_light_on: !secret unifi_ap_light_on #bash scripts/unifiAPLED.sh -i <ip_
 unifi_ap_light_off: !secret unifi_ap_light_off #bash scripts/unifiAPLED.sh -i <ip_address> -s off
 clear_video_directory: !secret clear_video_directory
 convert_camera_recording: !secret convert_camera_recording
-git_pull: bash scripts/git_pull.sh
-homeassistant_restart: bash scripts/homeassistant_restart.sh
+git_pull: bash /home/homeassistant/.homeassistant/scripts/git_pull.sh
+homeassistant_restart: bash /home/homeassistant/.homeassistant/scripts/homeassistant_restart.sh
