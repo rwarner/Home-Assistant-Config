@@ -47,11 +47,7 @@
     - condition: template
       value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.front_porch.last_changed)) > 15 }}"
   action:
-    - service: script.alexa_notify_main_floor
-      data:
-        title: "Motion detected"
-        message: "Front Door"
-    - service: script.alexa_notify_basement_office
+    - service: script.alexa_house_doorbell
       data:
         title: "Motion detected"
         message: "Front Door"
