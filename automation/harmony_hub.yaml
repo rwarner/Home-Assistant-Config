@@ -1,4 +1,4 @@
-- alias: Harmony Hub
+- alias: HARMONY - Harmony Hub input_select
   trigger:
     platform: state
     entity_id: input_select.harmony_hub
