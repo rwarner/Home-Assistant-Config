@@ -1,0 +1,36 @@
+############################
+#### SUNSET AUTOMATIONS ####
+############################
+
+# Sunset - 1 hr 30 min: Turn on Living room lights to 90%, Outside to 100%
+#                       turn off unneeded lights if nobody is home: center lamp,
+#                       bookcase lamp, undercabinet kitchen lights
+- alias: SUNSET - Turn on lights 1:30hr before sun sets
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "-01:30:00"
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: 
+          - light.living_room_lights
+          - light.kitchen_lights
+        brightness_pct: 90
+        transition: 10
+    - service: light.turn_on
+      data:
+        entity_id: 
+          - light.outside_lights
+        brightness_pct: 100
+        transition: 2
+      # Only proceed if someone is not home
+      # turn off lights that we don't want to leave on
+    - condition: state
+      entity_id: group.family
+      state: 'not_home'
+    - service: light.turn_off
+      entity_id: 
+        - light.center_lamp
+        - light.bookcase_lamp
+        - light.undercabinet_lights

@@ -74,6 +74,15 @@ alexa_house_doorbell:
           type: tts
         message: "{{ message }}"
 
+alexa_reset_all_volume:
+  sequence:
+    entity_id: 
+      - media_player.media_room_echo
+      - media_player.kitchen_echo_show
+      - media_player.living_room_echo_dot
+      - media_player.basement_echo_dot
+    volume_level: '0.6'
+
 ############################################
 
 

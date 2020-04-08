@@ -1,0 +1,12 @@
+############################
+### SUNRISE AUTOMATIONS ####
+############################
+
+# Turn on Unifi AP's LEDs in morning
+- alias: SUNRISE - Turn on Unifi AP LED in the morning
+  trigger:
+    - platform: sun
+      event: sunrise
+      offset: "+0:30:00"
+  action:
+    - service: shell_command.unifi_ap_light_on

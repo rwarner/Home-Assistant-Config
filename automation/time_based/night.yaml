@@ -1,0 +1,56 @@
+############################
+##### NIGHT AUTOMATIONS ####
+############################
+
+# 9:00 p.m : Outside lights off, if we are both home
+#            Sun - Friday
+- alias: NIGHT - Outside lights off 9:00pm, both home during week
+  trigger:
+    - platform: time
+      at: '21:00:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.family 
+        state: 'home'
+      - condition: time
+        weekday:
+          - sun
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+  action:
+      service: light.turn_off
+      entity_id: light.outside_lights
+
+
+# 11:00 p.m: Turn off Unifi AP's LEDs
+- alias: NIGHT - 11:00 p.m, Turn off Unifi AP LED
+  trigger:
+    - platform: time
+      at: '23:00:00'
+  action:
+    - service: shell_command.unifi_ap_light_off
+
+
+# 11:30 p.m: Turn off outside lights regardless
+- alias: NIGHT - Turn off outside lights at 11:30pm
+  trigger:
+    - platform: time
+      at: '23:30:00'
+  action:
+      service: light.turn_off
+      entity_id: light.outside_lights
+
+
+# 12:30 a.m: Lock door regardless
+- alias: NIGHT - Lock door at 12:30 a.m.
+  trigger:
+    - platform: time
+      at: '00:30:00'
+  action:
+    service: lock.lock
+    entity_id: lock.back_door

@@ -48,15 +48,6 @@
       entity_id: light.rear_entry_lamp
 
 
-- alias: LOCKS - Lock door at 12:30 a.m.
-  trigger:
-    - platform: time
-      at: '00:30:00'
-  action:
-    service: lock.lock
-    entity_id: lock.back_door
-
-
 #### Turn on Tablet when unlocking door, assuming you're coming inside
 - alias: LOCKS - When unlocking the door, turn on tablet for use, Alexa welcome home
   trigger:

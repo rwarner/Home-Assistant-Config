@@ -1,0 +1,7 @@
+# 8:00 a.m.
+- alias: MORNING - Set all Alexa volume to 60% everyday
+  trigger:
+    - platform: time
+      at: '08:00:00'
+  action:
+    - service: script.alexa_reset_all_volume
