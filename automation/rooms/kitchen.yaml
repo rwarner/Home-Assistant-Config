@@ -20,17 +20,16 @@
     - service: script.turn_on_kitchen_tablet
 
 
-#### Turn on Tablet if someone is in the kitchen 
+#### Turn off Tablet if motion hasn't been detected in 3 minutes 
 - alias: KITCHEN - Turn off tablet in kitchen, no motion
   trigger:
     - platform: state
       entity_id: sensor.kitchen_motion_sensor
       from: 'active'
       to: 'inactive'
+      for:
+        minutes: 3
   condition:
-    # Ignore any turn ons if the tablet turned on in the last 10 minutes (Tablet has 10 min screen time)
-    #- condition: template
-    #  value_template: "{{ (as_timestamp(now())-as_timestamp(states.script.turn_on_kitchen_tablet.last_changed)) > 600 }}"
     - condition: time
       before: '01:30:00'
       after: '06:00:00'
