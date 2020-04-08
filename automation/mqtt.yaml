@@ -19,7 +19,7 @@
         after: '07:00:00'
         before: '23:30:00'
   action:
-    - service: script.alexa_notify_kitchen
+    - service: script.alexa_notify_everywhere
       data_template: # !!! MUST BE DEFINED AS DATA_TEMPLATE FOR USING TRIGGER PAYLOAD
         title: "New Movie Added"
         message: "{{ trigger.payload_json['body'] }} was recently added to Plex."
