@@ -12,8 +12,8 @@
   condition:
     # Ignore any turn ons if the tablet was the last thing turned on
     # only want to trigger if turned off, was the most recent triggered item
-    - condition: template
-      value_template: "{{ (as_timestamp(now())-as_timestamp(trigger.from_state.last_changed)) > (as_timestamp(now())-as_timestamp(states.script.turn_off_kitchen_tablet.attributes.last_triggered)) }}"
+    #- condition: template
+    #  value_template: "{{ (as_timestamp(now())-as_timestamp(trigger.from_state.last_changed)) > (as_timestamp(now())-as_timestamp(states.script.turn_off_kitchen_tablet.attributes.last_triggered)) }}"
     - condition: time
       before: '01:30:00'
       after: '06:00:00'
