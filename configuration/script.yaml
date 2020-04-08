@@ -1,3 +1,4 @@
+###### Alexa #######
 alexa_notify_kitchen:
   sequence:
     - service: notify.alexa_media
@@ -73,7 +74,10 @@ alexa_house_doorbell:
           type: tts
         message: "{{ message }}"
 
+############################################
 
+
+###### Lighting #######
 toggle_dresser_lamp:
   sequence:
     - service: light.toggle
@@ -81,7 +85,8 @@ toggle_dresser_lamp:
         - light.master_bedroom_lights
     # Only continue if light is on, we want to automate the
     # scene to a dim setting from the Hue app
-    - delay: '00:00:01'
+    - delay:
+        milliseconds: 500
     - condition: state
       entity_id: light.master_bedroom_lights
       state: 'on'
@@ -97,12 +102,24 @@ toggle_dresser_lamp:
             Bright
           {% endif %}
 
+############################################
+
+
+###### Kitchen Tablet #######
 turn_on_kitchen_tablet:
   sequence:
     - service: mqtt.publish
       data:
         topic: homeassistant
         payload: "wakedevice"
+        qos: 0
+
+turn_off_kitchen_tablet:
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: homeassistant
+        payload: "sleepdevice"
         qos: 0
 
 turn_on_tablet_mlbtv:
@@ -113,6 +130,10 @@ turn_on_tablet_mlbtv:
         payload: "mlbtv"
         qos: 0
 
+############################################
+
+
+###### Video Recording #######
 capture_front_door_video:
   sequence:
     - delay: '00:00:02'
@@ -133,13 +154,17 @@ capture_rear_porch_video:
         duration: 15
         lookback: 2
 
+############################################
 
+
+###### Home Assistant Admin #######
 pull_changes_restart_homeassistant:
   sequence:
     - service: shell_command.git_pull
     - delay: '00:00:02'
     - service: shell_command.homeassistant_restart
 
+############################################
 
 
 #### Harmony Hub ####
@@ -170,3 +195,6 @@ harmony_poweroff:
       entity_id: remote.harmony_hub
       data:
         activity: "PowerOff" 
+
+
+############################################
