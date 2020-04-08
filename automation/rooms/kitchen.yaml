@@ -10,9 +10,10 @@
       from: 'inactive'
       to: 'active'
   condition:
-    # Ignore any turn ons if the tablet turned on in the last 10 minutes (Tablet has 10 min screen time)
-    #- condition: template
-    #  value_template: "{{ (as_timestamp(now())-as_timestamp(states.script.turn_on_kitchen_tablet.last_changed)) > 600 }}"
+    # Ignore any turn ons if the tablet was the last thing turned on
+    # only want to trigger if turned off, was the most recent triggered item
+    - condition: template
+      value_template: "{{ (as_timestamp(now())-as_timestamp(trigger.from_state.attributes.last_triggered)) > (as_timestamp(now())-as_timestamp(states.script.turn_off_kitchen_tablet.attributes.last_triggered)) }}"
     - condition: time
       before: '01:30:00'
       after: '06:00:00'
