@@ -51,27 +51,32 @@ alexa_notify_everywhere:
 # minimum of 1/2 a second delay in between from my testing
 alexa_house_doorbell:
   sequence:
-    - service: media_player.volume_set
-      data:
-        entity_id: media_player.everywhere
-        volume_level: '0.6'
-    - delay:
-        milliseconds: 500
+    #- service: media_player.volume_set
+    #  data:
+    #    entity_id: media_player.everywhere
+    #    volume_level: '0.6'
+    #- delay:
+    #    seconds: 3
     - service: media_player.play_media
       data:
         entity_id: 
-          - media_player.everywhere
+          - media_player.media_room_echo
+          - media_player.kitchen_echo_show
+          - media_player.living_room_echo_dot
+          - media_player.basement_echo_dot
         media_content_type: sound
         media_content_id: amzn_sfx_doorbell_chime_01
     - delay:
         milliseconds: 500
     - service: notify.alexa_media
       data_template:
-        target: 
-          - media_player.everywhere
-        title: "{{ title }}"
         data:
           type: tts
+        target: 
+          - media_player.media_room_echo
+          - media_player.kitchen_echo_show
+          - media_player.living_room_echo_dot
+          - media_player.basement_echo_dot
         message: "{{ message }}"
 
 alexa_reset_all_volume:
