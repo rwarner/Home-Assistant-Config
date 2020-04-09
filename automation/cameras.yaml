@@ -49,5 +49,4 @@
   action:
     - service: script.alexa_house_doorbell
       data:
-        title: "Motion detected"
         message: "Front Door"
