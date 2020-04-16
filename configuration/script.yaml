@@ -49,7 +49,7 @@ alexa_notify_everywhere:
 
 # Multiple Alexa script services in a row require atleast a
 # minimum of 1/2 a second delay in between from my testing
-alexa_house_doorbell:
+alexa_notify_house:
   sequence:
     #- service: media_player.volume_set
     #  data:

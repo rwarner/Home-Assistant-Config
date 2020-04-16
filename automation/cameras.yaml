@@ -47,6 +47,6 @@
     - condition: template
       value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.front_porch.last_changed)) > 15 }}"
   action:
-    - service: script.alexa_house_doorbell
+    - service: script.alexa_notify_house
       data:
         message: "Front Door"
