@@ -2,7 +2,7 @@
 ### LAUNDRY AUTOMATIONS  ###
 ############################
 
-- alias: LAUNDRY - Notify home laundry is done
+- alias: LAUNDRY - Notify kitchen laundry is done
   trigger:
     platform: template
     value_template: "{{ is_state_attr('sensor.washing_machine', 'run_completed', 'on') }}"
@@ -11,6 +11,22 @@
       entity_id: group.family 
       state: 'home'
   action:
-    - service: script.alexa_notify_house
-      data:
+    - service: script.alexa_notify_kitchen
+      data_template:
         message: "Laundry is done washing"
+
+
+- alias: LAUNDRY - Re-notify kitchen laundry is done after 1 hour
+  trigger:
+    platform: template
+    value_template: "{{ is_state_attr('sensor.washing_machine', 'run_completed', 'on') }}"
+    for:
+      hours: 1
+  condition:
+    - condition: state
+      entity_id: group.family 
+      state: 'home'
+  action:
+    - service: script.alexa_notify_kitchen
+      data_template:
+        message: "Reminder, laundry finished washing 1 hour ago"
