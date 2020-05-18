@@ -9,6 +9,8 @@
 # Add to Unifi Controller settings -> Device Authentication -> SSH Keys
 # All APs and devices should adopt this authorized key to /etc/dropbear/authorized_keys
 
+# NOTE: On every Unifi AP firmware upgrade, run this shell script manually to prompt authorization. The public key auth may need reauthorization and not work until done (i.e. trusting the machine again locally on the HASS server)
+
 
 #Unifi Hardware Username 
 USERNAME=admin  
