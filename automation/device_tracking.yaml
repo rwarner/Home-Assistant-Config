@@ -65,8 +65,9 @@
         - condition: sun
           before: sunrise
           before_offset: "+00:45:00"
+    # Keep lights that should be on while away, on
     - service: light.turn_on
-      entity_id: light.sun_based_not_home
+      entity_id: light.sun_based_lights_away
 
 
 
