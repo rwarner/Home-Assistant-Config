@@ -156,7 +156,7 @@
   action:
     - service: variable.set_variable
       data:
-        variable: variable.family_status
+        variable: family_status
         value: Away
 
 - alias: PERSON - Mark Family as Home if someone goes from Away to Just Arrived
@@ -187,5 +187,5 @@
   action:
     - service: variable.set_variable
       data:
-        variable: variable.family_status
+        variable: family_status
         value: Home
