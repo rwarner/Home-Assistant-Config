@@ -134,3 +134,58 @@
             kelly_status
           {% endif %}
         value: Extended Away
+        
+        
+- alias: PERSON - Mark Family as Away if both go from Just Left to Away
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      from: 'Just Left'
+      to: 'Away'
+    - platform: state
+      entity_id: variable.kelly_status
+      from: 'Just Left'
+      to: 'Away'
+  condition:
+    - condition: state
+      entity_id: variable.ryan_status
+      state: 'Away' 
+    - condition: state
+      entity_id: variable.kelly_status
+      state: 'Away'
+  action:
+    - service: variable.set_variable
+      data:
+        variable: variable.family_status
+        value: Away
+
+- alias: PERSON - Mark Family as Home if someone goes from Away to Just Arrived
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      from: 'Away'
+      to: 'Just Arrived'
+    - platform: state
+      entity_id: variable.kelly_status
+      from: 'Away'
+      to: 'Just Arrived'
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: variable.ryan_status
+        state: 'Just Arrived'
+      - condition: state
+        entity_id: variable.ryan_status
+        state: 'Home'
+      - condition: state
+        entity_id: variable.kelly_status
+        state: 'Just Arrived'
+      - condition: state
+        entity_id: variable.kelly_status
+        state: 'Home'
+  action:
+    - service: variable.set_variable
+      data:
+        variable: variable.family_status
+        value: Home

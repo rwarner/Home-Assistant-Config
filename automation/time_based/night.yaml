@@ -12,8 +12,8 @@
     condition: and
     conditions:
       - condition: state
-        entity_id: group.family 
-        state: 'home'
+        entity_id: variable.family_status 
+        state: 'Home'
       - condition: time
         weekday:
           - sun

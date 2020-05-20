@@ -4,7 +4,7 @@
 
 
 # Checking for if Ryan / Kelly / All_devices has changed within the last 10 minutes
-# or if group.family is "not_home" and our phones haven't connected to WiFi yet
+# or if variable.family_status is "Away" and our phones haven't connected to WiFi yet
 # Only if after 45 minutes before sunset, or 45 minutes before sunrise
 - alias: LOCKS - When unlocking the door, turn on lights inside if before/after sun and nobody is home
   trigger:
@@ -22,10 +22,10 @@
           - condition: template
             value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.ryan_status.last_changed)) < 600 }}"
           - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.group.family.last_changed)) < 600 }}"
+            value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.family_status.last_changed)) < 600 }}"
           - condition: state
-            entity_id: group.family
-            state: 'not_home'
+            entity_id: variable.family_status
+            state: 'Away'
       - condition: or
         conditions:
           - condition: sun
@@ -70,10 +70,10 @@
           - condition: template
             value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.ryan_status.last_changed)) < 600 }}"
           - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.group.family.last_changed)) < 600 }}"
+            value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.family_status.last_changed)) < 600 }}"
           - condition: state
-            entity_id: group.family
-            state: 'not_home'
+            entity_id: variable.family_status
+            state: 'Away'
   action:
     - service: mqtt.publish
       data:

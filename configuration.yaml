@@ -165,6 +165,8 @@ variable:
     restore: true
   kelly_status:
     restore: true
+  family_status:
+    restore: true
   tautilli_data:
     value: ""
     restore: true

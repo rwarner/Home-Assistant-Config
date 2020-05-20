@@ -5,3 +5,7 @@ variable.ryan_status:
 variable.kelly_status:
   friendly_name: Kelly
   icon: mdi:account
+
+variable.family_status:
+  friendly_name: Family
+  icon: mdi:account

@@ -8,8 +8,8 @@
     value_template: "{{ is_state_attr('sensor.washing_machine', 'run_completed', 'on') }}"
   condition:
     - condition: state
-      entity_id: group.family 
-      state: 'home'
+      entity_id: variable.family_status 
+      state: 'Home'
   action:
     - service: script.alexa_notify_kitchen
       data_template:
@@ -24,8 +24,8 @@
 #      hours: 1
 #  condition:
 #   - condition: state
-#      entity_id: group.family 
-#      state: 'home'
+#      entity_id: variable.family_status 
+#      state: 'Home'
 #  action:
 #    - service: script.alexa_notify_kitchen
 #      data_template:

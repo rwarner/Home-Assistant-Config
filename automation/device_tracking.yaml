@@ -42,9 +42,9 @@
 - alias: DEVICE_TRACK - Nobody home, lock doors, arm alexa, set Tstat to Away, turn off Lights, etc..
   trigger:
     - platform: state
-      entity_id: group.family
-      from: 'home'
-      to: 'not_home'
+      entity_id: variable.family_status
+      from: 'Just Left'
+      to: 'Away'
   action:
     - service: lock.lock
       entity_id: lock.back_door
@@ -74,9 +74,9 @@
 - alias: DEVICE_TRACK - Someone arrived home, disable alexa guard, set Thermostat to Home
   trigger:
     - platform: state
-      entity_id: group.family
-      from: 'not_home'
-      to: 'home'
+      entity_id: variable.family_status
+      from: 'Away'
+      to: 'Home'
   action:
     - service: alarm_control_panel.alarm_disarm
       entity_id: alarm_control_panel.alexa_guard_de7c8

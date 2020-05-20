@@ -10,8 +10,8 @@
       to: 'on'
   condition:
     - condition: state
-      entity_id: group.family 
-      state: 'not_home'
+      entity_id: variable.family_status 
+      state: 'Away'
   action:
     - service: script.capture_front_door_video
 
@@ -23,8 +23,8 @@
       to: 'on'
   condition:
     - condition: state
-      entity_id: group.family 
-      state: 'not_home'
+      entity_id: variable.family_status 
+      state: 'Away'
   action:
     - service: script.capture_rear_porch_video
 

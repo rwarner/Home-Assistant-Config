@@ -13,8 +13,8 @@
     condition: and
     conditions:
       - condition: state
-        entity_id: group.family
-        state: 'home'
+        entity_id: variable.family_status
+        state: 'Home'
       - condition: time
         after: '07:00:00'
         before: '23:30:00'
@@ -35,8 +35,8 @@
     condition: or
     conditions:
       - condition: state
-        entity_id: group.family
-        state: 'not_home'
+        entity_id: variable.family_status
+        state: 'Away'
       - condition: time
         before: '07:00:00'
         after: '23:30:00'

@@ -27,8 +27,8 @@
       # Only proceed if someone is not home
       # turn off lights that we don't want to leave on
     - condition: state
-      entity_id: group.family
-      state: 'not_home'
+      entity_id: variable.family_status
+      state: 'Away'
     - service: light.turn_off
       entity_id: 
         - light.center_lamp
