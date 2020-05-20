@@ -10,9 +10,9 @@ include:
     - alarm_control_panel.alexa_guard_de7c8
     #- group.family
     #- person.kelly
-    - sensor.kelly_status
+    - variable.kelly_status
     #- person.ryan
-    - sensor.ryan_status
+    - variable.ryan_status
     - variable.family_status
     - binary_sensor.living_room_occupancy
     - binary_sensor.thermostat_occupancy

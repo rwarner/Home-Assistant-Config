@@ -87,11 +87,11 @@
       data_template:
         title: "Welcome home!"
         message: >
-          {% if is_state('sensor.ryan_status', 'Just Arrived') and is_state('sensor.kelly_status', 'Just Arrived') %}
+          {% if is_state('variable.ryan_status', 'Just Arrived') and is_state('variable.kelly_status', 'Just Arrived') %}
           Welcome home, Ryan and Kelly!
-          {% elif is_state('sensor.ryan_status', 'Just Arrived') and (is_state('sensor.kelly_status', 'Away') or is_state('sensor.kelly_status', 'Home')) %}
+          {% elif is_state('variable.ryan_status', 'Just Arrived') and (is_state('variable.kelly_status', 'Away') or is_state('variable.kelly_status', 'Home')) %}
           Welcome home, Ryan!
-          {% elif (is_state('sensor.ryan_status', 'Away') or is_state('sensor.ryan_status', 'Home')) and is_state('sensor.kelly_status', 'Just Arrived') %}
+          {% elif (is_state('variable.ryan_status', 'Away') or is_state('variable.ryan_status', 'Home')) and is_state('variable.kelly_status', 'Just Arrived') %}
           Welcome home, Kelly!
           {% else %}
           Welcome home!

@@ -46,10 +46,10 @@
 #      to: 'active'
 #  condition:
 #    - condition: state
-#      entity_id: sensor.ryan_status
+#      entity_id: variable.ryan_status
 #      state: 'Home' 
 #    - condition: state
-#      entity_id: sensor.kelly_status
+#      entity_id: variable.kelly_status
 #      state: 'Away'
 #    - condition: time
 #      before: '11:00:00'
