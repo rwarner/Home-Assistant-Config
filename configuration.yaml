@@ -155,6 +155,11 @@ camera:
     still_image_url: !secret unifi_garage_camera_still
     stream_source: !secret unifi_garage_camera_source
     verify_ssl: false
+  - platform: generic
+    name: Doorbell Camera
+    still_image_url: !secret unifi_doorbell_camera_still
+    stream_source: !secret unifi_doorbell_camera_source
+    verify_ssl: false
 
 # Custom HACS variable integation
 # https://github.com/rogro82/hass-variables
