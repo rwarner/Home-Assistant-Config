@@ -66,12 +66,6 @@ ecobee:
 mqtt:
   broker: !secret mqtt_broker_ip
 
-# Broken currently
-#smartthinq:
-#  token: !secret smartthinq_api
-#  region: US
-#  language: en-US
-
 pi_hole:
   host: !secret pi_hole_host
   ssl: false
