@@ -190,6 +190,8 @@ binary_sensor:
           or is_state('states.sensor.synology_nas', 'Offline')
           or is_state('states.sensor.yamaha_receiver', 'Offline') }}"
         friendly_name: 'Device Critical'
+  - platform: unifiprotect
+  - platform: bhyve
   ## Front Door Motion Sensor
   - platform: mqtt
     name: Front Door Motion Sensor
@@ -203,6 +205,19 @@ binary_sensor:
     payload_on: 'ON'
     payload_off: 'OFF'
     device_class: motion
+
+unifiprotect:
+  host: 192.168.1.2
+  username: !secret unifiprotect_user
+  password: !secret unifiprotect_pass
+  port: 7443
+
+bhyve:
+  username: !secret bhyve_username
+  password: !secret bhyve_password
+
+switch:
+  - platform: bhyve
 
 #################################
 ##### EXTERNAL FILES BELOW ######

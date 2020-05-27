@@ -100,6 +100,9 @@
   state_topic: "smartthings/Kitchen Motion Sensor/battery"
   unit_of_measurement: '%'
 
+# Bhyve sensor (water/garden)
+- platform: bhyve
+
 
 #### Integral device status ##########
 - platform: template
