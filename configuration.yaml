@@ -188,10 +188,10 @@ binary_sensor:
   - platform: bhyve
 
 unifiprotect:
-  host: 192.168.1.2
+  host: !secret unifiprotect_ip
   username: !secret unifiprotect_user
   password: !secret unifiprotect_pass
-  port: 7443
+  port: !secret unifiprotect_port
 
 bhyve:
   username: !secret bhyve_username
