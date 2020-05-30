@@ -186,19 +186,6 @@ binary_sensor:
         friendly_name: 'Device Critical'
   - platform: unifiprotect
   - platform: bhyve
-  ## Front Door Motion Sensor
-  - platform: mqtt
-    name: Front Door Motion Sensor
-    state_topic: "/camera/motion/front_door"
-    payload_on: 'ON'
-    payload_off: 'OFF'
-    device_class: motion
-  - platform: mqtt
-    name: Rear Porch Motion Sensor
-    state_topic: "/camera/motion/rear_porch"
-    payload_on: 'ON'
-    payload_off: 'OFF'
-    device_class: motion
 
 unifiprotect:
   host: 192.168.1.2
