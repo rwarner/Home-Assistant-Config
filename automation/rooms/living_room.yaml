@@ -10,6 +10,8 @@
     - condition: state
       entity_id: binary_sensor.living_room_occupancy 
       state: 'off'
+    - condition: template
+      value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'Playing') }}"
   action:
     - service: light.turn_off
       entity_id: light.living_room_lights
@@ -23,7 +25,7 @@
       entity_id: binary_sensor.living_room_occupancy 
       state: 'off'
     - condition: template
-      value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'Playing') }}"h
+      value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'Playing') }}"
   action:
     - service: light.turn_off
       entity_id: light.living_room_lights
