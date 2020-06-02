@@ -5,11 +5,11 @@
 # Sunset - 1 hr 30 min: Turn on Living room lights to 90%, Outside to 100%
 #                       turn off unneeded lights if nobody is home: center lamp,
 #                       bookcase lamp, undercabinet kitchen lights
-- alias: SUNSET - Turn on lights 1:30hr before sun sets
+- alias: SUNSET - Turn on lights 1:45hr before sun sets
   trigger:
     - platform: sun
       event: sunset
-      offset: "-01:30:00"
+      offset: "-01:45:00"
   action:
     - service: light.turn_on
       data:
