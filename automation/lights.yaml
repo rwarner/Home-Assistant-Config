@@ -7,6 +7,9 @@
     - platform: state
       entity_id: binary_sensor.unifiprotect_motion_front_door
       to: 'on'
+    - platform: state
+      entity_id: binary_sensor.unifiprotect_motion_doorbell
+      to: 'on'
   condition:
     - condition: state
       entity_id: light.front_porch
