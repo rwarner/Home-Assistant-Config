@@ -11,6 +11,19 @@
   optimistic: true
   retain: true
 
+- platform: mqtt
+  name: Dining Room Table
+  state_topic: "smartthings/Dining Room Table/switch"
+  command_topic: "smartthings/Dining Room Table/switch"
+  brightness_state_topic: "smartthings/Dining Room Table/level"
+  brightness_command_topic: "smartthings/Dining Room Table/level"
+  brightness_scale: 101
+  payload_on: "on"
+  payload_off: "off"
+  optimistic: true
+  retain: true
+
+
  ## Wemo Lights -> Regular lights
 #- platform: switch
 #  name: Bookshelf Lamp
