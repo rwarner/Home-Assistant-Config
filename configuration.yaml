@@ -63,8 +63,8 @@ folder_watcher:
 ecobee:
   api_key: !secret ecobee_api 
 
-mqtt:
-  broker: !secret mqtt_broker_ip
+#mqtt:
+#  broker: !secret mqtt_broker_ip
 
 pi_hole:
   host: !secret pi_hole_host
@@ -203,8 +203,6 @@ switch:
 #################################
 ##### EXTERNAL FILES BELOW ######
 #################################
-group: !include configuration/groups.yaml
-
 automation: !include_dir_merge_list automation/
 
 lock: !include configuration/locks.yaml
