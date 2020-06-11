@@ -4,8 +4,10 @@
 
 - alias: LAUNDRY - Notify kitchen laundry is done
   trigger:
-    platform: template
-    value_template: "{{ is_state_attr('sensor.washing_machine', 'run_completed', 'on') }}"
+    - platform: state
+      entity_id: binary_sensor.washer_wash_completed
+      from: 'off'
+      to: 'on'
   condition:
     - condition: state
       entity_id: variable.family_status 
