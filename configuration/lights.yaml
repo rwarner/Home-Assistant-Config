@@ -66,8 +66,8 @@
   name: Master Bedroom Lights
   entities:
     - light.dresser_lamp
-    - light.kelly's_bedside
-    - light.ryan's_bedside
+    - light.kellys_bedside
+    - light.ryans_bedside
 
 
  ### Outside ###
