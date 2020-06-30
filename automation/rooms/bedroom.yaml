@@ -32,7 +32,7 @@
       entity_id: sensor.bedroom_light_button
       to: 'pushed'
   action:
-      service: script.toggle_dresser_lamp
+      service: script.toggle_bedroom_lights
 
 - alias: BEDROOM - Turn on fan from light button in Bedroom
   trigger:
@@ -53,7 +53,7 @@
     - service: switch.toggle
       entity_id: 
         - switch.fan
-    - service: script.toggle_dresser_lamp
+    - service: script.toggle_bedroom_lights
 
 #####################################
 
@@ -65,7 +65,7 @@
       entity_id: sensor.bedroom_fan_button
       to: 'pushed'
   action:
-      service: script.toggle_dresser_lamp
+      service: script.toggle_bedroom_lights
 
 - alias: BEDROOM - Turn on fan in Bedroom (Ryan Button)
   trigger:

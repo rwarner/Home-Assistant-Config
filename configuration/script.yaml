@@ -98,7 +98,7 @@ alexa_reset_all_volume:
 
 
 ###### Lighting #######
-toggle_dresser_lamp:
+toggle_bedroom_lights:
   sequence:
     - service: light.toggle
       entity_id: 
