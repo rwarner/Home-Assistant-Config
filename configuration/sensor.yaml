@@ -51,6 +51,8 @@
 ## Folder for mp4 videos
 - platform: folder
   folder: /tmp/hass
+    
+- platform: bhyve
 
 
 ## Smart Things Button Pushes
