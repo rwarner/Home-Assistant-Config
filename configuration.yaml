@@ -184,7 +184,6 @@ binary_sensor:
           or is_state('states.sensor.synology_nas', 'Offline')
           or is_state('states.sensor.yamaha_receiver', 'Offline') }}"
         friendly_name: 'Device Critical'
-  - platform: unifiprotect
 
 unifiprotect:
   host: !secret unifiprotect_ip
