@@ -6,7 +6,7 @@
   trigger:
     - platform: state
       entity_id: 
-        - binary_sensor.unifiprotect_motion_front_door
+        - binary_sensor.motion_front_door
       to: 'on'
   condition:
     - condition: state
@@ -19,7 +19,7 @@
   trigger:
     - platform: state
       entity_id: 
-        - binary_sensor.unifiprotect_motion_rear_porch
+        - binary_sensor.motion_rear_porch
       to: 'on'
   condition:
     - condition: state
@@ -32,7 +32,7 @@
   trigger:
     - platform: state
       entity_id: 
-        - binary_sensor.unifiprotect_motion_front_door
+        - binary_sensor.motion_front_door
       to: 'on'
   condition:
     # If Ryan is home

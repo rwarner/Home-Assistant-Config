@@ -5,10 +5,10 @@
 - alias: LIGHTS - Turn on Front Porch Light, if motion detected
   trigger:
     - platform: state
-      entity_id: binary_sensor.unifiprotect_motion_front_door
+      entity_id: binary_sensor.motion_front_door
       to: 'on'
     - platform: state
-      entity_id: binary_sensor.unifiprotect_motion_doorbell
+      entity_id: binary_sensor.motion_doorbell
       to: 'on'
   condition:
     - condition: state
@@ -27,7 +27,7 @@
 - alias: LIGHTS - Turn on Rear Porch Light, if motion detected
   trigger:
     - platform: state
-      entity_id: binary_sensor.unifiprotect_motion_rear_porch
+      entity_id: binary_sensor.motion_rear_porch
       to: 'on'
   condition:
     # Only trigger if the back porch light hasn't been turned off/on it hasn't been turned off in the last 30 seconds

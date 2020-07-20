@@ -106,7 +106,7 @@ toggle_bedroom_lights:
     # Only continue if light is on, we want to automate the
     # scene to a dim setting from the Hue app
     - delay:
-        milliseconds: 500
+        milliseconds: 250
     - condition: state
       entity_id: light.master_bedroom_lights
       state: 'on'
