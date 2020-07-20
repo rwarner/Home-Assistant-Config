@@ -119,7 +119,7 @@ toggle_bedroom_lights:
           {% elif now().hour <= 7 %}
             Night lamp
           {% else %}
-            Bright
+            Preferred Bright
           {% endif %}
 
 ############################################
