@@ -80,18 +80,15 @@ notify:
     name: discord
     token: !secret discord_token
 
-hue:
-  bridges:
-    - host: !secret hue_ip #Static IP set
-      filename: mainhue.conf
-      allow_unreachable: true
-      allow_hue_groups: false
-
 remote:
   - platform: harmony
     name: Harmony Hub
     host: !secret harmony_ip
     activity: Watch Shield TV
+  - platform: broadlink
+    host: 192.168.3.25
+    mac: "24:df:a7:b1:37:ff"
+    type: rm4_mini
 
 media_player:
   - platform: yamaha
@@ -195,8 +192,24 @@ bhyve:
   username: !secret bhyve_username
   password: !secret bhyve_password
 
+smartir:
+
+# Imperitave that the "Type" for rm4_mini is included to make it work
+# for broadlink / smartir
 switch:
   - platform: bhyve
+  - platform: broadlink
+    host: 192.168.3.25
+    mac: "24:df:a7:b1:37:ff"
+    type: rm4_mini
+
+climate:
+  - platform: smartir
+    name: Living Room AC
+    unique_id: living_room_ac
+    device_code: 2040
+    controller_data: 192.168.3.25
+    power_sensor: binary_sensor.living_room_ac_power
 
 #################################
 ##### EXTERNAL FILES BELOW ######
