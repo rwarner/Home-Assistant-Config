@@ -57,7 +57,7 @@
       friendly_name: "Media Room Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ ((float(states.sensor.media_room_temperature.state) | round(2) }}
+        {{ (float(states.sensor.media_room_temperature.state) | round(2)) }}
         
 # -- Kitchen -- only one sensor currently
 - platform: template
@@ -66,7 +66,7 @@
       friendly_name: "Kitchen Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ ((float(states.sensor.kitchen_motion_temperature.state) | round(2) }}
+        {{ (float(states.sensor.kitchen_motion_temperature.state) | round(2)) }}
 
 # -- Basement -- only one sensor currently
 - platform: template
@@ -75,7 +75,7 @@
       friendly_name: "Basement Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ ((float(states.sensor.basement_laundry_sensor_temperature.state) | round(2) }}
+        {{ (float(states.sensor.basement_laundry_sensor_temperature.state) | round(2)) }}
 
 
 
