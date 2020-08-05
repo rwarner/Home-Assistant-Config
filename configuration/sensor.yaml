@@ -28,6 +28,11 @@
       friendly_name: "Ecobee Preset"
   
   
+
+# Temperature for rooms
+# Define below multiple sensors into one, only rely on these sensors for automations and views
+
+#  -- Bedroom --
 - platform: template
   sensors:
     bedroom_avg_temp:
@@ -35,6 +40,44 @@
       unit_of_measurement: '°F'
       value_template: >-
         {{ ((float(states.sensor.bedroom_fan_button_temperature.state) + float(states.sensor.bedroom_light_button_temperature.state))  / 2)  | round(2) }}
+
+#  -- Living Room --
+- platform: template
+  sensors:
+    living_room_avg_temp:
+      friendly_name: "Living Room Temperature"
+      unit_of_measurement: '°F'
+      value_template: >-
+        {{ ((float(states.sensor.living_room_temperature.state) + float(states.sensor.thermostat_temperature.state))  / 2)  | round(2) }}
+
+# -- Media Room -- only one sensor currently
+- platform: template
+  sensors:
+    media_room_avg_temp:
+      friendly_name: "Media Room Temperature"
+      unit_of_measurement: '°F'
+      value_template: >-
+        {{ ((float(states.sensor.media_room_temperature.state) | round(2) }}
+        
+# -- Kitchen -- only one sensor currently
+- platform: template
+  sensors:
+    kitchen_avg_temp:
+      friendly_name: "Kitchen Temperature"
+      unit_of_measurement: '°F'
+      value_template: >-
+        {{ ((float(states.sensor.kitchen_motion_temperature.state) | round(2) }}
+
+# -- Basement -- only one sensor currently
+- platform: template
+  sensors:
+    basement_avg_temp:
+      friendly_name: "Basement Temperature"
+      unit_of_measurement: '°F'
+      value_template: >-
+        {{ ((float(states.sensor.basement_laundry_sensor_temperature.state) | round(2) }}
+
+
 
 # Harmony Remote sensor for current activity
 - platform: template

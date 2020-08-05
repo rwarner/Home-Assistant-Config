@@ -32,15 +32,13 @@ include:
     - sensor.bedroom_fan_button_battery
     - sensor.bedroom_light_button_battery
 
-    - sensor.thermostat_temperature
-    - climate.thermostat
     - sensor.thermostat_humidity
-    - climate.media_room
     - sensor.media_room_humidity
-    - sensor.media_room_temperature
-    - sensor.basement_laundry_sensor_temperature
-    - sensor.living_room_temperature
+    - sensor.media_room_avg_temp
+    - sensor.basement_avg_temp
+    - sensor.living_room_avg_temp
     - sensor.bedroom_avg_temp
+    - sensor.kitchen_avg_temp
      
     #- sensor.glances_cpu_temp
     #- sensor.glances_ram_used_percent
