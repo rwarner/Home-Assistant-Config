@@ -1,18 +1,18 @@
 # Binary sensor for device critcal, if one of them goes offline
 - platform: template
-    sensors:
-      device_critical:
-        value_template: >-
-          "{{ is_state('states.sensor.garage_camera','Offline')
-          or is_state('states.sensor.front_door_camera', 'Offline')
-          or is_state('states.sensor.doorbell_camera', 'Offline')
-          or is_state('states.sensor.rear_porch_camera', 'Offline')
-          or is_state('states.sensor.living_room_camera', 'Offline')
-          or is_state('states.sensor.hdhomerun_extend', 'Offline')
-          or is_state('states.sensor.hue_bridge', 'Offline')
-          or is_state('states.sensor.kitchen_tablet', 'Offline')
-          or is_state('states.sensor.logitech_harmony_hub', 'Offline')
-          or is_state('states.sensor.smartthings_hub', 'Offline')
-          or is_state('states.sensor.synology_nas', 'Offline')
-          or is_state('states.sensor.yamaha_receiver', 'Offline') }}"
-        friendly_name: 'Device Critical'
+  sensors:
+    device_critical:
+      value_template: >-
+        "{{ is_state('states.sensor.garage_camera','Offline')
+        or is_state('states.sensor.front_door_camera', 'Offline')
+        or is_state('states.sensor.doorbell_camera', 'Offline')
+        or is_state('states.sensor.rear_porch_camera', 'Offline')
+        or is_state('states.sensor.living_room_camera', 'Offline')
+        or is_state('states.sensor.hdhomerun_extend', 'Offline')
+        or is_state('states.sensor.hue_bridge', 'Offline')
+        or is_state('states.sensor.kitchen_tablet', 'Offline')
+        or is_state('states.sensor.logitech_harmony_hub', 'Offline')
+        or is_state('states.sensor.smartthings_hub', 'Offline')
+        or is_state('states.sensor.synology_nas', 'Offline')
+        or is_state('states.sensor.yamaha_receiver', 'Offline') }}"
+      friendly_name: 'Device Critical'
