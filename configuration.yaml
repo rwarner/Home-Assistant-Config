@@ -167,20 +167,7 @@ variable:
     value: ""
     restore: true
 
-binary_sensor:
-  - platform: template
-    sensors:
-      device_critical:
-        value_template: >-
-          "{{ is_state('states.sensor.garage_camera','Offline')
-          or is_state('states.sensor.hdhomerun_extend', 'Offline')
-          or is_state('states.sensor.hue_bridge', 'Offline')
-          or is_state('states.sensor.kitchen_tablet', 'Offline')
-          or is_state('states.sensor.logitech_harmony_hub', 'Offline')
-          or is_state('states.sensor.smartthings_hub', 'Offline')
-          or is_state('states.sensor.synology_nas', 'Offline')
-          or is_state('states.sensor.yamaha_receiver', 'Offline') }}"
-        friendly_name: 'Device Critical'
+  
 
 unifiprotect:
   host: !secret unifiprotect_ip
@@ -229,3 +216,5 @@ script: !include configuration/script.yaml
 input_select: !include configuration/input_select.yaml
 
 shell_command: !include configuration/shell_command.yaml
+
+binary_sensor: !include configuration/binary_sensor.yaml
