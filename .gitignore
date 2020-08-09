@@ -13,7 +13,11 @@
 .google.token
 backup/
 tts/
-custom_components/
+#custom_components/
+custom_components/alexa_media/
+custom_components/hacs/
+custom_components/huesensor/
+custom_components/smartthinq_sensors/
 
 # Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
 ip_bans.yaml
@@ -23,7 +27,7 @@ known_devices.yaml
 *.conf
 *.log
 *.db
-
+*.db*
 #Alex media
 *.pickle
 
