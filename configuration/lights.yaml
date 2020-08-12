@@ -11,12 +11,26 @@
   optimistic: true
   retain: true
 
+## Leviton Z-Wave Dimmer Switch -- Dining Room Table
 - platform: mqtt
   name: Dining Room Table
   state_topic: "smartthings/Dining Room Table/switch"
   command_topic: "smartthings/Dining Room Table/switch"
   brightness_state_topic: "smartthings/Dining Room Table/level"
   brightness_command_topic: "smartthings/Dining Room Table/level"
+  brightness_scale: 101
+  payload_on: "on"
+  payload_off: "off"
+  optimistic: true
+  retain: true
+
+## Leviton Z-Wave Dimmer Switch -- Basement Office
+- platform: mqtt
+  name: Basement Office
+  state_topic: "smartthings/Basement Office/switch"
+  command_topic: "smartthings/Basement Office/switch"
+  brightness_state_topic: "smartthings/Basement Office/level"
+  brightness_command_topic: "smartthings/Basement Office/level"
   brightness_scale: 101
   payload_on: "on"
   payload_off: "off"
@@ -43,6 +57,7 @@
   name: Basement Office Lights
   entities:
     - light.ryans_office_lamp
+    - light.basement_office_recessed
 
 
  ### Laundry Room ###
