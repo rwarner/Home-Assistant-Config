@@ -86,7 +86,7 @@ remote:
     host: !secret harmony_ip
     activity: Watch Shield TV
   - platform: broadlink
-    host: 192.168.3.25
+    host: !secret broadlink_living_room_ip
     mac: "24:df:a7:b1:37:ff"
     type: rm4_mini
 
@@ -186,8 +186,8 @@ smartir:
 switch:
   - platform: bhyve
   - platform: broadlink
-    host: 192.168.3.25
-    mac: "24:df:a7:b1:37:ff"
+    host: !secret broadlink_living_room_ip
+    mac: !secret broadlink_living_room_mac
     type: rm4_mini
 
 climate:
@@ -195,7 +195,7 @@ climate:
     name: Living Room AC
     unique_id: living_room_ac
     device_code: 2040
-    controller_data: 192.168.3.25
+    controller_data: !secret broadlink_living_room_ip
     power_sensor: binary_sensor.living_room_ac_power
 
 #################################
