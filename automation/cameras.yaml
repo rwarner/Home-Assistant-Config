@@ -2,7 +2,10 @@
 ### CAMERA AUTOMATIONS   ###
 ############################
 
+
+# Set mode to queued so that there isn't conflicting runs when called while another is running
 - alias: CAMERAS - Capture on front door motion
+  mode: queued
   trigger:
     - platform: state
       entity_id: 
@@ -15,7 +18,9 @@
   action:
     - service: script.capture_front_door_video
 
+# Set mode to queued so that there isn't conflicting runs when called while another is running
 - alias: CAMERAS - Capture on rear porch motion
+  mode: queued
   trigger:
     - platform: state
       entity_id: 
