@@ -43,7 +43,7 @@
   trigger:
     - platform: state
       entity_id: variable.family_status
-      from: 'Just Left'
+      from: 'Home'
       to: 'Away'
   action:
     - service: lock.lock
