@@ -73,6 +73,6 @@
   action:
     - service: notify.discord
       data_template:
-        message: '{{trigger.event.data.service_data.message}}'
+        message: 'Persistent: {{trigger.event.data.service_data.title}} - {{trigger.event.data.service_data.message}}'
         title: 'Persistent: {{trigger.event.data.service_data.title}}'
         target: "658174234480082997"
