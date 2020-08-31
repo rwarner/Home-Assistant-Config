@@ -72,8 +72,6 @@ pi_hole:
   verify_ssl: false
 
 weather:
-  - platform: darksky
-    api_key: !secret dark_sky_api
 
 notify:
   - platform: discord
