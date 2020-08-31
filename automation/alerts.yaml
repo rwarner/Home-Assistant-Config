@@ -61,3 +61,17 @@
             #- "{{ trigger.event.data.path }}"
     - delay: '00:00:15'
     - service: shell_command.clear_video_directory
+
+- alias: ALERT - HA Persistent Notifications to Discord
+  trigger:
+  - event_data:
+      domain: persistent_notification
+      service: create
+    event_type: call_service
+    platform: event
+  condition: []
+  action:
+    - service: notify.discord
+      data_template:
+        message: '{{trigger.event.data.service_data.message}}'
+        title: 'Persistent: {{trigger.event.data.service_data.title}}'
