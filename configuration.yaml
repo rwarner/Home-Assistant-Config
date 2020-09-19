@@ -177,15 +177,15 @@ smartir:
 
 switch:
   - platform: bhyve
-  - platform: broadlink
-    mac: !secret broadlink_living_room_mac
+#  - platform: broadlink
+#    mac: !secret broadlink_living_room_mac
 
 climate:
   - platform: smartir
     name: Living Room AC
     unique_id: living_room_ac
     device_code: 2040
-    controller_data: !secret broadlink_living_room_ip
+    controller_data: remote.living_room_remote
     power_sensor: binary_sensor.living_room_ac_power
 
 #################################
