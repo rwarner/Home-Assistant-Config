@@ -83,10 +83,6 @@ remote:
     name: Harmony Hub
     host: !secret harmony_ip
     activity: Watch Shield TV
-  - platform: broadlink
-    host: !secret broadlink_living_room_ip
-    mac: "24:df:a7:b1:37:ff"
-    type: rm4_mini
 
 media_player:
   - platform: yamaha
