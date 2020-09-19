@@ -179,14 +179,10 @@ bhyve:
 
 smartir:
 
-# Imperitave that the "Type" for rm4_mini is included to make it work
-# for broadlink / smartir
 switch:
   - platform: bhyve
   - platform: broadlink
-    host: !secret broadlink_living_room_ip
     mac: !secret broadlink_living_room_mac
-    type: rm4_mini
 
 climate:
   - platform: smartir
