@@ -95,69 +95,79 @@ class OrbitWebsocket:
                     self.state = STATE_RUNNING
 
                     while True:
+                        if self.state == STATE_STOPPED:
+                            _LOGGER.warning("Websocket is stopped, exiting loop")
+                            break
+
                         msg = await self._ws.receive()
                         self._reset_heartbeat()
                         _LOGGER.debug("msg received {}".format(str(msg)[:80]))
 
-                        if self.state == STATE_STOPPED:
-                            break
-
-                        elif msg.type == WSMsgType.TEXT:
+                        if msg.type == WSMsgType.TEXT:
                             ensure_future(self._async_callback(json.loads(msg.data)))
 
                         elif msg.type == WSMsgType.PING:
                             self._ws.pong()
 
-                        # elif msg.type == WSMsgType.CLOSE:
-                        #     await self._ws.close()
-                        #     break
+                        elif msg.type == WSMsgType.CLOSE:
+                            _LOGGER.debug("Websocket received CLOSE message, ignoring")
+                            break
 
                         elif msg.type == WSMsgType.CLOSED:
                             _LOGGER.error("websocket connection closed")
                             break
 
                         elif msg.type == WSMsgType.ERROR:
-                            _LOGGER.error("websocket error %s", self._ws.exception())
+                            _LOGGER.error(
+                                "websocket error: %s", self._ws.exception() or "Unknown"
+                            )
                             break
 
                     if self._ws.closed:
                         _LOGGER.info("Websocket closed? %s", self._ws.closed)
+                        self.state = STATE_STOPPED
 
                     if self._ws.exception():
-                        _LOGGER.warning("Websocket exception: %s", self._ws.exception())
+                        _LOGGER.warning(
+                            "Websocket exception: %s", self._ws.exception() or "Unknown"
+                        )
+                        self.state = STATE_STOPPED
 
         except aiohttp.ClientConnectorError:
-            _LOGGER.error("Client connection error")
-            if self.state != STATE_STOPPED:
-                self.retry()
+            _LOGGER.error("Client connection error; state: %s", self.state)
+            self.retry()
 
         # pylint: disable=broad-except
         except Exception as err:
             _LOGGER.error("Unexpected error %s", err)
-            if self.state != STATE_STOPPED:
-                self.retry()
+            self.retry()
 
         else:
-            if self.state != STATE_STOPPED:
-                _LOGGER.info("Reconnecting websocket; state: %s", self.state)
-                self.retry()
+            _LOGGER.info("Reconnecting websocket; state: %s", self.state)
+            self.retry()
 
     async def stop(self):
         """Close websocket connection."""
+        _LOGGER.info("Closing websocket connection; state: %s --> STOPPED", self.state)
         self.state = STATE_STOPPED
-        _LOGGER.info("Closing websocket connection")
         await self._ws.close()
 
     def retry(self):
         """Retry to connect to Orbit."""
         if self.state != STATE_STARTING:
+            _LOGGER.info(
+                "Reconnecting to Orbit in %i; state: %s", RECONNECT_DELAY, self.state
+            )
             self.state = STATE_STARTING
             self._loop.call_later(RECONNECT_DELAY, self.start)
-            _LOGGER.info("Reconnecting to Orbit in %i.", RECONNECT_DELAY)
+        else:
+            _LOGGER.info("Ignoring websocket retry; state: %s", self.state)
 
     async def send(self, payload):
         """Send a websocket message."""
         if not self._ws.closed:
             await self._ws.send_str(json.dumps(payload))
         else:
-            _LOGGER.warning("Tried to send message whilst websocket closed")
+            _LOGGER.warning(
+                "Tried to send message whilst websocket closed; state: %s", self.state
+            )
