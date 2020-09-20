@@ -27,10 +27,10 @@
 ## Leviton Z-Wave Dimmer Switch -- Basement Office
 - platform: mqtt
   name: Basement Office
-  state_topic: "smartthings/Basement Office/switch"
-  command_topic: "smartthings/Basement Office/switch"
-  brightness_state_topic: "smartthings/Basement Office/level"
-  brightness_command_topic: "smartthings/Basement Office/level"
+  state_topic: "smartthings/Basement Office Dimmer/switch"
+  command_topic: "smartthings/Basement Office Dimmer/switch"
+  brightness_state_topic: "smartthings/Basement Office Dimmer/level"
+  brightness_command_topic: "smartthings/Basement Office Dimmer/level"
   brightness_scale: 101
   payload_on: "on"
   payload_off: "off"
