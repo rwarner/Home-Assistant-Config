@@ -6,7 +6,6 @@
   trigger:
     - platform: state
       entity_id: 
-        - sensor.garage_camera
         - sensor.hdhomerun_extend
         - sensor.hue_bridge
         - sensor.kitchen_tablet
@@ -14,6 +13,10 @@
         - sensor.smartthings_hub
         - sensor.synology_nas
         - sensor.yamaha_reciever
+        - sensor.front_door_camera
+        - sensor.doorbell_camera
+        - sensor.living_room_camera
+        - sensor.garage_camera
       from: 'Online'
       to: 'Offline'
       for:

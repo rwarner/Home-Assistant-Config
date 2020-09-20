@@ -57,7 +57,7 @@
 
 #####################################
 
-############ BEDROOM FAN BUTTON #############
+############ BEDROOM FAN BUTTON (Ryan Button) #############
 
 - alias: BEDROOM - Turn on light in Bedroom (Ryan Button)
   trigger:

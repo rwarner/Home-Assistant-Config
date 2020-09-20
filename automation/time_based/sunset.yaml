@@ -2,7 +2,7 @@
 #### SUNSET AUTOMATIONS ####
 ############################
 
-# Sunset - 1 hr 30 min: Turn on Living room lights to 90%, Outside to 100%
+# Sunset - 1 hr 45 min: Turn on Living room lights to 90%, Outside to 100%
 #                       turn off unneeded lights if nobody is home: center lamp,
 #                       bookcase lamp, undercabinet kitchen lights
 - alias: SUNSET - Turn on lights 1:45hr before sun sets
