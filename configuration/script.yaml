@@ -155,6 +155,7 @@ turn_on_tablet_mlbtv:
 
 ###### Video Recording #######
 capture_front_door_video:
+  mode: queued
   sequence:
     - delay: '00:00:02'
     - service: camera.record
@@ -165,6 +166,7 @@ capture_front_door_video:
         lookback: 2
 
 capture_rear_porch_video:
+  mode: queued
   sequence:
     - delay: '00:00:02'
     - service: camera.record
