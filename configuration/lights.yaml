@@ -11,7 +11,6 @@
   optimistic: true
   retain: true
 
-## Leviton Z-Wave Dimmer Switch -- Dining Room Table
 - platform: mqtt
   name: Dining Room Table
   state_topic: "smartthings/Dining Room Table/switch"
@@ -24,7 +23,6 @@
   optimistic: true
   retain: true
 
-## Leviton Z-Wave Dimmer Switch -- Basement Office
 - platform: mqtt
   name: Basement Office
   state_topic: "smartthings/Basement Office/switch"
