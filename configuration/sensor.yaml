@@ -1,8 +1,3 @@
-- platform: sonarr
-  api_key: !secret sonarr_api
-  host: !secret sonarr_ip
-  port: !secret sonarr_port
-  days: 7
 - platform: radarr
   api_key: !secret radarr_api
   host: !secret radarr_ip
