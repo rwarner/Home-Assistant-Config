@@ -24,7 +24,7 @@
   retain: true
 
 - platform: mqtt
-  name: Basement Office
+  name: Basement Office Recessed
   state_topic: "smartthings/Basement Office/switch"
   command_topic: "smartthings/Basement Office/switch"
   brightness_state_topic: "smartthings/Basement Office/level"
