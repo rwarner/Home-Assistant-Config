@@ -142,6 +142,17 @@
 #### Integral device status ##########
 - platform: template
   sensors:
+    mac_mini_server:
+      value_template: "{% if states.device_tracker.mac_mini_server %}
+      {% if is_state('device_tracker.mac_mini_server', 'home') %}
+        Online
+      {% else %}
+        Offline
+      {% endif %}
+      {% else %}
+        Unknown
+      {% endif %}"
+      friendly_name: 'Mac Mini Server'
     hue_bridge:
       value_template: "{% if states.device_tracker.hue_bridge %}
       {% if is_state('device_tracker.hue_bridge', 'home') %}

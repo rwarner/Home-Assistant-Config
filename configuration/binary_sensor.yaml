@@ -14,5 +14,6 @@
         or is_state('states.sensor.logitech_harmony_hub', 'Offline')
         or is_state('states.sensor.smartthings_hub', 'Offline')
         or is_state('states.sensor.synology_nas', 'Offline')
+        or is_state('states.sensor.mac_mini_server', 'Offline')
         or is_state('states.sensor.yamaha_receiver', 'Offline') }}"
       friendly_name: 'Device Critical'
