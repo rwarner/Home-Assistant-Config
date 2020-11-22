@@ -24,11 +24,12 @@
     - service: light.turn_off
       entity_id: light.front_porch
 
-- alias: LIGHTS - Turn on Rear Porch Light, if motion detected
+- alias: LIGHTS - Turn on Porch/Floods, if motion detected (Late night)
   trigger:
     - platform: state
       entity_id: binary_sensor.motion_rear_porch
       to: 'on'
+  mode: restart
   condition:
     # Only trigger if the back porch light hasn't been turned off/on it hasn't been turned off in the last 30 seconds
     - condition: template
@@ -49,5 +50,29 @@
     - service: light.turn_off
       entity_id: 
         - light.back_porch
+        - light.porch_flood
+        - light.driveway_flood
+
+- alias: LIGHTS - Turn on Floods, if motion detected (While away)
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.motion_rear_porch
+      to: 'on'
+    mode: restart
+  condition:
+    # Only trigger if the back porch light hasn't been turned off/on it hasn't been turned off in the last 30 seconds
+    - condition: template
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.back_porch.last_changed)) > 30 }}"
+    - condition: time
+      after: '21:00:00'
+      before: '5:00:00'
+  action:
+    - service: light.turn_on
+      entity_id: 
+        - light.porch_flood
+        - light.driveway_flood
+    - delay: '00:03:00'
+    - service: light.turn_off
+      entity_id: 
         - light.porch_flood
         - light.driveway_flood
