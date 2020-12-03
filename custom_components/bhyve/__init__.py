@@ -215,7 +215,7 @@ class BHyveWebsocketEntity(BHyveEntity):
     def _on_ws_data(self, data):
         pass
 
-    def _should_handle_event(self, event_name):
+    def _should_handle_event(self, event_name, data):
         """True if the websocket event should be handled"""
         return True
 
@@ -299,10 +299,10 @@ class BHyveDeviceEntity(BHyveWebsocketEntity):
                 self._available = False
             elif event == "device_connected":
                 self._available = True
-            if self._should_handle_event(event):
+            if self._should_handle_event(event, data):
                 _LOGGER.info(
-                    "Callback update: {} - {} - {}".format(
-                        self.name, self._device_id, str(data)[:160]
+                    "Message received: {} - {} - {}".format(
+                        self.name, self._device_id, str(data)
                     )
                 )
                 self._ws_unprocessed_events.append(data)
