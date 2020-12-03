@@ -20,6 +20,8 @@ homeassistant:
   whitelist_external_dirs:
     - /tmp/hass
 
+cloud:
+
 logger:
 #  default: critical
 
@@ -110,6 +112,12 @@ media_player:
       HDMI1: "NVIDIA Shield"
       HDMI2: "Xbox One"
  # - platform: plex   # Super unreliable for some reason
+  - platform: smartir
+    name: Living room TV
+    unique_id: living_room_tv
+    device_code: 1400
+    controller_data: remote.living_room_remote
+    power_sensor: binary_sensor.tv_power
 
 wemo:
   static:
