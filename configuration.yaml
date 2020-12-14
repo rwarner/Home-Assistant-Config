@@ -62,12 +62,6 @@ recorder:
 folder_watcher:
   - folder: /tmp/hass/
 
-ecobee:
-  api_key: !secret ecobee_api 
-
-#mqtt:
-#  broker: !secret mqtt_broker_ip
-
 pi_hole:
   host: !secret pi_hole_host
   ssl: false
