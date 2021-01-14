@@ -34,7 +34,7 @@
       friendly_name: "Bedroom Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ ((float(states.sensor.bedroom_fan_button_temperature.state) + float(states.sensor.bedroom_light_button_temperature.state))  / 2)  | round(2) }}
+        {{ ((float(states.sensor.ryans_bedside_button_temperature.state) + float(states.sensor.bedroom_light_button_temperature.state))  / 2)  | round(2) }}
 
 #  -- Living Room --
 - platform: template
@@ -70,7 +70,7 @@
       friendly_name: "Basement Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (float(states.sensor.basement_laundry_sensor_temperature.state) | round(2)) }}
+        {{ (float(states.sensor.laundry_motion_sensor_temperature.state) | round(2)) }}
 
 
 
@@ -85,59 +85,8 @@
 - platform: folder
   folder: /tmp/hass
     
-- platform: bhyve
-
-
-## Smart Things Button Pushes
-- platform: mqtt
-  name: Bedroom Fan Button
-  state_topic: "smartthings/Fan Button/button"
-  expire_after: 1
-## Smart Things Button Temperature
-- platform: mqtt
-  name: Bedroom Fan Button Temperature
-  state_topic: "smartthings/Fan Button/temperature"
-  unit_of_measurement: '°F'
-## Smart Things Button Battery
-- platform: mqtt
-  name: Bedroom Fan Button Battery
-  state_topic: "smartthings/Fan Button/battery"
-  unit_of_measurement: '%'
-
-## Smart Things Button Pushes
-- platform: mqtt
-  name: Bedroom Light Button
-  state_topic: "smartthings/Bedroom Light Button/button"
-  expire_after: 1
-## Smart Things Button Temperature
-- platform: mqtt
-  name: Bedroom Light Button Temperature
-  state_topic: "smartthings/Bedroom Light Button/temperature"
-  unit_of_measurement: '°F'
-## Smart Things Button Battery
-- platform: mqtt
-  name: Bedroom Light Button Battery
-  state_topic: "smartthings/Bedroom Light Button/battery"
-  unit_of_measurement: '%'
-
-## Smart Things Kitchen Motion Sensor
-- platform: mqtt
-  name: Kitchen Motion Sensor
-  state_topic: "smartthings/Kitchen Motion Sensor/motion"
-## Smart Things Kitchen Motion Sensor
-- platform: mqtt
-  name: Kitchen Motion Sensor Temperature
-  state_topic: "smartthings/Kitchen Motion Sensor/temperature"
-  unit_of_measurement: '°F'
-## Smart Things Kitchen Motion Sensor
-- platform: mqtt
-  name: Kitchen Motion Sensor Battery
-  state_topic: "smartthings/Kitchen Motion Sensor/battery"
-  unit_of_measurement: '%'
-
 # Bhyve sensor (water/garden)
 - platform: bhyve
-
 
 #### Integral device status ##########
 - platform: template
@@ -153,28 +102,6 @@
         Unknown
       {% endif %}"
       friendly_name: 'Mac Mini Server'
-    hue_bridge:
-      value_template: "{% if states.device_tracker.hue_bridge %}
-      {% if is_state('device_tracker.hue_bridge', 'home') %}
-        Online
-      {% else %}
-        Offline
-      {% endif %}
-      {% else %}
-        Unknown
-      {% endif %}"
-      friendly_name: 'Hue Bridge'
-    smartthings_hub:
-      value_template: "{% if states.device_tracker.samsung_smartthings_hub_ethernet %}
-      {% if is_state('device_tracker.samsung_smartthings_hub_ethernet', 'home') %}
-        Online
-      {% else %}
-        Offline
-      {% endif %}
-      {% else %}
-        Unknown
-      {% endif %}"
-      friendly_name: 'SmartThings Hub'
     synology_nas:
       value_template: "{% if states.device_tracker.synology_nas %}
       {% if is_state('device_tracker.synology_nas', 'home') %}

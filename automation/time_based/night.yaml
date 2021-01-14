@@ -53,4 +53,4 @@
       at: '00:30:00'
   action:
     service: lock.lock
-    entity_id: lock.back_door
+    entity_id: lock.media_room_deadbolt

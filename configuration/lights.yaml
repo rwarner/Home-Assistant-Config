@@ -1,42 +1,4 @@
-  ## Leviton Z-Wave Dimmer Switch -- Kitchen
-- platform: mqtt
-  name: Undercabinet Lights
-  state_topic: "smartthings/Undercabinet Lights/switch"
-  command_topic: "smartthings/Undercabinet Lights/switch"
-  brightness_state_topic: "smartthings/Undercabinet Lights/level"
-  brightness_command_topic: "smartthings/Undercabinet Lights/level"
-  brightness_scale: 101
-  payload_on: "on"
-  payload_off: "off"
-  optimistic: true
-  retain: true
-
-- platform: mqtt
-  name: Dining Room Table
-  state_topic: "smartthings/Dining Room Table/switch"
-  command_topic: "smartthings/Dining Room Table/switch"
-  brightness_state_topic: "smartthings/Dining Room Table/level"
-  brightness_command_topic: "smartthings/Dining Room Table/level"
-  brightness_scale: 101
-  payload_on: "on"
-  payload_off: "off"
-  optimistic: true
-  retain: true
-
-- platform: mqtt
-  name: Basement Office Recessed
-  state_topic: "smartthings/Basement Office/switch"
-  command_topic: "smartthings/Basement Office/switch"
-  brightness_state_topic: "smartthings/Basement Office/level"
-  brightness_command_topic: "smartthings/Basement Office/level"
-  brightness_scale: 101
-  payload_on: "on"
-  payload_off: "off"
-  optimistic: true
-  retain: true
-
-
- ## Wemo Lights -> Regular lights
+## Wemo Lights -> Regular lights
 #- platform: switch
 #  name: Bookshelf Lamp
 #  entity_id: switch.bookshelf_lamp
@@ -47,57 +9,58 @@
 - platform: group
   name: Media Room Lights
   entities:
-    - light.movie_screen
-    - light.rear_entry_lamp
+    - light.media_room_movie_screen
+    - light.media_room_entry_lamp
 
 ### Basement Office ###
 - platform: group
   name: Basement Office Lights
   entities:
-    - light.ryans_office_lamp
+    - light.basement_ryans_desk_lamp
     - light.basement_office_recessed
+    - light.ryans_desk_uplighting
 
 
  ### Laundry Room ###
 - platform: group
   name: Laundry Room Lights
   entities:
-    - light.laundry_light
+    - light.basement_laundry_light
 
 
  ### Living Room ###
 - platform: group
   name: Living Room Lights
   entities:
-    - light.center_lamp
-    - light.entry_lamp
-    - light.bookcase_lamp
+    - light.living_room_center_lamp
+    - light.living_room_entry_lamp
+    - light.living_room_bookcase_lamp
 
 
  ### Master Bedroom ###
 - platform: group
   name: Master Bedroom Lights
   entities:
-    - light.dresser_lamp
-    - light.kellys_bedside
-    - light.ryans_bedside
+    - light.bedroom_dresser_lamp
+    - light.bedroom_kellys_bedside
+    - light.bedroom_ryans_bedside
 
 
  ### Outside ###
 - platform: group
   name: Outside Lights
   entities:
-    - light.back_porch
-    - light.front_porch
-    - light.driveway_flood
-    - light.porch_flood
+    - light.outside_back_porch
+    - light.outside_front_porch
+    - light.outside_driveway_flood
+    - light.outside_porch_flood
 
 
  ### Kitchen ###
 - platform: group
   name: Kitchen Lights
   entities:
-    - light.undercabinet_lights
+    - light.kitchen_undercabinet_lights
     - light.kitchen_nook
 
 
@@ -105,34 +68,34 @@
 - platform: group
   name: Sun Based Lights Home
   entities:
-    - light.back_porch
-    - light.front_porch
+    - light.outside_back_porch
+    - light.outside_front_porch
     - light.living_room_lights
 
 ### Sun Based Lights - While we're away ###
 - platform: group
   name: Sun Based Lights Away
   entities:
-    - light.back_porch
-    - light.front_porch
-    - light.entry_lamp
+    - light.outside_back_porch
+    - light.outside_front_porch
+    - light.living_room_entry_lamp
 
 
 #### SINGLE USE ENTITIES, NOT NAMED "LIGHTS" ###
 - platform: group
   name: Kitchen Nook
   entities:
-    - light.nook_left
-    - light.nook_right
+    - light.kitchen_nook_left
+    - light.kitchen_nook_right
 
 - platform: group
-  name: Overhead Kitchen
+  name: Kitchen Overhead
   entities:
     - light.kitchen_overhead_one
     - light.kitchen_overhead_two
  
 - platform: group
-  name: Movie Screen
+  name: Media Room Movie Screen
   entities:
-    - light.movie_left
-    - light.movie_right
+    - light.media_room_movie_left
+    - light.media_room_movie_right

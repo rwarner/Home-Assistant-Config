@@ -26,29 +26,38 @@
 
 ########## BEDROOM LIGHT BUTTON ##########
 
-- alias: BEDROOM - Turn on light in Bedroom
+- alias: BEDROOM - Turn on light in Bedroom (Bedroom Light Button)
   trigger:
-    - platform: state
-      entity_id: sensor.bedroom_light_button
-      to: 'pushed'
+  - event_data:
+      command: button_single
+      device_ieee: !secret bedroom_light_button_ieee
+    event_type: zha_event
+    platform: event
+  condition: []
   action:
-      service: script.toggle_bedroom_lights
+    service: script.toggle_bedroom_lights
 
-- alias: BEDROOM - Turn on fan from light button in Bedroom
+- alias: BEDROOM - Turn on fan from light button in Bedroom (Bedroom Light Button)
   trigger:
-    - platform: state
-      entity_id: sensor.bedroom_light_button
-      to: 'double'
+  - event_data:
+      command: button_double
+      device_ieee: !secret bedroom_light_button_ieee
+    event_type: zha_event
+    platform: event
+  condition: []
   action:
       service: switch.toggle
       entity_id: 
         - switch.fan
 
-- alias: BEDROOM - Turn on fan and light in Bedroom
+- alias: BEDROOM - Turn on fan and light in Bedroom (Bedroom Light Button)
   trigger:
-    - platform: state
-      entity_id: sensor.bedroom_light_button
-      to: 'held'
+  - event_data:
+      command: button_hold
+      device_ieee: !secret bedroom_light_button_ieee
+    event_type: zha_event
+    platform: event
+  condition: []
   action:
     - service: switch.toggle
       entity_id: 
@@ -57,21 +66,27 @@
 
 #####################################
 
-############ BEDROOM FAN BUTTON (Ryan Button) #############
+############ Ryan's Bedside Button #############
 
 - alias: BEDROOM - Turn on light in Bedroom (Ryan Button)
   trigger:
-    - platform: state
-      entity_id: sensor.bedroom_fan_button
-      to: 'pushed'
+  - event_data:
+      command: button_single
+      device_ieee: !secret bedroom_ryans_bedside_button_ieee
+    event_type: zha_event
+    platform: event
+  condition: []
   action:
-      service: script.toggle_bedroom_lights
+    service: script.toggle_bedroom_lights
 
 - alias: BEDROOM - Turn on fan in Bedroom (Ryan Button)
   trigger:
-    - platform: state
-      entity_id: sensor.bedroom_fan_button
-      to: 'double'
+  - event_data:
+      command: button_double
+      device_ieee: !secret bedroom_ryans_bedside_button_ieee
+    event_type: zha_event
+    platform: event
+  condition: []
   action:
       service: switch.toggle
       entity_id: 

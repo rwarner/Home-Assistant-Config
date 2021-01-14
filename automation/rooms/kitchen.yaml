@@ -6,9 +6,9 @@
 - alias: KITCHEN - Turn on tablet in kitchen, sensed motion
   trigger:
     - platform: state
-      entity_id: sensor.kitchen_motion_sensor
-      from: 'inactive'
-      to: 'active'
+      entity_id: binary_sensor.kitchen_motion_sensor
+      from: 'off'
+      to: 'on'
   condition:
     # Ignore any turn ons if the tablet was the last thing turned on
     # only want to trigger if turned off, was the most recent triggered item
@@ -25,9 +25,9 @@
 - alias: KITCHEN - Turn off tablet in kitchen, no motion
   trigger:
     - platform: state
-      entity_id: sensor.kitchen_motion_sensor
-      from: 'active'
-      to: 'inactive'
+      entity_id: binary_sensor.kitchen_motion_sensor
+      from: 'on'
+      to: 'off'
       for:
         minutes: 3
   condition:

@@ -1,0 +1,10 @@
+light.kitchen_nook:
+  friendly_name: "Nook"
+
+light.media_room_movie_screen:
+  friendly_name: "Movie Screen"
+
+light.kitchen_overhead:
+  friendly_name: "Overhead"
+
+

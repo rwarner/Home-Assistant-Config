@@ -18,6 +18,21 @@
         message: "Laundry is done washing"
 
 
+- alias: LAUNDRY - Turn on Light from motion
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry_motion_sensor
+      from: 'off'
+      to: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.laundry_room_lights
+    - delay:
+        minutes: 5
+    - service: light.turn_off
+      entity_id: light.laundry_room_lights
+
 #- alias: LAUNDRY - Re-notify kitchen laundry is done after 1 hour
 #  trigger:
 #    platform: template

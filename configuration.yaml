@@ -19,6 +19,7 @@ homeassistant:
         
   whitelist_external_dirs:
     - /tmp/hass
+  packages: !include_dir_named packages
 
 cloud:
 
@@ -190,12 +191,16 @@ climate:
     controller_data: remote.living_room_remote
     power_sensor: binary_sensor.living_room_ac_power
 
+
+# Z-Wave USB0, Zigbee USB1 (Manually upgraded firmware on USB stick)
+zwave:
+  usb_path: /dev/ttyUSB0
+  network_key: !secret zwave_network_key
+  
 #################################
 ##### EXTERNAL FILES BELOW ######
 #################################
 automation: !include_dir_merge_list automation/
-
-lock: !include configuration/locks.yaml
 
 light: !include configuration/lights.yaml
 

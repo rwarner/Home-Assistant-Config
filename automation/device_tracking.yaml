@@ -47,7 +47,7 @@
       to: 'Away'
   action:
     - service: lock.lock
-      entity_id: lock.back_door
+      entity_id: lock.media_room_deadbolt
     - service: alarm_control_panel.alarm_arm_away
       entity_id: alarm_control_panel.alexa_guard_de7c8
     - service: climate.set_preset_mode

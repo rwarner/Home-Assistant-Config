@@ -50,7 +50,7 @@
     # was causing a notification when you turned the light on/off
     # "last_changed", must be used for light entity not "last_triggered" like automations
     - condition: template
-      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.front_porch.last_changed)) > 15 }}"
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.outside_front_porch.last_changed)) > 15 }}"
   action:
     - service: script.alexa_notify_house
       data:
