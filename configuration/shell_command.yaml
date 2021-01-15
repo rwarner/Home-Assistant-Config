@@ -1,3 +1,7 @@
+####################################
+########## SHELL COMMANDS  #########
+####################################
+
 unifi_ap_light_on: !secret unifi_ap_light_on #bash shell_scripts/unifiAPLED.sh -i <ip_address> -s on
 unifi_ap_light_off: !secret unifi_ap_light_off #bash shell_scripts/unifiAPLED.sh -i <ip_address> -s off
 clear_video_directory: bash /home/homeassistant/.homeassistant/shell_scripts/clearVideoDir.sh

@@ -1,3 +1,7 @@
+####################################
+####### HISTORY CONFIGURATION  #####
+####################################
+
 use_include_order: true
 include:
   domains:

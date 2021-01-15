@@ -1,8 +1,11 @@
+####################################
+####### LIGHTS CONFIGURATION  ######
+####################################
+
 ## Wemo Lights -> Regular lights
 #- platform: switch
 #  name: Bookshelf Lamp
 #  entity_id: switch.bookshelf_lamp
-
 
 
  ### Media Room ###
@@ -11,6 +14,7 @@
   entities:
     - light.media_room_movie_screen
     - light.media_room_entry_lamp
+
 
 ### Basement Office ###
 - platform: group
@@ -81,7 +85,7 @@
     - light.living_room_entry_lamp
 
 
-#### SINGLE USE ENTITIES, NOT NAMED "LIGHTS" ###
+#### SINGLE USE ENTITIES, NOT NAMED "LIGHTS" ####
 - platform: group
   name: Kitchen Nook
   entities:

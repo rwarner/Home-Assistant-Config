@@ -1,3 +1,7 @@
+####################################
+######### LIGHT CUSTOMIZATION  #####
+####################################
+
 light.kitchen_nook:
   friendly_name: "Nook"
 
@@ -6,5 +10,3 @@ light.media_room_movie_screen:
 
 light.kitchen_overhead:
   friendly_name: "Overhead"
-
-

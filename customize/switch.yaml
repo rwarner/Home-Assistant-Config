@@ -1,15 +1,19 @@
-  switch.fan:
-    friendly_name: "Bedroom Fan"
-    icon: mdi:fan
+####################################
+####### SWITCH CUSTOMIZATION  ######
+####################################
 
-  switch.dehumidifier:
-    friendly_name: "Dehumidifier"
-    icon: mdi:fan
+switch.fan:
+  friendly_name: "Bedroom Fan"
+  icon: mdi:fan
 
-  switch.tree:
-    friendly_name: "Christmas Tree"
-    icon: mdi:pine-tree
+switch.dehumidifier:
+  friendly_name: "Dehumidifier"
+  icon: mdi:fan
 
-  switch.bookshelf:
-    friendly_name: "Bookshelf Christmas Lights"
-    icon: mdi:pine-tree
+switch.tree:
+  friendly_name: "Christmas Tree"
+  icon: mdi:pine-tree
+
+switch.bookshelf:
+  friendly_name: "Bookshelf Christmas Lights"
+  icon: mdi:pine-tree

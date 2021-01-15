@@ -1,3 +1,7 @@
+####################################
+### BINARY SENSOR CUSTOMIZATION  ###
+####################################
+
 binary_sensor.living_room_occupancy:
   friendly_name: Living Room
 

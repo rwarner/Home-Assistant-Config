@@ -1,4 +1,8 @@
-# Binary sensor for device critcal, if one of them goes offline
+####################################
+### BINARY SENSOR CONFIGURATION  ###
+####################################
+
+# Binary sensor for device critical, if one of them goes offline
 - platform: template
   sensors:
     device_critical:

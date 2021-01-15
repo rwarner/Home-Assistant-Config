@@ -1,3 +1,7 @@
+####################################
+####### SENSOR CUSTOMIZATION  ######
+####################################
+
 sensor.bedroom_avg_temp:
   icon: mdi:thermometer
 

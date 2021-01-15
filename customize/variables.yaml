@@ -1,3 +1,7 @@
+####################################
+###### VARIABLES CUSTOMIZATION  ####
+####################################
+
 variable.ryan_status:
   friendly_name: Ryan
   icon: mdi:account
