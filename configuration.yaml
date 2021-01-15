@@ -17,9 +17,8 @@ homeassistant:
         - 192.168.1.0/24
         - 192.168.2.0/24
         
-  whitelist_external_dirs:
+  allowlist_external_dirs:
     - /tmp/hass
-  packages: !include_dir_named packages
 
 cloud:
 
@@ -164,8 +163,6 @@ variable:
     value: ""
     restore: true
 
-  
-
 unifiprotect:
   host: !secret unifiprotect_ip
   username: !secret unifiprotect_user
@@ -190,7 +187,6 @@ climate:
     device_code: 2040
     controller_data: remote.living_room_remote
     power_sensor: binary_sensor.living_room_ac_power
-
 
 # Z-Wave USB0, Zigbee USB1 (Manually upgraded firmware on USB stick)
 zwave:
