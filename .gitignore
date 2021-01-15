@@ -1,19 +1,17 @@
-# Example .gitignore file for your config dir.
-# A * ensures that everything will be ignored.
-#*
-
 # You can whitelist files/folders with !, these will not be ignored.
 !*.yaml
 !.gitignore
 !*.md
 
-# Ignore folders.
+# Ignore folders
 .storage
 .cloud
 .google.token
 backup/
+image/
 tts/
-#custom_components/
+
+#Ignoring specific custom components below
 custom_components/alexa_media/
 custom_components/hacs/
 custom_components/huesensor/
@@ -23,14 +21,22 @@ custom_components/smartthinq_sensors/
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml
+
+# DB Files or special files
 *.bak
 *.conf
 *.log
 *.db
 *.db*
-#Alex media
+*.sqlite
+
+#Alexa media
 *.pickle
 
 #Specific Files
 .HA_VERSION
 .uuid
+OZW_Log.txt
+options.xml
+zwscene.xml
+zwcfg_0xe4c19993.xml
