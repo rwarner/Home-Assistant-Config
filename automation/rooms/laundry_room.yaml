@@ -22,7 +22,7 @@
   mode: single
   trigger:
     - platform: state
-      entity_id: binary_sensor.laundry_motion_sensor
+      entity_id: binary_sensor.laundry_motion_sensor_occupancy
       from: 'off'
       to: 'on'
   action:
