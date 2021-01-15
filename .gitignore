@@ -7,6 +7,7 @@
 .storage
 .cloud
 .google.token
+.vscode
 backup/
 image/
 tts/
