@@ -18,8 +18,10 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ## <a name="SmartHomeEquipment">Smart Home Equipment</a>
 
+[Networking](#Networking) | [Smart Home Hubs](#SmartHomeHub) | [Zigbee](#Zigbee) | [Z-Wave](#ZWave) | [Lighting](#Lighting) | [Cameras / Security](#Cameras) | [Media Devices](#MediaDevices) | [Amazon Alexa](#AmazonAlexa) | [Miscellaneous](#Misc)
+<hr>
 
-### Networking
+### <a name="Networking">Networking</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
@@ -163,7 +165,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <!----------------- NEW SECTION ------------------>
 
 
-### Smart Home Hubs
+### <a name="SmartHomeHubs">Smart Home Hubs</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
@@ -223,7 +225,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 
 <!----------------- NEW SECTION ------------------>
-### Zigbee
+### <a name="Zigbee">Zigbee</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
@@ -258,7 +260,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 </table>
 
 <!----------------- NEW SECTION ------------------>
-### Z-Wave
+### <a name="ZWave">Z-Wave</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
@@ -291,7 +293,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 </table>
 
 <!----------------- NEW SECTION ------------------>
-### Lighting
+### <a name="Lighting">Lighting</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
@@ -324,7 +326,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 </table>
 
 <!----------------- NEW SECTION ------------------>
-### Cameras / Security
+### <a name="Cameras">Cameras / Security</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
@@ -394,7 +396,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <!----------------- NEW SECTION ------------------>
 
-### Media Devices
+### <a name="MediaDevices">Media Devices</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
@@ -455,7 +457,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <!----------------- NEW SECTION ------------------>
 
-### Amazon Alexa
+### <a name="AmazonAlexa">Amazon Alexa</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
@@ -516,7 +518,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 
 <!----------------- NEW SECTION ------------------>
-### Miscellaneous
+### <a name="Misc">Miscellaneous</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
