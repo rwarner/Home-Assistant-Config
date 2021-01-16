@@ -16,353 +16,534 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  - SeaSonic M12II 520W PSU
 
 
-## Smart Home Equipment
+## <a name="SmartHomeEquipment">Smart Home Equipment</a>
 
+
+### Networking
+
+| [Back To Top](#SmartHomeEquipment)
 
 <table align="center" border="0">
-<tr>  
-  <td align=center colspan="4">
-    Networking
-  </td>
+
+<tr>
+ <td align=center>
+    Unifi AP AC-Pro
+ </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
 </tr>
 
-<tr align=center>
+<tr>
+ <td align=center>
+    Unifi AP Nano HD
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+ 
+ 
+<tr>
+ <td align=center>
+    Unifi AP AC-LR
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
 
-  <th>
-      Unifi AP's
-  </th>
-  
-  <th>
-    Unifi Switches
-  </th>
-    
-  <th>
+<tr>
+ <td align=center>
+    Unifi AP AC-IW
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+    Unifi AP AC-Pro
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+    Unifi US-24 Switch
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+<td align=center>
+    Unifi US-8-150W Switch
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+<td align=center>
+    Unifi US-8-60W Switch
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+    Unifi Flex Mini
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+ 
+<tr>
+ <td align=center>
     Unifi Cloudkey Gen 2+
-  </th>
-    
-  <th>
-    Unifi USG
-  </th>
-  
-</tr>
-
-<tr>
-  <td colspan="4">
   </td>
-</tr>
-<tr>
-  <td colspan="4">
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ 
+ <tr>
+ <td align=center>
+    Unifi USG (Router)
   </td>
-</tr>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ </table>
 
 
 <!----------------- NEW SECTION ------------------>
 
-<tr>  
-  <td align=center colspan="4">
-    Smart Home Hubs
-  </td>
-</tr>
 
-<tr align=center>
+### Smart Home Hubs
 
-  <th>
+<table align="center" border="0">
+ 
+ <tr>
+ <td align=center>
     GoControl HUSBZB-1 (Zigbee / Z-Wave)
-  </th>
-  
-  <th>
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+
+<tr>
+ <td align=center>
     Hue Hub
-  </th>
-    
-  <th>
-    Smart Things Hub V2
-  </th>
-    
-  <th>
-    Logitech Harmony Hub
-  </th>
-  
-</tr>
-
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ 
+ 
 <tr>
-  <td colspan="4">
+ <td align=center>
+    Smart Things Hub
   </td>
-</tr>
-<tr>
-  <td colspan="4">
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ 
+ 
+ <tr>
+ <td align=center>
+   Logitech Harmony Hub
   </td>
-</tr>
-
-<!----------------- NEW SECTION ------------------>
-
-<tr>  
-  <td align=center colspan="4">
-    Zigbee
-  </td>
-</tr>
-
-<tr align=center>
-
-  <th>
-    Hue Bulbs
-  </th>
-  
-  <th>
-    Smart Things Buttons
-  </th>
-    
-  <th>
-    
-  </th>
-    
-  <th>
-    
-  </th>
-  
-</tr>
-
-
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-
-<!----------------- NEW SECTION ------------------>
-
-<tr>  
-  <td align=center colspan="4">
-    Z-Wave
-  </td>
-</tr>
-
-<tr align=center>
-
-  <th>
-    Schlage Touchscreen Deadbolt
-  </th>
-  
-  <th>
-    Leviton Decora Smart Dimmer
-  </th>
-    
-  <th>
-  
-  </th>
-    
-  <th>
-    
-  </th>
-  
-</tr>
-
-
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-
-<!----------------- NEW SECTION ------------------>
-
-
-<tr>  
-  <td align=center colspan="4">
-    Lighting
-  </td>
-</tr>
-
-<tr align=center>
-
-  <th>
-    Philips Hue
-  </th>
-  
-  <th>
-    D1 Mini (ESP 8266) w/ LED Strip
-  </th>
-    
-  <th>
-  
-  </th>
-    
-  <th>
-    
-  </th>
-  
-</tr>
-
-
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-
-<!----------------- NEW SECTION ------------------>
-
-<tr>  
-  <td align=center colspan="4">
-    Cameras / Security
-  </td>
-</tr>
-
-<tr align=center>
-
-  <th>
-    Schlage Touchscreen Deadbolt
-  </th>
-  
-  <th>
-    Unifi Protect Cameras
-  </th>
-    
-  <th>
-    Amazon Alexa
-  </th>
-    
-  <th>
-    
-  </th>
-  
-</tr>
-
-
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-
-<!----------------- NEW SECTION ------------------>
-
-<tr>  
-  <td align=center colspan="4">
-    Media Devices
-  </td>
-</tr>
-
-<tr align=center>
-
-  <th>
-    Fire TV Sticks
-  </th>
-  
-  <th>
-    Nvidia Shield TV
-  </th>
-    
-  <th>
-    Google Chromecast
-  </th>
-    
-  <th>
-    Amazon Alexa
-  </th>
-  
-</tr>
-
-
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-
-<!----------------- NEW SECTION ------------------>
-
-
-<tr>  
-  <td align=center colspan="4">
-    Amazon Alexa
-  </td>
-</tr>
-
-<tr align=center>
-
-  <th>
-    Echo Show 5"
-  </th>
-  
-  <th>
-    Original Echo
-  </th>
-    
-  <th>
-    Echo Dots
-  </th>
-    
-  <th>
-    
-  </th>
-  
-</tr>
-
-
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-
-<!----------------- NEW SECTION ------------------>
-
-<tr>  
-  <td align=center colspan="4">
-    Misc
-  </td>
-</tr>
-
-<tr align=center>
-
-  <th>
-    Broadlink RM 4 Mini
-  </th>
-  
-  <th>
-    LG Washer
-  </th>
-    
-  <th>
-  
-  </th>
-    
-  <th>
-    
-  </th>
-  
-</tr>
-
-
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-<tr>
-  <td colspan="4">
-  </td>
-</tr>
-
-<!----------------- NEW SECTION ------------------>
-  
-  
-  
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ 
 </table>
+
+
+<!----------------- NEW SECTION ------------------>
+### Zigbee
+
+<table align="center" border="0">
+ 
+ <tr>
+ <td align=center>
+   Hue Bulbs
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ 
+ 
+<tr>
+ <td align=center>
+   Smart Things Button
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+
+
+</table>
+
+<!----------------- NEW SECTION ------------------>
+### Z-Wave
+
+<table align="center" border="0">
+ 
+ <tr>
+ <td align=center>
+   Schlage Touchscreen Deadbolt
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ 
+<tr>
+ <td align=center>
+   Leviton Decora Smart Dimmer
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+ 
+</table>
+
+<!----------------- NEW SECTION ------------------>
+### Lighting
+
+<table align="center" border="0">
+ 
+ <tr>
+ <td align=center>
+   Hue Bulbs
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ 
+<tr>
+ <td align=center>
+   D1 Mini (ESP 8266) w/ LED Strip
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+ 
+</table>
+
+<!----------------- NEW SECTION ------------------>
+### Cameras / Security
+
+<table align="center" border="0">
+ 
+ <tr>
+ <td align=center>
+   Schlage Touchscreen Deadbolt
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+ </tr>
+ 
+<tr>
+ <td align=center>
+   Unifi G3 Flex (Camera)
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Unifi G3 (Camera)
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Unifi G4 Doorbell (Camera / Doorbell)
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Amazon Alexa
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+ 
+</table>
+
+<!----------------- NEW SECTION ------------------>
+
+### Media Devices
+
+<table align="center" border="0">
+ 
+<tr>
+ <td align=center>
+   Fire TV Sticks
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+ 
+<tr>
+ <td align=center>
+   Nvidia Shield TV
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+
+<tr>
+ <td align=center>
+   Google Chromecast
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+
+<tr>
+ <td align=center>
+   Amazon Alexa
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+ 
+</table>
+
+<!----------------- NEW SECTION ------------------>
+
+### Amazon Alexa
+
+<table align="center" border="0">
+ 
+<tr>
+ <td align=center>
+   Amazon Echo Dot
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+ 
+<tr>
+ <td align=center>
+   Amazon Echo (Original)
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+
+<tr>
+ <td align=center>
+   Amazon Echo Show 5"
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+
+<tr>
+ <td align=center>
+   Amazon Alexa
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+ 
+</table>
+
+
+<!----------------- NEW SECTION ------------------>
+### Miscellaneous
+
+<table align="center" border="0">
+ 
+<tr>
+ <td align=center>
+   Broadlink RM4 Mini
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+
+<tr>
+ <td align=center>
+   LG Washer
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Pioneer Mini Split Units
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td align=center colspan="2">
+    Notes
+ </td>
+</tr>
+
+</table>
+
+
+<!----------------- NEW SECTION ------------------>
