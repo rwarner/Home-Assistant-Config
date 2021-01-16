@@ -197,32 +197,32 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Moved over to this for all direct HomeAssistant Zigbee / Z-Wave needs. Everything is much faster and reliable now than using two seperate hubs outside of HA. I also favored to only use the Hue bulbs through this device through Alexa so everything is in one place.
  </td>
  </tr>
 
 <tr>
  <td align=center>
-    Hue Hub
+  <strike>Hue Hub</strike>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Previously used to support Hue Bulbs when first expanding my hue bulbs. Have moved to the GoControl HUSBZB-1 USB stick since the Hue Bulbs use Zigbee. They also help expand the zigbee network if they're all on the same frequency / network.
  </td>
  </tr>
  
  
 <tr>
  <td align=center>
-    Smart Things Hub
+  <strike>Smart Things Hub</strike>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Previously used to support Z-Wave devices like the Schlage lock and Zigbee buttons. Have moved to the GoControl HUSBZB-1 USB stick.
  </td>
  </tr>
  
