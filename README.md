@@ -26,7 +26,16 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
-
+ 
+<tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+ 
 <tr>
  <td align=center>
     Unifi AP AC-Pro
@@ -35,7 +44,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -47,7 +56,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
  
@@ -60,7 +69,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -72,7 +81,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -84,7 +93,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -96,7 +105,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -108,7 +117,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -120,7 +129,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -132,7 +141,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
  
@@ -144,7 +153,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  
@@ -156,7 +165,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  </table>
@@ -171,6 +180,15 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <table border="0">
  
+<tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+
  <tr>
  <td align=center>
     GoControl HUSBZB-1 (Zigbee / Z-Wave)
@@ -179,7 +197,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
 
@@ -191,7 +209,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  
@@ -204,7 +222,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  
@@ -217,7 +235,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  
@@ -231,6 +249,15 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <table border="0">
  
+<tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+
  <tr>
  <td align=center>
    Hue Bulbs
@@ -239,7 +266,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  
@@ -252,7 +279,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
 
@@ -266,6 +293,15 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <table border="0">
  
+<tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+
  <tr>
  <td align=center>
    Schlage Touchscreen Deadbolt
@@ -274,7 +310,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  
@@ -286,7 +322,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
  
@@ -299,6 +335,15 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <table border="0">
  
+<tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+
  <tr>
  <td align=center>
    Hue Bulbs
@@ -307,7 +352,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  
@@ -319,7 +364,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
  
@@ -332,6 +377,15 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <table border="0">
  
+<tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+
  <tr>
  <td align=center>
    Schlage Touchscreen Deadbolt
@@ -340,7 +394,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
  </tr>
  
@@ -352,7 +406,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -364,7 +418,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -376,7 +430,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -388,7 +442,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
  
@@ -403,6 +457,15 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <table border="0">
  
 <tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+
+<tr>
  <td align=center>
    Fire TV Sticks
   </td>
@@ -410,7 +473,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
  
@@ -422,7 +485,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -435,7 +498,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -448,7 +511,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -464,6 +527,15 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <table border="0">
  
 <tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+
+<tr>
  <td align=center>
    Amazon Echo Dot
   </td>
@@ -471,7 +543,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
  
@@ -483,10 +555,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
-
 
 <tr>
  <td align=center>
@@ -496,10 +567,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
-
 
 <tr>
  <td align=center>
@@ -509,7 +579,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -525,6 +595,15 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <table border="0">
  
 <tr>
+ <th align=center colspan="2">
+  Device
+ </th>
+ <th align=center>
+  Notes
+ </th>
+</tr>
+
+<tr>
  <td align=center>
    Broadlink RM4 Mini
   </td>
@@ -532,7 +611,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -545,7 +624,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
@@ -557,7 +636,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td align=center colspan="2">
-    Notes
+    
  </td>
 </tr>
 
