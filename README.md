@@ -197,7 +197,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td colspan="2">
-    Moved over to this for all direct HomeAssistant Zigbee / Z-Wave needs. Everything is much faster and reliable now than using two seperate hubs outside of HA. I also favored to only use the Hue bulbs through this device through Alexa so everything is in one place.
+    Moved over to this for all direct Home Assistant Zigbee / Z-Wave needs. Everything is much faster and reliable now than using two seperate hubs outside of HA. I also favored to only use the Hue bulbs through this device through Alexa so everything is in one place.
  </td>
  </tr>
 
@@ -547,7 +547,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td colspan="2">
-    TTS output from Alexa Media Skill on Homeassistant around the house.
+    TTS output from Alexa Media Skill on Home Assistant around the house.
  </td>
 </tr>
 
@@ -579,7 +579,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td colspan="2">
-    TTS output from Alexa Media Skill on Homeassistant around the house.
+    TTS output from Alexa Media Skill on Home Assistant around the house.
  </td>
 </tr>
  
@@ -591,7 +591,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td colspan="2">
-    TTS output from Alexa Media Skill on Homeassistant.
+    TTS output from Alexa Media Skill on Home Assistant.
  </td>
 </tr>
 
@@ -603,7 +603,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td colspan="2">
-    Kitchen, use solely for timers and kitchen related things. Slideshow of pictures. TTS output from Alexa Media Skill on Homeassistant.
+    Kitchen, use solely for timers and kitchen related things. Slideshow of pictures. TTS output from Alexa Media Skill on Home Assistant.
  </td>
 </tr>
 
@@ -672,7 +672,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td colspan="2">
-    Temperature control / thermostat via WiFi, through HomeAssistant Ecobee integration.
+    Temperature control / thermostat via WiFi, through Home Assistant Ecobee integration.
  </td>
 </tr>
 
@@ -684,7 +684,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Graphic
  </td>
  <td colspan="2">
-    Temperature control / thermostat via WiFi, through HomeAssistant Ecobee integration.
+    Temperature control / thermostat via WiFi, through Home Assistant Ecobee integration.
  </td>
 </tr>
 
