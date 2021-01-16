@@ -21,9 +21,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ### Networking
 
-| [Back To Top](#SmartHomeEquipment)
+> [Back To Top](#SmartHomeEquipment)
 
-<table align="center" border="0">
+<table border="0">
 
 <tr>
  <td align=center>
@@ -165,7 +165,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ### Smart Home Hubs
 
-<table align="center" border="0">
+> [Back To Top](#SmartHomeEquipment)
+
+<table border="0">
  
  <tr>
  <td align=center>
@@ -223,7 +225,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <!----------------- NEW SECTION ------------------>
 ### Zigbee
 
-<table align="center" border="0">
+> [Back To Top](#SmartHomeEquipment)
+
+<table border="0">
  
  <tr>
  <td align=center>
@@ -256,7 +260,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <!----------------- NEW SECTION ------------------>
 ### Z-Wave
 
-<table align="center" border="0">
+> [Back To Top](#SmartHomeEquipment)
+
+<table border="0">
  
  <tr>
  <td align=center>
@@ -287,7 +293,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <!----------------- NEW SECTION ------------------>
 ### Lighting
 
-<table align="center" border="0">
+> [Back To Top](#SmartHomeEquipment)
+
+<table border="0">
  
  <tr>
  <td align=center>
@@ -318,7 +326,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <!----------------- NEW SECTION ------------------>
 ### Cameras / Security
 
-<table align="center" border="0">
+> [Back To Top](#SmartHomeEquipment)
+
+<table border="0">
  
  <tr>
  <td align=center>
@@ -386,7 +396,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ### Media Devices
 
-<table align="center" border="0">
+> [Back To Top](#SmartHomeEquipment)
+
+<table border="0">
  
 <tr>
  <td align=center>
@@ -445,7 +457,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ### Amazon Alexa
 
-<table align="center" border="0">
+> [Back To Top](#SmartHomeEquipment)
+
+<table border="0">
  
 <tr>
  <td align=center>
@@ -504,7 +518,9 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 <!----------------- NEW SECTION ------------------>
 ### Miscellaneous
 
-<table align="center" border="0">
+> [Back To Top](#SmartHomeEquipment)
+
+<table border="0">
  
 <tr>
  <td align=center>
