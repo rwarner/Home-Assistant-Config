@@ -282,6 +282,18 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     Used to control lights / fan in bedroom via night stand or on the wall. Utilized via the Zigbee network through Home Assistant.
  </td>
  </tr>
+ 
+ <tr>
+ <td align=center>
+   Philips Hue Motion Sensors
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td colspan="2">
+    Alerts for motion when not home, or other automations for movement / motion / occupancy. Utilized via the Zigbee network in Home Assistant.
+ </td>
+</tr>
 
 
 </table>
@@ -371,7 +383,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 </table>
 
 <!----------------- NEW SECTION ------------------>
-### <a name="Cameras">Cameras / Security</a>
+### <a name="Cameras">Cameras / Security / Motion Sensors</a>
 
 > [Back To Top](#SmartHomeEquipment)
 
