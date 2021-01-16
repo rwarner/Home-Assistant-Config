@@ -196,7 +196,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Moved over to this for all direct HomeAssistant Zigbee / Z-Wave needs. Everything is much faster and reliable now than using two seperate hubs outside of HA. I also favored to only use the Hue bulbs through this device through Alexa so everything is in one place.
  </td>
  </tr>
@@ -208,7 +208,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Previously used to support Hue Bulbs when first expanding my hue bulbs. Have moved to the GoControl HUSBZB-1 USB stick since the Hue Bulbs use Zigbee. They also help expand the zigbee network if they're all on the same frequency / network.
  </td>
  </tr>
@@ -221,7 +221,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Previously used to support Z-Wave devices like the Schlage lock and Zigbee buttons. Have moved to the GoControl HUSBZB-1 USB stick.
  </td>
  </tr>
@@ -234,8 +234,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Used to control most of the Home Theater equipment via IR. Used prior to any smart home stuff. Now connected thrugh Home Assistant / Alexa to start movie viewing. "Alexa turn on Projector"
  </td>
  </tr>
  
@@ -265,8 +265,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Hue Bulbs connected through Home Assistant's Zigbee connection. If anything, they help also provide the Zigbee network extend reach throughout the property.
  </td>
  </tr>
  
@@ -278,8 +278,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Used to control lights / fan in bedroom via night stand or on the wall. Utilized via the Zigbee network through Home Assistant.
  </td>
  </tr>
 
@@ -309,8 +309,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Lock for doors using the Z-Wave connection with Home Assistant.
  </td>
  </tr>
  
@@ -321,8 +321,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Light switch dimmers used via the Z-Wave network through Home Assistant. Places where Hue bulbs didn't make sense.
  </td>
 </tr>
  
@@ -351,8 +351,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Lightbulbs used in the Zigbee network through Home Assistant.
  </td>
  </tr>
  
@@ -363,8 +363,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Uplighting in certain areas for super cheap manually created. Utilized with the ESPHome integration in Home Assistant via WiFi.
  </td>
 </tr>
  
@@ -393,8 +393,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Lock for doors using the Z-Wave connection with Home Assistant.
  </td>
  </tr>
  
@@ -405,8 +405,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Cameras mounted around the house using the Unifi Protect software. Sensors connected to Home Assistant via the Unifi Protect integraton.
  </td>
 </tr>
 
@@ -417,8 +417,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Cameras mounted around the house using the Unifi Protect software. Sensors connected to Home Assistant via the Unifi Protect integraton.
  </td>
 </tr>
 
@@ -429,8 +429,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Provides live view for front door and alerts for doorbell ringing. Using the Unifi Protect software. Sensors connected to Home Assistant via the Unifi Protect integraton.
  </td>
 </tr>
 
@@ -441,8 +441,44 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Amazon Alexa provides a "Guard Mode" that is utilized for security. Improved on Alexa side independantly. Enable / disabled via Home Assistant.
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Smart Things Motion Sensors
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td colspan="2">
+    Used for turning on / off Tablet in Kitchen as well as alerts for motion when not home. Connected through Zigbee network in Home Assistant.
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Ecobee Smart Sensors
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td colspan="2">
+    Alerts for motion when not home, or other automations for movement / motion / occupancy. Connected through Ecobee integreation in Home Assistant.
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Philips Hue Motion Sensors
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td colspan="2">
+    Alerts for motion when not home, or other automations for movement / motion / occupancy. Connected through Zigbee network in Home Assistant.
  </td>
 </tr>
  
@@ -472,8 +508,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Main source of entertainment. Can sort of detect if something is playing depending on the application. TBD if I'll integrate more sensors with ADB on the devices over the network.
  </td>
 </tr>
  
@@ -484,8 +520,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Main source of movie viewing in backroom.
  </td>
 </tr>
 
@@ -497,8 +533,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    One or two around if needed, not used with Home Assistant at all.
  </td>
 </tr>
 
@@ -510,8 +546,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    TTS output from Alexa Media Skill on Homeassistant around the house.
  </td>
 </tr>
 
@@ -537,13 +573,13 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Amazon Echo Dot
+   Amazon Echo Dots
   </td>
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    TTS output from Alexa Media Skill on Homeassistant around the house.
  </td>
 </tr>
  
@@ -554,8 +590,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    TTS output from Alexa Media Skill on Homeassistant.
  </td>
 </tr>
 
@@ -566,20 +602,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
- </td>
-</tr>
-
-<tr>
- <td align=center>
-   Amazon Alexa
-  </td>
- <td align=center>
-    Graphic
- </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Kitchen, use solely for timers and kitchen related things. Slideshow of pictures. TTS output from Alexa Media Skill on Homeassistant.
  </td>
 </tr>
 
@@ -610,8 +634,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Provides IR in the living room and other areas where the Pioneer Mini Splits live. These can also be used to control ANY IR device. I also use Smart IR (HACS) to control a few things like the Living Room TV power.
  </td>
 </tr>
 
@@ -623,8 +647,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Standard Washer in the basement, used via the LG ThinQ skill (HACS) and/or the LG ThinQ Skill on Alexa, or the Android App.
  </td>
 </tr>
 
@@ -635,8 +659,32 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td colspan="2">
+    Providing AC to three seperate areas in the house. These are controlled via the Broadlink RM4 Mini, via Infrared (IR) through Hass.
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Ecobee 4
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td colspan="2">
+    Temperature control / thermostat via WiFi, through HomeAssistant Ecobee integration.
+ </td>
+</tr>
+
+<tr>
+ <td align=center>
+   Ecobee 3 Lite
+  </td>
+ <td align=center>
+    Graphic
+ </td>
+ <td colspan="2">
+    Temperature control / thermostat via WiFi, through HomeAssistant Ecobee integration.
  </td>
 </tr>
 
