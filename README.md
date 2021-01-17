@@ -38,134 +38,122 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
 <tr>
  <td align=center>
-    Unifi AP AC-Pro
+  <a href="https://amzn.to/3suM6IF">Unifi AP AC-Pro</a>
  </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Standard Unifi Access Point, most popular one. Turn off AP LED at night, main floor.
  </td>
 </tr>
 
 <tr>
  <td align=center>
-    Unifi AP Nano HD
+  <a href="https://amzn.to/2N3Xyuw">Unifi AP Nano HD</a>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Standard Unifi Access Point, more recent version. Basement office area.
  </td>
 </tr>
  
  
 <tr>
  <td align=center>
-    Unifi AP AC-LR
+  <a href="https://amzn.to/2KpvjFO">Unifi AP AC-LR</a>
   </td>
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
-    
+ <td align=center colspan="2"> 
+    Entry level Unifi Access Point, to cover basement and more of the front of the house from below.
  </td>
 </tr>
 
 <tr>
  <td align=center>
-    Unifi AP AC-IW
+  <a href="https://amzn.to/3bQe0Jd">Unifi AP AC-IW</a>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Unifi Access Point for putting "in the wall" or moreso on a outlet cover. Used for Garage and Patio area access.
  </td>
 </tr>
 
 <tr>
  <td align=center>
-    Unifi AP AC-Pro
+  <a href="https://amzn.to/3szNBFk">Unifi US-24 Switch</a>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
- </td>
-</tr>
-
-<tr>
- <td align=center>
-    Unifi US-24 Switch
-  </td>
- <td align=center>
-    Graphic
- </td>
- <td align=center colspan="2">
-    
+    Unifi's standard rack mountable switch, no POE. Connecting most equipment in the server rack.
  </td>
 </tr>
 
 <tr>
 <td align=center>
-    Unifi US-8-150W Switch
+ <a href="https://amzn.to/3qqAvZb">Unifi US-8-150W Switch</a>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Larger POE switch (full 8 ports) for powering all the cameras, APs, and a flex mini amongst the house.
  </td>
 </tr>
 
 <tr>
 <td align=center>
-    Unifi US-8-60W Switch
+ <a href="https://amzn.to/38R3qQd">Unifi US-8-60W Switch</a>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Smaller POE switch, for use in garage POE for cameras and Unifi AP-IW.
  </td>
 </tr>
 
 <tr>
  <td align=center>
-    Unifi Flex Mini
+  <a href="https://amzn.to/3sHlnc6">Unifi Flex Mini</a>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Unifi Switch used for my Basement Office. Powered by POE!
  </td>
 </tr>
  
 <tr>
  <td align=center>
-    Unifi Cloudkey Gen 2+
+  <a href="https://amzn.to/2N1nk2v">Unifi Cloudkey Gen 2+</a>
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Running Unifi Network / Unifi Protect software for home network. Also provides information to Home Assistant of device tracking.
  </td>
  </tr>
  
  <tr>
  <td align=center>
-    Unifi USG (Router)
+  <a href="https://amzn.to/3qkpcls">Unifi USG</a> (Router)
   </td>
  <td align=center>
     Graphic
  </td>
  <td align=center colspan="2">
-    
+    Main router for incoming ISP, ties into Unifi system.
  </td>
  </tr>
  </table>
@@ -191,7 +179,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
  <tr>
  <td align=center>
-    GoControl HUSBZB-1 (Zigbee / Z-Wave)
+  <a href="https://amzn.to/3sFd2FV">GoControl HUSBZB-1</a> (Zigbee / Z-Wave)
   </td>
  <td align=center>
     Graphic
@@ -203,7 +191,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-  <strike>Hue Hub</strike>
+  <a href="https://amzn.to/35NMNDd"><strike>Hue Hub</strike></a>
   </td>
  <td align=center>
     Graphic
@@ -216,7 +204,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
 <tr>
  <td align=center>
-  <strike>Smart Things Hub</strike>
+  <a href="https://www.samsung.com/us/smart-home/smartthings/hubs/samsung-smartthings-hub--2018--gp-u999sjvlgda/"><strike>Smart Things Hub</strike></a>
   </td>
  <td align=center>
     Graphic
@@ -229,7 +217,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
  <tr>
  <td align=center>
-   Logitech Harmony Hub
+  <a href="https://amzn.to/38RTciF">Logitech Harmony Hub</a>
   </td>
  <td align=center>
     Graphic
@@ -260,7 +248,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
  <tr>
  <td align=center>
-   Hue Bulbs
+   <a href="https://amzn.to/3bIg06l">Hue Bulbs</a>
   </td>
  <td align=center>
     Graphic
@@ -273,7 +261,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
 <tr>
  <td align=center>
-   Smart Things Button
+   <a href="https://www.samsung.com/us/smart-home/smartthings/buttons/samsung-smartthings-button-gp-u999sjvleaa/">Smart Things Button</a>
   </td>
  <td align=center>
     Graphic
@@ -285,7 +273,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
  <tr>
  <td align=center>
-   Philips Hue Motion Sensors
+  <a href="https://amzn.to/2M1ALyQ">Philips Hue Motion Sensors</a>
   </td>
  <td align=center>
     Graphic
@@ -316,7 +304,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
  <tr>
  <td align=center>
-   Schlage Touchscreen Deadbolt
+   <a href="https://amzn.to/3syKk9y">Schlage Touchscreen Deadbolt</a>
   </td>
  <td align=center>
     Graphic
@@ -328,7 +316,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
 <tr>
  <td align=center>
-   Leviton Decora Smart Dimmer
+  <a href="https://amzn.to/38QF7lx">Leviton Decora Smart Dimmer</a>
   </td>
  <td align=center>
     Graphic
@@ -358,7 +346,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
  <tr>
  <td align=center>
-   Hue Bulbs
+   <a href="https://amzn.to/3bIg06l">Hue Bulbs</a>
   </td>
  <td align=center>
     Graphic
@@ -370,7 +358,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
 <tr>
  <td align=center>
-   D1 Mini (ESP 8266) w/ LED Strip
+  <a href="https://amzn.to/2XKSLQH">D1 Mini (ESP 8266)</a> w/ <a href="https://amzn.to/3ij9Xq9">LED Strip</a>
   </td>
  <td align=center>
     Graphic
@@ -400,7 +388,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
  <tr>
  <td align=center>
-   Schlage Touchscreen Deadbolt
+  <a href="https://amzn.to/3syKk9y">Schlage Touchscreen Deadbolt</a>
   </td>
  <td align=center>
     Graphic
@@ -412,7 +400,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
 <tr>
  <td align=center>
-   Unifi G3 Flex (Camera)
+  <a href="https://amzn.to/35Onqkz">Unifi G3 Flex</a> (Camera)
   </td>
  <td align=center>
     Graphic
@@ -424,7 +412,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Unifi G3 (Camera)
+  <a href="https://amzn.to/2NdK4fZ">Unifi G3</a> (Camera)
   </td>
  <td align=center>
     Graphic
@@ -436,7 +424,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Unifi G4 Doorbell (Camera / Doorbell)
+  <a href="https://amzn.to/35MHOmk">Unifi G4 Doorbell</a> (Camera / Doorbell)
   </td>
  <td align=center>
     Graphic
@@ -448,7 +436,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Amazon Alexa
+  <a href="https://amzn.to/39TNSe7">Amazon Alexa</a>
   </td>
  <td align=center>
     Graphic
@@ -460,7 +448,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Smart Things Motion Sensors
+   <a href="https://www.samsung.com/us/smart-home/smartthings/sensors/samsung-smartthings-motion-sensor-2018-gp-u999sjvlbaa/">Smart Things Motion Sensors</a>
   </td>
  <td align=center>
     Graphic
@@ -472,7 +460,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Ecobee Smart Sensors
+  <a href="https://amzn.to/39GXisX">Ecobee Smart Sensors</a>
   </td>
  <td align=center>
     Graphic
@@ -484,7 +472,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Philips Hue Motion Sensors
+  <a href="https://amzn.to/2M1ALyQ">Philips Hue Motion Sensors</a>
   </td>
  <td align=center>
     Graphic
@@ -515,7 +503,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Fire TV Sticks
+  <a href="https://amzn.to/2XJZJWm">Fire TV Sticks</a>
   </td>
  <td align=center>
     Graphic
@@ -527,7 +515,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
 <tr>
  <td align=center>
-   Nvidia Shield TV
+  <a href="https://amzn.to/2LS9WNH">Nvidia Shield TV</a>
   </td>
  <td align=center>
     Graphic
@@ -540,7 +528,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Google Chromecast
+  <a href="https://store.google.com/us/product/chromecast">Google Chromecast</a>
   </td>
  <td align=center>
     Graphic
@@ -553,7 +541,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Amazon Alexa
+  <a href="https://amzn.to/39TNSe7">Amazon Alexa</a>
   </td>
  <td align=center>
     Graphic
@@ -585,7 +573,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Amazon Echo Dots
+  <a href="https://amzn.to/39TNSe7">Amazon Echo Dots</a>
   </td>
  <td align=center>
     Graphic
@@ -597,7 +585,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  
 <tr>
  <td align=center>
-   Amazon Echo (Original)
+  <a href="https://en.wikipedia.org/wiki/Amazon_Echo">Amazon Echo (Original)</a>
   </td>
  <td align=center>
     Graphic
@@ -609,7 +597,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Amazon Echo Show 5"
+  <a href="https://amzn.to/38SxjQ4">Amazon Echo Show 5"</a>
   </td>
  <td align=center>
     Graphic
@@ -641,7 +629,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Broadlink RM4 Mini
+  <a href="https://amzn.to/2KmX2XH">Broadlink RM4 Mini</a>
   </td>
  <td align=center>
     Graphic
@@ -654,7 +642,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   LG Washer
+  <a href="https://www.lg.com/us/washers/lg-WM3700HWA-front-load-washer">LG Washer</a>
   </td>
  <td align=center>
     Graphic
@@ -666,7 +654,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Pioneer Mini Split Units
+  <a href="https://www.pioneerminisplit.com/">Pioneer Mini Split Units</a>
   </td>
  <td align=center>
     Graphic
@@ -678,7 +666,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Ecobee 4
+  <a href="https://amzn.to/35N6TNL">Ecobee 4</a>
   </td>
  <td align=center>
     Graphic
@@ -690,7 +678,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 <tr>
  <td align=center>
-   Ecobee 3 Lite
+  <a href="https://amzn.to/35LfrVm">Ecobee 3 Lite</a>
   </td>
  <td align=center>
     Graphic
