@@ -43,7 +43,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
   <a href="https://amzn.to/3suM6IF">Unifi AP AC-Pro</a>
  </td>
  <td align=center>
-    Graphic
+    <img src="https://photos.smugmug.com/photos/i-M7bWsTt/0/5d814b33/Th/i-M7bWsTt-Th.png" alt="">
  </td>
  <td colspan="2">
     Standard Unifi Access Point, most popular one. Turn off AP LED at night, main floor.
@@ -55,7 +55,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
   <a href="https://amzn.to/2N3Xyuw">Unifi AP Nano HD</a>
   </td>
  <td align=center>
-    Graphic
+    <img src="https://photos.smugmug.com/photos/i-M7bWsTt/0/5d814b33/Th/i-M7bWsTt-Th.png" alt="">
  </td>
  <td colspan="2">
     Standard Unifi Access Point, more recent version. Basement office area.
@@ -68,7 +68,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
   <a href="https://amzn.to/2KpvjFO">Unifi AP AC-LR</a>
   </td>
  <td align=center>
-    Graphic
+    <img src="https://photos.smugmug.com/photos/i-M7bWsTt/0/5d814b33/Th/i-M7bWsTt-Th.png" alt="">
  </td>
  <td colspan="2"> 
     Entry level Unifi Access Point, to cover basement and more of the front of the house from below.
