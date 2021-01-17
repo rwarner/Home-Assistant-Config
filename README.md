@@ -43,7 +43,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Standard Unifi Access Point, most popular one. Turn off AP LED at night, main floor.
  </td>
 </tr>
@@ -55,7 +55,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Standard Unifi Access Point, more recent version. Basement office area.
  </td>
 </tr>
@@ -68,7 +68,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2"> 
+ <td colspan="2"> 
     Entry level Unifi Access Point, to cover basement and more of the front of the house from below.
  </td>
 </tr>
@@ -80,7 +80,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Unifi Access Point for putting "in the wall" or moreso on a outlet cover. Used for Garage and Patio area access.
  </td>
 </tr>
@@ -92,7 +92,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Unifi's standard rack mountable switch, no POE. Connecting most equipment in the server rack.
  </td>
 </tr>
@@ -104,7 +104,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Larger POE switch (full 8 ports) for powering all the cameras, APs, and a flex mini amongst the house.
  </td>
 </tr>
@@ -116,7 +116,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Smaller POE switch, for use in garage POE for cameras and Unifi AP-IW.
  </td>
 </tr>
@@ -128,7 +128,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Unifi Switch used for my Basement Office. Powered by POE!
  </td>
 </tr>
@@ -140,7 +140,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Running Unifi Network / Unifi Protect software for home network. Also provides information to Home Assistant of device tracking.
  </td>
  </tr>
@@ -152,7 +152,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  <td align=center>
     Graphic
  </td>
- <td align=center colspan="2">
+ <td colspan="2">
     Main router for incoming ISP, ties into Unifi system.
  </td>
  </tr>
