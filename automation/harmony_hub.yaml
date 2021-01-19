@@ -4,7 +4,7 @@
     entity_id: input_select.harmony_hub
     from: 'Select Input'
   action:
-    - service_template: >
+    - service: >
           {% if states.input_select.harmony_hub.state == "Watch Shield TV" %}
             script.harmony_shield_tv
           {% elif states.input_select.harmony_hub.state == "Play Xbox One" %}

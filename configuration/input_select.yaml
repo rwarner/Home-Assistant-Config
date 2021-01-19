@@ -2,6 +2,8 @@
 ####### INPUT SELECT OPTIONS  ######
 ####################################
 
+# Enables a input select drop down 
+# functionality to work with the Harmony Hub
 harmony_hub:
   name: Harmony Hub
   options:

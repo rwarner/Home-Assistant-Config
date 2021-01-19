@@ -102,29 +102,41 @@ alexa_reset_all_volume:
 
 
 ###### Lighting #######
+
+
+# Toggle for bedroom lights. Switch brightness late and early.
+# Color temperature warmer (470) night and early.
 toggle_bedroom_lights:
   sequence:
     - service: light.toggle
       entity_id: 
         - light.master_bedroom_lights
-    # Only continue if light is on, we want to automate the
-    # scene to a dim setting from the Hue app
+    # Only continue if light is on, delay a bit
     - delay:
         milliseconds: 250
     - condition: state
       entity_id: light.master_bedroom_lights
       state: 'on'
-    - service: hue.hue_activate_scene
+    - service: light.turn_on
       data_template:
-        group_name: Bedroom
-        scene_name: >
+        entity_id: light.master_bedroom_lights
+        brightness_pct: >
           {% if now().hour >= 22 %}
-            Night lamp
+            30
           {% elif now().hour <= 7 %}
-            Night lamp
+            30
           {% else %}
-            Preferred Bright
+            100
           {% endif %}
+        color_temp: >
+          {% if now().hour >= 22 %}
+            470
+          {% elif now().hour <= 7 %}
+            470
+          {% else %}
+            350
+          {% endif %}
+          
 
 ############################################
 

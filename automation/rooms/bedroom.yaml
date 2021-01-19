@@ -25,7 +25,6 @@
 #      entity_id: switch.fan
 
 ########## BEDROOM LIGHT BUTTON ##########
-
 - alias: BEDROOM - Turn on light in Bedroom (Bedroom Light Button)
   trigger:
   - event_data:
@@ -67,7 +66,6 @@
 #####################################
 
 ############ Ryan's Bedside Button #############
-
 - alias: BEDROOM - Turn on light in Bedroom (Ryan Button)
   trigger:
   - event_data:

@@ -7,10 +7,11 @@
 - alias: CAMERAS - Capture on front door motion
   mode: queued
   trigger:
-    - platform: state
-      entity_id: 
-        - binary_sensor.motion_front_door
-      to: 'on'
+    platform: state
+    entity_id:
+     - binary_sensor.motion_front_door
+     - binary_sensor.motion_doorbell
+    to: 'on'
   condition:
     - condition: state
       entity_id: variable.family_status 

@@ -2,19 +2,12 @@
 ####### LIGHTS CONFIGURATION  ######
 ####################################
 
-## Wemo Lights -> Regular lights
-#- platform: switch
-#  name: Bookshelf Lamp
-#  entity_id: switch.bookshelf_lamp
-
-
  ### Media Room ###
 - platform: group
   name: Media Room Lights
   entities:
     - light.media_room_movie_screen
     - light.media_room_entry_lamp
-
 
 ### Basement Office ###
 - platform: group
@@ -24,13 +17,11 @@
     - light.basement_office_recessed
     - light.ryans_desk_uplighting
 
-
  ### Laundry Room ###
 - platform: group
   name: Laundry Room Lights
   entities:
     - light.basement_laundry_light
-
 
  ### Living Room ###
 - platform: group
@@ -40,7 +31,6 @@
     - light.living_room_entry_lamp
     - light.living_room_bookcase_lamp
 
-
  ### Master Bedroom ###
 - platform: group
   name: Master Bedroom Lights
@@ -48,7 +38,6 @@
     - light.bedroom_dresser_lamp
     - light.bedroom_kellys_bedside
     - light.bedroom_ryans_bedside
-
 
  ### Outside ###
 - platform: group
@@ -59,13 +48,16 @@
     - light.outside_driveway_flood
     - light.outside_porch_flood
 
-
  ### Kitchen ###
 - platform: group
   name: Kitchen Lights
   entities:
     - light.kitchen_undercabinet_lights
     - light.kitchen_nook
+
+###################################
+####### Event Based Groups ########
+###################################
 
 
 ### Sun Based Lights - While we're Home ###
@@ -85,7 +77,10 @@
     - light.living_room_entry_lamp
 
 
-#### SINGLE USE ENTITIES, NOT NAMED "LIGHTS" ####
+###################################
+####### Single use entities #######
+###################################
+
 - platform: group
   name: Kitchen Nook
   entities:
@@ -103,3 +98,12 @@
   entities:
     - light.media_room_movie_left
     - light.media_room_movie_right
+
+###################################
+### Switch Conversion -> Light ####
+###################################
+
+## Wemo Lights -> Regular lights
+#- platform: switch
+#  name: Bookshelf Lamp
+#  entity_id: switch.bookshelf_lamp

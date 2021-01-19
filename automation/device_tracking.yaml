@@ -2,43 +2,6 @@
 ### DEVICE TRACKING AUTOMATIONS ###
 ###################################
 
-
-#
-# For Kelly/Ryan's phone, if you arrive home and the outside lights are off.
-# Turn them on for 10 minutes and then shut them off.
-#
-# e.g. Getting home late or really early in the morning
-#
-
-#- alias: DEVICE_TRACK - When arriving home, turn on back porch for 10 minutes, before/after sun and if outside is not on
-#  trigger:
-#    - platform: state
-#      entity_id: variable.ryan_status, variable.kelly_status
-#      from: 'Away'
-#      to: 'Just Arrived'
-#  condition:
-#    condition: and
-#    conditions:
-#      - condition: state
-#        entity_id: light.outside_lights
-#        state: 'off'
-#      - condition: or
-#        conditions:
-#          - condition: sun
-#            after: sunset
-#            after_offset: "-00:45:00"
-#          - condition: sun
-#            before: sunrise
-#            before_offset: "00:45:00"
-#  action:
-#    - service: light.turn_on
-#      entity_id: light.back_porch
-#    - delay: 
-#        minutes: 10
-#    - service: light.turn_off
-#      entity_id: light.back_porch
-
-
 - alias: DEVICE_TRACK - Nobody home, lock doors, arm alexa, set Tstat to Away, turn off Lights, etc..
   trigger:
     - platform: state
@@ -68,7 +31,6 @@
     # Keep lights that should be on while away, on
     - service: light.turn_on
       entity_id: light.sun_based_lights_away
-
 
 
 - alias: DEVICE_TRACK - Someone arrived home, disable alexa guard, set Thermostat to Home

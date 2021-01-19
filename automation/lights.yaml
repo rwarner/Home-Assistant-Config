@@ -4,12 +4,11 @@
 
 - alias: LIGHTS - Turn on Front Porch Light, if motion detected
   trigger:
-    - platform: state
-      entity_id: binary_sensor.motion_front_door
-      to: 'on'
-    - platform: state
-      entity_id: binary_sensor.motion_doorbell
-      to: 'on'
+    platform: state
+    entity_id:
+    - binary_sensor.motion_front_door
+    - binary_sensor.motion_doorbell
+    to: 'on'
   condition:
     - condition: state
       entity_id: light.outside_front_porch

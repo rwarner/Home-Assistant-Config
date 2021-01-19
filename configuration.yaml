@@ -7,6 +7,8 @@ homeassistant:
   elevation: 90
   unit_system: imperial
   time_zone: America/New_York
+  # Folders / files for customize: plugin
+  # Mainly for changing names, icons, etc...
   customize: !include_dir_merge_named customize
   auth_providers:
     - type: homeassistant
@@ -19,8 +21,10 @@ homeassistant:
   allowlist_external_dirs:
     - /tmp/hass
 
+# Enable Home Assistant Cloud functionality
 cloud:
 
+# Logging functionality for Home Assistant
 logger:
 #  default: critical
 
@@ -52,8 +56,10 @@ sun:
 # Support for the home-assistant mobile application
 mobile_app:
 
+# Required for camera accessibility / streaming / rtsp:
 stream:
 
+# History enabled, keeps the last two weeks
 recorder:
   purge_keep_days: 14
 
@@ -61,13 +67,9 @@ recorder:
 folder_watcher:
   - folder: /tmp/hass/
 
-pi_hole:
-  host: !secret pi_hole_host
-  ssl: false
-  verify_ssl: false
-
 weather:
 
+# Enable functionality for Discord mobile notification alerts
 notify:
   - platform: discord
     name: discord
@@ -176,8 +178,6 @@ smartir:
 
 switch:
   - platform: bhyve
-#  - platform: broadlink
-#    mac: !secret broadlink_living_room_mac
 
 climate:
   - platform: smartir

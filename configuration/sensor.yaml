@@ -7,9 +7,11 @@
   host: !secret radarr_ip
   port: !secret radarr_port
   days: 7
+
 - platform: tautulli
   api_key: !secret tautulli_api
   host: !secret tautulli_ip
+
 - platform: template
   sensors:
     ryan_status:
@@ -25,11 +27,26 @@
     ecobee_preset:
       value_template: '{{ states.climate.thermostat.attributes.preset_mode }}'
       friendly_name: "Ecobee Preset"
-  
-  
 
-# Temperature for rooms
-# Define below multiple sensors into one, only rely on these sensors for automations and views
+# Harmony Remote sensor for current activity
+- platform: template
+  sensors:
+      harmony_hub_activity:
+        value_template: '{{ state_attr("remote.harmony_hub", "current_activity") }}'
+        friendly_name: 'Media Room'
+
+# Folder for mp4 videos
+- platform: folder
+  folder: /tmp/hass
+  
+# Bhyve sensor (water/garden)
+- platform: bhyve
+
+##################################
+#  Average Temperature for rooms #
+##################################
+# Define below multiple sensors into one
+# only rely on these sensors for automations and views
 
 #  -- Bedroom --
 - platform: template
@@ -78,21 +95,10 @@
 
 
 
-# Harmony Remote sensor for current activity
-- platform: template
-  sensors:
-      harmony_hub_activity:
-        value_template: '{{ state_attr("remote.harmony_hub", "current_activity") }}'
-        friendly_name: 'Media Room'
+##################################
+##### Critical Device Status #####
+##################################
 
-## Folder for mp4 videos
-- platform: folder
-  folder: /tmp/hass
-    
-# Bhyve sensor (water/garden)
-- platform: bhyve
-
-#### Integral device status ##########
 - platform: template
   sensors:
     mac_mini_server:
