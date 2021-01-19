@@ -20,6 +20,7 @@
 
 - alias: LAUNDRY - Turn on Light from motion
   mode: single
+  max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
       entity_id: binary_sensor.laundry_motion_sensor_occupancy
