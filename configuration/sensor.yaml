@@ -55,7 +55,7 @@
       friendly_name: "Bedroom Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ ((float(states.sensor.ryans_bedside_button_temperature.state) + float(states.sensor.bedroom_light_button_temperature.state))  / 2)  | round(2) }}
+        {{ (states('sensor.ryans_bedside_button_temperature')|float + states('sensor.bedroom_light_button_temperature')|float)  / 2 | round(2) }}
 
 #  -- Living Room --
 - platform: template
@@ -64,7 +64,7 @@
       friendly_name: "Living Room Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ ((float(states.sensor.living_room_temperature.state) + float(states.sensor.thermostat_temperature.state))  / 2)  | round(2) }}
+        {{ (states('sensor.living_room_temperature')|float + states('sensor.thermostat_temperature')|float)  / 2 | round(2) }}
 
 # -- Media Room -- only one sensor currently
 - platform: template
@@ -73,7 +73,7 @@
       friendly_name: "Media Room Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (float(states.sensor.media_room_temperature.state) | round(2)) }}
+        {{ (states('sensor.media_room_temperature')|float | round(2)) }}
         
 # -- Kitchen -- only one sensor currently
 - platform: template
@@ -82,7 +82,7 @@
       friendly_name: "Kitchen Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (float(states.sensor.kitchen_motion_sensor_temperature.state) | round(2)) }}
+        {{ (states('sensor.kitchen_motion_sensor_temperature')|float | round(2)) }}
 
 # -- Basement -- only one sensor currently
 - platform: template
@@ -91,7 +91,7 @@
       friendly_name: "Basement Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (float(states.sensor.laundry_motion_sensor_temperature.state) | round(2)) }}
+        {{ (states('sensor.laundry_motion_sensor_temperature')|float | round(2)) }}
 
 
 
@@ -204,8 +204,8 @@
       friendly_name: 'Garage Camera'
       icon_template: mdi:cctv
     doorbell_camera:
-      value_template: "{% if states.device_tracker.doorbell_camera %}
-      {% if is_state('device_tracker.doorbell_camera', 'home') %}
+      value_template: "{% if states.device_tracker.doorbell %}
+      {% if is_state('device_tracker.doorbell', 'home') %}
         Online
       {% else %}
         Offline
