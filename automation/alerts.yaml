@@ -158,6 +158,7 @@
       - sensor.laundry_motion_sensor_battery_level
       - sensor.ryans_bedside_button_battery_level
       - sensor.schlage_allegion_be469_touchscreen_deadbolt_battery_level
+      - sensor.basement_office_motion_sensor_battery_level
     below: 30
   action:
     - service: notify.mobile_app_pixel_3

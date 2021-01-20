@@ -43,6 +43,7 @@ include:
     - sensor.living_room_avg_temp
     - sensor.bedroom_avg_temp
     - sensor.kitchen_avg_temp
+    - sensor.basement_office_avg_temp
      
     #- sensor.glances_cpu_temp
     #- sensor.glances_ram_used_percent

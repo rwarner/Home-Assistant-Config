@@ -3,6 +3,7 @@
 ############################
 
 - alias: LIGHTS - Turn on Front Porch Light, if motion detected
+  max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     platform: state
     entity_id:
