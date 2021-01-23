@@ -13,3 +13,11 @@ harmony_hub:
     - Play Switch
     - Power Off
   icon: mdi:monitor
+
+dryer_status:
+  name: Dryer Status
+  options:
+    - Idle
+    - Running
+    - Done
+  initial: Idle

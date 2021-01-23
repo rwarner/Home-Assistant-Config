@@ -15,7 +15,7 @@
   action:
     - service: script.alexa_notify_kitchen
       data_template:
-        message: "Laundry is done washing"
+        message: "Your clothes are clean"
 
 
 - alias: LAUNDRY - Turn on Light from motion
@@ -33,6 +33,18 @@
         minutes: 5
     - service: light.turn_off
       entity_id: light.laundry_room_lights
+
+- alias: LAUNDRY - Notify Kitchen dryer is done
+  trigger:
+    - platform: state
+      entity_id: input_select.dryer_status
+      from: 'Running'
+      to: "Done"
+  action:
+    - service: script.alexa_notify_kitchen
+      data_template:
+        message: "Your clothes are dry"
+  
 
 #- alias: LAUNDRY - Re-notify kitchen laundry is done after 1 hour
 #  trigger:
