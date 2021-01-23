@@ -7,6 +7,7 @@
 # or if variable.family_status is "Away" and our phones haven't connected to WiFi yet
 # Only if after 45 minutes before sunset, or 45 minutes before sunrise
 - alias: LOCKS - When unlocking the door, turn on lights inside if before/after sun and nobody is home
+  max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
       entity_id: lock.media_room_deadbolt
