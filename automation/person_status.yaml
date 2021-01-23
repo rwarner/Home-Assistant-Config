@@ -2,7 +2,14 @@
 ### PERSON_STATUS CONFIGURATION / AUTOMATION ###
 ################################################
 
+# Changing all modes in here to parallel
+
+# Occasionally, there would be incorrect "Just Left" "Just Arrived"
+# and never go to "Home". Assuming this may be from not executing parellel
+# tasks for one of us to mark as home when both arriving, maybe leaving
+
 - alias: PERSON - Mark person as just arrived
+  mode: parallel
   trigger:
     - platform: state
       entity_id: person.ryan
@@ -38,6 +45,7 @@
 
 
 - alias: PERSON - Mark person as home
+  mode: parallel
   trigger:
     - platform: state
       entity_id: variable.ryan_status
@@ -69,6 +77,7 @@
         value: Home
  
 - alias: PERSON - Mark person as just left
+  mode: parallel
   trigger:
     - platform: state
       entity_id: person.ryan
@@ -90,6 +99,7 @@
         value: Just Left
  
 - alias: PERSON - Mark person as not_home
+  mode: parallel
   trigger:
     - platform: state
       entity_id: variable.ryan_status
@@ -113,6 +123,7 @@
         value: Away
  
 - alias: PERSON - Mark person as extended not_home
+  mode: parallel
   trigger:
     - platform: state
       entity_id: variable.ryan_status
@@ -137,6 +148,7 @@
         
         
 - alias: PERSON - Mark Family as Away if both go from Just Left to Away
+  mode: parallel
   trigger:
     - platform: state
       entity_id: variable.ryan_status
@@ -160,6 +172,7 @@
         value: Away
 
 - alias: PERSON - Mark Family as Home if someone goes from Away to Just Arrived
+  mode: parallel
   trigger:
     - platform: state
       entity_id: variable.ryan_status
