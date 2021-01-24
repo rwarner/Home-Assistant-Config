@@ -2,60 +2,9 @@
 ### ALERT / DISCORD AUTOMATIONS  ###
 ####################################
 
-
-
 ########################################
 ######### Companion App Below ##########
 ########################################
-
-- alias: ALERT - Motion at Front Door, notify Mobile App
-  mode: single # Only run once at a time  
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    platform: state
-    entity_id:
-     - binary_sensor.motion_front_door
-     - binary_sensor.motion_doorbell
-    to: 'on'
-  condition:
-    - condition: state
-      entity_id: variable.family_status
-      state: 'Away'
-  action:
-    - service: notify.mobile_app_pixel_3
-      data:
-        title: "Front Door Motion"
-        message: ""
-        data:
-          image: "/api/camera_proxy/camera.front_door" #Captures image immediately, sends via notification
-          ttl: 0
-          priority: high
-    - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
-
-- alias: ALERT - Motion at Rear Porch, notify Mobile App
-  mode: single # Only run once at a time  
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    platform: state
-    entity_id:
-      - binary_sensor.motion_rear_porch
-    to: 'on'
-  condition:
-    - condition: state
-      entity_id: variable.family_status
-      state: 'Away'
-  action:
-    - service: notify.mobile_app_pixel_3
-      data:
-        title: "Rear Porch Motion"
-        message: ""
-        data:
-          image: "/api/camera_proxy/camera.rear_porch" #Captures image immediately, sends via notification
-          ttl: 0
-          priority: high
-    - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
-
-
 - alias: ALERT - Doorbell rang, notify Mobile App
   trigger:
   - platform: state
