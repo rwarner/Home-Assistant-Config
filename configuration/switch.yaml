@@ -1,0 +1,6 @@
+####################################
+####### SWITCH CONFIGURATION  ######
+####################################
+
+# Enable Bhyve platform for garden hoses
+- platform: bhyve

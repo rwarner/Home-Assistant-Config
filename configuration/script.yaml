@@ -17,7 +17,7 @@ close_garage_door:
       entity_id: binary_sensor.garage_door
       state: 'on'
     - service: switch.turn_on
-      entity_id: switch.garage_door
+      entity_id: switch.garage_door_toggle
 
 open_garage_door:
   alias: Open Garage Door
@@ -26,7 +26,7 @@ open_garage_door:
       entity_id: binary_sensor.garage_door
       state: 'off'
     - service: switch.turn_on
-      entity_id: switch.garage_door
+      entity_id: switch.garage_door_toggle
 
 
 ###### Alexa #######

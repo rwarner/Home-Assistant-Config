@@ -176,8 +176,6 @@ bhyve:
 
 smartir:
 
-switch:
-  - platform: bhyve
 
 climate:
   - platform: smartir
@@ -210,3 +208,7 @@ input_select: !include configuration/input_select.yaml
 shell_command: !include configuration/shell_command.yaml
 
 binary_sensor: !include configuration/binary_sensor.yaml
+
+switch: !include configuration/switch.yaml
+
+cover: !include configuration/cover.yaml
