@@ -14,6 +14,7 @@ harmony_hub:
     - Power Off
   icon: mdi:monitor
 
+# See also: sensor.dryer_status which points to this input_select value
 dryer_status:
   name: Dryer Status
   options:

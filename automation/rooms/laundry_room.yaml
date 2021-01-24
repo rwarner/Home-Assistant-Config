@@ -37,7 +37,7 @@
 - alias: LAUNDRY - Notify Kitchen dryer is done
   trigger:
     - platform: state
-      entity_id: input_select.dryer_status
+      entity_id: sensor.dryer_status
       from: 'Running'
       to: "Done"
   action:

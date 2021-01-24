@@ -21,6 +21,20 @@
       value_template: '{{ states.variable.kelly_status.state }}'
       friendly_name: 'Kelly'
 
+
+- platform: template
+  sensors:
+    dryer_status:
+      unique_id: sensor.dryer_status # Allow UI customizations
+      value_template: "{{ states('input_select.dryer_status') }}"
+      icon_template: >-
+        {% if is_state('input_select.dryer_status', 'Idle') %}
+          mdi:tumble-dryer-off
+        {% else %}
+          mdi:tumble-dryer
+        {% endif %}
+
+
 # Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
 - platform: template
   sensors:
@@ -93,7 +107,7 @@
       value_template: >-
         {{ (states('sensor.laundry_motion_sensor_temperature')|float | round(2)) }}
 
-# -- Basement -- only one sensor currently
+# -- Basement Office -- only one sensor currently
 - platform: template
   sensors:
     basement_office_avg_temp:
