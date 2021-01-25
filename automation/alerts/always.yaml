@@ -8,7 +8,7 @@
 - alias: ALERT - Doorbell rang, notify Mobile App
   trigger:
   - platform: state
-    entity_id: binary_sensor.doorbell_doorbell #Press of the doorbell
+    entity_id: binary_sensor.doorbell_doorbell # Press of the doorbell
     from: 'off'
     to: 'on'
   action:
@@ -18,9 +18,10 @@
         title: "Doorbell Rang"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.doorbell" #Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.doorbell" # Captures image immediately, sends via notification
           ttl: 0
           priority: high
+          clickAction: "/lovelace/camera_view"
 
 - alias: ALERT - When a critical device goes offline to mobile app
   trigger:
@@ -64,6 +65,7 @@
       data:
         ttl: 0
         priority: high
+        clickAction: "/lovelace/devices_view"
 
 
 - alias: ALERT - HA Persistent Notifications to Mobile App
@@ -114,6 +116,7 @@
       data:
         title: "Sensor Battery Low"
         message: "{{trigger.from_state.attributes.friendly_name}} is low"
+        clickAction: "/lovelace/devices_view"
 
 
 ########################################

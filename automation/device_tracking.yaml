@@ -9,16 +9,18 @@
       from: 'Home'
       to: 'Away'
   action:
-    - service: lock.lock
+    - service: lock.lock                                # Lock Deadbolt
       entity_id: lock.media_room_deadbolt
-    - service: alarm_control_panel.alarm_arm_away
+    - service: alarm_control_panel.alarm_arm_away       # Arm Alexa for guard mode
       entity_id: alarm_control_panel.alexa_guard_de7c8
-    - service: climate.set_preset_mode
+    - service: climate.set_preset_mode                  # Set thermostat for Away mode
       data:
         entity_id: climate.thermostat, climate.media_room
         preset_mode: 'Away'
-    - service: light.turn_off
+    - service: light.turn_off                           # Turn off all lights in home
       entity_id: all
+    - service: cover.close_cover                        # Close garage door, if open
+      entity_id: cover.garage_door
     # Only proceed if its dark outside with the following services
     - condition: or 
       conditions:

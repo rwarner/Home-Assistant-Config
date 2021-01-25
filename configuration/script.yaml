@@ -41,19 +41,6 @@ alexa_notify_kitchen:
         data:
           type: announce
           method: all
-        
-
-alexa_notify_main_floor:
-  sequence:
-    - service: notify.alexa_media
-      data_template:
-        target: 
-          - media_player.main_floor
-        title: "{{ title }}"
-        message: "{{ message }}"
-        data:
-          type: announce
-          method: all
 
 alexa_notify_basement_office:
   sequence:
@@ -185,12 +172,12 @@ turn_off_kitchen_tablet:
         payload: "sleepdevice"
         qos: 0
 
-turn_on_tablet_mlbtv:
+turn_on_tablet_doorbell:
   sequence:
     - service: mqtt.publish
       data:
         topic: homeassistant
-        payload: "mlbtv"
+        payload: "doorbell"
         qos: 0
 
 ############################################
@@ -260,6 +247,4 @@ harmony_poweroff:
       entity_id: remote.harmony_hub
       data:
         activity: "PowerOff" 
-
-
 ############################################

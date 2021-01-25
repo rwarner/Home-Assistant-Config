@@ -12,13 +12,9 @@
       friendly_name: "Garage Door"
       value_template: "{{ states('binary_sensor.garage_door') == 'on' }}"
       open_cover:
-        service: switch.turn_on
-        data:
-          entity_id: switch.garage_door_toggle
+        service: script.open_garage_door # Execute script, to make sure we aren't closing garage door
       close_cover:
-        service: switch.turn_on
-        data:
-          entity_id: switch.garage_door_toggle
+        service: script.close_garage_door # Execute script, to make sure we aren't opening garage door
       icon_template: >-
         {% if is_state('binary_sensor.garage_door', 'on') %}
           mdi:garage-open

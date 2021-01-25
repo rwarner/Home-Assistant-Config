@@ -24,6 +24,7 @@
           image: "/api/camera_proxy/camera.front_door" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
+          clickAction: "/lovelace/camera_view"
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Motion at Rear Porch, notify Mobile App
@@ -47,6 +48,7 @@
           image: "/api/camera_proxy/camera.rear_porch" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
+          clickAction: "/lovelace/camera_view"
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Motion in house
@@ -73,6 +75,7 @@
         data:
           ttl: 0
           priority: high
+          clickAction: "/lovelace/camera_view"
     - delay: '00:02:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Garage has opened
@@ -95,6 +98,7 @@
           image: "/api/camera_proxy/camera.garage" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
+          clickAction: "/lovelace/camera_view"
 
 - alias: ALERT (AWAY) - Door has been unlocked
   mode: single # Only run once at a time  
@@ -116,3 +120,4 @@
           image: "/api/camera_proxy/camera.rear_porch" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
+          clickAction: "/lovelace/camera_view"
