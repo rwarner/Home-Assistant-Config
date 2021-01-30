@@ -5,6 +5,29 @@
 ########################################
 ######### Companion App Below ##########
 ########################################
+
+- alias: ALERT - Garage door left open, notify Mobile App
+  trigger:
+  - platform: state
+    entity_id: cover.garage_door
+    to: 'opened'
+    for:
+      minutes: 30
+  action:
+    - service: notify.mobile_app_pixel_3
+      data:
+        title: "Garage Door is Open"
+        message: "Do you want to close it?"
+        data:
+          ttl: 0
+          priority: high
+          data:  
+            clickAction: "/lovelace/camera_view"
+            actions:
+              - action: "close_garage_door"
+                title: "Close Garage"
+
+
 - alias: ALERT - Doorbell rang, notify Mobile App
   trigger:
   - platform: state
@@ -116,7 +139,8 @@
       data:
         title: "Sensor Battery Low"
         message: "{{trigger.from_state.attributes.friendly_name}} is low"
-        clickAction: "/lovelace/devices_view"
+        data:
+          clickAction: "/lovelace/devices_view"
 
 
 ########################################
