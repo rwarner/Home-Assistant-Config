@@ -1,0 +1,28 @@
+###############################
+### MEDIA ROOM AUTOMATIONS  ###
+###############################
+
+- alias: MEDIA ROOM - Turn on Light from motion (only when Projector is off, light is low)
+  mode: restart # Restart on every motion, ensure that the light is always on
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.media_room_motion_sensor_occupancy
+      from: 'off'
+      to: 'on'
+  condition:
+  # Make sure that the projector is off, could be watching something
+    - condition: state
+      entity_id: sensor.harmony_hub_activity 
+      state: 'PowerOff'
+  # Make sure that the light level is below 10 lx
+    - condition: numeric_state
+      entity_id: sensor.media_room_motion_sensor_illuminance
+      below: 10
+  action:
+    - service: light.turn_on
+      entity_id: light.media_room_lights
+    - delay:
+        minutes: 3
+    - service: light.turn_off
+      entity_id: light.media_room_lights
