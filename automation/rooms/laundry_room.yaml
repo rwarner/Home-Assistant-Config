@@ -19,7 +19,7 @@
 
 
 - alias: LAUNDRY - Turn on Light from motion
-  mode: single
+  mode: restart # Restart on every motion, ensure that the light is always on
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
