@@ -75,12 +75,6 @@ notify:
     name: discord
     token: !secret discord_token
 
-remote:
-  - platform: harmony
-    name: Harmony Hub
-    host: !secret harmony_ip
-    activity: Watch Shield TV
-
 media_player:
   - platform: yamaha
     host: !secret yamaha_ip #Not a static ip
