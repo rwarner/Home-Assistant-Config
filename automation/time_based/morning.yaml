@@ -5,3 +5,12 @@
       at: '08:00:00'
   action:
     - service: script.alexa_reset_all_volume
+
+# 8:00 a.m.
+- alias: MORNING - Reset mailbox input_boolean to off
+  trigger:
+    - platform: time
+      at: '08:00:00'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.mail_arrived
