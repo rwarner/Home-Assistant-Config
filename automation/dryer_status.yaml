@@ -2,6 +2,7 @@
 ### DRYER_STATUS CONFIGURATION / AUTOMATION ####
 ################################################
 
+# 2/26/21 not in use
 
 - alias: Set dryer active when vibrating for 5 minutes
   trigger:
