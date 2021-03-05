@@ -7,7 +7,7 @@
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
-      entity_id: binary_sensor.media_room_motion_sensor_occupancy
+      entity_id: binary_sensor.media_room_motion_sensor
       from: 'off'
       to: 'on'
   condition:
@@ -15,13 +15,22 @@
     - condition: state
       entity_id: sensor.harmony_hub_activity 
       state: 'PowerOff'
-  # Make sure that the light level is below 10 lx
-    - condition: numeric_state
-      entity_id: sensor.media_room_motion_sensor_illuminance
-      below: 10
+  # Check if the light is dark OR if the automation has recently been triggered
+  # this allows us to skip luminance checks on restart
+    - condition: or
+      conditions:
+      # Automation has recently been trigger by a restart within 3 min window
+        - condition: template
+          value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.media_room_turn_on_light_from_motion_only_when_projector_is_off_light_is_low.last_changed)) < 180 }}"
+      # Make sure that the light level is below 10 lx
+        - condition: numeric_state
+          entity_id: sensor.media_room_motion_sensor_illuminance
+          below: 10
   action:
     - service: light.turn_on
-      entity_id: light.media_room_lights
+      data:
+        entity_id: light.media_room_lights
+        brightness_pct: 100
     - delay:
         minutes: 3
     - service: light.turn_off
