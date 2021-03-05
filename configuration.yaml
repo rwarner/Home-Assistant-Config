@@ -170,7 +170,6 @@ bhyve:
 
 smartir:
 
-
 climate:
   - platform: smartir
     name: Living Room AC
@@ -183,6 +182,11 @@ climate:
 zwave:
   usb_path: /dev/ttyUSB0
   network_key: !secret zwave_network_key
+
+input_boolean:
+  mail_arrived:
+    name: Whether or not the mail has arrived
+
   
 #################################
 ##### EXTERNAL FILES BELOW ######

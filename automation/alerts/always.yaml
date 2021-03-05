@@ -133,6 +133,9 @@
       - sensor.ryans_bedside_button_battery_level
       - sensor.schlage_allegion_be469_touchscreen_deadbolt_battery_level
       - sensor.basement_office_motion_sensor_battery_level
+      - sensor.media_room_motion_sensor_battery_levelcdd
+      - sensor.master_bedroom_motion_sensor_battery_level
+      - sensor.front_outdoor_motion_sensor_battery_level
     below: 30
   action:
     - service: notify.mobile_app_pixel_3
@@ -141,6 +144,29 @@
         message: "{{trigger.from_state.attributes.friendly_name}} is low"
         data:
           clickAction: "/lovelace/devices_view"
+
+- alias: ALERT - Notify when the physical mail comes
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.mailbox_sensor
+      to: 'on'
+  condition:
+      condition: state
+      entity_id: input_boolean.mail_arrived
+      state: 'off'
+  action:
+    - service: notify.mobile_app_pixel_3
+      data:
+        title: "\uD83D\uDCEB\uD83D\uDCEB  Mail has arrived  \uD83D\uDCEB\uD83D\uDCEB"
+        message: ""
+    - service: script.alexa_notify_kitchen
+      data_template:
+        message: "You've got mail"
+    - service: script.alexa_notify_basement_office
+      data_template:
+        message: "You've got mail"
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.mail_arrived
 
 
 ########################################
