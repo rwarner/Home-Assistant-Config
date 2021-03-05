@@ -90,3 +90,44 @@
       entity_id: 
         - switch.fan
 #####################################
+
+
+############ Motion Sensor #############
+- alias: BEDROOM - Turn on Light from motion (Off after 5 min, between 10 am and 9:30pm)
+  mode: restart # Restart on every motion, ensure that the light is always on
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.master_bedroom_motion_sensor
+      from: 'off'
+      to: 'on'
+  condition:
+  # Only between the hours of 10 am and 9:30 p.m.
+    - condition: time
+      after: '10:00:00'
+      before: '21:30:00'
+  # Only if the fan is off (i.e. not in bed, sleeping)
+    - condition: state
+      entity_id: switch.fan
+      state: 'off'
+    # Check if the light is dark OR if the automation has recently been triggered
+    # this allows us to skip luminance checks on restart
+    - condition: or
+      conditions:
+      # Automation has recently been trigger by a restart within 5 min window
+        - condition: template
+          value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.bedroom_turn_on_light_from_motion_off_after_5_min_between_10_am_and_9_30pm.last_changed)) < 300 }}"
+      # Make sure that the light level is below 10 lx
+        - condition: numeric_state
+          entity_id: sensor.master_bedroom_motion_sensor_illuminance
+          below: 10
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.master_bedroom_lights
+        brightness_pct: 100
+    - delay:
+        minutes: 5
+    - service: light.turn_off
+      entity_id: light.master_bedroom_lights
+#####################################
