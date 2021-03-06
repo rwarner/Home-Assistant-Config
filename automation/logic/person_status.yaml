@@ -1,0 +1,204 @@
+################################################
+### PERSON_STATUS CONFIGURATION / AUTOMATION ###
+################################################
+
+# Changing all modes in here to parallel
+
+# Occasionally, there would be incorrect "Just Left" "Just Arrived"
+# and never go to "Home". Assuming this may be from not executing parellel
+# tasks for one of us to mark as home when both arriving, maybe leaving
+
+- alias: PERSON - Mark person as just arrived
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: person.ryan
+      from: 'not_home'
+      to: 'home'
+    - platform: state
+      entity_id: person.kelly
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'person.ryan' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: >
+          {% if trigger.entity_id == 'person.ryan' %}
+            {% if states.variable.ryan_status.state == 'Just Left' %}
+              Home
+            {% else %}
+              Just Arrived
+            {% endif %}
+          {% else %}
+            {% if states.variable.kelly_status.state == 'Just Left' %}
+              Home
+            {% else %}
+              Just Arrived
+            {% endif %}
+          {% endif %}
+
+
+- alias: PERSON - Mark person as home
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: variable.kelly_status
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: variable.ryan_status
+      from: 'Just Left'
+      to: 'Just Arrived'
+    - platform: state
+      entity_id: variable.kelly_status
+      from: 'Just Left'
+      to: 'Just Arrived'
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'variable.ryan_status' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: Home
+ 
+- alias: PERSON - Mark person as just left
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: person.ryan
+      from: 'home'
+      to: 'not_home'
+    - platform: state
+      entity_id: person.kelly
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'person.ryan' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: Just Left
+ 
+- alias: PERSON - Mark person as not_home
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      to: 'Just Left'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: variable.kelly_status
+      to: 'Just Left'
+      for:
+        minutes: 10
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'variable.ryan_status' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: Away
+ 
+- alias: PERSON - Mark person as extended not_home
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      to: 'Away'
+      for:
+        hours: 24
+    - platform: state
+      entity_id: variable.kelly_status
+      to: 'Away'
+      for:
+        hours: 24
+  action:
+    - service: variable.set_variable
+      data_template:
+        variable: >
+          {% if trigger.entity_id == 'variable.ryan_status' %}
+            ryan_status
+          {% else %}
+            kelly_status
+          {% endif %}
+        value: Extended Away
+        
+        
+- alias: PERSON - Mark Family as Away if both go from Just Left to Away
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      from: 'Just Left'
+      to: 'Away'
+    - platform: state
+      entity_id: variable.kelly_status
+      from: 'Just Left'
+      to: 'Away'
+  condition:
+    - condition: state
+      entity_id: variable.ryan_status
+      state: 'Away' 
+    - condition: state
+      entity_id: variable.kelly_status
+      state: 'Away'
+  action:
+    - service: variable.set_variable
+      data:
+        variable: family_status
+        value: Away
+
+- alias: PERSON - Mark Family as Home if someone goes from Away to Just Arrived
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: variable.ryan_status
+      from: 'Away'
+      to: 'Just Arrived'
+    - platform: state
+      entity_id: variable.kelly_status
+      from: 'Away'
+      to: 'Just Arrived'
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: variable.ryan_status
+        state: 'Just Arrived'
+      - condition: state
+        entity_id: variable.ryan_status
+        state: 'Home'
+      - condition: state
+        entity_id: variable.kelly_status
+        state: 'Just Arrived'
+      - condition: state
+        entity_id: variable.kelly_status
+        state: 'Home'
+  action:
+    - service: variable.set_variable
+      data:
+        variable: family_status
+        value: Home
