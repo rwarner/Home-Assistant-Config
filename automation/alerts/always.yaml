@@ -35,6 +35,11 @@
     from: 'off'
     to: 'on'
   action:
+    - service: unifiprotect.set_doorbell_lcd_message
+      data:
+        entity_id: camera.doorbell
+        message: "Please wait"
+        duration: 1 # Display for 1 minute
     - delay: '00:00:02' # Wait 2 seconds so we don't get their finger in the camera
     - service: notify.mobile_app_pixel_3
       data:
@@ -167,7 +172,6 @@
         message: "You've got mail"
     - service: homeassistant.turn_on
       entity_id: input_boolean.mail_arrived
-
 
 ########################################
 ############# Discord Below ############
