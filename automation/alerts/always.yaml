@@ -138,7 +138,7 @@
       - sensor.ryans_bedside_button_battery_level
       - sensor.schlage_allegion_be469_touchscreen_deadbolt_battery_level
       - sensor.basement_office_motion_sensor_battery_level
-      - sensor.media_room_motion_sensor_battery_levelcdd
+      - sensor.media_room_motion_sensor_battery_level
       - sensor.master_bedroom_motion_sensor_battery_level
       - sensor.front_outdoor_motion_sensor_battery_level
     below: 30
