@@ -186,6 +186,8 @@ zwave:
 input_boolean:
   mail_arrived:
     name: Whether or not the mail has arrived
+  someone_at_front_door:
+    name: Whether or not someone is at the front door
 
   
 #################################

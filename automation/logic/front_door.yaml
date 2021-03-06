@@ -1,0 +1,29 @@
+################################################
+### FRONT_DOOR CONFIGURATION / AUTOMATION ####
+################################################
+
+
+- alias: FRONT DOOR - Whether or not someone is at the front door
+  trigger:
+    # Relying on Outdoor Hue Motion Sensor for main source of motion
+    - platform: state
+      entity_id: binary_sensor.front_outdoor_motion_sensor
+      to: 'on'
+  condition:
+    # Check if doorbell also had motion within the last minute
+    - condition: template
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.binary_sensor.motion_doorbell.last_changed)) < 60 }}"
+    # If doorbell did have motion, check that it was in fact a person object
+    - condition: state
+      entity_id: binary_sensor.motion_doorbell 
+      attribute: event_object
+      state: 'person'
+  action:
+    # Most likely, someone is at the front door turn on input boolean
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.someone_at_front_door
+    # Wait 3 minutes before turning off the boolean
+    - delay:
+        minutes: 3
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.someone_at_front_door
