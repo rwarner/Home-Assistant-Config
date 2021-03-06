@@ -7,8 +7,7 @@
   trigger:
     platform: state
     entity_id:
-    - binary_sensor.motion_front_door
-    - binary_sensor.motion_doorbell
+    - input_boolean.someone_at_front_door
     to: 'on'
   condition:
     - condition: state
