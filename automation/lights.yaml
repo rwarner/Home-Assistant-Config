@@ -26,7 +26,7 @@
 - alias: LIGHTS - Turn on Porch/Floods, if motion detected (Late night)
   trigger:
     - platform: state
-      entity_id: binary_sensor.motion_rear_porch
+      entity_id: input_boolean.someone_at_rear_porch
       to: 'on'
   mode: restart
   condition:
@@ -55,7 +55,7 @@
 - alias: LIGHTS - Turn on Floods, if motion detected (While dark/porch on)
   trigger:
     - platform: state
-      entity_id: binary_sensor.motion_rear_porch
+      entity_id: input_boolean.someone_at_rear_porch
       to: 'on'
   mode: restart
   condition:
