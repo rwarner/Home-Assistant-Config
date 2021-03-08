@@ -79,7 +79,7 @@
       friendly_name: "Living Room Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (states('sensor.living_room_temperature')|float + states('sensor.thermostat_temperature')|float)  / 2 | round(2) }}
+        {{ '%0.3g'|format((states('sensor.living_room_temperature')|float + states('sensor.thermostat_temperature')|float)  / 2 | round(2)) }}
 
 # -- Media Room -- only one sensor currently
 - platform: template
