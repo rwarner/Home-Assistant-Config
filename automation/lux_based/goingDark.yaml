@@ -14,6 +14,9 @@
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       below: 15
   action:
+    # Only proceed, if we haven't used this in the last 18 hours
+    - condition: template 
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered)) > 64800 }}"
     - service: light.turn_on
       data:
         entity_id: 
