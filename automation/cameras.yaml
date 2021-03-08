@@ -24,7 +24,7 @@
   trigger:
     - platform: state
       entity_id: 
-        - binary_sensor.motion_rear_porch
+        - input_boolean.someone_at_rear_porch
       to: 'on'
   condition:
     - condition: state

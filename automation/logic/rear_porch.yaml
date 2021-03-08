@@ -1,0 +1,26 @@
+##############################################
+### REAR_PORCH CONFIGURATION / AUTOMATION ####
+##############################################
+
+
+- alias: REAR PORCH - Whether or not someone is at rear porch
+  trigger:
+    # Relying on Outdoor Hue Motion Sensor for main source of motion
+    - platform: state
+      entity_id: binary_sensor.motion_rear_porch
+      to: 'on'
+  condition:
+    # Make sure the rear porch is accurate / over 75 certainty
+    - condition: numeric_state
+      entity_id: binary_sensor.motion_rear_porch 
+      attribute: event_score
+      above: 75
+  action:
+    # Most likely, someone is at the front door turn on input boolean
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.someone_at_rear_porch
+    # Wait 3 minutes before turning off the boolean
+    - delay:
+        minutes: 3
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.someone_at_rear_porch

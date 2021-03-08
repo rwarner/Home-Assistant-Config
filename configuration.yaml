@@ -188,6 +188,8 @@ input_boolean:
     name: Whether or not the mail has arrived
   someone_at_front_door:
     name: Whether or not someone is at the front door
+  someone_at_rear_porch:
+    name: Whether or not someone is at the rear porch
 
   
 #################################
