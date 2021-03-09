@@ -6,7 +6,7 @@
 - alias: KITCHEN - Doorbell rang, change tablet to doorbell view
   trigger:
   - platform: state
-    entity_id: binary_sensor.doorbell_doorbell # Press of the doorbell
+    entity_id: binary_sensor.doorbell_push # Press of the doorbell
     from: 'off'
     to: 'on'
   action:

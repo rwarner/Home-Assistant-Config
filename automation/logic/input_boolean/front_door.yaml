@@ -12,10 +12,10 @@
   condition:
     # Check if doorbell also had motion within the last minute
     - condition: template
-      value_template: "{{ (as_timestamp(now())-as_timestamp(states.binary_sensor.motion_doorbell.last_changed)) < 60 }}"
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.binary_sensor.motion_camera_doorbell.last_changed)) < 60 }}"
     # If doorbell did have motion, check that it was in fact a person object
     - condition: state
-      entity_id: binary_sensor.motion_doorbell 
+      entity_id: binary_sensor.motion_camera_doorbell 
       attribute: event_object
       state: 'person'
   action:

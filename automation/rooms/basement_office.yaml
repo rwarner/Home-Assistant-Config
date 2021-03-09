@@ -7,7 +7,7 @@
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
-      entity_id: binary_sensor.basement_office_motion_sensor_occupancy
+      entity_id: binary_sensor.basement_office_motion_sensor
       from: 'off'
       to: 'on'
   condition:
@@ -29,7 +29,7 @@
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
-      entity_id: binary_sensor.basement_office_motion_sensor_occupancy
+      entity_id: binary_sensor.basement_office_motion_sensor
       from: 'on'
       to: 'off'
       for:

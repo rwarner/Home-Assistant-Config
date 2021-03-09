@@ -7,12 +7,12 @@
   trigger:
     # Relying on Outdoor Hue Motion Sensor for main source of motion
     - platform: state
-      entity_id: binary_sensor.motion_rear_porch
+      entity_id: binary_sensor.motion_camera_rear_porch
       to: 'on'
   condition:
     # Make sure the rear porch is accurate / over 75 certainty
     - condition: numeric_state
-      entity_id: binary_sensor.motion_rear_porch 
+      entity_id: binary_sensor.motion_camera_rear_porch 
       attribute: event_score
       above: 75
   action:
