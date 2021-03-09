@@ -37,7 +37,7 @@
   action:
     - service: unifiprotect.set_doorbell_lcd_message
       data:
-        entity_id: camera.doorbell
+        entity_id: camera.unifi_doorbell
         message: "Please wait"
         duration: 1 # Display for 1 minute
     - delay: '00:00:02' # Wait 2 seconds so we don't get their finger in the camera
@@ -46,7 +46,7 @@
         title: "Doorbell Rang"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.doorbell" # Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.unifi_doorbell" # Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"

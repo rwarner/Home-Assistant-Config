@@ -20,7 +20,7 @@
         title: "Front Door Motion"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.front_door" #Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.unifi_front_door" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"
@@ -48,7 +48,7 @@
         title: "Rear Porch Motion"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.rear_porch" #Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.unifi_rear_porch" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"
@@ -101,7 +101,7 @@
         title: "Garage Door opened at home"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.garage" #Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.unifi_garage" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"
@@ -124,7 +124,7 @@
         title: "Rear door unlocked"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.rear_porch" #Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.unifi_rear_porch" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"
