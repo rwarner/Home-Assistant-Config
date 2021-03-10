@@ -29,6 +29,8 @@
   action:
     - service: light.turn_on
       entity_id: light.laundry_room_lights
+    # Wait until motion goes off
+    - wait_template: "{{ is_state('binary_sensor.laundry_motion_sensor', 'off') }}"
     - delay:
         minutes: 5
     - service: light.turn_off
