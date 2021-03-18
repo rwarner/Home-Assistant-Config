@@ -13,10 +13,15 @@
     - platform: numeric_state
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       below: 15
-  action:
-    # Only proceed, if we haven't used this in the last 18 hours
+  condition:
+    # Only proceed, if we haven't used this in the last 12 hours
     - condition: template 
-      value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered)) > 64800 }}"
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered)) > 43200 }}"
+    # Only after 4 pm and before 9pm
+    - condition: time
+      after: '16:00:00'
+      before: '21:00:00'
+  action:
     - service: light.turn_on
       data:
         entity_id: 
