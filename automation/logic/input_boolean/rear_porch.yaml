@@ -4,6 +4,7 @@
 
 
 - alias: REAR PORCH - Whether or not someone is at rear porch
+  max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
     # Relying on Outdoor Hue Motion Sensor for main source of motion
     - platform: state

@@ -4,6 +4,7 @@
 
 
 - alias: FRONT DOOR - Whether or not someone is at the front door
+  max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
     # Relying on Outdoor Hue Motion Sensor for main source of motion
     - platform: state
