@@ -41,3 +41,19 @@
   action:
     - service: light.turn_off
       entity_id: light.basement_office_lights
+
+- alias: BASEMENT OFFICE - Good morning on first movement
+  mode: single
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    - platform: state
+      entity_id: input_boolean.first_movement_basement_office
+      to: 'on'
+  condition:
+    - condition: time
+      after: '06:00:00'
+      before: '11:30:00'
+  action:
+    - service: script.alexa_notify_basement_office
+      data_template:
+        message: "Good morning Ryan."

@@ -1,0 +1,17 @@
+################################################
+### FRONT_DOOR CONFIGURATION / AUTOMATION ####
+################################################
+
+- alias: BASEMENT OFFICE - First movement of the day in basement office
+  max_exceeded: silent # Hide warnings when triggered while in delay
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.basement_office_motion_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.first_movement_basement_office
+      state: 'off'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.first_movement_basement_office
