@@ -6,7 +6,6 @@
 - alias: REAR PORCH - Whether or not someone is at rear porch
   max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
-    # Relying on Outdoor Hue Motion Sensor for main source of motion
     - platform: state
       entity_id: binary_sensor.motion_camera_rear_porch
       to: 'on'
@@ -15,9 +14,9 @@
     - condition: numeric_state
       entity_id: binary_sensor.motion_camera_rear_porch 
       attribute: event_score
-      above: 75
+      above: 65
   action:
-    # Most likely, someone is at the front door turn on input boolean
+    # Most likely, someone is at the rear porch turn on input boolean
     - service: homeassistant.turn_on
       entity_id: input_boolean.someone_at_rear_porch
     # Wait 3 minutes before turning off the boolean

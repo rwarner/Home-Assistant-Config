@@ -23,49 +23,21 @@
     - service: light.turn_off
       entity_id: light.outside_front_porch
 
-- alias: LIGHTS - Turn on Porch/Floods, if motion detected (Late night)
+- alias: LIGHTS - Turn on Floods, if motion detected (While dark)
+  mode: restart
   trigger:
     - platform: state
       entity_id: input_boolean.someone_at_rear_porch
       to: 'on'
-  mode: restart
   condition:
-    # Only trigger if the back porch light hasn't been turned off/on it hasn't been turned off in the last 30 seconds
+    # Only trigger if the back porch light hasn't been turned off/on it hasn't been turned off in the last 10 seconds
     - condition: template
-      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.outside_back_porch.last_changed)) > 30 }}"
-    - condition: state
-      entity_id: light.outside_back_porch
-      state: 'off'
-    - condition: time
-      after: '21:00:00'
-      before: '5:00:00'
-  action:
-    - service: light.turn_on
-      entity_id: 
-        - light.outside_back_porch
-        - light.outside_porch_flood
-        - light.outside_driveway_flood
-    - delay: '00:03:00'
-    - service: light.turn_off
-      entity_id: 
-        - light.outside_back_porch
-        - light.outside_porch_flood
-        - light.outside_driveway_flood
-
-- alias: LIGHTS - Turn on Floods, if motion detected (While dark/porch on)
-  trigger:
-    - platform: state
-      entity_id: input_boolean.someone_at_rear_porch
-      to: 'on'
-  mode: restart
-  condition:
-    # Only trigger if the back porch light hasn't been turned off/on it hasn't been turned off in the last 30 seconds
-    - condition: template
-      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.outside_back_porch.last_changed)) > 30 }}"
-    - condition: state
-      entity_id: light.outside_back_porch
-      state: 'on'
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.outside_back_porch.last_changed)) > 10 }}"
+    #- condition: state
+    #  entity_id: light.outside_back_porch
+    #  state: 'on'
     # Trigger outside of the "Late night" time window"
+    # Before 9 p.m. and after 3 p.m.
     - condition: time
       after: '15:00:00'
       before: '21:00:00'
@@ -74,8 +46,18 @@
       entity_id: 
         - light.outside_porch_flood
         - light.outside_driveway_flood
-    - delay: '00:03:00'
+    # Wait 5 minutes before turning them off
+    - delay: '00:05:00'
     - service: light.turn_off
       entity_id: 
         - light.outside_porch_flood
         - light.outside_driveway_flood
+    # Turn off back porch light as well, if we're late night / early morning
+    # otherwise, we'll leave it on
+    # Before 5 a.m. and after 9 p.m.
+    - condition: time
+      after: '21:00:00'
+      before: '5:00:00'
+    - service: light.turn_off
+      entity_id: 
+        - light.outside_back_porch
