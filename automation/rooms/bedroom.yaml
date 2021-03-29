@@ -116,7 +116,7 @@
       conditions:
       # Automation has recently been trigger by a restart within 5 min window
         - condition: template
-          value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.bedroom_turn_on_light_from_motion_off_after_5_min_between_10_am_and_9_30pm.last_changed)) < 300 }}"
+          value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.bedroom_turn_on_light_from_motion_off_after_5_min_between_10_am_and_9_30pm.attributes.last_triggered)) < 300 }}"
       # Make sure that the light level is below 10 lx
         - condition: numeric_state
           entity_id: sensor.master_bedroom_motion_sensor_illuminance
