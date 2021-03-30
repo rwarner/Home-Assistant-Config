@@ -192,7 +192,11 @@ input_boolean:
     name: Whether or not someone is at the rear porch
   first_movement_basement_office:
     name: First movement of the day in basement office
+  dark_outside:
+    name: Whether or not it is dark outside
 
+ifttt:
+  key: !secret ifttt_api_key
   
 #################################
 ##### EXTERNAL FILES BELOW ######

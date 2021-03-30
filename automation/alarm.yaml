@@ -1,0 +1,22 @@
+#########################
+### ALARM AUTOMATIONS ###
+#########################
+
+- alias: "ALARM - Disable Alarm from Schlage Deadbolt"
+  trigger:
+    - platform: state
+      entity_id: lock.media_room_deadbolt
+      attribute: notification
+      to: "Keypad Unlock"
+  action:
+    - service: alarm_control_panel.alarm_disarm
+      target:
+        entity_id: alarm_control_panel.alexa_guard_de7c8
+    - service: notify.mobile_app_pixel_3
+      data:
+        title: "Alarm Disarmed"
+        message: ""
+        data:
+          ttl: 0
+          priority: high
+          clickAction: "/"

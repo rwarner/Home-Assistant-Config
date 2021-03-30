@@ -2,17 +2,15 @@
 ##### GOING DARK AUTOMATIONS ####
 #################################
 
-
-# Darker than 15 Lux Outsdie 
-# - Turn on Living room lights to 90%, Outside to 100%
+#   Turn on Living room lights to 90%, Outside to 100%
 #   turn off unneeded lights if nobody is home: center lamp,
 #   bookcase lamp, undercabinet kitchen lights
 - alias: GOING DARK - Turn on lights when outside gets dark
   trigger:
-    # Make sure that the light level is below 10 lx
-    - platform: numeric_state
-      entity_id: sensor.front_outdoor_motion_sensor_illuminance
-      below: 15
+    # Make sure that it's dark outside
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      to: 'on'
   condition:
     # Only proceed, if we haven't used this in the last 12 hours
     - condition: template 

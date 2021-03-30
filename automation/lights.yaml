@@ -13,12 +13,16 @@
     - condition: state
       entity_id: light.outside_front_porch
       state: 'off'
-    - condition: time
-      after: '21:00:00'
-      before: '5:00:00'
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: 'on'
   action:
     - service: light.turn_on
       entity_id: light.outside_front_porch
+    # If it's after 9 pm, or before 5am turn off the light
+    - condition: time
+      after: '21:00:00'
+      before: '05:00:00'
     - delay: '00:03:00'
     - service: light.turn_off
       entity_id: light.outside_front_porch
@@ -33,17 +37,13 @@
     # Only trigger if the back porch light hasn't been turned off/on it hasn't been turned off in the last 10 seconds
     - condition: template
       value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.outside_back_porch.last_changed)) > 10 }}"
-    #- condition: state
-    #  entity_id: light.outside_back_porch
-    #  state: 'on'
-    # Trigger outside of the "Late night" time window"
-    # Before 9 p.m. and after 3 p.m.
-    - condition: time
-      after: '15:00:00'
-      before: '21:00:00'
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: 'on'
   action:
     - service: light.turn_on
       entity_id: 
+        - light.outside_back_porch
         - light.outside_porch_flood
         - light.outside_driveway_flood
     # Wait 5 minutes before turning them off
