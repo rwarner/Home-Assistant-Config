@@ -5,7 +5,7 @@
 
 # Checking for if Ryan / Kelly / All_devices has changed within the last 10 minutes
 # or if variable.family_status is "Away" and our phones haven't connected to WiFi yet
-# Only if after 45 minutes before sunset, or 45 minutes before sunrise
+# Only if it's currently "dark_outside"
 - alias: LOCKS - When unlocking the door, turn on lights inside if before/after sun and nobody is home
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -27,14 +27,9 @@
           - condition: state
             entity_id: variable.family_status
             state: 'Away'
-      - condition: or
-        conditions:
-          - condition: sun
-            after: sunset
-            after_offset: "-00:45:00"
-          - condition: sun
-            before: sunrise
-            before_offset: "00:45:00"
+      - condition: state
+        entity_id: input_boolean.dark_outside
+        state: 'on'
   action:
     - service: light.turn_on
       entity_id: light.media_room_lights
