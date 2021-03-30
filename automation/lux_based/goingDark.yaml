@@ -36,8 +36,8 @@
       # Only proceed if someone is not home
       # turn off lights that we don't want to leave on
     - condition: state
-      entity_id: variable.family_status
-      state: 'Away'
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      state: armed_away
     - service: light.turn_off
       entity_id: 
         - light.living_room_center_lamp

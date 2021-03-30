@@ -12,8 +12,8 @@
     to: 'on'
   condition:
     - condition: state
-      entity_id: variable.family_status
-      state: 'Away'
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
       data:
@@ -40,8 +40,8 @@
     to: 'on'
   condition:
     - condition: state
-      entity_id: variable.family_status
-      state: 'Away'
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
       data:
@@ -70,8 +70,8 @@
     to: 'on'
   condition:
     - condition: state
-      entity_id: variable.family_status
-      state: 'Away'
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
       data:
@@ -93,8 +93,8 @@
     to: 'open'
   condition:
     - condition: state
-      entity_id: variable.family_status
-      state: 'Away'
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
       data:
@@ -110,14 +110,14 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: state
-    entity_id:
-      - lock.media_room_deadbolt
-    to: 'unlocked'
+    - platform: state
+      entity_id: lock.media_room_deadbolt
+      attribute: notification
+      to: "Manual Unlock"
   condition:
     - condition: state
-      entity_id: variable.family_status
-      state: 'Away'
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
       data:
@@ -128,3 +128,38 @@
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"
+
+- alias: "ALERT (AWAY) - Alarm Triggered, notify NoonLight IFTTT"
+  trigger:
+    - platform: state
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      to: "triggered"
+  action:
+    #- service: homeassistant.turn_on
+    #  entity_id: switch.siren
+    - service: notify.mobile_app_pixel_3
+      data:
+        title: "Alarm Triggered"
+        message: "Notifying Noonlight IFTTT, emergency services in 60 seconds"
+        data:
+          ttl: 0
+          priority: high
+          clickAction: "/"
+    - delay:
+        minutes: 1
+    # If after 60 seconds, alarm has not been disabled, notify
+    - condition: state
+      entity_id: alarm_control_panel.alexa_guard_de7c8
+      state: "triggered"
+    # Trigger IFTTT applet to notify Noonlight
+    #- service: ifttt.trigger
+    #  data_template:
+    #    event: "alarm_triggered"
+    - service: notify.mobile_app_pixel_3
+      data:
+        title: "Noonlight Notified"
+        message: "Emergency services has been called"
+        data:
+          ttl: 0
+          priority: high
+          clickAction: "/"
