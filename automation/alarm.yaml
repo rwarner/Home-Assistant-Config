@@ -8,6 +8,10 @@
       entity_id: lock.media_room_deadbolt
       attribute: notification
       to: "Keypad Unlock"
+    - platform: state
+      entity_id: lock.media_room_deadbolt
+      attribute: notification
+      to: "RF Unlock"
   condition:
     - condition: state
       entity_id: alarm_control_panel.alarm
@@ -16,14 +20,15 @@
     - service: alarm_control_panel.alarm_disarm
       target:
         entity_id: alarm_control_panel.alarm
-    - service: notify.mobile_app_pixel_3
-      data:
-        title: "Alarm Disarmed"
-        message: ""
-        data:
-          ttl: 0
-          priority: high
-          clickAction: "/"
+    #  Alexa Guard currently sends a notification already
+    #- service: notify.mobile_app_pixel_3
+    #  data:
+    #    title: "Alarm Disarmed"
+    #    message: ""
+    #    data:
+    #      ttl: 0
+    #      priority: high
+    #      clickAction: "/"
 
 - alias: "ALARM - Set Alexa Guard to on when alarm goes on"
   trigger:
