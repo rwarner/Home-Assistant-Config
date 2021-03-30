@@ -84,7 +84,7 @@
           actions:
               - action: "trigger_alarm"
                 title: "Trigger Alarm"
-    - delay: '00:02:00' # Prevent multiple runs of this within 5 minute intervals
+    - delay: '00:02:00' # Prevent multiple runs of this within 2 minute intervals
 
 - alias: ALERT (AWAY) - Garage has opened
   mode: single # Only run once at a time  
@@ -132,36 +132,40 @@
           priority: high
           clickAction: "/lovelace/camera_view"
 
-- alias: "ALERT (AWAY) - Alarm Triggered, notify NoonLight IFTTT"
+- alias: "ALERT (AWAY) - Alarm Triggered, notify mobile / in house"
   trigger:
     - platform: state
       entity_id: alarm_control_panel.alarm
-      to: "triggered"
+      from: "armed_away"
+      to: "pending"
   action:
     #- service: homeassistant.turn_on
     #  entity_id: switch.siren
     - service: notify.mobile_app_pixel_3
       data:
         title: "Alarm Triggered"
-        message: "Notifying Noonlight IFTTT, emergency services in 60 seconds"
+        message: "Notifying emergency services in 60 seconds"
         data:
           ttl: 0
           priority: high
           clickAction: "/"
-    - delay:
-        minutes: 1
-    # If after 60 seconds, alarm has not been disabled, notify
-    - condition: state
+
+
+- alias: "ALERT (AWAY) - Alarm Pending to Triggered, notify NoonLight IFTTT"
+  trigger:
+    - platform: state
       entity_id: alarm_control_panel.alarm
-      state: "triggered"
+      from: "pending"
+      to: "triggered"
+  action:
     # Trigger IFTTT applet to notify Noonlight
-    #- service: ifttt.trigger
-    #  data_template:
-    #    event: "alarm_triggered"
+    - service: ifttt.trigger
+      data_template:
+        event: "alarm_triggered"
     - service: notify.mobile_app_pixel_3
       data:
         title: "Noonlight Notified"
-        message: "Emergency services has been called"
+        message: "Emergency services has been contacted"
         data:
           ttl: 0
           priority: high

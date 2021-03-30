@@ -206,8 +206,8 @@ alarm_control_panel:
     code_arm_required: false
     # Arm again after triggering
     disarm_after_trigger: false
-    # Delay from arming and becoming armed, eg. to leave the house - 2 minutes
-    arming_time: 120
+    # Delay from arming and becoming armed - 30 seconds
+    arming_time: 30
     # Allow time to disarm the alarm before it triggers, eg. when arriving home - 1 minute
     delay_time: 60
     # Amount of time the alarm is triggered for - 10 minutes
