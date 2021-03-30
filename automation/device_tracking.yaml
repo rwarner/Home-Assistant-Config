@@ -12,30 +12,26 @@
     - service: lock.lock                                # Lock Deadbolt
       entity_id: lock.media_room_deadbolt
     - service: alarm_control_panel.alarm_arm_away       # Arm Alexa for guard mode
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
     - service: climate.set_preset_mode                  # Set thermostat for Away mode
       data:
         entity_id: climate.thermostat, climate.media_room
         preset_mode: 'Away'
     - service: light.turn_off                           # Turn off all lights in home
       entity_id: all
-    - service: cover.close_cover                        # Close garage door, if open
-      entity_id: cover.garage_door
+    # Not reliable enough to close automatically right now
+    #- service: cover.close_cover                        # Close garage door, if open
+    #  entity_id: cover.garage_door
     # Only proceed if its dark outside with the following services
-    - condition: or 
-      conditions:
-        - condition: sun
-          after: sunset
-          after_offset: "-00:45:00"
-        - condition: sun
-          before: sunrise
-          before_offset: "+00:45:00"
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: 'on'
     # Keep lights that should be on while away, on
     - service: light.turn_on
       entity_id: light.sun_based_lights_away
 
 
-- alias: DEVICE_TRACK - Someone arrived home, disable alexa guard, set Thermostat to Home
+- alias: DEVICE_TRACK - Someone arrived home, disable alarm, set Thermostat to Home
   trigger:
     - platform: state
       entity_id: variable.family_status
@@ -43,7 +39,7 @@
       to: 'Home'
   action:
     - service: alarm_control_panel.alarm_disarm
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
       # Only change thermostat when arriving home, if we aren't in "Sleep" mode on Ecobee
       # will probably be during the night if this is true
     - condition: template
