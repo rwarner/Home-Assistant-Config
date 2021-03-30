@@ -8,6 +8,8 @@ DOMAIN = "unifiprotect"
 UNIQUE_ID = "unique_id"
 
 ATTR_CAMERA_ID = "camera_id"
+ATTR_CHIME_ENABLED = "chime_enabled"
+ATTR_CHIME_DURATION = "chime_duration"
 ATTR_DEVICE_MODEL = "device_model"
 ATTR_ENABLED_AT = "enabled_at"
 ATTR_EVENT_SCORE = "event_score"
@@ -24,6 +26,8 @@ ATTR_ZOOM_POSITION = "zoom_position"
 CONF_THUMB_WIDTH = "image_width"
 CONF_RECORDING_MODE = "recording_mode"
 CONF_SNAPSHOT_DIRECT = "snapshot_direct"
+CONF_CHIME_ON = "chime_on"
+CONF_CHIME_DURATION = "chime_duration"
 CONF_ENABLE_AT = "enable_at"
 CONF_IR_MODE = "ir_mode"
 CONF_IR_ON = "ir_on"
@@ -67,6 +71,7 @@ SERVICE_SET_MIC_VOLUME = "set_mic_volume"
 SERVICE_SET_PRIVACY_MODE = "set_privacy_mode"
 SERVICE_SET_ZOOM_POSITION = "set_zoom_position"
 SERVICE_SET_WDR_VALUE = "set_wdr_value"
+SERVICE_SET_DOORBELL_CHIME_DURAION = "set_doorbell_chime_duration"
 
 TYPE_RECORD_MOTION = "motion"
 TYPE_RECORD_ALWAYS = "always"
@@ -203,5 +208,12 @@ SET_WDR_VALUE_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
         vol.Required(CONF_VALUE, default=1): vol.Coerce(int),
+    }
+)
+
+SET_DOORBELL_CHIME_DURATION_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
+        vol.Required(CONF_CHIME_DURATION, default=300): vol.Coerce(int),
     }
 )
