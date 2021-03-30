@@ -12,6 +12,7 @@ include:
     #- weather.thermostat #Favoring Dark Sky
     - sensor.ecobee_preset
     - alarm_control_panel.alexa_guard_de7c8
+    - alarm_control_panel.alarm
     #- group.family
     #- person.kelly
     - variable.kelly_status

@@ -12,7 +12,7 @@
     to: 'on'
   condition:
     - condition: state
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
@@ -40,7 +40,7 @@
     to: 'on'
   condition:
     - condition: state
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
@@ -70,7 +70,7 @@
     to: 'on'
   condition:
     - condition: state
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
@@ -81,6 +81,9 @@
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"
+          actions:
+              - action: "trigger_alarm"
+                title: "Trigger Alarm"
     - delay: '00:02:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Garage has opened
@@ -93,7 +96,7 @@
     to: 'open'
   condition:
     - condition: state
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
@@ -116,7 +119,7 @@
       to: "Manual Unlock"
   condition:
     - condition: state
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
     - service: notify.mobile_app_pixel_3
@@ -132,7 +135,7 @@
 - alias: "ALERT (AWAY) - Alarm Triggered, notify NoonLight IFTTT"
   trigger:
     - platform: state
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
       to: "triggered"
   action:
     #- service: homeassistant.turn_on
@@ -149,7 +152,7 @@
         minutes: 1
     # If after 60 seconds, alarm has not been disabled, notify
     - condition: state
-      entity_id: alarm_control_panel.alexa_guard_de7c8
+      entity_id: alarm_control_panel.alarm
       state: "triggered"
     # Trigger IFTTT applet to notify Noonlight
     #- service: ifttt.trigger

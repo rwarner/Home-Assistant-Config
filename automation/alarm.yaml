@@ -8,10 +8,14 @@
       entity_id: lock.media_room_deadbolt
       attribute: notification
       to: "Keypad Unlock"
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.alarm
+      state: armed_away
   action:
     - service: alarm_control_panel.alarm_disarm
       target:
-        entity_id: alarm_control_panel.alexa_guard_de7c8
+        entity_id: alarm_control_panel.alarm
     - service: notify.mobile_app_pixel_3
       data:
         title: "Alarm Disarmed"
@@ -20,3 +24,23 @@
           ttl: 0
           priority: high
           clickAction: "/"
+
+- alias: "ALARM - Set Alexa Guard to on when alarm goes on"
+  trigger:
+    - platform: state
+      entity_id: alarm_control_panel.alarm
+      to: armed_away
+  action:
+    - service: alarm_control_panel.alarm_arm_away
+      target:
+        entity_id: alarm_control_panel.alexa_guard_de7c8
+
+- alias: "ALARM - Set Alexa Guard to off when alarm goes off"
+  trigger:
+    - platform: state
+      entity_id: alarm_control_panel.alarm
+      to: disarmed
+  action:
+    - service: alarm_control_panel.alarm_disarm
+      target:
+        entity_id: alarm_control_panel.alexa_guard_de7c8

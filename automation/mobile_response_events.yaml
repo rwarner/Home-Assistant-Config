@@ -10,3 +10,14 @@
       action: close_garage_door
   action:
     service: script.close_garage_door
+
+- alias: MOBILE RESPONSE - Trigger Alarm / Noonlight
+  trigger:
+    platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: trigger_alarm
+  action:
+    - service: alarm_control_panel.alarm_trigger
+      target:
+        entity_id: alarm_control_panel.alarm

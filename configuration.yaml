@@ -197,6 +197,29 @@ input_boolean:
 
 ifttt:
   key: !secret ifttt_api_key
+
+alarm_control_panel:
+  - platform: manual
+    name: Alarm
+    # code: !secret alarm_control_panel_code
+    # Don't require the code to arm the alarm
+    code_arm_required: false
+    # Arm again after triggering
+    disarm_after_trigger: false
+    # Delay from arming and becoming armed, eg. to leave the house - 2 minutes
+    arming_time: 120
+    # Allow time to disarm the alarm before it triggers, eg. when arriving home - 1 minute
+    delay_time: 60
+    # Amount of time the alarm is triggered for - 10 minutes
+    trigger_time: 600
+    disarmed:
+      # Ensure the alarm can never be directly triggered when disarmed
+      trigger_time: 0
+    armed_home:
+      # Leave no delay between arming -> armed
+      arming_time: 0
+      # Leave no delay between pending -> triggered
+      delay_time: 0
   
 #################################
 ##### EXTERNAL FILES BELOW ######
