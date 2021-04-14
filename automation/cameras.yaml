@@ -13,8 +13,8 @@
     to: 'on'
   condition:
     - condition: state
-      entity_id: variable.family_status 
-      state: 'Away'
+      entity_id: alarm_control_panel.alarm
+      state: armed_away
   action:
     - service: script.capture_front_door_video
 
@@ -28,7 +28,7 @@
       to: 'on'
   condition:
     - condition: state
-      entity_id: variable.family_status 
-      state: 'Away'
+      entity_id: alarm_control_panel.alarm
+      state: armed_away
   action:
     - service: script.capture_rear_porch_video
