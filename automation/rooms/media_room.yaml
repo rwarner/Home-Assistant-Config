@@ -19,9 +19,10 @@
   # this allows us to skip luminance checks on restart
     - condition: or
       conditions:
-      # Automation has recently been trigger by a restart within 3 min window
+      # Automation has recently been trigger by a restart within 8 min window
+      # (3 min till turn off, 5 min till lux/illuminance sensor updates)
         - condition: template
-          value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.media_room_turn_on_light_from_motion_only_when_projector_is_off_light_is_low.attributes.last_triggered)) < 180 }}"
+          value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.media_room_turn_on_light_from_motion_only_when_projector_is_off_light_is_low.attributes.last_triggered)) < 480 }}"
       # Make sure that the light level is below 10 lx
         - condition: numeric_state
           entity_id: sensor.media_room_motion_sensor_illuminance
