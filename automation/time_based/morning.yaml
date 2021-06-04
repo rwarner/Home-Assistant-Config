@@ -31,14 +31,15 @@
         at: '08:00:00'
   action:
     - service: light.turn_on
-      data:
+      target:
         entity_id: 
           - light.living_room_lights
           - light.media_room_lights
           - light.kitchen_lights
-        brightness: 100
-    - service: light.turn_off
       data:
+        brightness_pct: 100
+    - service: light.turn_off
+      target:
         entity_id: 
           - light.living_room_lights
           - light.media_room_lights
