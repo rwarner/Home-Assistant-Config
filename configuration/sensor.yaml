@@ -53,9 +53,6 @@
 - platform: folder
   folder: /tmp/hass
   
-# Bhyve sensor (water/garden)
-- platform: bhyve
-
 ##################################
 #  Average Temperature for rooms #
 ##################################

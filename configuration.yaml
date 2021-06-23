@@ -164,10 +164,6 @@ unifiprotect:
   password: !secret unifiprotect_pass
   port: !secret unifiprotect_port
 
-bhyve:
-  username: !secret bhyve_username
-  password: !secret bhyve_password
-
 smartir:
 
 climate:
