@@ -109,7 +109,7 @@
           priority: high
           clickAction: "/lovelace/camera_view"
 
-- alias: ALERT (AWAY) - Door has been unlocked
+- alias: ALERT (AWAY) - Rear door has been unlocked
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -128,6 +128,29 @@
         message: ""
         data:
           image: "/api/camera_proxy/camera.unifi_rear_porch" #Captures image immediately, sends via notification
+          ttl: 0
+          priority: high
+          clickAction: "/lovelace/camera_view"
+
+- alias: ALERT (AWAY) - Front door has been unlocked
+  mode: single # Only run once at a time  
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    - platform: state
+      entity_id: lock.front_door_deadbolt
+      attribute: notification
+      to: "Manual Unlock"
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.alarm
+      state: armed_away
+  action:
+    - service: notify.mobile_app_pixel_3
+      data:
+        title: "Front door unlocked"
+        message: ""
+        data:
+          image: "/api/camera_proxy/camera.unifi_front_porch" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"

@@ -9,8 +9,10 @@
       from: 'Home'
       to: 'Away'
   action:
-    - service: lock.lock                                # Lock Deadbolt
+    - service: lock.lock                                # Lock Media Room Deadbolt
       entity_id: lock.media_room_deadbolt
+    - service: lock.lock                                # Lock Front Door Deadbolt
+      entity_id: lock.front_door_deadbolt
     - service: alarm_control_panel.alarm_arm_away       # Arm Alexa for guard mode
       entity_id: alarm_control_panel.alarm
     - service: climate.set_preset_mode                  # Set thermostat for Away mode

@@ -12,6 +12,14 @@
       entity_id: lock.media_room_deadbolt
       attribute: notification
       to: "RF Unlock"
+    - platform: state
+      entity_id: lock.front_door_deadbolt
+      attribute: notification
+      to: "Keypad Unlock"
+    - platform: state
+      entity_id: lock.front_door_deadbolt
+      attribute: notification
+      to: "RF Unlock"
   condition:
     - condition: state
       entity_id: alarm_control_panel.alarm
