@@ -12,7 +12,10 @@
     condition: and
     conditions:
       - condition: state
-        entity_id: variable.family_status 
+        entity_id: variable.ryan_status 
+        state: 'Home'
+      - condition: state
+        entity_id: variable.kelly_status 
         state: 'Home'
       - condition: time
         weekday:
