@@ -159,12 +159,22 @@
       from: 'Just Left'
       to: 'Away'
   condition:
-    - condition: state
-      entity_id: variable.ryan_status
-      state: 'Away' 
-    - condition: state
-      entity_id: variable.kelly_status
-      state: 'Away'
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: variable.ryan_status
+          state: 'Away'
+        - condition: state
+          entity_id: variable.ryan_status
+          state: 'Extended Away' 
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: variable.kelly_status
+          state: 'Away'
+        - condition: state
+          entity_id: variable.kelly_status
+          state: 'Extended Away' 
   action:
     - service: variable.set_variable
       data:
@@ -179,8 +189,16 @@
       from: 'Away'
       to: 'Just Arrived'
     - platform: state
+      entity_id: variable.ryan_status
+      from: 'Extended Away'
+      to: 'Just Arrived'
+    - platform: state
       entity_id: variable.kelly_status
       from: 'Away'
+      to: 'Just Arrived'
+    - platform: state
+      entity_id: variable.kelly_status
+      from: 'Extended Away'
       to: 'Just Arrived'
   condition:
     condition: or
