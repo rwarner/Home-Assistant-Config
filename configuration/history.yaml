@@ -55,3 +55,6 @@ include:
     #- sensor.pi_hole_dns_queries_forwarded
     #- sensor.pi_hole_dns_queries_today
 
+    - sensor.server_closet_energy_cost
+    - sensor.server_closet_energy
+
