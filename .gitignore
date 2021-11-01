@@ -30,6 +30,7 @@ known_devices.yaml
 *.db
 *.db*
 *.sqlite
+home-assistant.log.*
 
 #Alexa media
 *.pickle
