@@ -6,6 +6,7 @@ homeassistant:
   # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: 90
   unit_system: imperial
+  currency: USD
   time_zone: America/New_York
   # Folders / files for customize: plugin
   # Mainly for changing names, icons, etc...
@@ -23,6 +24,9 @@ homeassistant:
 
 # Enable Home Assistant Cloud functionality
 cloud:
+
+# Enable new energy mechansisms
+energy:
 
 # Logging functionality for Home Assistant
 logger:
@@ -137,11 +141,10 @@ camera:
     still_image_url: !secret unifi_garage_camera_still
     stream_source: !secret unifi_garage_camera_source
     verify_ssl: false
-  - platform: generic
+  # Changed to FFMPEG due to doorbell not compatible with HomeHabit tablet view
+  - platform: ffmpeg
     name: Doorbell Camera
-    still_image_url: !secret unifi_doorbell_camera_still
-    stream_source: !secret unifi_doorbell_camera_source
-    verify_ssl: false
+    input: !secret unifi_doorbell_camera_source
 
 # Custom HACS variable integation
 # https://github.com/rogro82/hass-variables
@@ -216,6 +219,17 @@ alarm_control_panel:
       arming_time: 0
       # Leave no delay between pending -> triggered
       delay_time: 0
+
+####################################
+#  Energy Usage Monitoring Sensors #
+####################################
+template:
+  - sensor:
+      - name: "Server Closet Power"
+        unit_of_measurement: kW
+        state: >
+          {{  (((((states('sensor.ups_load')|float) / 100) * 2000) * 0.7) | round(1)) / 1000 }}
+        state_class: measurement
   
 #################################
 ##### EXTERNAL FILES BELOW ######
