@@ -2,6 +2,12 @@
 ####### SENSOR CONFIGURATION  ######
 ####################################
 
+- platform: filesize
+  file_paths:
+    - /home/homeassistant/.homeassistant/home-assistant.log
+    - /home/homeassistant/.homeassistant/home-assistant_v2.db
+  scan_interval: 1800
+
 - platform: radarr
   api_key: !secret radarr_api
   host: !secret radarr_ip
@@ -290,9 +296,22 @@
 
 - platform: integration
   name: Tesla Energy
-  source: sensor.tesla_charger_power
+  source: sensor.tesla_charger_power_home
   method: left
   unit: kWh
+
+- platform: template
+  sensors:
+    tesla_charger_power_home:
+      friendly_name: 'Tesla Charger Power Home'
+      icon_template: mdi:lightning-bolt
+      unit_of_measurement: "kW"
+      value_template: >-
+        {% if is_state('sensor.tesla_geofence', 'Home') %}
+          {{ states.sensor.tesla_charger_power.state }}
+        {% else %}
+          0
+        {% endif %}
   
 ##################################
 ##### Tesla / Teslamate MQTT #####
@@ -301,16 +320,6 @@
 
 - platform: template
   sensors:
-    tesla_park_brake:
-      friendly_name: Parking Brake
-      icon_template: mdi:car-brake-parking
-      value_template: >-
-        {% if is_state('sensor.tesla_shift_state', 'P') %}
-          true
-        {% else %}
-          false
-        {% endif %}
-
     tesla_est_battery_range_mi:
       friendly_name: Estimated Range (mi)
       unit_of_measurement: mi
@@ -345,13 +354,6 @@
       icon_template: mdi:speedometer
       value_template: >
         {{ (states('sensor.tesla_speed') | float / 1.609) | round(2) }}
-
-    tesla_elevation_ft:
-      friendly_name: Elevation (ft)
-      unit_of_measurement: ft
-      icon_template: mdi:image-filter-hdr
-      value_template: >
-        {{ (states('sensor.tesla_elevation') | float * 3.2808 ) | round(2) }}
 
 - platform: mqtt
   name: tesla_state
@@ -397,22 +399,6 @@
   name: tesla_longitude
   state_topic: "teslamate/cars/1/longitude"
   icon: mdi:crosshairs-gps
-
-- platform: mqtt
-  name: tesla_shift_state
-  state_topic: "teslamate/cars/1/shift_state"
-  icon: mdi:car-shift-pattern
-
-- platform: mqtt
-  name: tesla_speed
-  state_topic: "teslamate/cars/1/speed"
-  unit_of_measurement: kph
-  icon: mdi:speedometer
-
-- platform: mqtt
-  name: tesla_heading
-  state_topic: "teslamate/cars/1/heading"
-  icon: mdi:compass
 
 - platform: mqtt
   name: tesla_locked
