@@ -30,7 +30,7 @@ energy:
 
 # Logging functionality for Home Assistant
 logger:
-#  default: critical
+  default: critical #Set to info, for more information when needed
 
 # Enables the Person integration for handling "home and away"
 person:
