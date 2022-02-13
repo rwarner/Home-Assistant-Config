@@ -2,11 +2,11 @@
 ####### SENSOR CONFIGURATION  ######
 ####################################
 
-- platform: filesize
-  file_paths:
-    - /home/homeassistant/.homeassistant/home-assistant.log
-    - /home/homeassistant/.homeassistant/home-assistant_v2.db
-  scan_interval: 1800
+# - platform: filesize
+#   file_paths:
+#     - /home/homeassistant/.homeassistant/home-assistant.log
+#     - /home/homeassistant/.homeassistant/home-assistant_v2.db
+#   scan_interval: 1800
 
 - platform: radarr
   api_key: !secret radarr_api
@@ -102,8 +102,9 @@
       friendly_name: "Bedroom Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ '%0.3g'|format((states('sensor.ryans_bedside_button_temperature')|float + states('sensor.bedroom_light_button_temperature')|float + states('sensor.master_bedroom_motion_sensor_temperature')|float)  / 3 | round(2)) }}
-
+        {{'%0.3g'|format((float(states('sensor.ryans_bedside_button_temperature'), 65.0) 
+        + float(states('sensor.bedroom_light_button_temperature'), 65.0)
+        + float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0)) / 3) }}
 
 #  -- Living Room --
 - platform: template
@@ -112,7 +113,7 @@
       friendly_name: "Living Room Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ '%0.3g'|format((states('sensor.living_room_temperature')|float + states('sensor.thermostat_temperature')|float)  / 2 | round(2)) }}
+        {{ '%0.3g'|format((float(states('sensor.living_room_temperature'), 65.0) + float(states('sensor.thermostat_temperature'), 65.0))  / 2) }}
 
 # -- Media Room -- only one sensor currently
 - platform: template
@@ -121,7 +122,7 @@
       friendly_name: "Media Room Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (states('sensor.media_room_temperature')|float | round(2)) }}
+        {{ '%0.3g'|format(float(states('sensor.media_room_temperature'), 65.0)) }}
         
 # -- Kitchen -- only one sensor currently
 - platform: template
@@ -130,7 +131,7 @@
       friendly_name: "Kitchen Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (states('sensor.kitchen_motion_sensor_temperature')|float | round(2)) }}
+        {{ '%0.3g'|format(float(states('sensor.kitchen_motion_sensor_temperature'), 65.0)) }}
 
 # -- Basement -- only one sensor currently
 - platform: template
@@ -139,7 +140,7 @@
       friendly_name: "Basement Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (states('sensor.laundry_motion_sensor_temperature')|float | round(2)) }}
+        {{ '%0.3g'|format(float(states('sensor.laundry_motion_sensor_temperature'), 65.0)) }}
 
 # -- Basement Office -- only one sensor currently
 - platform: template
@@ -148,7 +149,7 @@
       friendly_name: "Basement Office Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ (states('sensor.basement_office_motion_sensor_temperature')|float | round(2)) }}
+        {{ '%0.3g'|format(float(states('sensor.basement_office_motion_sensor_temperature'), 65.0)) }}
 
 
 
@@ -292,13 +293,11 @@
   name: Server Closet Energy
   source: sensor.server_closet_power
   method: left
-  unit: kWh
 
 - platform: integration
   name: Tesla Energy
   source: sensor.tesla_charger_power_home
   method: left
-  unit: kWh
 
 - platform: template
   sensors:
@@ -325,35 +324,35 @@
       unit_of_measurement: mi
       icon_template: mdi:gauge
       value_template: >
-        {{ (states('sensor.tesla_est_battery_range_km') | float / 1.609) | round(2) }}
+        {{ (float(states('sensor.tesla_est_battery_range_km'), 0.0) / 1.609) | round(2) }}
 
     tesla_rated_battery_range_mi:
       friendly_name: Rated Range (mi)
       unit_of_measurement: mi
       icon_template: mdi:gauge
       value_template: >
-        {{ (states('sensor.tesla_rated_battery_range_km') | float / 1.609) | round(2) }}
+        {{ (float(states('sensor.tesla_rated_battery_range_km'), 0.0) / 1.609) | round(2) }}
 
     tesla_ideal_battery_range_mi:
       friendly_name: Ideal Range (mi)
       unit_of_measurement: mi
       icon_template: mdi:gauge
       value_template: >
-        {{ (states('sensor.tesla_ideal_battery_range_km') | float / 1.609) | round(2) }}
+        {{ (float(states('sensor.tesla_ideal_battery_range_km'), 0.0) / 1.609) | round(2) }}
 
     tesla_odometer_mi:
       friendly_name: Odometer (mi)
       unit_of_measurement: mi
       icon_template: mdi:counter
       value_template: >
-        {{ (states('sensor.tesla_odometer') | float / 1.609) | round(2) }}
+        {{ (float(states('sensor.tesla_odometer'), 0.0) / 1.609) | round(2) }}
 
     tesla_speed_mph:
       friendly_name: Speed (MPH)
       unit_of_measurement: mph
       icon_template: mdi:speedometer
       value_template: >
-        {{ (states('sensor.tesla_speed') | float / 1.609) | round(2) }}
+        {{ (float(states('sensor.tesla_speed'), 0.0) / 1.609) | round(2) }}
 
 - platform: mqtt
   name: tesla_state
