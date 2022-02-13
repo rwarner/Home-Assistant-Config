@@ -48,7 +48,7 @@
         {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
           Off
         {% else %}
-          {{{ state_attr('sensor.washing_machine', 'remain_time').split(":")[0] + 
+          {{ state_attr('sensor.washing_machine', 'remain_time').split(":")[0] + 
           ":" 
           + state_attr('sensor.washing_machine', 'remain_time').split(":")[1] }}
         {% endif %}
