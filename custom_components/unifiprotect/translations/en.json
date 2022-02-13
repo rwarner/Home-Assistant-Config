@@ -1,27 +1,34 @@
 {
     "config": {
         "abort": {
-            "server_exists": "Unifi Protect Server already configured."
+            "reauth_successful": "Re-authentication was successful",
+            "server_exists": "UniFi Protect Server already configured."
         },
         "error": {
-            "connection_error": "Failed to connect. Wrong IP or Username/Password.",
-            "nvr_error": "Error retrieving data from Unifi Protect."
+            "invalid_auth": "Invalid authentication",
+            "nvr_error": "Error retrieving data from UniFi Protect.",
+            "protect_version": "UniFi Protect Version is not supported by this Integration"
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "host": "IP/Host of UniFi Protect Server",
+                    "password": "Password",
+                    "port": "Port",
+                    "username": "Username"
+                },
+                "title": "UniFi Protect Reauth"
+            },
             "user": {
                 "data": {
-                    "host": "IP Address of Unifi Protect Server",
-                    "port": "Port Number (7443 NON UnifiOS, 443 UnifiOS)",
-                    "username": "Username",
+                    "host": "IP/Host of UniFi Protect Server",
                     "password": "Password",
-                    "disable_rtsp": "Disable the RTSP stream",
-                    "snapshot_direct": "Use Anonymous Snapshots (Must be enabled on all Cameras)",
-                    "ir_on": "Setting to use for Infrared Light ON",
-                    "ir_off": "Setting to use for Infrared Light OFF",
-                    "scan_interval": "Scan interval for Events on NON UnifiOS Servers (Set higher if many Cameras)"
+                    "port": "Port",
+                    "username": "Username",
+                    "verify_ssl": "Verify SSL certificate"
                 },
-                "description": "Set up Unifi Protect to monitor cameras and sensors.",
-                "title": "Unifi Protect"
+                "description": "Set up UniFi Protect to monitor cameras and sensors.",
+                "title": "UniFi Protect Setup"
             }
         }
     },
@@ -29,10 +36,12 @@
         "step": {
             "init": {
                 "data": {
+                    "all_updates": "Realtime metrics (WARNING: Greatly increases CPU usage)",
                     "disable_rtsp": "Disable the RTSP stream",
-                    "snapshot_direct": "Use Anonymous Snapshots (Must be enabled on all Cameras)",
-                    "scan_interval": "Scan interval for Events on NON UnifiOS Servers (Set higher if many Cameras)"
-                }
+                    "override_connection_host": "Override Connection Host"
+                },
+                "description": "Realtime metrics option should only be enabled if you have enabled the diagnostics sensors and want them updated in realtime. If if not enabled, they will only update once every 15 minutes.",
+                "title": "UniFi Protect Options"
             }
         }
     }

@@ -1,37 +1,46 @@
 {
     "config": {
-        "step": {
-            "user": {
-                "title": "Unifi Protect",
-                "description": "Set up Unifi Protect to monitor cameras and sensors.",
-                "data": {
-                    "host": "IP Address of Unifi Protect Server",
-                    "port": "Port Number: (7443 NON UnifiOS, 443 UnifiOS)",
-                    "username": "Username",
-                    "password": "Password",
-                    "disable_rtsp": "Disable the RTSP stream",
-                    "snapshot_direct": "Use Anonymous Snapshots (Must be enabled on all Cameras)",
-                    "ir_on": "Setting to use for Infrared Light ON",
-                    "ir_off": "Setting to use for Infrared Light OFF",
-                    "scan_interval": "Scan interval for Events on NON UnifiOS Servers (Set higher if many Cameras)"
-                }
-            }
+        "abort": {
+            "server_exists": "UniFi Protect Server already configured.",
+            "reauth_successful": "[%key:common::config_flow::abort::reauth_successful%]"
         },
         "error": {
-            "connection_error": "Failed to connect. Wrong IP or Username/Password.",
-            "nvr_error": "Error retrieving data from Unifi Protect."
+            "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+            "protect_version": "UniFi Protect Version is not supported by this Integration",
+            "nvr_error": "Error retrieving data from UniFi Protect."
         },
-        "abort": {
-            "server_exists": "Unifi Protect Server already configured."
+        "step": {
+            "user": {
+                "title": "UniFi Protect Setup",
+                "description": "Set up UniFi Protect to monitor cameras and sensors.",
+                "data": {
+                    "host": "IP/Host of UniFi Protect Server",
+                    "port": "[%key:common::config_flow::data::port%]",
+                    "verify_ssl": "[%key:common::config_flow::data::verify_ssl%]",
+                    "username": "[%key:common::config_flow::data::username%]",
+                    "password": "[%key:common::config_flow::data::password%]"
+                }
+            },
+            "reauth_confirm": {
+                "title": "UniFi Protect Reauth",
+                "data": {
+                    "host": "IP/Host of UniFi Protect Server",
+                    "port": "[%key:common::config_flow::data::port%]",
+                    "username": "[%key:common::config_flow::data::username%]",
+                    "password": "[%key:common::config_flow::data::password%]"
+                }
+            }
         }
     },
     "options": {
         "step": {
             "init": {
+                "title": "UniFi Protect Options",
+                "description": "Realtime metrics option should only be enabled if you have enabled the diagnostics sensors and want them updated in realtime. If if not enabled, they will only update once every 15 minutes.",
                 "data": {
                     "disable_rtsp": "Disable the RTSP stream",
-                    "snapshot_direct": "Use Anonymous Snapshots (Must be enabled on all Cameras)",
-                    "scan_interval": "Scan interval for Events on NON UnifiOS Servers (Set higher if many Cameras)"
+                    "all_updates": "Realtime metrics (WARNING: Greatly increases CPU usage)",
+                    "override_connection_host": "Override Connection Host"
                 }
             }
         }
