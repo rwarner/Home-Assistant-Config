@@ -45,13 +45,15 @@
     washer_remaining_time:
       unique_id: sensor.washer_remaining_time # Allow UI customizations
       value_template: >-
-        {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00') %}
+        {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
           Off
         {% else %}
-          {{ state_attr('sensor.washing_machine', 'remain_time') }}
+          {{{ state_attr('sensor.washing_machine', 'remain_time').split(":")[0] + 
+          ":" 
+          + state_attr('sensor.washing_machine', 'remain_time').split(":")[1] }}
         {% endif %}
       icon_template: >-
-        {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00') %}
+        {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
           mdi:tumble-washer-off
         {% else %}
           mdi:tumble-washer
