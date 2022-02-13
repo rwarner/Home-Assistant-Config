@@ -30,7 +30,7 @@ energy:
 
 # Logging functionality for Home Assistant
 logger:
-  default: critical #Set to info, for more information when needed
+  default: error #Set to info, for more information when needed
 
 # Enables the Person integration for handling "home and away"
 person:
@@ -228,7 +228,7 @@ template:
       - name: "Server Closet Power"
         unit_of_measurement: kW
         state: >
-          {{  (((((states('sensor.ups_load')|float) / 100) * 2000) * 0.7) | round(1)) / 1000 }}
+          {{  (((((float(states('sensor.ups_load'), 10.0)) / 100) * 2000) * 0.7) | round(1)) / 1000 }}
         state_class: measurement
   
 #################################
