@@ -10,7 +10,7 @@
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
-      entity_id: lock.media_room_deadbolt
+      entity_id: lock.front_door_deadbolt
       from: 'locked'
       to: 'unlocked'
   condition:
@@ -32,23 +32,23 @@
         state: 'on'
   action:
     - service: light.turn_on
-      entity_id: light.media_room_lights
+      entity_id: light.living_room_fireplace
       # Wait until someone walks into the Kitchen
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
     - service: light.turn_on
-      entity_id: light.kitchen_lights # Nook and Undercabinet Lights
+      entity_id: light.kitchen_lights # Lamps and Pendants
       # Turn off rear entry lamp after 5 minutes
     - delay:
         minutes: 5
     - service: light.turn_off
-      entity_id: light.media_room_entry_lamp
+      entity_id: light.living_room_fireplace
 
 
 #### Turn on Tablet when unlocking door, assuming you're coming inside
 - alias: LOCKS - When unlocking the door, turn on tablet for use, Alexa welcome home
   trigger:
     - platform: state
-      entity_id: lock.media_room_deadbolt
+      entity_id: lock.front_door_deadbolt
       from: 'locked'
       to: 'unlocked'
   condition:

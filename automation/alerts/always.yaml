@@ -6,50 +6,58 @@
 ######### Companion App Below ##########
 ########################################
 
-- alias: ALERT - Garage door left open, notify Mobile App
-  trigger:
-  - platform: state
-    entity_id: cover.garage_door
-    to: 'opened'
-    for:
-      minutes: 30
-  action:
-    - service: notify.mobile_app_pixel_3
-      data:
-        title: "Garage Door is Open"
-        message: "Do you want to close it?"
-        data:
-          ttl: 0
-          priority: high
-          data:  
-            clickAction: "/lovelace/camera_view"
-            actions:
-              - action: "close_garage_door"
-                title: "Close Garage"
+# - alias: ALERT - Garage door left open, notify Mobile App
+#   trigger:
+#   - platform: state
+#     entity_id: cover.garage_door
+#     to: 'opened'
+#     for:
+#       minutes: 30
+#   action:
+#     - service: notify.ryan_devices
+#       data:
+#         title: "Garage Door is Open"
+#         message: "Do you want to close it?"
+#         data:
+#           ttl: 0
+#           priority: high
+#           data:  
+#             clickAction: "/lovelace/camera_view"
+#             actions:
+#               - action: "close_garage_door"
+#                 title: "Close Garage"
 
 
-- alias: ALERT - Doorbell rang, notify Mobile App
+- alias: ALERT - Doorbell rang, notify Mobile App and House
   trigger:
   - platform: state
     entity_id: binary_sensor.doorbell_push # Press of the doorbell
     from: 'off'
     to: 'on'
   action:
-    - service: unifiprotect.set_doorbell_lcd_message
+    - service: unifiprotect.set_doorbell_message
       data:
         entity_id: camera.unifi_doorbell
         message: "Please wait"
         duration: 1 # Display for 1 minute
+    - service: script.alexa_notify_everywhere
+      data_template:
+        message: "Doorbell Rang"
     - delay: '00:00:02' # Wait 2 seconds so we don't get their finger in the camera
-    - service: notify.mobile_app_pixel_3
+    - service: notify.ryan_devices
       data:
         title: "Doorbell Rang"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.unifi_doorbell" # Captures image immediately, sends via notification
-          ttl: 0
-          priority: high
-          clickAction: "/lovelace/camera_view"
+          entity_id: camera.doorbell_camera
+      # data:
+      #   title: "Doorbell Rang"
+      #   message: ""
+      #   data:
+      #     image: "/api/camera_proxy/camera.unifi_doorbell" # Captures image immediately, sends via notification
+      #     ttl: 0
+      #     priority: high
+      #     clickAction: "/lovelace/camera_view"
 
 - alias: ALERT - When a critical device goes offline to mobile app
   trigger:
@@ -76,7 +84,8 @@
     conditions:
       - condition: template
         value_template: >
-          {% if states.automation.alert_when_a_critical_device_goes_offline.last_triggered is not none %}
+         value_template: 
+          {% if states.automation.alert_when_a_critical_device_goes_offline is not none %}
             {% if as_timestamp(now()) | int - as_timestamp(states.automation.alert_when_a_critical_device_goes_offline.attributes.last_triggered) | int > 3600 %} 
               true
             {% else %} 
@@ -86,7 +95,7 @@
             false
           {% endif %}
   action:
-    service: notify.mobile_app_pixel_3
+    service: notify.ryan_devices
     data:
       title: "Critical Device Alert"
       message: "{{trigger.to_state.attributes.friendly_name}} has gone offline."
@@ -105,7 +114,7 @@
     platform: event
   condition: []
   action:
-    service: notify.mobile_app_pixel_3
+    service: notify.ryan_devices
     data:
       title: "{{trigger.event.data.service_data.title}}"
       message: "{{trigger.event.data.service_data.message}}"
@@ -117,7 +126,7 @@
       from: 'off'
       to: 'on'
   action:
-    service: notify.mobile_app_pixel_3
+    service: notify.ryan_devices
     data:
       title: "New Version of HASS Available"
       message: "Release Notes for {{ state_attr('binary_sensor.updater', 'newest_version') }}: {{ state_attr('binary_sensor.updater', 'release_notes') }}"   
@@ -137,14 +146,14 @@
       - sensor.laundry_motion_sensor_battery_level
       - sensor.ryans_bedside_button_battery_level
       - sensor.media_room_deadbolt_battery_level
-      - sensor.basement_office_motion_sensor_battery_level
+      - sensor.ryans_office_motion_sensor_battery_level
       - sensor.media_room_motion_sensor_battery_level
       - sensor.master_bedroom_motion_sensor_battery_level
       - sensor.front_outdoor_motion_sensor_battery_level
       - sensor.front_door_deadbolt_battery_level
     below: 30
   action:
-    - service: notify.mobile_app_pixel_3
+    - service: notify.ryan_devices
       data:
         title: "Sensor Battery Low"
         message: "{{trigger.from_state.attributes.friendly_name}} is low"
@@ -161,14 +170,14 @@
       entity_id: input_boolean.mail_arrived
       state: 'off'
   action:
-    - service: notify.mobile_app_pixel_3
+    - service: notify.ryan_devices
       data:
         title: "\uD83D\uDCEB\uD83D\uDCEB  Mail has arrived  \uD83D\uDCEB\uD83D\uDCEB"
         message: ""
     - service: script.alexa_notify_kitchen
       data_template:
         message: "You've got mail"
-    - service: script.alexa_notify_basement_office
+    - service: script.alexa_notify_ryans_office
       data_template:
         message: "You've got mail"
     - service: homeassistant.turn_on
@@ -188,10 +197,10 @@
       event_data:
         event_type: created
   action:
-    - delay: '00:00:20' #Wait until file is done being modified
+    - delay: '00:00:20' # Wait until file is done being modified
     - service: shell_command.convert_camera_recording
-    - delay: '00:00:20' #Wait until file is done being modified
-    - service: notify.discord
+    - delay: '00:00:20' # Wait until file is done being modified
+    - service: notify.home_assistant # Discord notification name change to Discord server name
       data_template:
         message: 'Motion detected'
         target: "658174234480082997"

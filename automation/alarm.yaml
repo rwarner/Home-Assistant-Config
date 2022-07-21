@@ -5,11 +5,11 @@
 - alias: "ALARM - Disable Alarm from Schlage Deadbolt"
   trigger:
     - platform: state
-      entity_id: lock.media_room_deadbolt
+      entity_id: lock.basement_door_deadbolt
       attribute: notification
       to: "Keypad Unlock"
     - platform: state
-      entity_id: lock.media_room_deadbolt
+      entity_id: lock.basement_door_deadbolt
       attribute: notification
       to: "RF Unlock"
     - platform: state
@@ -29,7 +29,7 @@
       target:
         entity_id: alarm_control_panel.alarm
     #  Alexa Guard currently sends a notification already
-    #- service: notify.mobile_app_pixel_3
+    #- service: notify.ryan_devices
     #  data:
     #    title: "Alarm Disarmed"
     #    message: ""

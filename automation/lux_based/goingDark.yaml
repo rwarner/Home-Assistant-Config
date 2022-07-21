@@ -2,7 +2,7 @@
 ##### GOING DARK AUTOMATIONS ####
 #################################
 
-#   Turn on Living room lights to 90%, Outside to 100%
+#   Turn on Family Room Lights to 90%, Outside to 100%
 #   turn off unneeded lights if nobody is home: center lamp,
 #   bookcase lamp, undercabinet kitchen lights
 - alias: GOING DARK - Turn on lights when outside gets dark
@@ -23,7 +23,7 @@
     - service: light.turn_on
       data:
         entity_id: 
-          - light.living_room_lights
+          - light.family_room_lights
           - light.kitchen_lights
         brightness_pct: 90
         transition: 10
@@ -40,6 +40,6 @@
       state: armed_away
     - service: light.turn_off
       entity_id: 
-        - light.living_room_center_lamp
-        - light.living_room_bookcase_lamp
-        - light.kitchen_undercabinet_lights
+        - light.living_room_fireplace
+        - light.living_room_corner_lamp
+        - light.kitchen_ceiling_lights

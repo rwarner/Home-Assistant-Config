@@ -10,15 +10,15 @@
       to: 'Away'
   action:
     - service: lock.lock                                # Lock Media Room Deadbolt
-      entity_id: lock.media_room_deadbolt
+      entity_id: lock.basement_door_deadbolt
     - service: lock.lock                                # Lock Front Door Deadbolt
       entity_id: lock.front_door_deadbolt
     - service: alarm_control_panel.alarm_arm_away       # Arm Alexa for guard mode
       entity_id: alarm_control_panel.alarm
-    - service: climate.set_preset_mode                  # Set thermostat for Away mode
-      data:
-        entity_id: climate.thermostat, climate.media_room
-        preset_mode: 'Away'
+    # - service: climate.set_preset_mode                  # Set thermostat for Away mode
+    #   data:
+    #     entity_id: climate.thermostat, climate.media_room
+    #     preset_mode: 'Away'
     - service: light.turn_off                           # Turn off all lights in home
       entity_id: all
     # Not reliable enough to close automatically right now
@@ -44,9 +44,9 @@
       entity_id: alarm_control_panel.alarm
       # Only change thermostat when arriving home, if we aren't in "Sleep" mode on Ecobee
       # will probably be during the night if this is true
-    - condition: template
-      value_template: '{{ states.climate.thermostat.attributes.preset_mode != "Sleep" }}'
-    - service: climate.set_preset_mode
-      data:
-        entity_id: climate.thermostat, climate.media_room
-        preset_mode: 'Home'
+    # - condition: template
+    #   value_template: '{{ states.climate.thermostat.attributes.preset_mode != "Sleep" }}'
+    # - service: climate.set_preset_mode
+    #   data:
+    #     entity_id: climate.thermostat, climate.media_room
+    #     preset_mode: 'Home'

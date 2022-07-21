@@ -3,23 +3,25 @@
 ################################################
 
 
+# Relying on Outdoor Hue Motion Sensor for main source of motion
 - alias: FRONT DOOR - Whether or not someone is at the front door
-  max_exceeded: silent # Hide warnings when triggered while in delay
+  #max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
-    # Relying on Outdoor Hue Motion Sensor for main source of motion
     - platform: state
       entity_id: binary_sensor.front_outdoor_motion_sensor
       to: 'on'
-  condition:
+  action: 
+    # Go into action directly, since delay can only be done in "Action:" and not "Condition:"
+    # Wait 2 seconds for doorbell to catch on, if neccessary
+    - delay:
+        seconds: 2
     # Check if doorbell also had motion within the last minute
     - condition: template
-      value_template: "{{ (as_timestamp(now())-as_timestamp(states.binary_sensor.motion_camera_doorbell.attributes.last_tripped_time)) < 60 }}"
+      value_template: "{{ (as_timestamp(now())-as_timestamp(states.binary_sensor.motion_camera_doorbell.last_changed)) < 60 }}"
     # If doorbell did have motion, check that it was in fact a person object
     - condition: state
-      entity_id: binary_sensor.motion_camera_doorbell 
-      attribute: event_object
+      entity_id: sensor.doorbell_detected_object
       state: 'person'
-  action:
     # Most likely, someone is at the front door turn on input boolean
     - service: homeassistant.turn_on
       entity_id: input_boolean.someone_at_front_door
