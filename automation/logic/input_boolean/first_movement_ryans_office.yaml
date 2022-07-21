@@ -1,0 +1,17 @@
+################################################
+### FIRST MOVEMENT CONFIGURATION / AUTOMATION ##
+################################################
+
+- alias: RYANS OFFICE - First movement of the day in ryans office
+  max_exceeded: silent # Hide warnings when triggered while in delay
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ryans_office_motion_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.first_movement_ryans_office
+      state: 'off'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.first_movement_ryans_office

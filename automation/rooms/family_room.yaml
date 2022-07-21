@@ -1,0 +1,31 @@
+################################
+### FAMILY ROOM AUTOMATIONS  ###
+################################
+
+- alias: FAMILY ROOM - Turn off family room at 11:00pm, unless occupancy detected
+  trigger:
+    - platform: time
+      at: '23:00:00'
+  condition:
+    - condition: state
+      entity_id: binary_sensor.family_room_occupancy 
+      state: 'off'
+    - condition: template
+      value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'playing') }}"
+  action:
+    - service: light.turn_off
+      entity_id: light.family_room_lights
+
+- alias: FAMILY ROOM - Turn off family room early (10:30pm), if living room is not being used
+  trigger:
+    - platform: time
+      at: '22:30:00'
+  condition:
+    - condition: state
+      entity_id: binary_sensor.family_room_occupancy 
+      state: 'off'
+    - condition: template
+      value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'playing') }}"
+  action:
+    - service: light.turn_off
+      entity_id: light.family_room_lights
