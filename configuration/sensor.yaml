@@ -28,43 +28,43 @@
       friendly_name: 'Kelly'
 
 # 2/26/21 not in use
-- platform: template
-  sensors:
-    dryer_status:
-      unique_id: sensor.dryer_status # Allow UI customizations
-      value_template: "{{ states('input_select.dryer_status') }}"
-      icon_template: >-
-        {% if is_state('input_select.dryer_status', 'Idle') %}
-          mdi:tumble-dryer-off
-        {% else %}
-          mdi:tumble-dryer
-        {% endif %}
+# - platform: template
+#   sensors:
+#     dryer_status:
+#       unique_id: sensor.dryer_status # Allow UI customizations
+#       value_template: "{{ states('input_select.dryer_status') }}"
+#       icon_template: >-
+#         {% if is_state('input_select.dryer_status', 'Idle') %}
+#           mdi:tumble-dryer-off
+#         {% else %}
+#           mdi:tumble-dryer
+#         {% endif %}
 
-- platform: template
-  sensors:
-    washer_remaining_time:
-      unique_id: sensor.washer_remaining_time # Allow UI customizations
-      value_template: >-
-        {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
-          Off
-        {% else %}
-          {{ state_attr('sensor.washing_machine', 'remain_time').split(":")[0] + 
-          ":" 
-          + state_attr('sensor.washing_machine', 'remain_time').split(":")[1] }}
-        {% endif %}
-      icon_template: >-
-        {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
-          mdi:tumble-washer-off
-        {% else %}
-          mdi:tumble-washer
-        {% endif %}
+# - platform: template
+#   sensors:
+#     washer_remaining_time:
+#       unique_id: sensor.washer_remaining_time # Allow UI customizations
+#       value_template: >-
+#         {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
+#           Off
+#         {% else %}
+#           {{ state_attr('sensor.washing_machine', 'remain_time').split(":")[0] + 
+#           ":" 
+#           + state_attr('sensor.washing_machine', 'remain_time').split(":")[1] }}
+#         {% endif %}
+#       icon_template: >-
+#         {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
+#           mdi:tumble-washer-off
+#         {% else %}
+#           mdi:tumble-washer
+#         {% endif %}
 
 # Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
-- platform: template
-  sensors:
-    ecobee_preset:
-      value_template: '{{ states.climate.thermostat.attributes.preset_mode }}'
-      friendly_name: "Ecobee Preset"
+# - platform: template
+#   sensors:
+#     ecobee_preset:
+#       value_template: '{{ states.climate.thermostat.attributes.preset_mode }}'
+#       friendly_name: "Ecobee Preset"
 
 # Harmony Remote sensor for current activity
 - platform: template
@@ -97,35 +97,34 @@
 # Define below multiple sensors into one
 # only rely on these sensors for automations and views
 
-#  -- Bedroom --
+# -- Movie Room -- only one sensor currently
 - platform: template
   sensors:
-    bedroom_avg_temp:
-      friendly_name: "Bedroom Temperature"
+    movie_room_avg_temp:
+      friendly_name: "Movie Room Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{'%0.3g'|format((float(states('sensor.ryans_bedside_button_temperature'), 65.0) 
-        + float(states('sensor.bedroom_light_button_temperature'), 65.0)
-        + float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0)) / 3) }}
+        {{ '%0.3g'|format(float(states('sensor.movie_room_motion_sensor_temperature'), 65.0)) }}
+
+# -- Laundry Room -- only one sensor currently
+- platform: template
+  sensors:
+    laundry_room_avg_temp:
+      friendly_name: "Laundry Room Temperature"
+      unit_of_measurement: '°F'
+      value_template: >-
+        {{ '%0.3g'|format(float(states('sensor.laundry_motion_sensor_temperature'), 65.0)) }}
 
 #  -- Living Room --
-- platform: template
-  sensors:
-    living_room_avg_temp:
-      friendly_name: "Living Room Temperature"
-      unit_of_measurement: '°F'
-      value_template: >-
-        {{ '%0.3g'|format((float(states('sensor.living_room_temperature'), 65.0) + float(states('sensor.thermostat_temperature'), 65.0))  / 2) }}
+# - platform: template
+#   sensors:
+#     living_room_avg_temp:
+#       friendly_name: "Living Room Temperature"
+#       unit_of_measurement: '°F'
+#       value_template: >-
+#         {{ '%0.3g'|format((float(states('sensor.living_room_temperature'), 65.0) + float(states('sensor.thermostat_temperature'), 65.0))  / 2) }}
 
-# -- Media Room -- only one sensor currently
-- platform: template
-  sensors:
-    media_room_avg_temp:
-      friendly_name: "Media Room Temperature"
-      unit_of_measurement: '°F'
-      value_template: >-
-        {{ '%0.3g'|format(float(states('sensor.media_room_temperature'), 65.0)) }}
-        
+
 # -- Kitchen -- only one sensor currently
 - platform: template
   sensors:
@@ -135,24 +134,54 @@
       value_template: >-
         {{ '%0.3g'|format(float(states('sensor.kitchen_motion_sensor_temperature'), 65.0)) }}
 
-# -- Basement -- only one sensor currently
+
+# # -- Family Room -- only one sensor currently
+# - platform: template
+#   sensors:
+#     kitchen_avg_temp:
+#       friendly_name: "Family Room Temperature"
+#       unit_of_measurement: '°F'
+#       value_template: >-
+#         {{ '%0.3g'|format(float(states('sensor.kitchen_motion_sensor_temperature'), 65.0)) }}
+
+
+#  -- Master Bedroom --
 - platform: template
   sensors:
-    basement_avg_temp:
-      friendly_name: "Basement Temperature"
+    bedroom_avg_temp:
+      friendly_name: "Master Bedroom Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ '%0.3g'|format(float(states('sensor.laundry_motion_sensor_temperature'), 65.0)) }}
+        {{'%0.3g'|format((float(states('sensor.ryans_bedside_button_temperature'), 65.0) 
+        + float(states('sensor.bedroom_light_button_temperature'), 65.0)
+        + float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0)) / 3) }}
 
-# -- Basement Office -- only one sensor currently
+# -- Guest Room -- only one sensor currently
+# - platform: template
+#   sensors:
+#     guest_room_avg_temp:
+#       friendly_name: "Guest Room Temperature"
+#       unit_of_measurement: '°F'
+#       value_template: >-
+#         {{ '%0.3g'|format(float(states('sensor.laundry_motion_sensor_temperature'), 65.0)) }}
+
+# -- Ryan's Office -- only one sensor currently
 - platform: template
   sensors:
-    basement_office_avg_temp:
-      friendly_name: "Basement Office Temperature"
+    ryans_office_avg_temp:
+      friendly_name: "Ryan's Office Temperature"
       unit_of_measurement: '°F'
       value_template: >-
-        {{ '%0.3g'|format(float(states('sensor.basement_office_motion_sensor_temperature'), 65.0)) }}
+        {{ '%0.3g'|format(float(states('sensor.ryans_office_motion_sensor_temperature'), 65.0)) }}
 
+# -- Kelly's Office -- only one sensor currently
+# - platform: template
+#   sensors:
+#     kellys_office_avg_temp:
+#       friendly_name: "Guest Room Temperature"
+#       unit_of_measurement: '°F'
+#       value_template: >-
+#         {{ '%0.3g'|format(float(states('sensor.laundry_motion_sensor_temperature'), 65.0)) }}
 
 
 ##################################

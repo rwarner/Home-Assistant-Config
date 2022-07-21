@@ -26,6 +26,13 @@ sensor.bedroom_fan_button_battery:
 sensor.basement_laundry_sensor_temperature:
   friendly_name: Basement Temperature
 
+# Deprecation notice for device_class requirement
+sensor.tesla_inside_temp:
+  device_class: temperature
+
+sensor.tesla_outside_temp:
+  device_class: temperature
+
 # sensor.ups_nominal_real_power:
 #   device_class: power
 #   state_class: measurement

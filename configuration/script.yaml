@@ -30,24 +30,74 @@ open_garage_door:
 
 
 ###### Alexa #######
+# Current alexas:
+# - media_player.ryans_office_echo_dot
+# - media_player.guest_room_echo_dot
+# - media_player.kitchen_echo_show_15
+# - media_player.living_room_echo_dot
+# - media_player.family_room_echo_dot
+# - media_player.movie_room_echo
+# - media_player.laundy_room_echo_dot
+# - media_player.echo_show
+
 alexa_notify_kitchen:
   sequence:
     - service: notify.alexa_media
       data_template:
         target: 
-          - media_player.kitchen_echo_show
+          - media_player.kitchen_echo_show_15
         title: "{{ title }}"
         message: "{{ message }}"
         data:
           type: announce
           method: all
 
-alexa_notify_basement_office:
+alexa_notify_second_floor:
   sequence:
     - service: notify.alexa_media
       data_template:
         target: 
-          - media_player.basement_echo_dot
+          - media_player.ryans_office_echo_dot
+          - media_player.guest_room_echo_dot
+        title: "{{ title }}"
+        message: "{{ message }}"
+        data:
+          type: announce
+          method: all
+
+alexa_notify_first_floor:
+  sequence:
+    - service: notify.alexa_media
+      data_template:
+        target: 
+          - media_player.kitchen_echo_show_15
+          - media_player.living_room_echo_dot
+          - media_player.family_room_echo_dot
+        title: "{{ title }}"
+        message: "{{ message }}"
+        data:
+          type: announce
+          method: all
+
+alexa_notify_basement:
+  sequence:
+    - service: notify.alexa_media
+      data_template:
+        target: 
+          - media_player.movie_room_echo
+          - media_player.laundy_room_echo_dot
+        title: "{{ title }}"
+        message: "{{ message }}"
+        data:
+          type: announce
+          method: all
+
+alexa_notify_ryans_office:
+  sequence:
+    - service: notify.alexa_media
+      data_template:
+        target: 
+          - media_player.ryans_office_echo_dot
         title: "{{ title }}"
         message: "{{ message }}"
         data:
@@ -81,7 +131,7 @@ alexa_notify_house:
     #  data:
     #    entity_id: 
     #      - media_player.media_room_echo
-    #      - media_player.kitchen_echo_show
+    #      - media_player.kitchen_echo_show_15
     #      - media_player.living_room_echo_dot
     #      - media_player.basement_echo_dot
     #    media_content_type: sound
@@ -94,10 +144,13 @@ alexa_notify_house:
           type: announce
           method: all
         target: 
-          - media_player.media_room_echo
-          - media_player.kitchen_echo_show
+          - media_player.ryans_office_echo_dot
+          - media_player.guest_room_echo_dot
+          - media_player.kitchen_echo_show_15
           - media_player.living_room_echo_dot
-          - media_player.basement_echo_dot
+          - media_player.family_room_echo_dot
+          - media_player.movie_room_echo
+          - media_player.laundy_room_echo_dot
         title: "{{ title }}"
         message: "{{ message }}"
 
@@ -108,17 +161,18 @@ alexa_reset_all_volume:
         entity_id: 
           - media_player.media_room_echo
           - media_player.basement_echo_dot
+          - media_player.ryans_office_echo_dot
+          - media_player.guest_room_echo_dot
+          - media_player.living_room_echo_dot
+          - media_player.family_room_echo_dot
+          - media_player.movie_room_echo
+          - media_player.laundy_room_echo_dot
         volume_level: '0.6'
     - service: media_player.volume_set
       data:
         entity_id: 
-          - media_player.kitchen_echo_show
+          - media_player.kitchen_echo_show_15
         volume_level: '0.5'
-    - service: media_player.volume_set
-      data:
-        entity_id: 
-          - media_player.living_room_echo_dot
-        volume_level: '0.4'
 
 ############################################
 
@@ -198,7 +252,7 @@ capture_front_door_video:
     - delay: '00:00:02'
     - service: camera.record
       data:
-        entity_id: camera.front_door_camera
+        entity_id: camera.doorbell_camera
         filename: '/tmp/hass/front_door_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 15
         lookback: 2

@@ -2,40 +2,39 @@
 ####### LIGHTS CONFIGURATION  ######
 ####################################
 
- ### Media Room ###
-- platform: group
-  name: Media Room Lights
-  entities:
-    - light.media_room_movie_screen
-    - light.media_room_entry_lamp
+ ### Movie Room ###
+# - platform: group
+#   name: Movie Room Lights
+#   entities:
+#     - light.media_room_movie_screen
+#     - light.media_room_entry_lamp
 
 ### Basement Office ###
-- platform: group
-  name: Basement Office Lights
-  entities:
-    - light.basement_ryans_desk_lamp
-    - light.basement_office_recessed
-    - light.ryans_desk_uplighting
+# - platform: group
+#   name: Basement Office Lights
+#   entities:
+#     - light.basement_ryans_desk_lamp
+#     - light.basement_office_recessed
+#     - light.ryans_desk_uplighting
 
  ### Laundry Room ###
-- platform: group
-  name: Laundry Room Lights
-  entities:
-    - light.basement_laundry_light
+# - platform: group
+#   name: Laundry Room Lights
+#   entities:
+#     - light.basement_laundry_light
 
  ### Living Room ###
-- platform: group
-  name: Living Room Lights
-  entities:
-    - light.living_room_center_lamp
-    - light.living_room_entry_lamp
-    - light.living_room_bookcase_lamp
+# - platform: group
+#   name: Living Room Lights
+#   entities:
+#     - light.living_room_center_lamp
+#     - light.living_room_entry_lamp
+#     - light.living_room_bookcase_lamp
 
  ### Master Bedroom ###
 - platform: group
   name: Master Bedroom Lights
   entities:
-    - light.bedroom_dresser_lamp
     - light.bedroom_kellys_bedside
     - light.bedroom_ryans_bedside
 
@@ -43,17 +42,22 @@
 - platform: group
   name: Outside Lights
   entities:
-    - light.outside_back_porch
-    - light.outside_front_porch
-    - light.outside_driveway_flood
-    - light.outside_porch_flood
+    - light.outside_front_door
+    - light.outside_side_patio
 
  ### Kitchen ###
 - platform: group
   name: Kitchen Lights
   entities:
-    - light.kitchen_undercabinet_lights
-    - light.kitchen_nook
+    - light.kitchen_lamp
+    - light.kitchen_dining_area_lamp
+
+ ### Family Room ###
+- platform: group
+  name: Family Room Lights
+  entities:
+    - light.family_room_center_lamp
+    - light.family_room_corner_lamp
 
 ###################################
 ####### Event Based Groups ########
@@ -64,40 +68,47 @@
 - platform: group
   name: Sun Based Lights Home
   entities:
-    - light.outside_back_porch
-    - light.outside_front_porch
-    - light.living_room_lights
+    - light.outside_front_door
+    - light.living_room_fireplace
+    - light.family_room_lights
 
 ### Sun Based Lights - While we're away ###
 - platform: group
   name: Sun Based Lights Away
   entities:
-    - light.outside_back_porch
-    - light.outside_front_porch
-    - light.living_room_entry_lamp
+    - light.outside_front_door
+    - light.outside_side_patio
+    - light.family_room_lights
 
 
 ###################################
 ####### Single use entities #######
 ###################################
-
 - platform: group
-  name: Kitchen Nook
+  name: Kitchen Pendants
   entities:
-    - light.kitchen_nook_left
-    - light.kitchen_nook_right
-
-- platform: group
-  name: Kitchen Overhead
-  entities:
-    - light.kitchen_overhead_one
-    - light.kitchen_overhead_two
+    - light.kitchen_pendant_left
+    - light.kitchen_pendant_right
  
 - platform: group
-  name: Media Room Movie Screen
+  name: Living Room Fireplace
   entities:
-    - light.media_room_movie_left
-    - light.media_room_movie_right
+    - light.living_room_fireplace_left
+    - light.living_room_fireplace_right
+
+- platform: group
+  unique_id: outside_front_door
+  name: Front Door
+  entities:
+    - light.outside_front_door_left
+    - light.outside_front_door_right
+
+- platform: group
+  unique_id: outside_side_patio
+  name: Side Patio
+  entities:
+    - light.outside_side_patio_left
+    - light.outside_side_patio_right
 
 ###################################
 ### Switch Conversion -> Light ####

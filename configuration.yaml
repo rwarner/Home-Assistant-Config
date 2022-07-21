@@ -45,9 +45,6 @@ config:
 
 http:
 
-# Checks for available updates
-updater:
-
 # Discover some devices automatically
 discovery:
 
@@ -74,43 +71,52 @@ folder_watcher:
 weather:
 
 # Enable functionality for Discord mobile notification alerts
+# notify:
+#   - platform: discord
+#     name: discord
+#     token: !secret discord_token
 notify:
-  - platform: discord
-    name: discord
-    token: !secret discord_token
+  - name: ryan_devices
+    platform: group
+    services:
+      - service: mobile_app_ryans_iphone_13_mini
+  - name: kelly_devices
+    platform: group
+    services:
+      - service: mobile_app_kelly_s_iphone_13_pro_max
 
-media_player:
-  - platform: yamaha
-    host: !secret yamaha_ip #Not a static ip
-    source_ignore:
-      - "AUDIO1"
-      - "AUDIO2"
-      - "AV1"
-      - "AV2"
-      - "AV3"
-      - "AV4"
-      - "AV5"
-      - "AV6"
-      - "AirPlay"
-      - "HDMI5"
-      - "NET RADIO"
-      - "Pandora"
-      - "Rhapsody"
-      - "SERVER"
-      - "SiriusXM"
-      - "TUNER"
-      - "USB"
-      - "iPod (USB)"
-    source_names:
-      HDMI1: "NVIDIA Shield"
-      HDMI2: "Xbox One"
- # - platform: plex   # Super unreliable for some reason
-  - platform: smartir
-    name: Living room TV
-    unique_id: living_room_tv
-    device_code: 1400
-    controller_data: remote.living_room_remote
-    power_sensor: binary_sensor.tv_power
+# media_player:
+#   - platform: yamaha
+#     host: !secret yamaha_ip #Not a static ip
+#     source_ignore:
+#       - "AUDIO1"
+#       - "AUDIO2"
+#       - "AV1"
+#       - "AV2"
+#       - "AV3"
+#       - "AV4"
+#       - "AV5"
+#       - "AV6"
+#       - "AirPlay"
+#       - "HDMI5"
+#       - "NET RADIO"
+#       - "Pandora"
+#       - "Rhapsody"
+#       - "SERVER"
+#       - "SiriusXM"
+#       - "TUNER"
+#       - "USB"
+#       - "iPod (USB)"
+#     source_names:
+#       HDMI1: "NVIDIA Shield"
+#       HDMI2: "Xbox One"
+#  # - platform: plex   # Super unreliable for some reason
+#   - platform: smartir
+#     name: Living room TV
+#     unique_id: living_room_tv
+#     device_code: 1400
+#     controller_data: remote.living_room_remote
+#     power_sensor: binary_sensor.tv_power
 
 wemo:
   static:
@@ -121,26 +127,26 @@ wemo:
     #Still not statically set on network, but required without ports
 
 camera:
-  - platform: generic
-    name: Rear Porch Camera
-    still_image_url: !secret unifi_rear_porch_camera_still
-    stream_source: !secret unifi_rear_porch_camera_source
-    verify_ssl: false
+  # - platform: generic
+  #   name: Rear Porch Camera
+  #   still_image_url: !secret unifi_rear_porch_camera_still
+  #   stream_source: !secret unifi_rear_porch_camera_source
+  #   verify_ssl: false
   - platform: generic
     name: Front Door Camera
-    still_image_url: !secret unifi_front_door_camera_still
+    #still_image_url: !secret unifi_front_door_camera_still
     stream_source: !secret unifi_front_door_camera_source
     verify_ssl: false
-  - platform: generic
-    name: Living Room Camera
-    still_image_url: !secret unifi_living_room_camera_still
-    stream_source: !secret unifi_living_room_camera_source
-    verify_ssl: false
-  - platform: generic
-    name: Garage Camera
-    still_image_url: !secret unifi_garage_camera_still
-    stream_source: !secret unifi_garage_camera_source
-    verify_ssl: false
+  # - platform: generic
+  #   name: Living Room Camera
+  #   still_image_url: !secret unifi_living_room_camera_still
+  #   stream_source: !secret unifi_living_room_camera_source
+  #   verify_ssl: false
+  # - platform: generic
+  #   name: Garage Camera
+  #   still_image_url: !secret unifi_garage_camera_still
+  #   stream_source: !secret unifi_garage_camera_source
+  #   verify_ssl: false
   # Changed to FFMPEG due to doorbell not compatible with HomeHabit tablet view
   - platform: ffmpeg
     name: Doorbell Camera
@@ -167,20 +173,20 @@ unifiprotect:
   password: !secret unifiprotect_pass
   port: !secret unifiprotect_port
 
-smartir:
+# smartir:
 
-climate:
-  - platform: smartir
-    name: Living Room AC
-    unique_id: living_room_ac
-    device_code: 2040
-    controller_data: remote.living_room_remote
-    power_sensor: binary_sensor.living_room_ac_power
+# climate:
+#   - platform: smartir
+#     name: Living Room AC
+#     unique_id: living_room_ac
+#     device_code: 2040
+#     controller_data: remote.living_room_remote
+#     power_sensor: binary_sensor.living_room_ac_power
 
 # Z-Wave USB0, Zigbee USB1 (Manually upgraded firmware on USB stick)
-zwave:
-  usb_path: /dev/ttyUSB0
-  network_key: !secret zwave_network_key
+# zwave:
+#   usb_path: /dev/ttyUSB0
+#   network_key: !secret zwave_network_key
 
 input_boolean:
   mail_arrived:
@@ -189,8 +195,8 @@ input_boolean:
     name: Whether or not someone is at the front door
   someone_at_rear_porch:
     name: Whether or not someone is at the rear porch
-  first_movement_basement_office:
-    name: First movement of the day in basement office
+  first_movement_ryans_office:
+    name: First movement of the day in ryans office
   dark_outside:
     name: Whether or not it is dark outside
 
@@ -219,6 +225,41 @@ alarm_control_panel:
       arming_time: 0
       # Leave no delay between pending -> triggered
       delay_time: 0
+
+
+homekit:
+  filter:
+    include_domains:
+      - lock
+    include_entities:
+      - light.living_room_fireplace
+      - light.family_room_lights
+      - light.master_bedroom_lights
+      - light.outside_front_door
+      - light.outside_side_patio
+      - light.kitchen_ceiling_lights
+      - light.kitchen_lights
+      - light.kitchen_pendants
+      - light.ryans_office_desk_lamp
+      - camera.unifi_doorbell
+      - climate.family_room_ac
+      - switch.fan
+      - binary_sensor.laundry_motion_sensor
+      - binary_sensor.kitchen_motion_sensor
+      - binary_sensor.ryans_office_motion_sensor
+      - binary_sensor.media_room_motion_sensor
+      - binary_sensor.master_bedroom_motion_sensor
+      - sensor.movie_room_avg_temp
+      - sensor.laundry_room_avg_temp
+      - sensor.kitchen_avg_temp
+      - sensor.bedroom_avg_temp
+      - sensor.ryans_office_avg_temp
+      #- light.media_room_movie_screen
+      #- camera.unifi_front_door
+      #- camera.unifi_living_room
+      #- camera.unifi_garage
+      #- camera.unifi_rear_porch
+      #- switch.garage_door_toggle
 
 ####################################
 #  Energy Usage Monitoring Sensors #

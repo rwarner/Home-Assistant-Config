@@ -4,20 +4,20 @@
 
 # Convert garage door to "cover" to get proper signaling / toggles
 # soltion for all-in-one with a sensor / switch combo
-- platform: template
-  covers:
-    garage_door:
-      unique_id: cover.garage_door # Allows UI changes
-      device_class: garage
-      friendly_name: "Garage Door"
-      value_template: "{{ states('binary_sensor.garage_door') == 'on' }}"
-      open_cover:
-        service: script.open_garage_door # Execute script, to make sure we aren't closing garage door
-      close_cover:
-        service: script.close_garage_door # Execute script, to make sure we aren't opening garage door
-      icon_template: >-
-        {% if is_state('binary_sensor.garage_door', 'on') %}
-          mdi:garage-open
-        {% else %}
-          mdi:garage
-        {% endif %}
+# - platform: template
+#   covers:
+#     garage_door:
+#       unique_id: cover.garage_door # Allows UI changes
+#       device_class: garage
+#       friendly_name: "Garage Door"
+#       value_template: "{{ states('binary_sensor.garage_door') == 'on' }}"
+#       open_cover:
+#         service: script.open_garage_door # Execute script, to make sure we aren't closing garage door
+#       close_cover:
+#         service: script.close_garage_door # Execute script, to make sure we aren't opening garage door
+#       icon_template: >-
+#         {% if is_state('binary_sensor.garage_door', 'on') %}
+#           mdi:garage-open
+#         {% else %}
+#           mdi:garage
+#         {% endif %}

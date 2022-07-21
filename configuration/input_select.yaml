@@ -16,10 +16,10 @@ harmony_hub:
 
 # See also: sensor.dryer_status which points to this input_select value
 # 2/26/21 not in use
-dryer_status:
-  name: Dryer Status
-  options:
-    - Idle
-    - Running
-    - Done
-  initial: Idle
+# dryer_status:
+#   name: Dryer Status
+#   options:
+#     - Idle
+#     - Running
+#     - Done
+#   initial: Idle
