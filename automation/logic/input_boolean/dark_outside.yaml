@@ -2,13 +2,13 @@
 ### DARK_OUTSIDE CONFIGURATION / AUTOMATION ####
 ################################################
 
-# Darker than 15 Lux Outside 
+# Darker than 500 Lux Outside 
 - alias: GOING DARK - Set dark_outside input_boolean to On, dark out
   trigger:
-    # Make sure that the light level is below 15 lx
+    # Make sure that the light level is below 500 lx
     - platform: numeric_state
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
-      below: 400
+      below: 500
   # condition:
     # # Only after 4 pm and before 9pm
     # - condition: time
@@ -18,10 +18,10 @@
     - service: homeassistant.turn_on
       entity_id: input_boolean.dark_outside
 
-# Brighter than 15 Lux Outside 
+# Brighter than 400 Lux Outside 
 - alias: GOING DARK - Set dark_outside input_boolean to off, light out
   trigger:
-    # Make sure that the light level is above 17 lx
+    # Make sure that the light level is above 400 lx
     - platform: numeric_state
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       above: 400
