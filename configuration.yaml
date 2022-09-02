@@ -13,8 +13,6 @@ homeassistant:
   customize: !include_dir_merge_named customize
   auth_providers:
     - type: homeassistant
-    - type: legacy_api_password
-      api_password: !secret hass_http_pass
     - type: trusted_networks
       trusted_networks:
         - 192.168.1.0/24
@@ -277,20 +275,23 @@ template:
 #################################
 automation: !include_dir_merge_list automation/
 
+binary_sensor: !include configuration/binary_sensor.yaml
+binary_sensor groups: !include_dir_merge_list configuration/binary_sensor/
+
+cover: !include configuration/cover.yaml
+
 light: !include configuration/lights.yaml
 
 history: !include configuration/history.yaml
 
-sensor: !include configuration/sensor.yaml
-
-script: !include configuration/script.yaml
-
 input_select: !include configuration/input_select.yaml
+
+sensor: !include_dir_merge_list configuration/sensor/
+
+# Scripts need to be merge_named rather than merge_list
+# backup: https://community.home-assistant.io/t/script-editor-and-split-up-files/40459
+script: !include_dir_merge_named configuration/scripts/
 
 shell_command: !include configuration/shell_command.yaml
 
-binary_sensor: !include configuration/binary_sensor.yaml
-
 switch: !include configuration/switch.yaml
-
-cover: !include configuration/cover.yaml
