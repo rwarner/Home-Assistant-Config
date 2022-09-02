@@ -1,0 +1,26 @@
+###### Kitchen Tablet #######
+turn_on_kitchen_tablet:
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: homeassistant
+        payload: "wakedevice"
+        qos: 0
+
+turn_off_kitchen_tablet:
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: homeassistant
+        payload: "sleepdevice"
+        qos: 0
+
+turn_on_tablet_doorbell:
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: homeassistant
+        payload: "doorbell"
+        qos: 0
+
+############################################

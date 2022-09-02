@@ -1,0 +1,60 @@
+####################################
+####### BINARY_SENSOR DOORS   ######
+####################################
+
+- platform: group
+  name: House Doors
+  entities:
+    - binary_sensor.ryans_office_doors
+    - binary_sensor.living_room_doors
+    - binary_sensor.kitchen_doors
+    - binary_sensor.family_room_doors
+    - binary_sensor.laundry_room_doors
+
+- platform: group
+  name: Exterior Doors
+  entities:
+    - binary_sensor.front_door_sensor
+    - binary_sensor.porch_slider_sensor
+    - binary_sensor.family_room_slider
+    - binary_sensor.basement_door_sensor
+
+# - platform: group
+#   name: Kellys Office Doors
+#   entities:
+#     - binary_sensor.sample_window_sensor
+
+- platform: group
+  name: Ryans Office Doors
+  entities:
+    - binary_sensor.ryans_office_door_sensor
+
+# - platform: group
+#   name: Master Bedroom Doors
+#   entities:
+#     - binary_sensor.sample_window_sensor
+
+# - platform: group
+#   name: Guest Room Doors
+#   entities:
+#     - binary_sensor.sample_window_sensor
+
+- platform: group
+  name: Living Room Doors
+  entities:
+    - binary_sensor.front_door_sensor
+
+- platform: group
+  name: Kitchen Doors
+  entities:
+    - binary_sensor.porch_slider_sensor
+
+- platform: group
+  name: Family Room Doors
+  entities:
+    - binary_sensor.family_room_slider
+
+- platform: group
+  name: Laundry Room Doors
+  entities:
+    - binary_sensor.basement_door_sensor

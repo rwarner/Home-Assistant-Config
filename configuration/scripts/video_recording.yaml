@@ -1,0 +1,24 @@
+###### Video Recording #######
+capture_front_door_video:
+  mode: queued
+  sequence:
+    - delay: '00:00:02'
+    - service: camera.record
+      data:
+        entity_id: camera.doorbell_camera
+        filename: '/tmp/hass/front_door_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        duration: 15
+        lookback: 2
+
+capture_rear_porch_video:
+  mode: queued
+  sequence:
+    - delay: '00:00:02'
+    - service: camera.record
+      data:
+        entity_id: camera.rear_porch_camera
+        filename: '/tmp/hass/rear_porch_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        duration: 15
+        lookback: 2
+
+############################################

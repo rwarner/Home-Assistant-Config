@@ -1,0 +1,12 @@
+####################################
+####### SCRIPT CONFIGURATION  ######
+####################################
+
+###### Home Assistant Admin #######
+pull_changes_restart_homeassistant:
+  sequence:
+    - service: shell_command.git_pull
+    - delay: '00:00:02'
+    - service: shell_command.homeassistant_restart
+
+############################################

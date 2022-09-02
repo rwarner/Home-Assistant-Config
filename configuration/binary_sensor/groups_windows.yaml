@@ -1,0 +1,57 @@
+####################################
+####### BINARY_SENSOR WINDOWS ######
+####################################
+
+- platform: group
+  name: House Windows
+  entities:
+    - binary_sensor.living_room_windows
+    - binary_sensor.kitchen_windows
+    - binary_sensor.family_room_windows
+
+# - platform: group
+#   name: Kellys Office Windows
+#   entities:
+#     - binary_sensor.sample_window_sensor
+
+# - platform: group
+#   name: Ryans Office Windows
+#   entities:
+#     - binary_sensor.sample_window_sensor
+
+# - platform: group
+#   name: Master Bedroom Windows
+#   entities:
+#     - binary_sensor.sample_window_sensor
+
+# - platform: group
+#   name: Guest Room Windows
+#   entities:
+#     - binary_sensor.sample_window_sensor
+
+- platform: group
+  name: Living Room Windows
+  entities:
+    - binary_sensor.living_room_front_window_sensor
+    - binary_sensor.living_room_side_window_1_sensor
+
+- platform: group
+  name: Kitchen Windows
+  entities:
+    - binary_sensor.kitchen_window_sensor
+
+- platform: group
+  name: Family Room Windows
+  entities:
+    - binary_sensor.family_room_front_window_1_sensor
+    - binary_sensor.family_room_front_window_2_sensor
+
+# - platform: group
+#   name: Laundry Room Windows
+#   entities:
+#     - binary_sensor.sample_window_sensor
+
+# - platform: group
+#   name: Movie Room Windows
+#   entities:
+#     - binary_sensor.sample_window_sensor

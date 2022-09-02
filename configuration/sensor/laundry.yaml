@@ -1,0 +1,35 @@
+##################################
+####  LAUNDRY SENSORS       ######
+##################################
+
+# 2/26/21 not in use
+# - platform: template
+#   sensors:
+#     dryer_status:
+#       unique_id: sensor.dryer_status # Allow UI customizations
+#       value_template: "{{ states('input_select.dryer_status') }}"
+#       icon_template: >-
+#         {% if is_state('input_select.dryer_status', 'Idle') %}
+#           mdi:tumble-dryer-off
+#         {% else %}
+#           mdi:tumble-dryer
+#         {% endif %}
+
+# - platform: template
+#   sensors:
+#     washer_remaining_time:
+#       unique_id: sensor.washer_remaining_time # Allow UI customizations
+#       value_template: >-
+#         {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
+#           Off
+#         {% else %}
+#           {{ state_attr('sensor.washing_machine', 'remain_time').split(":")[0] + 
+#           ":" 
+#           + state_attr('sensor.washing_machine', 'remain_time').split(":")[1] }}
+#         {% endif %}
+#       icon_template: >-
+#         {% if is_state_attr('sensor.washing_machine', 'remain_time', '0:00:00') %}
+#           mdi:tumble-washer-off
+#         {% else %}
+#           mdi:tumble-washer
+#         {% endif %}
