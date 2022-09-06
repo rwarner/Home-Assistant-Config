@@ -1,0 +1,8 @@
+###################################
+### Switch Conversion -> Light ####
+###################################
+
+## Wemo Lights -> Regular lights
+#- platform: switch
+#  name: Bookshelf Lamp
+#  entity_id: switch.bookshelf_lamp

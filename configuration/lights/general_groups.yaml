@@ -1,0 +1,60 @@
+###################################
+##### LIGHTS - GENERAL GROUPS #####
+###################################
+
+ ### Master Bedroom ###
+- platform: group
+  name: Master Bedroom Lights
+  entities:
+    - light.bedroom_kellys_bedside
+    - light.bedroom_ryans_bedside
+
+ ### Outside ###
+- platform: group
+  name: Outside Lights
+  entities:
+    - light.outside_front_door
+    - light.outside_side_patio
+
+ ### Kitchen ###
+- platform: group
+  name: Kitchen Lights
+  entities:
+    - light.kitchen_lamp
+    - light.kitchen_dining_area_lamp
+
+ ### Family Room ###
+- platform: group
+  name: Family Room Lights
+  entities:
+    - light.family_room_center_lamp
+    - light.family_room_corner_lamp
+
+ ### Movie Room ###
+# - platform: group
+#   name: Movie Room Lights
+#   entities:
+#     - light.media_room_movie_screen
+#     - light.media_room_entry_lamp
+
+### Basement Office ###
+# - platform: group
+#   name: Basement Office Lights
+#   entities:
+#     - light.basement_ryans_desk_lamp
+#     - light.basement_office_recessed
+#     - light.ryans_desk_uplighting
+
+ ### Laundry Room ###
+# - platform: group
+#   name: Laundry Room Lights
+#   entities:
+#     - light.basement_laundry_light
+
+ ### Living Room ###
+# - platform: group
+#   name: Living Room Lights
+#   entities:
+#     - light.living_room_center_lamp
+#     - light.living_room_entry_lamp
+#     - light.living_room_bookcase_lamp

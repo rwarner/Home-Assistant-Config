@@ -1,0 +1,20 @@
+############################################
+####### LIGHTS - EVENT BASED GROUPS ########
+############################################
+
+
+### Sun Based Lights - While we're Home ###
+- platform: group
+  name: Sun Based Lights Home
+  entities:
+    - light.outside_front_door
+    - light.living_room_fireplace
+    - light.family_room_lights
+
+### Sun Based Lights - While we're away ###
+- platform: group
+  name: Sun Based Lights Away
+  entities:
+    - light.outside_front_door
+    - light.outside_side_patio
+    - light.family_room_lights
