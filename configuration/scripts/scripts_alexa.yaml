@@ -72,18 +72,20 @@ alexa_notify_ryans_office:
         data:
           type: announce
           method: all
-       
-alexa_notify_everywhere:
-  sequence:
-    - service: notify.alexa_media
-      data_template:
-        target: 
-          - media_player.everywhere
-        title: "{{ title }}"
-        message: "{{ message }}"
-        data:
-          type: announce
-          method: all
+
+# Favor to using alexa_notify_house
+
+# alexa_notify_everywhere:
+#   sequence:
+#     - service: notify.alexa_media
+#       data_template:
+#         target: 
+#           - media_player.everywhere
+#         title: "{{ title }}"
+#         message: "{{ message }}"
+#         data:
+#           type: announce
+#           method: all
         
 
 # Multiple Alexa script services in a row require atleast a
@@ -115,11 +117,14 @@ alexa_notify_house:
         target: 
           - media_player.ryans_office_echo_dot
           - media_player.guest_room_echo_dot
-          - media_player.kitchen_echo_show_15
           - media_player.living_room_echo_dot
           - media_player.family_room_echo_dot
           - media_player.movie_room_echo
           - media_player.laundy_room_echo_dot
+        title: "{{ title }}"
+        message: "{{ message }}"
+    - service: script.alexa_notify_kitchen
+      data_template:
         title: "{{ title }}"
         message: "{{ message }}"
 
