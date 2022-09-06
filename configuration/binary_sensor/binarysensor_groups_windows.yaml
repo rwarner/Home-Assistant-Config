@@ -3,6 +3,7 @@
 ####################################
 
 - platform: group
+  unique_id: house_windows
   name: House Windows
   entities:
     - binary_sensor.living_room_windows
@@ -31,17 +32,20 @@
 
 - platform: group
   name: Living Room Windows
+  unique_id: living_room_windows
   entities:
     - binary_sensor.living_room_front_window_sensor
     - binary_sensor.living_room_side_window_1_sensor
 
 - platform: group
   name: Kitchen Windows
+  unique_id: kitchen_windows
   entities:
     - binary_sensor.kitchen_window_sensor
 
 - platform: group
   name: Family Room Windows
+  unique_id: family_room_windows
   entities:
     - binary_sensor.family_room_front_window_1_sensor
     - binary_sensor.family_room_front_window_2_sensor

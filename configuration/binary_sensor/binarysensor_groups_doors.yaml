@@ -4,6 +4,7 @@
 
 - platform: group
   name: House Doors
+  unique_id: house_doors
   entities:
     - binary_sensor.ryans_office_doors
     - binary_sensor.living_room_doors
@@ -13,6 +14,7 @@
 
 - platform: group
   name: Exterior Doors
+  unique_id: exterior_doors
   entities:
     - binary_sensor.front_door_sensor
     - binary_sensor.porch_slider_sensor
@@ -26,6 +28,7 @@
 
 - platform: group
   name: Ryans Office Doors
+  unique_id: ryans_office_doors
   entities:
     - binary_sensor.ryans_office_door_sensor
 
@@ -41,20 +44,24 @@
 
 - platform: group
   name: Living Room Doors
+  unique_id: living_room_doors
   entities:
     - binary_sensor.front_door_sensor
 
 - platform: group
   name: Kitchen Doors
+  unique_id: kitchen_doors
   entities:
     - binary_sensor.porch_slider_sensor
 
 - platform: group
   name: Family Room Doors
+  unique_id: family_room_doors
   entities:
     - binary_sensor.family_room_slider
 
 - platform: group
   name: Laundry Room Doors
+  unique_id: laundry_room_doors
   entities:
     - binary_sensor.basement_door_sensor
