@@ -2,50 +2,50 @@
 ### LAUNDRY AUTOMATIONS  ###
 ############################
 
-- alias: LAUNDRY - Notify kitchen laundry is done
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.washer_wash_completed
-      from: 'off'
-      to: 'on'
-  condition:
-    - condition: state
-      entity_id: variable.family_status 
-      state: 'Home'
-  action:
-    - service: script.alexa_notify_kitchen
-      data_template:
-        message: "Your clothes are clean"
+# - alias: LAUNDRY - Notify kitchen laundry is done
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.washer_wash_completed
+#       from: 'off'
+#       to: 'on'
+#   condition:
+#     - condition: state
+#       entity_id: variable.family_status 
+#       state: 'Home'
+#   action:
+#     - service: script.alexa_notify_kitchen
+#       data_template:
+#         message: "Your clothes are clean"
+
+# - alias: LAUNDRY - Notify Kitchen dryer is done
+#   trigger:
+#     - platform: state
+#       entity_id: sensor.dryer_status
+#       from: 'Running'
+#       to: "Done"
+#   action:
+#     - service: script.alexa_notify_kitchen
+#       data_template:
+#         message: "Your clothes are dry"
 
 
-- alias: LAUNDRY - Turn on Light from motion
-  mode: restart # Restart on every motion, ensure that the light is always on
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.laundry_motion_sensor
-      from: 'off'
-      to: 'on'
-  action:
-    - service: light.turn_on
-      entity_id: light.laundry_room_lights
-    # Wait until motion goes off
-    - wait_template: "{{ is_state('binary_sensor.laundry_motion_sensor', 'off') }}"
-    - delay:
-        minutes: 5
-    - service: light.turn_off
-      entity_id: light.laundry_room_lights
-
-- alias: LAUNDRY - Notify Kitchen dryer is done
-  trigger:
-    - platform: state
-      entity_id: sensor.dryer_status
-      from: 'Running'
-      to: "Done"
-  action:
-    - service: script.alexa_notify_kitchen
-      data_template:
-        message: "Your clothes are dry"
+# - alias: LAUNDRY - Turn on Light from motion
+#   mode: restart # Restart on every motion, ensure that the light is always on
+#   max_exceeded: silent # Hide warnings when triggered while in delay.
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.laundry_motion_sensor
+#       from: 'off'
+#       to: 'on'
+#   action:
+#     - service: light.turn_on
+#       entity_id: light.laundry_room_lights
+#     # Wait until motion goes off
+#     - wait_template: "{{ is_state('binary_sensor.laundry_motion_sensor', 'off') }}"
+#     - delay:
+#         minutes: 5
+#     - service: light.turn_off
+#       entity_id: light.laundry_room_lights
   
 
 #- alias: LAUNDRY - Re-notify kitchen laundry is done after 1 hour

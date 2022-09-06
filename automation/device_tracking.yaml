@@ -21,9 +21,6 @@
     #     preset_mode: 'Away'
     - service: light.turn_off                           # Turn off all lights in home
       entity_id: all
-    # Not reliable enough to close automatically right now
-    #- service: cover.close_cover                        # Close garage door, if open
-    #  entity_id: cover.garage_door
     # Only proceed if its dark outside with the following services
     - condition: state
       entity_id: input_boolean.dark_outside

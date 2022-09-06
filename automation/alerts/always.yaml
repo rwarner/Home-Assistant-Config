@@ -40,7 +40,7 @@
         entity_id: camera.unifi_doorbell
         message: "Please wait"
         duration: 1 # Display for 1 minute
-    - service: script.alexa_notify_everywhere
+    - service: script.alexa_notify_house
       data_template:
         message: "Doorbell Rang"
     - delay: '00:00:02' # Wait 2 seconds so we don't get their finger in the camera

@@ -2,45 +2,45 @@
 ##### RYANS OFFICE AUTOMATIONS  ####
 ####################################
 
-- alias: RYANS OFFICE - Turn on lights from motion
-  mode: single
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.ryans_office_motion_sensor
-      from: 'off'
-      to: 'on'
-  condition:
-    - condition: state
-      entity_id: light.ryans_office_lights 
-      state: 'off'
-  action:
-    - service: light.turn_on
-      entity_id: light.ryans_office_lights
-    - service: light.turn_on
-      data:
-        entity_id: light.ryans_desk_uplighting
-        brightness_step_pct: 100
-        rgb_color: [145,226,255] #Default preferred blue
+# - alias: RYANS OFFICE - Turn on lights from motion
+#   mode: single
+#   max_exceeded: silent # Hide warnings when triggered while in delay.
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.ryans_office_motion_sensor
+#       from: 'off'
+#       to: 'on'
+#   condition:
+#     - condition: state
+#       entity_id: light.ryans_office_lights 
+#       state: 'off'
+#   action:
+#     - service: light.turn_on
+#       entity_id: light.ryans_office_lights
+#     - service: light.turn_on
+#       data:
+#         entity_id: light.ryans_desk_uplighting
+#         brightness_step_pct: 100
+#         rgb_color: [145,226,255] #Default preferred blue
 
 
-- alias: RYANS OFFICE - Turn off lights from motion
-  mode: single
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.ryans_office_motion_sensor
-      from: 'on'
-      to: 'off'
-      for:
-        minutes: 5
-  condition:
-    - condition: state
-      entity_id: light.ryans_office_lights 
-      state: 'on'
-  action:
-    - service: light.turn_off
-      entity_id: light.ryans_office_lights
+# - alias: RYANS OFFICE - Turn off lights from motion
+#   mode: single
+#   max_exceeded: silent # Hide warnings when triggered while in delay.
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.ryans_office_motion_sensor
+#       from: 'on'
+#       to: 'off'
+#       for:
+#         minutes: 5
+#   condition:
+#     - condition: state
+#       entity_id: light.ryans_office_lights 
+#       state: 'on'
+#   action:
+#     - service: light.turn_off
+#       entity_id: light.ryans_office_lights
 
 - alias: RYANS OFFICE - Good morning on first movement
   mode: single

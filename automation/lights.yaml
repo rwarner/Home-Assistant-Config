@@ -6,26 +6,25 @@
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     platform: state
-    entity_id:
-    - input_boolean.someone_at_front_door
+    entity_id: input_boolean.someone_at_front_door
     to: 'on'
   condition:
     - condition: state
-      entity_id: light.outside_front_porch
+      entity_id: light.outside_front_door
       state: 'off'
     - condition: state
       entity_id: input_boolean.dark_outside
       state: 'on'
   action:
     - service: light.turn_on
-      entity_id: light.outside_front_porch
-    # If it's after 9 pm, or before 5am turn off the light
+      entity_id: light.outside_front_door
+    # If it's after 9:00 pm, or before 5:00 am turn off the light
     - condition: time
       after: '21:00:00'
       before: '05:00:00'
     - delay: '00:03:00'
     - service: light.turn_off
-      entity_id: light.outside_front_porch
+      entity_id: light.outside_front_door
 
 - alias: LIGHTS - Turn on Floods, if motion detected (While dark)
   mode: restart
@@ -56,7 +55,7 @@
     # otherwise, we'll leave it on
     # Before 5 a.m. and after 9 p.m.
     - condition: time
-      before: '5:00:00'
+      before: '05:00:00'
       after: '21:00:00'
     - service: light.turn_off
       entity_id: 

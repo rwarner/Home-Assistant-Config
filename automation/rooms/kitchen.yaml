@@ -3,61 +3,38 @@
 ############################
 
 ## Switch kitchen tablet to Doorbell live view when doorbell is rung
-- alias: KITCHEN - Doorbell rang, change tablet to doorbell view
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.doorbell_push # Press of the doorbell
-    to: 'on'
-  - platform: state
-    entity_id: input_boolean.someone_at_front_door # Someone at front door
-    to: 'on'
-  action:
-    - service: script.turn_on_tablet_doorbell
+# - alias: KITCHEN - Doorbell rang, change tablet to doorbell view
+#   trigger:
+#   - platform: state
+#     entity_id: binary_sensor.doorbell_push # Press of the doorbell
+#     to: 'on'
+#   - platform: state
+#     entity_id: input_boolean.someone_at_front_door # Someone at front door
+#     to: 'on'
+#   action:
+#     - service: script.turn_on_tablet_doorbell
 
 #### Turn on Tablet if someone is in the kitchen 
-- alias: KITCHEN - Turn on tablet in kitchen, sensed motion
-  mode: restart # Restart on every motion, ensure that the light is always on
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.kitchen_motion_sensor
-      from: 'off'
-      to: 'on'
-  condition:
-    # Ignore any turn ons if the tablet was the last thing turned on
-    # only want to trigger if turned off, was the most recent triggered item
-    #- condition: template
-    #  value_template: "{{ ((state_attr('states.script.turn_on_kitchen_tablet.attributes', 'last_triggered') == none) or (state_attr('states.script.turn_off_kitchen_tablet.attributes', 'last_triggered') == none)) or (as_timestamp(now())-as_timestamp(states.script.turn_on_kitchen_tablet.attributes.last_triggered)) > (as_timestamp(now())-as_timestamp(states.script.turn_off_kitchen_tablet.attributes.last_triggered)) }}"
-    - condition: time
-      before: '01:30:00'
-      after: '06:00:00'
-  action:
-    - service: script.turn_on_kitchen_tablet
-    # Wait until motion goes off
-    - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'off') }}"
-    - delay:
-        minutes: 3
-    - service: script.turn_off_kitchen_tablet
-
-#### Turn on Tablet if someone is in the kitchen 
-#- alias: KITCHEN - Turn on tablet in kitchen, mlb tv morning
-#  trigger:
-#    - platform: state
-#      entity_id: sensor.kitchen_motion_sensor
-#      from: 'inactive'
-#      to: 'active'
-#  condition:
-#    - condition: state
-#      entity_id: variable.ryan_status
-#      state: 'Home' 
-#    - condition: state
-#      entity_id: variable.kelly_status
-#      state: 'Away'
-#    - condition: time
-#      before: '11:00:00'
-#      after: '06:30:00'
-#    # Only run once within the timeframe
-#    - condition: template
-#      value_template: "{{ (as_timestamp(now()) - as_timestamp(states.automation.kitchen_turn_on_tablet_in_kitchen_mlb_tv_morning.attributes.last_triggered)) > 16200}}"
-#  action:
-#    - service: script.turn_on_tablet_mlbtv
+# - alias: KITCHEN - Turn on tablet in kitchen, sensed motion
+#   mode: restart # Restart on every motion, ensure that the light is always on
+#   max_exceeded: silent # Hide warnings when triggered while in delay.
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.kitchen_motion_sensor
+#       from: 'off'
+#       to: 'on'
+#   condition:
+#     # Ignore any turn ons if the tablet was the last thing turned on
+#     # only want to trigger if turned off, was the most recent triggered item
+#     #- condition: template
+#     #  value_template: "{{ ((state_attr('states.script.turn_on_kitchen_tablet.attributes', 'last_triggered') == none) or (state_attr('states.script.turn_off_kitchen_tablet.attributes', 'last_triggered') == none)) or (as_timestamp(now())-as_timestamp(states.script.turn_on_kitchen_tablet.attributes.last_triggered)) > (as_timestamp(now())-as_timestamp(states.script.turn_off_kitchen_tablet.attributes.last_triggered)) }}"
+#     - condition: time
+#       before: '01:30:00'
+#       after: '06:00:00'
+#   action:
+#     - service: script.turn_on_kitchen_tablet
+#     # Wait until motion goes off
+#     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'off') }}"
+#     - delay:
+#         minutes: 3
+#     - service: script.turn_off_kitchen_tablet

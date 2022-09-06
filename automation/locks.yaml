@@ -37,15 +37,14 @@
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
     - service: light.turn_on
       entity_id: light.kitchen_lights # Lamps and Pendants
-      # Turn off rear entry lamp after 5 minutes
+      # Turn off Living Room Fireplace lights after 5 minutes
     - delay:
         minutes: 5
     - service: light.turn_off
       entity_id: light.living_room_fireplace
 
 
-#### Turn on Tablet when unlocking door, assuming you're coming inside
-- alias: LOCKS - When unlocking the door, turn on tablet for use, Alexa welcome home
+- alias: LOCKS - When unlocking the door, Alexa welcome home
   trigger:
     - platform: state
       entity_id: lock.front_door_deadbolt
@@ -71,11 +70,6 @@
             entity_id: variable.family_status
             state: 'Away'
   action:
-    - service: mqtt.publish
-      data:
-        topic: homeassistant
-        payload: "wakedevice"
-        qos: 0
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
     - delay: 
         seconds: 2
