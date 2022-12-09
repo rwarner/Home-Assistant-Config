@@ -83,31 +83,32 @@ notify:
     services:
       - service: mobile_app_kelly_s_iphone_13_pro_max
 
-# media_player:
-#   - platform: yamaha
-#     host: !secret yamaha_ip #Not a static ip
-#     source_ignore:
-#       - "AUDIO1"
-#       - "AUDIO2"
-#       - "AV1"
-#       - "AV2"
-#       - "AV3"
-#       - "AV4"
-#       - "AV5"
-#       - "AV6"
-#       - "AirPlay"
-#       - "HDMI5"
-#       - "NET RADIO"
-#       - "Pandora"
-#       - "Rhapsody"
-#       - "SERVER"
-#       - "SiriusXM"
-#       - "TUNER"
-#       - "USB"
-#       - "iPod (USB)"
-#     source_names:
-#       HDMI1: "NVIDIA Shield"
-#       HDMI2: "Xbox One"
+media_player:
+  - platform: yamaha
+    host: !secret yamaha_ip #Not a static ip
+    source_ignore:
+      - "AUDIO1"
+      - "AUDIO2"
+      - "AV1"
+      - "AV2"
+      - "AV3"
+      - "AV4"
+      - "AV5"
+      - "AV6"
+      - "AirPlay"
+      - "HDMI5"
+      - "NET RADIO"
+      - "Pandora"
+      - "Rhapsody"
+      - "SERVER"
+      - "SiriusXM"
+      - "TUNER"
+      - "USB"
+      - "iPod (USB)"
+    source_names:
+      HDMI1: "Shield TV"
+      HDMI2: "Playstation 4"
+      HDMI3: "Nintendo Switch"
 #  # - platform: plex   # Super unreliable for some reason
 #   - platform: smartir
 #     name: Living room TV
@@ -119,7 +120,7 @@ notify:
 wemo:
   static:
     - !secret wemo_ip_1 
-    #- !secret wemo_ip_2
+    - !secret wemo_ip_2
     #If needing to re-setup, launch HASS without switch ON -- plug in Wemo, then restart again
     #almost like you need the switch to be offline when first setting up
     #Still not statically set on network, but required without ports
@@ -130,25 +131,23 @@ camera:
   #   still_image_url: !secret unifi_rear_porch_camera_still
   #   stream_source: !secret unifi_rear_porch_camera_source
   #   verify_ssl: false
-  - platform: generic
-    name: Front Door Camera
-    #still_image_url: !secret unifi_front_door_camera_still
-    stream_source: !secret unifi_front_door_camera_source
-    verify_ssl: false
   # - platform: generic
   #   name: Living Room Camera
   #   still_image_url: !secret unifi_living_room_camera_still
   #   stream_source: !secret unifi_living_room_camera_source
   #   verify_ssl: false
-  # - platform: generic
-  #   name: Garage Camera
-  #   still_image_url: !secret unifi_garage_camera_still
-  #   stream_source: !secret unifi_garage_camera_source
-  #   verify_ssl: false
   # Changed to FFMPEG due to doorbell not compatible with HomeHabit tablet view
   - platform: ffmpeg
     name: Doorbell Camera
     input: !secret unifi_doorbell_camera_source
+  - platform: ffmpeg
+    name: Rear Patio Camera
+    input: !secret unifi_rear_patio_camera_source
+  - platform: ffmpeg
+    name: Side Patio Camera
+    #still_image_url: !secret unifi_side_patio_camera_still
+    input: !secret unifi_side_patio_camera_source
+    # verify_ssl: false
 
 # Custom HACS variable integation
 # https://github.com/rogro82/hass-variables
@@ -229,7 +228,13 @@ homekit:
   filter:
     include_domains:
       - lock
+    include_entity_globs:
+      - binary_sensor.*_door_sensor
+      - binary_sensor.*_windows
+      - binary_sensor.*_motion_sensor
+      - sensor.*_avg_temp
     include_entities:
+      - alarm_control_panel.alarm
       - light.living_room_fireplace
       - light.family_room_lights
       - light.master_bedroom_lights
@@ -239,25 +244,46 @@ homekit:
       - light.kitchen_lights
       - light.kitchen_pendants
       - light.ryans_office_desk_lamp
-      - camera.unifi_doorbell
-      - climate.family_room_ac
+      - camera.doorbell_high
+      - camera.unifi_rear_patio_high
+      - camera.unifi_side_patio_high
+      # - climate.family_room_ac
       - switch.fan
-      - binary_sensor.laundry_motion_sensor
-      - binary_sensor.kitchen_motion_sensor
-      - binary_sensor.ryans_office_motion_sensor
-      - binary_sensor.media_room_motion_sensor
-      - binary_sensor.master_bedroom_motion_sensor
-      - sensor.movie_room_avg_temp
-      - sensor.laundry_room_avg_temp
-      - sensor.kitchen_avg_temp
-      - sensor.bedroom_avg_temp
-      - sensor.ryans_office_avg_temp
+      - sensor.washer_washer_machine_state
+      - sensor.dryer_dryer_machine_state
       #- light.media_room_movie_screen
       #- camera.unifi_front_door
       #- camera.unifi_living_room
-      #- camera.unifi_garage
       #- camera.unifi_rear_porch
       #- switch.garage_door_toggle
+  entity_config:
+    binary_sensor.front_outdoor_motion_sensor:
+      linked_battery_sensor: sensor.front_outdoor_motion_sensor_battery_level
+      low_battery_threshold: 30
+    binary_sensor.kitchen_motion_sensor:
+      linked_battery_sensor: sensor.kitchen_motion_sensor_battery_level
+      low_battery_threshold: 30
+    binary_sensor.laundry_motion_sensor:
+      linked_battery_sensor: sensor.laundry_motion_sensor_battery_level
+      low_battery_threshold: 30
+    binary_sensor.master_bedroom_motion_sensor:
+      linked_battery_sensor: sensor.master_bedroom_motion_sensor_battery_level
+      low_battery_threshold: 30
+    binary_sensor.movie_room_motion_sensor:
+      linked_battery_sensor: sensor.movie_room_motion_sensor_battery_level
+      low_battery_threshold: 30
+    binary_sensor.ryans_office_motion_sensor:
+      linked_battery_sensor: sensor.ryans_office_motion_sensor_battery_level
+      low_battery_threshold: 30
+    lock.front_door_deadbolt:
+      linked_battery_sensor: sensor.front_door_deadbolt_battery_level
+      low_battery_threshold: 30
+    lock.basement_door_deadbolt:
+      linked_battery_sensor: sensor.basement_door_deadbolt_battery_level
+      low_battery_threshold: 30
+    camera.doorbell_high:
+      linked_motion_sensor: binary_sensor.motion_camera_doorbell
+      support_audio: True
 
 ####################################
 #  Energy Usage Monitoring Sensors #
@@ -295,3 +321,5 @@ script: !include_dir_merge_named configuration/scripts/
 shell_command: !include configuration/shell_command.yaml
 
 switch: !include configuration/switch.yaml
+
+mqtt: !include configuration/mqtt.yaml
