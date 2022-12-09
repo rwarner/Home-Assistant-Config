@@ -11,6 +11,7 @@
 backup/
 image/
 tts/
+blueprints/
 
 #Ignoring specific custom components below
 custom_components/alexa_media/
