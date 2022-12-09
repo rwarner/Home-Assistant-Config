@@ -9,6 +9,12 @@
     - light.bedroom_kellys_bedside
     - light.bedroom_ryans_bedside
 
+ ### Ryan's Office ###
+- platform: group
+  name: Ryans Office Lights
+  entities:
+    - light.ryans_office_desk_lamp
+
  ### Outside ###
 - platform: group
   name: Outside Lights
@@ -30,6 +36,13 @@
     - light.family_room_center_lamp
     - light.family_room_corner_lamp
 
+ ## Living Room ###
+- platform: group
+  name: Living Room Lights
+  entities:
+    - light.living_room_fireplace
+    - light.living_room_lamp
+
  ### Movie Room ###
 # - platform: group
 #   name: Movie Room Lights
@@ -37,24 +50,8 @@
 #     - light.media_room_movie_screen
 #     - light.media_room_entry_lamp
 
-### Basement Office ###
-# - platform: group
-#   name: Basement Office Lights
-#   entities:
-#     - light.basement_ryans_desk_lamp
-#     - light.basement_office_recessed
-#     - light.ryans_desk_uplighting
-
  ### Laundry Room ###
 # - platform: group
 #   name: Laundry Room Lights
 #   entities:
 #     - light.basement_laundry_light
-
- ### Living Room ###
-# - platform: group
-#   name: Living Room Lights
-#   entities:
-#     - light.living_room_center_lamp
-#     - light.living_room_entry_lamp
-#     - light.living_room_bookcase_lamp
