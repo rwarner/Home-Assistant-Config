@@ -8,12 +8,6 @@
 #     - /home/homeassistant/.homeassistant/home-assistant_v2.db
 #   scan_interval: 1800
 
-# - platform: radarr
-#   api_key: !secret radarr_api
-#   host: !secret radarr_ip
-#   port: !secret radarr_port
-#   days: 7
-
 - platform: tautulli
   api_key: !secret tautulli_api
   host: !secret tautulli_ip
