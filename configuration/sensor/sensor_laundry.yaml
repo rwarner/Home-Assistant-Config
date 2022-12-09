@@ -10,7 +10,13 @@
         value_template: >-
           {% set rem_h = (as_timestamp(states.sensor.washer_washer_completion_time.state) - as_timestamp(now())) | timestamp_custom('%-H', false) %}
           {% set rem_m = (as_timestamp(states.sensor.washer_washer_completion_time.state) - as_timestamp(now())) | timestamp_custom('%-M', false) %}
-          {% if int(rem_h) > 0.9 %} {{ rem_h }} hour(s) and {{ rem_m }} minute(s)  {% else %} {{ rem_m }} minute(s) {% endif %}
+          {% if int(rem_h) > 0.9 and int(rem_h) < 2.0 %} 
+            {{ rem_h }} hour(s) and {{ rem_m }} minute(s)
+          {% elif int(rem_h) > 2.0 %}
+            Not Running
+          {% else %} 
+            {{ rem_m }} minute(s) 
+          {% endif %}
 
  - platform: template
    sensors:
@@ -19,7 +25,13 @@
         value_template: >-
           {% set rem_h = (as_timestamp(states.sensor.dryer_dryer_completion_time.state) - as_timestamp(now())) | timestamp_custom('%-H', false) %}
           {% set rem_m = (as_timestamp(states.sensor.dryer_dryer_completion_time.state) - as_timestamp(now())) | timestamp_custom('%-M', false) %}
-          {% if int(rem_h) > 0.9 %} {{ rem_h }} hour(s) and {{ rem_m }} minute(s)  {% else %} {{ rem_m }} minute(s) {% endif %}
+          {% if int(rem_h) > 0.9 and int(rem_h) < 2.0 %} 
+            {{ rem_h }} hour(s) and {{ rem_m }} minute(s)
+          {% elif int(rem_h) > 2.0 %}
+            Not Running
+          {% else %} 
+            {{ rem_m }} minute(s) 
+          {% endif %}
 
 # 2/26/21 not in use
 # - platform: template
