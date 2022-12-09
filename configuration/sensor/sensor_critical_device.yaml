@@ -82,9 +82,9 @@
       {% endif %}"
       friendly_name: 'Rear Porch Camera'
       icon_template: mdi:cctv
-    front_door_camera:
-      value_template: "{% if states.device_tracker.front_door_camera %}
-      {% if is_state('device_tracker.front_door_camera', 'home') %}
+    side_patio_camera:
+      value_template: "{% if states.device_tracker.side_patio_camera %}
+      {% if is_state('device_tracker.side_patio_camera', 'home') %}
         Online
       {% else %}
         Offline
