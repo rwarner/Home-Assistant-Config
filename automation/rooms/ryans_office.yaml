@@ -57,3 +57,22 @@
     - service: script.alexa_notify_ryans_office
       data_template:
         message: "Good morning Ryan."
+
+
+- alias: RYANS OFFICE - Turn on lights from switch
+  trigger:
+    - platform: state
+      entity_id: switch.ryan_s_office_switch_2
+      to: 'off'
+  action:
+    - service: light.turn_off
+      entity_id: light.ryans_office_lights
+
+- alias: RYANS OFFICE - Turn off lights from switch
+  trigger:
+    - platform: state
+      entity_id: switch.ryan_s_office_switch_2
+      to: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.ryans_office_lights
