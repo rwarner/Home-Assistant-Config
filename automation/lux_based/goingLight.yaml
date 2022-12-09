@@ -11,7 +11,7 @@
     # Only proceed, if we haven't used this in the last 12 hours
     - condition: template 
       value_template: "{{ (state_attr('states.automation.going_light_turn_off_lights_outside_when_light_outside.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_light_turn_off_lights_outside_when_light_outside.attributes.last_triggered)) > 43200) }}"
-    # Only after 4 pm and before 9pm
+    # Only after 5 am and before 11am
     - condition: time
       after: '05:00:00'
       before: '11:00:00'

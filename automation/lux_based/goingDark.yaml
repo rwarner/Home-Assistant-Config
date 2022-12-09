@@ -3,8 +3,7 @@
 #################################
 
 #   Turn on Family Room Lights to 90%, Outside to 100%
-#   turn off unneeded lights if nobody is home: center lamp,
-#   bookcase lamp, undercabinet kitchen lights
+#   turn off unneeded lights if nobody is home
 - alias: GOING DARK - Turn on lights when outside gets dark
   trigger:
     # Make sure that it's dark outside
@@ -15,9 +14,10 @@
     # Only proceed, if we haven't used this in the last 12 hours
     - condition: template 
       value_template: "{{ (state_attr('states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered)) > 43200) }}"
-    # Only after 4 pm and before 9pm
+    # Only after 3 pm and before 9pm
+    # Has gotten dark in November in 3-4pm
     - condition: time
-      after: '16:00:00'
+      after: '15:00:00'
       before: '21:00:00'
   action:
     - service: light.turn_on
@@ -25,6 +25,7 @@
         entity_id: 
           - light.family_room_lights
           - light.kitchen_lights
+          - light.living_room_lights
         brightness_pct: 90
         transition: 10
     - service: light.turn_on
@@ -40,6 +41,4 @@
       state: armed_away
     - service: light.turn_off
       entity_id: 
-        - light.living_room_fireplace
-        - light.living_room_corner_lamp
         - light.kitchen_ceiling_lights

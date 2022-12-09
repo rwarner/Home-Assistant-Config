@@ -9,11 +9,19 @@
     - platform: numeric_state
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       below: 500
-  # condition:
-    # # Only after 4 pm and before 9pm
-    # - condition: time
-    #   after: '16:00:00'
-    #   before: '21:00:00'
+  condition:
+    # Only execute once per day
+    - "{{ state_attr(this.entity_id, 'last_triggered').date() < now().date() }}"
+    # Only after 12:00 pm and before 9pm
+    # November was hitting 500 lux before 2:30 p.m.
+    - condition: time
+      after: '12:00:00'
+      before: '21:00:00'
+
+    # # Only proceed, if we haven't used the light out in the last 6 hours
+    # - condition: template 
+    #   value_template: "{{ (state_attr('states.automation.going_dark_set_dark_outside_input_boolean_to_off_light_out.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_dark_set_dark_outside_input_boolean_to_off_light_out.attributes.last_triggered)) > 21600) }}"
+    
   action:
     - service: homeassistant.turn_on
       entity_id: input_boolean.dark_outside
@@ -25,7 +33,13 @@
     - platform: numeric_state
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       above: 400
-  # condition:
+  condition:
+    # Only execute once per day
+    - "{{ state_attr(this.entity_id, 'last_triggered').date() < now().date() }}"
+
+    # Only proceed, if we haven't used dark off in the last 6 hours
+    # - condition: template 
+    #   value_template: "{{ (state_attr('states.automation.going_dark_set_dark_outside_input_boolean_to_on_dark_out.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_dark_set_dark_outside_input_boolean_to_on_dark_out.attributes.last_triggered)) > 21600) }}"
     # # Only after 4 pm and before 9pm
     # - condition: time
     #   after: '05:00:00'
