@@ -71,7 +71,7 @@
         - sensor.smartthings_hub
         - sensor.synology_nas
         - sensor.yamaha_reciever
-        - sensor.front_door_camera
+        - sensor.side_patio_camera
         - sensor.doorbell_camera
         - sensor.living_room_camera
         - sensor.garage_camera
@@ -172,7 +172,9 @@
   action:
     - service: notify.ryan_devices
       data:
-        title: "\uD83D\uDCEB\uD83D\uDCEB  Mail has arrived  \uD83D\uDCEB\uD83D\uDCEB"
+        # UTF-8 issue as of 2022.8
+        #title: "\uD83D\uDCEB\uD83D\uDCEB  Mail has arrived  \uD83D\uDCEB\uD83D\uDCEB"
+        title: "Mail has arrived"
         message: ""
     - service: script.alexa_notify_kitchen
       data_template:
