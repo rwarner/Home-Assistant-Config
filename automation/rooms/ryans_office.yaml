@@ -57,9 +57,14 @@
     - service: script.alexa_notify_ryans_office
       data_template:
         message: "Good morning Ryan."
+      # Turn on light, if level is below 30 lx
+    - condition: numeric_state
+      entity_id: sensor.ryans_office_motion_sensor_illuminance
+      below: 30
+    - service: light.turn_on
+      entity_id: light.ryans_office_lights
 
-
-- alias: RYANS OFFICE - Turn on lights from switch
+- alias: RYANS OFFICE - Turn off lights from switch
   trigger:
     - platform: state
       entity_id: switch.ryan_s_office_switch_2
@@ -68,7 +73,7 @@
     - service: light.turn_off
       entity_id: light.ryans_office_lights
 
-- alias: RYANS OFFICE - Turn off lights from switch
+- alias: RYANS OFFICE - Turn on lights from switch
   trigger:
     - platform: state
       entity_id: switch.ryan_s_office_switch_2
