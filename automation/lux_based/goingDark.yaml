@@ -14,11 +14,6 @@
     # Only proceed, if we haven't used this in the last 12 hours
     - condition: template 
       value_template: "{{ (state_attr('states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered)) > 43200) }}"
-    # Only after 3 pm and before 9pm
-    # Has gotten dark in November in 3-4pm
-    - condition: time
-      after: '15:00:00'
-      before: '21:00:00'
   action:
     - service: light.turn_on
       data:
