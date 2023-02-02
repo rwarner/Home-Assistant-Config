@@ -122,18 +122,18 @@
 - alias: ALERT - HA Update Available to Mobile App
   trigger:
     - platform: state
-      entity_id: binary_sensor.updater
+      entity_id: binary_sensor.home_assistant_website_update_available
       from: 'off'
       to: 'on'
   action:
     service: notify.ryan_devices
     data:
       title: "New Version of HASS Available"
-      message: "Release Notes for {{ state_attr('binary_sensor.updater', 'newest_version') }}: {{ state_attr('binary_sensor.updater', 'release_notes') }}"   
+      message: "Release Notes for {{ states('sensor.home_assistant_website') }}: {{ state_attr('sensor.home_assistant_website', 'release_notes') }}"   
       data:
         ttl: 0
         priority: high
-        clickAction: "{{ state_attr('binary_sensor.updater', 'release_notes') }}"
+        clickAction: "{{ state_attr('sensor.home_assistant_website', 'release_notes') }}"
 
 - alias: ALERT - Low battery on sensor, notify Mobile App
   mode: single # Only run once at a time  
