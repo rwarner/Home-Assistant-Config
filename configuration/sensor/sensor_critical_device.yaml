@@ -27,8 +27,8 @@
       {% endif %}"
       friendly_name: 'Synology NAS'
     kitchen_tablet:
-      value_template: "{% if states.device_tracker.nexus_9 %}
-      {% if is_state('device_tracker.nexus_9', 'home') %}
+      value_template: "{% if states.device_tracker.kitchen_fire_tablet %}
+      {% if is_state('device_tracker.kitchen_fire_tablet', 'home') %}
         Online
       {% else %}
         Offline
