@@ -155,7 +155,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._name = discovery_info.properties['name']
         self._vendor = discovery_info.properties['vendor']
         self._version = discovery_info.properties['version']
-        self._uuid = discovery_info.properties['name']  # this is not right.  we need a uuid
+        self._uuid = discovery_info.name
         self._webapp_url = discovery_info.properties['web_app']
         self._api_path = discovery_info.properties['path']
 
