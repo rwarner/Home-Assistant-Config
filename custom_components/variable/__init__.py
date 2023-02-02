@@ -123,7 +123,7 @@ async def async_setup(hass, config):
                 for variable in target_variables
             ]
             if tasks:
-                yield from asyncio.wait(tasks, loop=hass.loop)
+                yield from asyncio.wait(tasks)
 
         else:
             _LOGGER.warning("Failed to set unknown variable: %s", entity_id)
