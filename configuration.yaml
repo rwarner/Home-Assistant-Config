@@ -151,27 +151,24 @@ camera:
     #still_image_url: !secret unifi_side_patio_camera_still
     input: !secret unifi_side_patio_camera_source
     # verify_ssl: false
+  - platform: ffmpeg
+    name: Under Porch Camera
+    input: !secret unifi_under_porch_camera_source
 
 # Custom HACS variable integation
 # https://github.com/rogro82/hass-variables
 # Changed from input_select_dropdown to variables for being
 # able to keep states through restarts
-variable:
-  ryan_status:
-    restore: true
-  kelly_status:
-    restore: true
-  family_status:
-    restore: true
-  tautilli_data:
-    value: ""
-    restore: true
-
-unifiprotect:
-  host: !secret unifiprotect_ip
-  username: !secret unifiprotect_user
-  password: !secret unifiprotect_pass
-  port: !secret unifiprotect_port
+# variable:
+#   ryan_status:
+#     restore: true
+#   kelly_status:
+#     restore: true
+#   family_status:
+#     restore: true
+#   tautilli_data:
+#     value: ""
+#     restore: true
 
 # smartir:
 
@@ -193,8 +190,10 @@ input_boolean:
     name: Whether or not the mail has arrived
   someone_at_front_door:
     name: Whether or not someone is at the front door
-  someone_at_rear_porch:
-    name: Whether or not someone is at the rear porch
+  someone_at_rear_patio:
+    name: Whether or not someone is at the rear patio
+  someone_at_side_patio:
+    name: Whether or not someone is at the side patio
   first_movement_ryans_office:
     name: First movement of the day in ryans office
   dark_outside:
@@ -239,6 +238,7 @@ homekit:
     include_entities:
       - alarm_control_panel.alarm
       - light.living_room_fireplace
+      - light.living_room_lamp
       - light.family_room_lights
       - light.master_bedroom_lights
       - light.outside_front_door
@@ -250,6 +250,7 @@ homekit:
       - camera.doorbell_high
       - camera.unifi_rear_patio_high
       - camera.unifi_side_patio_high
+      - camera.unifi_under_porch_high
       # - climate.family_room_ac
       - switch.fan
       - sensor.washer_washer_machine_state
@@ -326,3 +327,5 @@ shell_command: !include configuration/shell_command.yaml
 switch: !include configuration/switch.yaml
 
 mqtt: !include configuration/mqtt.yaml
+
+rest_command: !include configuration/rest_command.yaml

@@ -2,14 +2,14 @@
 ###### VARIABLES CUSTOMIZATION  ####
 ####################################
 
-variable.ryan_status:
+sensor.ryan_status:
   friendly_name: Ryan
   icon: mdi:account
 
-variable.kelly_status:
+sensor.kelly_status:
   friendly_name: Kelly
   icon: mdi:account
 
-variable.family_status:
+sensor.family_status:
   friendly_name: Family
   icon: mdi:account

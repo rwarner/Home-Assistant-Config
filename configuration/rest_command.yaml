@@ -1,0 +1,10 @@
+##########################################
+####### REST COMMAND CONFIGURATION  ######
+##########################################
+
+amplipi_announce:
+    url: !secret amplipi_announce_url
+    method: POST
+    payload: '{"media": "{{ media_url }}" }'
+    content_type:  'application/json'
+    verify_ssl: false

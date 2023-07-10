@@ -50,31 +50,19 @@
         message: ""
         data:
           entity_id: camera.doorbell_camera
-      # data:
-      #   title: "Doorbell Rang"
-      #   message: ""
-      #   data:
-      #     image: "/api/camera_proxy/camera.unifi_doorbell" # Captures image immediately, sends via notification
-      #     ttl: 0
-      #     priority: high
-      #     clickAction: "/lovelace/camera_view"
 
 - alias: ALERT - When a critical device goes offline to mobile app
   trigger:
     - platform: state
       entity_id: 
-        - sensor.mac_mini_server
         - sensor.hdhomerun_extend
-        - sensor.hue_bridge
         - sensor.kitchen_tablet
         - sensor.logitech_harmony_hub
-        - sensor.smartthings_hub
         - sensor.synology_nas
         - sensor.yamaha_reciever
-        - sensor.side_patio_camera
         - sensor.doorbell_camera
-        - sensor.living_room_camera
-        - sensor.garage_camera
+        - sensor.side_patio_camera
+        - sensor.rear_patio_camera
       from: 'Online'
       to: 'Offline'
       for:
@@ -160,6 +148,29 @@
         data:
           clickAction: "/lovelace/devices_view"
 
+- alias: ALERT - Sensor went unavailable, notify Mobile App
+  mode: single # Only run once at a time  
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    platform: state
+    entity_id:
+      - binary_sensor.family_room_front_window_1_sensor
+      - binary_sensor.family_room_front_window_2_sensor
+      - binary_sensor.living_room_front_window_sensor
+      - binary_sensor.living_room_side_window_1_sensor
+      - binary_sensor.kitchen_window_sensor
+      - binary_sensor.basement_door_sensor
+      - binary_sensor.front_door_sensor
+      - binary_sensor.ryans_office_door_sensor
+    to: "unavailable"
+  action:
+    - service: notify.ryan_devices
+      data:
+        title: "Sensor Unavailable"
+        message: "{{trigger.from_state.attributes.friendly_name}} is unavailable, reset"
+        data:
+          clickAction: "/lovelace/devices_view"
+
 - alias: ALERT - Notify when the physical mail comes
   trigger:
     - platform: state
@@ -204,7 +215,7 @@
     - delay: '00:00:20' # Wait until file is done being modified
     - service: notify.home_assistant # Discord notification name change to Discord server name
       data_template:
-        message: 'Motion detected'
+        message: 'Motion: {{ trigger.event.data.file }}'
         target: "658174234480082997"
         title: Device Alert
         data:

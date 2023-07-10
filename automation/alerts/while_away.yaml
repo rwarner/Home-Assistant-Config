@@ -30,13 +30,13 @@
             uri: 'app://com.ubnt.unifi.protect'
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
-- alias: ALERT (AWAY) - Motion at Rear Porch, notify Mobile App
+- alias: ALERT (AWAY) - Motion at Rear Patio, notify Mobile App
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     platform: state
     entity_id:
-      - input_boolean.someone_at_rear_porch
+      - input_boolean.someone_at_rear_patio
     to: 'on'
   condition:
     - condition: state
@@ -45,10 +45,34 @@
   action:
     - service: notify.ryan_devices
       data:
-        title: "Rear Porch Motion"
+        title: "Rear Patio Motion"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.unifi_rear_porch" #Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.unifi_rear_patio_high" #Captures image immediately, sends via notification
+          ttl: 0
+          priority: high
+          clickAction: "/lovelace/camera_view"
+    - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
+
+- alias: ALERT (AWAY) - Motion at Side Patio, notify Mobile App
+  mode: single # Only run once at a time  
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    platform: state
+    entity_id:
+      - input_boolean.someone_at_side_patio
+    to: 'on'
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.alarm
+      state: armed_away
+  action:
+    - service: notify.ryan_devices
+      data:
+        title: "Side Patio Motion"
+        message: ""
+        data:
+          image: "/api/camera_proxy/camera.unifi_side_patio_high" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"

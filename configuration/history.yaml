@@ -12,9 +12,9 @@ include:
     - sensor.ecobee_preset
     - alarm_control_panel.alexa_guard_de7c8
     - alarm_control_panel.alarm
-    - variable.kelly_status
-    - variable.ryan_status
-    - variable.family_status
+    - sensor.kelly_status
+    - sensor.ryan_status
+    - sensor.family_status
     - binary_sensor.living_room_occupancy
     - binary_sensor.thermostat_occupancy
     - binary_sensor.basement_laundry_sensor_motion

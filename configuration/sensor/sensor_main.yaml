@@ -12,16 +12,6 @@
   api_key: !secret tautulli_api
   host: !secret tautulli_ip
 
-- platform: template
-  sensors:
-    ryan_status:
-      value_template: '{{ states.variable.ryan_status.state }}'
-      friendly_name: 'Ryan'
-    kelly_status:
-      value_template: '{{ states.variable.kelly_status.state }}'
-      friendly_name: 'Kelly'
-
-
 # Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
 # - platform: template
 #   sensors:

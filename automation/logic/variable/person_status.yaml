@@ -30,13 +30,13 @@
           {% endif %}
         value: >
           {% if trigger.entity_id == 'person.ryan' %}
-            {% if states.variable.ryan_status.state == 'Just Left' %}
+            {% if states.sensor.ryan_status.state == 'Just Left' %}
               Home
             {% else %}
               Just Arrived
             {% endif %}
           {% else %}
-            {% if states.variable.kelly_status.state == 'Just Left' %}
+            {% if states.sensor.kelly_status.state == 'Just Left' %}
               Home
             {% else %}
               Just Arrived
@@ -48,28 +48,28 @@
   mode: parallel
   trigger:
     - platform: state
-      entity_id: variable.ryan_status
+      entity_id: sensor.ryan_status
       to: 'Just Arrived'
       for:
         minutes: 10
     - platform: state
-      entity_id: variable.kelly_status
+      entity_id: sensor.kelly_status
       to: 'Just Arrived'
       for:
         minutes: 10
     - platform: state
-      entity_id: variable.ryan_status
+      entity_id: sensor.ryan_status
       from: 'Just Left'
       to: 'Just Arrived'
     - platform: state
-      entity_id: variable.kelly_status
+      entity_id: sensor.kelly_status
       from: 'Just Left'
       to: 'Just Arrived'
   action:
     - service: variable.set_variable
       data_template:
         variable: >
-          {% if trigger.entity_id == 'variable.ryan_status' %}
+          {% if trigger.entity_id == 'sensor.ryan_status' %}
             ryan_status
           {% else %}
             kelly_status
@@ -102,12 +102,12 @@
   mode: parallel
   trigger:
     - platform: state
-      entity_id: variable.ryan_status
+      entity_id: sensor.ryan_status
       to: 'Just Left'
       for:
         minutes: 10
     - platform: state
-      entity_id: variable.kelly_status
+      entity_id: sensor.kelly_status
       to: 'Just Left'
       for:
         minutes: 10
@@ -115,7 +115,7 @@
     - service: variable.set_variable
       data_template:
         variable: >
-          {% if trigger.entity_id == 'variable.ryan_status' %}
+          {% if trigger.entity_id == 'sensor.ryan_status' %}
             ryan_status
           {% else %}
             kelly_status
@@ -126,12 +126,12 @@
   mode: parallel
   trigger:
     - platform: state
-      entity_id: variable.ryan_status
+      entity_id: sensor.ryan_status
       to: 'Away'
       for:
         hours: 24
     - platform: state
-      entity_id: variable.kelly_status
+      entity_id: sensor.kelly_status
       to: 'Away'
       for:
         hours: 24
@@ -139,7 +139,7 @@
     - service: variable.set_variable
       data_template:
         variable: >
-          {% if trigger.entity_id == 'variable.ryan_status' %}
+          {% if trigger.entity_id == 'sensor.ryan_status' %}
             ryan_status
           {% else %}
             kelly_status
@@ -151,29 +151,29 @@
   mode: parallel
   trigger:
     - platform: state
-      entity_id: variable.ryan_status
+      entity_id: sensor.ryan_status
       from: 'Just Left'
       to: 'Away'
     - platform: state
-      entity_id: variable.kelly_status
+      entity_id: sensor.kelly_status
       from: 'Just Left'
       to: 'Away'
   condition:
     - condition: or
       conditions:
         - condition: state
-          entity_id: variable.ryan_status
+          entity_id: sensor.ryan_status
           state: 'Away'
         - condition: state
-          entity_id: variable.ryan_status
+          entity_id: sensor.ryan_status
           state: 'Extended Away' 
     - condition: or
       conditions:
         - condition: state
-          entity_id: variable.kelly_status
+          entity_id: sensor.kelly_status
           state: 'Away'
         - condition: state
-          entity_id: variable.kelly_status
+          entity_id: sensor.kelly_status
           state: 'Extended Away' 
   action:
     - service: variable.set_variable
@@ -185,35 +185,35 @@
   mode: parallel
   trigger:
     - platform: state
-      entity_id: variable.ryan_status
+      entity_id: sensor.ryan_status
       from: 'Away'
       to: 'Just Arrived'
     - platform: state
-      entity_id: variable.ryan_status
+      entity_id: sensor.ryan_status
       from: 'Extended Away'
       to: 'Just Arrived'
     - platform: state
-      entity_id: variable.kelly_status
+      entity_id: sensor.kelly_status
       from: 'Away'
       to: 'Just Arrived'
     - platform: state
-      entity_id: variable.kelly_status
+      entity_id: sensor.kelly_status
       from: 'Extended Away'
       to: 'Just Arrived'
   condition:
     condition: or
     conditions:
       - condition: state
-        entity_id: variable.ryan_status
+        entity_id: sensor.ryan_status
         state: 'Just Arrived'
       - condition: state
-        entity_id: variable.ryan_status
+        entity_id: sensor.ryan_status
         state: 'Home'
       - condition: state
-        entity_id: variable.kelly_status
+        entity_id: sensor.kelly_status
         state: 'Just Arrived'
       - condition: state
-        entity_id: variable.kelly_status
+        entity_id: sensor.kelly_status
         state: 'Home'
   action:
     - service: variable.set_variable

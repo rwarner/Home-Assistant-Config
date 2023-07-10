@@ -5,7 +5,7 @@
 - alias: DEVICE_TRACK - Nobody home, lock doors, arm alexa, set Tstat to Away, turn off Lights, etc..
   trigger:
     - platform: state
-      entity_id: variable.family_status
+      entity_id: sensor.family_status
       from: 'Home'
       to: 'Away'
   action:
@@ -33,7 +33,7 @@
 - alias: DEVICE_TRACK - Someone arrived home, disable alarm, set Thermostat to Home
   trigger:
     - platform: state
-      entity_id: variable.family_status
+      entity_id: sensor.family_status
       from: 'Away'
       to: 'Home'
   action:

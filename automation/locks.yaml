@@ -4,7 +4,7 @@
 
 
 # Checking for if Ryan / Kelly / All_devices has changed within the last 10 minutes
-# or if variable.family_status is "Away" and our phones haven't connected to WiFi yet
+# or if sensor.family_status is "Away" and our phones haven't connected to WiFi yet
 # Only if it's currently "dark_outside"
 - alias: LOCKS - When unlocking the door, turn on lights inside if before/after sun and nobody is home
   max_exceeded: silent # Hide warnings when triggered while in delay.
@@ -19,13 +19,13 @@
       - condition: or
         conditions:
           - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.kelly_status.last_changed)) < 600 }}"
+            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.kelly_status.last_changed)) < 600 }}"
           - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.ryan_status.last_changed)) < 600 }}"
+            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.ryan_status.last_changed)) < 600 }}"
           - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.family_status.last_changed)) < 600 }}"
+            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.family_status.last_changed)) < 600 }}"
           - condition: state
-            entity_id: variable.family_status
+            entity_id: sensor.family_status
             state: 'Away'
       - condition: state
         entity_id: input_boolean.dark_outside
@@ -61,13 +61,13 @@
           # If in the last ten minutes, either phones have changed or the group family has changed.
           # Or if nobody is home at all when entering (typical)
           - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.kelly_status.last_changed)) < 600 }}"
+            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.kelly_status.last_changed)) < 600 }}"
           - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.ryan_status.last_changed)) < 600 }}"
+            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.ryan_status.last_changed)) < 600 }}"
           - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.variable.family_status.last_changed)) < 600 }}"
+            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.family_status.last_changed)) < 600 }}"
           - condition: state
-            entity_id: variable.family_status
+            entity_id: sensor.family_status
             state: 'Away'
   action:
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
@@ -77,19 +77,19 @@
       data_template:
         title: "Welcome home!"
         message: >
-          {% if is_state('variable.ryan_status', 'Just Arrived') and is_state('variable.kelly_status', 'Just Arrived') %}
+          {% if is_state('sensor.ryan_status', 'Just Arrived') and is_state('sensor.kelly_status', 'Just Arrived') %}
           Welcome home, Ryan and Kelly!
-          {% elif is_state('variable.ryan_status', 'Just Arrived') and (is_state('variable.kelly_status', 'Away') or is_state('variable.kelly_status', 'Home')) %}
+          {% elif is_state('sensor.ryan_status', 'Just Arrived') and (is_state('sensor.kelly_status', 'Away') or is_state('sensor.kelly_status', 'Home')) %}
           Welcome home, Ryan!
-          {% elif (is_state('variable.ryan_status', 'Away') or is_state('variable.ryan_status', 'Home')) and is_state('variable.kelly_status', 'Just Arrived') %}
+          {% elif (is_state('sensor.ryan_status', 'Away') or is_state('sensor.ryan_status', 'Home')) and is_state('sensor.kelly_status', 'Just Arrived') %}
           Welcome home, Kelly!
           {% else %}
           Welcome home!
           {% endif %}
 
-          {% if states.variable.tautilli_data.state == "" %}
+          {% if states.sensor.tautilli_data.state == "" %}
           {% else %}
-          {{ states.variable.tautilli_data.state }} has been added to Plex while you were away. 
+          {{ states.sensor.tautilli_data.state }} has been added to Plex while you were away. 
           {% endif %}
 
     #Reset variable after using it for announcement

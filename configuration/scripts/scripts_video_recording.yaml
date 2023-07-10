@@ -2,7 +2,7 @@
 capture_front_door_video:
   mode: queued
   sequence:
-    - delay: '00:00:02'
+    # - delay: '00:00:02'
     - service: camera.record
       data:
         entity_id: camera.doorbell_camera
@@ -10,14 +10,25 @@ capture_front_door_video:
         duration: 15
         lookback: 2
 
-capture_rear_porch_video:
+capture_rear_patio_video:
   mode: queued
   sequence:
-    - delay: '00:00:02'
+    # - delay: '00:00:02'
     - service: camera.record
       data:
-        entity_id: camera.rear_porch_camera
-        filename: '/tmp/hass/rear_porch_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        entity_id: camera.rear_patio_camera
+        filename: '/tmp/hass/rear_patio_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        duration: 15
+        lookback: 2
+
+capture_side_patio_video:
+  mode: queued
+  sequence:
+    # - delay: '00:00:02'
+    - service: camera.record
+      data:
+        entity_id: camera.side_patio_camera
+        filename: '/tmp/hass/side_patio_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 15
         lookback: 2
 

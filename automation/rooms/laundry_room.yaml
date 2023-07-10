@@ -12,7 +12,7 @@
       minutes: 20
   condition:
     - condition: state
-      entity_id: variable.family_status 
+      entity_id: sensor.family_status 
       state: 'Home'
   action:
     - wait_for_trigger:
@@ -33,7 +33,7 @@
       minutes: 20
   condition:
     - condition: state
-      entity_id: variable.family_status 
+      entity_id: sensor.family_status 
       state: 'Home'
   action:
     - wait_for_trigger:
@@ -54,7 +54,7 @@
       minutes: 20
   condition:
     - condition: state
-      entity_id: variable.family_status 
+      entity_id: sensor.family_status 
       state: 'Home'
   action:
     - wait_for_trigger:
@@ -80,7 +80,7 @@
 #       minutes: 1
 #   condition:
 #     - condition: state
-#       entity_id: variable.family_status 
+#       entity_id: sensor.family_status 
 #       state: 'Home'
 #   action:
 #     - service: script.alexa_notify_house
