@@ -93,8 +93,9 @@
           {% endif %}
 
     #Reset variable after using it for announcement
-    - service: variable.set_variable
+    - service: variable.update_sensor
       data:
-        variable: tautilli_data
         value: ""
+      target:
+        entity_id: sensor.tautilli_data
 

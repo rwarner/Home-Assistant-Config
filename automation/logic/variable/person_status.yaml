@@ -20,14 +20,8 @@
       from: 'not_home'
       to: 'home'
   action:
-    - service: variable.set_variable
+    - service: variable.update_sensor
       data_template:
-        variable: >
-          {% if trigger.entity_id == 'person.ryan' %}
-            ryan_status
-          {% else %}
-            kelly_status
-          {% endif %}
         value: >
           {% if trigger.entity_id == 'person.ryan' %}
             {% if states.sensor.ryan_status.state == 'Just Left' %}
@@ -41,6 +35,13 @@
             {% else %}
               Just Arrived
             {% endif %}
+          {% endif %} 
+      target:
+        entity_id: >
+          {% if trigger.entity_id == 'person.ryan' %}
+            sensor.ryan_status
+          {% else %}
+            sensor.kelly_status
           {% endif %}
 
 
@@ -66,15 +67,16 @@
       from: 'Just Left'
       to: 'Just Arrived'
   action:
-    - service: variable.set_variable
-      data_template:
-        variable: >
-          {% if trigger.entity_id == 'sensor.ryan_status' %}
-            ryan_status
-          {% else %}
-            kelly_status
-          {% endif %}
+    - service: variable.update_sensor
+      data:
         value: Home
+      target:
+        entity_id: >
+          {% if trigger.entity_id == 'sensor.ryan_status' %}
+            sensor.ryan_status
+          {% else %}
+            sensor.kelly_status
+          {% endif %}
  
 - alias: PERSON - Mark person as just left
   mode: parallel
@@ -88,15 +90,16 @@
       from: 'home'
       to: 'not_home'
   action:
-    - service: variable.set_variable
-      data_template:
-        variable: >
-          {% if trigger.entity_id == 'person.ryan' %}
-            ryan_status
-          {% else %}
-            kelly_status
-          {% endif %}
+    - service: variable.update_sensor
+      data:
         value: Just Left
+      target:
+        entity_id: >
+          {% if trigger.entity_id == 'person.ryan' %}
+            sensor.ryan_status
+          {% else %}
+            sensor.kelly_status
+          {% endif %}
  
 - alias: PERSON - Mark person as not_home
   mode: parallel
@@ -112,15 +115,16 @@
       for:
         minutes: 10
   action:
-    - service: variable.set_variable
-      data_template:
-        variable: >
-          {% if trigger.entity_id == 'sensor.ryan_status' %}
-            ryan_status
-          {% else %}
-            kelly_status
-          {% endif %}
+    - service: variable.update_sensor
+      data:
         value: Away
+      target:
+        entity_id: >
+          {% if trigger.entity_id == 'sensor.ryan_status' %}
+            sensor.ryan_status
+          {% else %}
+            sensor.kelly_status
+          {% endif %}
  
 - alias: PERSON - Mark person as extended not_home
   mode: parallel
@@ -136,15 +140,16 @@
       for:
         hours: 24
   action:
-    - service: variable.set_variable
-      data_template:
-        variable: >
-          {% if trigger.entity_id == 'sensor.ryan_status' %}
-            ryan_status
-          {% else %}
-            kelly_status
-          {% endif %}
+    - service: variable.update_sensor
+      data:
         value: Extended Away
+      target:
+        entity_id: >
+          {% if trigger.entity_id == 'sensor.ryan_status' %}
+            sensor.ryan_status
+          {% else %}
+            sensor.kelly_status
+          {% endif %}
         
         
 - alias: PERSON - Mark Family as Away if both go from Just Left to Away
@@ -176,10 +181,11 @@
           entity_id: sensor.kelly_status
           state: 'Extended Away' 
   action:
-    - service: variable.set_variable
+    - service: variable.update_sensor
       data:
-        variable: family_status
         value: Away
+      target:
+        entity_id: sensor.family_status
 
 - alias: PERSON - Mark Family as Home if someone goes from Away to Just Arrived
   mode: parallel
@@ -216,7 +222,8 @@
         entity_id: sensor.kelly_status
         state: 'Home'
   action:
-    - service: variable.set_variable
+    - service: variable.update_sensor
       data:
-        variable: family_status
         value: Home
+      target:
+        entity_id: sensor.family_status

@@ -35,7 +35,8 @@
         before: '07:00:00'
         after: '23:30:00'
   action:
-    - service: variable.set_variable
+    - service: variable.update_sensor
       data_template:
-        variable: tautilli_data
         value: "{{ trigger.payload_json['body'] }}, {{ states.sensor.tautilli_data.state }}"
+      target:
+        entity_id: sensor.tautilli_data
