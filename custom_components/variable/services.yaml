@@ -1,25 +1,133 @@
-# Example services.yaml entry
+update_sensor:
+  name: Update Sensor Variable
+  description: Update a Sensor Variable value and/or its attributes.
+  target:
+    entity:
+      integration: variable
+      domain: sensor
+  fields:
+    value:
+      name: New Value
+      description: "New value to set. If a device class and native unit of measurement is set: 1. This will update the value in the native unit of measurement not necessarily the displayed unit of measurement if they are different. 2. It will give an error if the value is not a supported type for the device class (ex. setting a string for a temperature device class) (optional)"
+      example: 9
+      selector:
+        text:
+    attributes:
+      name: New Attributes
+      description: Attributes to set or update [dictionary] (optional)
+      example: "{'key': 'value'}"
+      selector:
+        object:
+    replace_attributes:
+      name: Replace Attributes
+      description: Replace or merge current attributes [boolean] (optional) (default false = merge)
+      required: true
+      default: false
+      example: "false"
+      selector:
+        boolean:
+
+update_binary_sensor:
+  name: Update Binary Sensor Variable
+  description: Update a Binary Sensor Variable value and/or its attributes.
+  target:
+    entity:
+      integration: variable
+      domain: binary_sensor
+  fields:
+    value:
+      name: New Value
+      description: New value to set [boolean] (optional)
+      required: false
+      example: "false"
+      selector:
+        select:
+          mode: list
+          translation_key: "boolean_options"
+          options:
+            - "None"
+            - "true"
+            - "false"
+    attributes:
+      name: New Attributes
+      description: Attributes to set or update [dictionary] (optional)
+      example: "{'key': 'value'}"
+      selector:
+        object:
+    replace_attributes:
+      name: Replace Attributes
+      description: Replace or merge current attributes [boolean] (optional) (default false = merge)
+      required: true
+      default: false
+      example: "false"
+      selector:
+        boolean:
 
 set_variable:
   # Description of the service
-  description: Update a variables value and/or its attributes.
+  name: Set Variable (Legacy)
+  description: "Legacy service: Update a Sensor Variable value and/or its attributes. Will only work on Sensor Variables. Use one of the variable.update_ services for additional options."
   # Different fields that your service accepts
   fields:
     # Key of the field
     variable:
-      description: string (required) The name of the variable to update
+      name: Variable ID
+      description: The name of the Sensor Variable to update [string] (required)
+      required: true
+      example: test_counter
+      selector:
+        text:
     value:
-      description: any (optional) New value to set
-    value_template:
-      description: template (optional) New value to set from a template
+      name: New Value
+      description: "New value to set. If a device class and native unit of measurement is set: 1. This will update the value in the native unit of measurement not necessarily the displayed unit of measurement if they are different. 2. It will give an error if the value is not a supported type for the device class (ex. setting a string for a temperature device class) (optional)"
+      example: 9
+      selector:
+        text:
     attributes:
-      description: dictionary (optional) Attributes to set or update
-    attributes_template:
-      description: template (optional) Attributes to set or update from a template ( should return a json object )
+      name: New Attributes
+      description: Attributes to set or update [dictionary] (optional)
+      example: "{'key': 'value'}"
+      selector:
+        object:
     replace_attributes:
-      description: boolean ( optional ) Replace or merge current attributes (default false = merge)
+      name: Replace Attributes
+      description: Replace or merge current attributes [boolean] (optional) (default false = merge)
+      required: true
+      default: false
+      example: "false"
+      selector:
+        boolean:
 
- 
-
-
-
+set_entity:
+  name: Set Entity (Legacy)
+  description: "Legacy service: Update a Sensor Variable value and/or its attributes. Will only work on Sensor Variables. Use one of the variable.update_ services for additional options."
+  fields:
+    entity:
+      name: Entity ID
+      description: The entity_id of the Sensor Variable to update [string] (required)
+      example: sensor.test_sensor
+      required: true
+      selector:
+        entity:
+          integration: variable
+          domain: sensor
+    value:
+      name: New Value
+      description: "New value to set. If a device class and native unit of measurement is set: 1. This will update the value in the native unit of measurement not necessarily the displayed unit of measurement if they are different. 2. It will give an error if the value is not a supported type for the device class (ex. setting a string for a temperature device class) (optional)"
+      example: 9
+      selector:
+        text:
+    attributes:
+      name: New Attributes
+      description: Attributes to set or update [dictionary] (optional)
+      example: "{'key': 'value'}"
+      selector:
+        object:
+    replace_attributes:
+      name: Replace Attributes
+      description: Replace or merge current attributes [boolean] (optional) (default false = merge)
+      required: true
+      default: false
+      example: "false"
+      selector:
+        boolean:

@@ -1,259 +1,213 @@
-"""variable implementation for Homme Assistant."""
-import asyncio
-import logging
+"""Variable implementation for Home Assistant."""
 import json
+import logging
 
+from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
+from homeassistant.const import (
+    CONF_ENTITY_ID,
+    CONF_FRIENDLY_NAME,
+    CONF_ICON,
+    CONF_NAME,
+    Platform,
+)
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.typing import ConfigType
 import voluptuous as vol
 
-from homeassistant.const import CONF_NAME, ATTR_ICON
-from homeassistant.helpers import config_validation as cv
-from homeassistant.exceptions import TemplateError
-from homeassistant.loader import bind_hass
-from homeassistant.helpers.entity_component import EntityComponent
-from homeassistant.helpers.restore_state import RestoreEntity
+from .const import (
+    ATTR_ATTRIBUTES,
+    ATTR_ENTITY,
+    ATTR_REPLACE_ATTRIBUTES,
+    ATTR_VALUE,
+    ATTR_VARIABLE,
+    CONF_ATTRIBUTES,
+    CONF_ENTITY_PLATFORM,
+    CONF_FORCE_UPDATE,
+    CONF_RESTORE,
+    CONF_VALUE,
+    CONF_VARIABLE_ID,
+    DEFAULT_REPLACE_ATTRIBUTES,
+    DOMAIN,
+    PLATFORMS,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = "variable"
-ENTITY_ID_FORMAT = DOMAIN + ".{}"
+SERVICE_SET_VARIABLE_LEGACY = "set_variable"
+SERVICE_SET_ENTITY_LEGACY = "set_entity"
+SERVICE_UPDATE_SENSOR = "update_sensor"
 
-CONF_ATTRIBUTES = "attributes"
-CONF_VALUE = "value"
-CONF_RESTORE = "restore"
-
-ATTR_VARIABLE = "variable"
-ATTR_VALUE = "value"
-ATTR_VALUE_TEMPLATE = "value_template"
-ATTR_ATTRIBUTES = "attributes"
-ATTR_ATTRIBUTES_TEMPLATE = "attributes_template"
-ATTR_REPLACE_ATTRIBUTES = "replace_attributes"
-
-SERVICE_SET_VARIABLE = "set_variable"
-SERVICE_SET_VARIABLE_SCHEMA = vol.Schema(
+SERVICE_SET_VARIABLE_LEGACY_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_VARIABLE): cv.string,
         vol.Optional(ATTR_VALUE): cv.match_all,
-        vol.Optional(ATTR_VALUE_TEMPLATE): cv.template,
         vol.Optional(ATTR_ATTRIBUTES): dict,
-        vol.Optional(ATTR_ATTRIBUTES_TEMPLATE): cv.template,
-        vol.Optional(ATTR_REPLACE_ATTRIBUTES): cv.boolean,
+        vol.Optional(
+            ATTR_REPLACE_ATTRIBUTES, default=DEFAULT_REPLACE_ATTRIBUTES
+        ): cv.boolean,
     }
 )
 
-CONFIG_SCHEMA = vol.Schema(
+SERVICE_SET_ENTITY_LEGACY_SCHEMA = vol.Schema(
     {
-        DOMAIN: vol.Schema(
-            {
-                cv.slug: vol.Any(
-                    {
-                        vol.Optional(CONF_NAME): cv.string,
-                        vol.Optional(CONF_VALUE): cv.match_all,
-                        vol.Optional(CONF_ATTRIBUTES): dict,
-                        vol.Optional(CONF_RESTORE): cv.boolean,
-                    },
-                    None,
-                )
-            }
-        )
-    },
-    extra=vol.ALLOW_EXTRA,
+        vol.Required(ATTR_ENTITY): cv.string,
+        vol.Optional(ATTR_VALUE): cv.match_all,
+        vol.Optional(ATTR_ATTRIBUTES): dict,
+        vol.Optional(
+            ATTR_REPLACE_ATTRIBUTES, default=DEFAULT_REPLACE_ATTRIBUTES
+        ): cv.boolean,
+    }
 )
 
 
-@bind_hass
-def set_variable(
-    hass,
-    variable,
-    value,
-    value_template,
-    attributes,
-    attributes_template,
-    replace_attributes,
-):
-    """Set input_boolean to True."""
-    hass.services.call(
-        DOMAIN,
-        SERVICE_SET_VARIABLE,
-        {
-            ATTR_VARIABLE: variable,
-            ATTR_VALUE: value,
-            ATTR_VALUE_TEMPLATE: value_template,
-            ATTR_ATTRIBUTES: attributes,
-            ATTR_ATTRIBUTES_TEMPLATE: attributes_template,
-            ATTR_REPLACE_ATTRIBUTES: replace_attributes,
-        },
-    )
+async def async_setup(hass: HomeAssistant, config: ConfigType):
+    """Set up the Variable services."""
 
+    async def async_set_variable_legacy_service(call):
+        """Handle calls to the set_variable legacy service."""
 
-async def async_setup(hass, config):
-    """Set up variables."""
-    component = EntityComponent(_LOGGER, DOMAIN, hass)
-
-    entities = []
-
-    for variable_id, variable_config in config[DOMAIN].items():
-        if not variable_config:
-            variable_config = {}
-
-        name = variable_config.get(CONF_NAME)
-        value = variable_config.get(CONF_VALUE)
-        attributes = variable_config.get(CONF_ATTRIBUTES)
-        restore = variable_config.get(CONF_RESTORE, False)
-
-        entities.append(
-            Variable(variable_id, name, value, attributes, restore)
-        )
-
-    @asyncio.coroutine
-    def async_set_variable_service(call):
-        """Handle calls to the set_variable service."""
+        # _LOGGER.debug(f"[async_set_variable_legacy_service] Pre call data: {call.data}")
+        ENTITY_ID_FORMAT = Platform.SENSOR + ".{}"
         entity_id = ENTITY_ID_FORMAT.format(call.data.get(ATTR_VARIABLE))
-        entity = component.get_entity(entity_id)
+        call.data.update({ATTR_ENTITY: entity_id})
+        # _LOGGER.debug(f"[async_set_variable_legacy_service] Post call data: {call.data}")
+        await _async_set_legacy_service(call)
 
-        if entity:
-            target_variables = [entity]
-            tasks = [
-                variable.async_set_variable(
-                    call.data.get(ATTR_VALUE),
-                    call.data.get(ATTR_VALUE_TEMPLATE),
-                    call.data.get(ATTR_ATTRIBUTES),
-                    call.data.get(ATTR_ATTRIBUTES_TEMPLATE),
-                    call.data.get(ATTR_REPLACE_ATTRIBUTES, False),
-                )
-                for variable in target_variables
-            ]
-            if tasks:
-                yield from asyncio.wait(tasks)
+    async def async_set_entity_legacy_service(call):
+        """Handle calls to the set_entity legacy service."""
 
-        else:
-            _LOGGER.warning("Failed to set unknown variable: %s", entity_id)
+        # _LOGGER.debug(f"[async_set_entity_legacy_service] call data: {call.data}")
+        await _async_set_legacy_service(call)
+
+    async def _async_set_legacy_service(call):
+        """Shared function for both set_entity and set_variable legacy services."""
+
+        # _LOGGER.debug(f"[_async_set_legacy_service] call data: {call.data}")
+        update_sensor_data = {
+            CONF_ENTITY_ID: [call.data.get(ATTR_ENTITY)],
+            ATTR_REPLACE_ATTRIBUTES: call.data.get(ATTR_REPLACE_ATTRIBUTES, False),
+        }
+        if call.data.get(ATTR_VALUE):
+            update_sensor_data.update({ATTR_VALUE: call.data.get(ATTR_VALUE)})
+        if call.data.get(ATTR_ATTRIBUTES):
+            update_sensor_data.update({ATTR_ATTRIBUTES: call.data.get(ATTR_ATTRIBUTES)})
+        _LOGGER.debug(
+            f"[_async_set_legacy_service] update_sensor_data: {update_sensor_data}"
+        )
+        await hass.services.async_call(
+            DOMAIN, SERVICE_UPDATE_SENSOR, service_data=update_sensor_data
+        )
 
     hass.services.async_register(
         DOMAIN,
-        SERVICE_SET_VARIABLE,
-        async_set_variable_service,
-        schema=SERVICE_SET_VARIABLE_SCHEMA,
+        SERVICE_SET_VARIABLE_LEGACY,
+        async_set_variable_legacy_service,
+        schema=SERVICE_SET_VARIABLE_LEGACY_SCHEMA,
     )
 
-    await component.async_add_entities(entities)
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_SET_ENTITY_LEGACY,
+        async_set_entity_legacy_service,
+        schema=SERVICE_SET_ENTITY_LEGACY_SCHEMA,
+    )
+
+    variables = json.loads(json.dumps(config.get(DOMAIN, {})))
+
+    for var, var_fields in variables.items():
+
+        if var is not None:
+            _LOGGER.debug(f"[YAML] variable_id: {var}")
+            _LOGGER.debug(f"[YAML] var_fields: {var_fields}")
+
+            for key_empty, var_empty in var_fields.copy().items():
+                if var_empty is None:
+                    var_fields.pop(key_empty)
+
+            attr = var_fields.get(CONF_ATTRIBUTES, {})
+            icon = attr.pop(CONF_ICON, None)
+            name = var_fields.get(CONF_NAME, attr.pop(CONF_FRIENDLY_NAME, None))
+            attr.pop(CONF_FRIENDLY_NAME, None)
+
+            if var not in {
+                entry.data.get(CONF_VARIABLE_ID)
+                for entry in hass.config_entries.async_entries(DOMAIN)
+            }:
+                _LOGGER.warning(f"[YAML Import] Creating New Sensor Variable: {var}")
+                hass.async_create_task(
+                    hass.config_entries.flow.async_init(
+                        DOMAIN,
+                        context={"source": SOURCE_IMPORT},
+                        data={
+                            CONF_ENTITY_PLATFORM: Platform.SENSOR,
+                            CONF_VARIABLE_ID: var,
+                            CONF_NAME: name,
+                            CONF_VALUE: var_fields.get(CONF_VALUE),
+                            CONF_RESTORE: var_fields.get(CONF_RESTORE),
+                            CONF_FORCE_UPDATE: var_fields.get(CONF_FORCE_UPDATE),
+                            CONF_ATTRIBUTES: attr,
+                            CONF_ICON: icon,
+                        },
+                    )
+                )
+            else:
+                _LOGGER.info(f"[YAML Update] Updating Existing Sensor Variable: {var}")
+
+                entry_id = None
+                for ent in hass.config_entries.async_entries(DOMAIN):
+                    if var == ent.data.get(CONF_VARIABLE_ID):
+                        entry_id = ent.entry_id
+                        break
+                _LOGGER.debug(f"[YAML Update] entry_id: {entry_id}")
+                if entry_id:
+                    entry = ent
+                    # _LOGGER.debug(f"[YAML Update] entry before: {entry.as_dict()}")
+
+                    for m in dict(entry.data).keys():
+                        var_fields.setdefault(m, entry.data[m])
+                    _LOGGER.debug(f"[YAML Update] updated var_fields: {var_fields}")
+                    entry.options = {}
+                    hass.config_entries.async_update_entry(
+                        entry, data=var_fields, options=entry.options
+                    )
+
+                    hass.async_create_task(hass.config_entries.async_reload(entry_id))
+
+                else:
+                    _LOGGER.error(
+                        f"YAML Update Error. Could not find entry_id for: {var}"
+                    )
+
     return True
 
 
-class Variable(RestoreEntity):
-    """Representation of a variable."""
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up from a config entry."""
 
-    def __init__(self, variable_id, name, value, attributes, restore):
-        """Initialize a variable."""
-        self.entity_id = ENTITY_ID_FORMAT.format(variable_id)
-        self._name = name
-        self._value = value
-        self._attributes = attributes
-        self._restore = restore
+    entry.options = {}
+    # _LOGGER.debug(f"[init async_setup_entry] entry: {entry.data}")
+    hass.data.setdefault(DOMAIN, {})
+    hass_data = dict(entry.data)
+    hass.data[DOMAIN][entry.entry_id] = hass_data
+    if hass_data.get(CONF_ENTITY_PLATFORM) in PLATFORMS:
+        await hass.config_entries.async_forward_entry_setups(
+            entry, [hass_data.get(CONF_ENTITY_PLATFORM)]
+        )
+    return True
 
-    async def async_added_to_hass(self):
-        """Run when entity about to be added."""
-        await super().async_added_to_hass()
-        if self._restore is True:
-            # If variable state have been saved.
-            state = await self.async_get_last_state()
-            if state:
-                # restore state
-                self._value = state.state
-                # restore value
-                self._attributes = state.attributes
 
-    @property
-    def should_poll(self):
-        """If entity should be polled."""
-        return False
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload a config entry."""
 
-    @property
-    def name(self):
-        """Return the name of the variable."""
-        return self._name
+    _LOGGER.info(f"Unloading: {entry.data}")
+    hass_data = dict(entry.data)
+    unload_ok = False
+    if hass_data.get(CONF_ENTITY_PLATFORM) in PLATFORMS:
+        unload_ok = await hass.config_entries.async_unload_platforms(
+            entry, [hass_data.get(CONF_ENTITY_PLATFORM)]
+        )
+    if unload_ok:
+        hass.data[DOMAIN].pop(entry.entry_id)
 
-    @property
-    def icon(self):
-        """Return the icon to be used for this entity."""
-        if self._attributes is not None:
-            return self._attributes.get(ATTR_ICON)
-        return None
-
-    @property
-    def state(self):
-        """Return the state of the component."""
-        return self._value
-
-    @property
-    def state_attributes(self):
-        """Return the state attributes."""
-        return self._attributes
-
-    @asyncio.coroutine
-    def async_set_variable(
-        self,
-        value,
-        value_template,
-        attributes,
-        attributes_template,
-        replace_attributes,
-    ):
-        """Update variable."""
-        current_state = self.hass.states.get(self.entity_id)
-        updated_attributes = None
-        updated_value = None
-
-        if not replace_attributes and self._attributes is not None:
-            updated_attributes = dict(self._attributes)
-
-        if attributes is not None:
-            if updated_attributes is not None:
-                updated_attributes.update(attributes)
-            else:
-                updated_attributes = attributes
-
-        elif attributes_template is not None:
-            attributes_template.hass = self.hass
-
-            try:
-                attributes = json.loads(
-                    attributes_template.async_render(
-                        {"variable": current_state}
-                    )
-                )
-
-                if isinstance(attributes, dict):
-                    if updated_attributes is not None:
-                        updated_attributes.update(attributes)
-                    else:
-                        updated_attributes = attributes
-
-            except TemplateError as ex:
-                _LOGGER.error(
-                    "Could not render attribute_template %s: %s",
-                    self.entity_id,
-                    ex,
-                )
-
-        if value is not None:
-            updated_value = value
-
-        elif value_template is not None:
-            try:
-                value_template.hass = self.hass
-                updated_value = value_template.async_render(
-                    {"variable": current_state}
-                )
-            except TemplateError as ex:
-                _LOGGER.error(
-                    "Could not render value_template %s: %s",
-                    self.entity_id,
-                    ex,
-                )
-
-        self._attributes = updated_attributes
-
-        if updated_value is not None:
-            self._value = updated_value
-
-        yield from self.async_update_ha_state()
+    return unload_ok
