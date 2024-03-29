@@ -5,6 +5,7 @@
  ### Master Bedroom ###
 - platform: group
   name: Master Bedroom Lights
+  unique_id: master_bedroom_lights
   entities:
     - light.bedroom_kellys_bedside
     - light.bedroom_ryans_bedside
@@ -12,12 +13,14 @@
  ### Ryan's Office ###
 - platform: group
   name: Ryans Office Lights
+  unique_id: ryans_office_lights
   entities:
     - light.ryans_office_desk_lamp
 
  ### Outside ###
 - platform: group
   name: Outside Lights
+  unique_id: outside_lights
   entities:
     - light.outside_front_door
     - light.outside_side_patio
@@ -25,6 +28,7 @@
  ### Kitchen ###
 - platform: group
   name: Kitchen Lights
+  unique_id: kitchen_lights
   entities:
     - light.kitchen_lamp
     - light.kitchen_dining_area_lamp
@@ -32,6 +36,7 @@
  ### Family Room ###
 - platform: group
   name: Family Room Lights
+  unique_id: family_room_lights
   entities:
     - light.family_room_center_lamp
     - light.family_room_corner_lamp
@@ -39,9 +44,11 @@
  ## Living Room ###
 - platform: group
   name: Living Room Lights
+  unique_id: living_room_lights
   entities:
     - light.living_room_fireplace
-    - light.living_room_lamp
+    - light.living_room_desk_lamp
+    - light.living_room_floor_lamp
 
  ### Movie Room ###
 # - platform: group

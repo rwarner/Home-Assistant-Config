@@ -6,6 +6,7 @@
 ### Sun Based Lights - While we're Home ###
 - platform: group
   name: Sun Based Lights Home
+  unique_id: sun_based_lights_home
   entities:
     - light.outside_front_door
     - light.living_room_fireplace
@@ -14,6 +15,7 @@
 ### Sun Based Lights - While we're away ###
 - platform: group
   name: Sun Based Lights Away
+  unique_id: sun_based_lights_away
   entities:
     - light.outside_front_door
     - light.outside_side_patio

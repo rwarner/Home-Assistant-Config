@@ -5,26 +5,21 @@
 
 - platform: group
   name: Kitchen Pendants
+  unique_id: kitchen_pendants
   entities:
     - light.kitchen_pendant_left
     - light.kitchen_pendant_right
  
 - platform: group
   name: Living Room Fireplace
+  unique_id: living_room_fireplace
   entities:
     - light.living_room_fireplace_left
     - light.living_room_fireplace_right
 
 - platform: group
-  unique_id: outside_front_door
   name: Front Door
+  unique_id: outside_front_door
   entities:
     - light.outside_front_door_left
     - light.outside_front_door_right
-
-- platform: group
-  unique_id: outside_side_patio
-  name: Side Patio
-  entities:
-    - light.outside_side_patio_left
-    - light.outside_side_patio_right
