@@ -26,10 +26,6 @@ sensor:
   - name: tesla_state
     state_topic: "teslamate/cars/1/state"
     icon: mdi:car-connected
-    
-  - name: tesla_state
-    state_topic: "teslamate/cars/1/state"
-    icon: mdi:car-connected
 
   - name: tesla_since
     state_topic: "teslamate/cars/1/since"
@@ -55,13 +51,13 @@ sensor:
     state_topic: "teslamate/cars/1/geofence"
     icon: mdi:earth
 
-  - name: tesla_latitude
-    state_topic: "teslamate/cars/1/latitude"
-    icon: mdi:crosshairs-gps
+  # - name: tesla_latitude
+  #   state_topic: "teslamate/cars/1/latitude"
+  #   icon: mdi:crosshairs-gps
 
-  - name: tesla_longitude
-    state_topic: "teslamate/cars/1/longitude"
-    icon: mdi:crosshairs-gps
+  # - name: tesla_longitude
+  #   state_topic: "teslamate/cars/1/longitude"
+  #   icon: mdi:crosshairs-gps
 
   - name: tesla_locked
     state_topic: "teslamate/cars/1/locked"

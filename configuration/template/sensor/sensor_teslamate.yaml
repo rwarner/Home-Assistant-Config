@@ -1,0 +1,39 @@
+#############################################
+##### TEMPLATE - Tesla / Teslamate MQTT #####
+#############################################
+- sensor:
+
+  - name: "Estimated Range (mi)"
+    unique_id: tesla_est_battery_range_mi
+    unit_of_measurement: mi
+    icon: mdi:gauge
+    state: >
+      {{ (float(states('sensor.tesla_est_battery_range_km'), 0.0) / 1.609) | round(2) }}
+
+  - name: "Rated Range (mi)"
+    unique_id: tesla_rated_battery_range_mi
+    unit_of_measurement: mi
+    icon: mdi:gauge
+    state: >
+      {{ (float(states('sensor.tesla_rated_battery_range_km'), 0.0) / 1.609) | round(2) }}
+
+  - name: "Ideal Range (mi)"
+    unique_id: tesla_ideal_battery_range_mi
+    unit_of_measurement: mi
+    icon: mdi:gauge
+    state: >
+      {{ (float(states('sensor.tesla_ideal_battery_range_km'), 0.0) / 1.609) | round(2) }}
+
+  - name: "Odometer (mi)"
+    unique_id: tesla_odometer_mi
+    unit_of_measurement: mi
+    icon: mdi:counter
+    state: >
+      {{ (float(states('sensor.tesla_odometer'), 0.0) / 1.609) | round(2) }}
+
+  - name: "Speed (MPH)"
+    unique_id: tesla_speed_mph
+    unit_of_measurement: mph
+    icon: mdi:speedometer
+    state: >
+      {{ (float(states('sensor.tesla_speed'), 0.0) / 1.609) | round(2) }}

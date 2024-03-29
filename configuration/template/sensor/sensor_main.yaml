@@ -1,0 +1,40 @@
+###############################
+####### TEMPLATE - MAIN  ######
+###############################
+
+##### UNIQUE_ID DOES NOT SET ENTITY_ID IN FRONT END ####
+
+- sensor:
+
+# Last Alexa that was called
+  - name: Last Alexa
+    state: |-
+      {{ expand(integration_entities('alexa_media') | select('search', 'media_player'))
+      | selectattr('attributes.last_called', 'eq', True) | map(attribute='entity_id') | first }}
+    availability: |-
+      {{ expand(integration_entities('alexa_media') | select('search', 'media_player'))
+      | selectattr('attributes.last_called','eq',True) | first is defined }}
+
+# Harmony Remote sensor for current activity
+  - name: Media Room
+    unique_id: harmony_hub_activity
+    state: '{{ state_attr("remote.harmony_hub", "current_activity") }}'
+
+# Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
+# - platform: template
+#   sensors:
+#     ecobee_preset:
+#       value_template: '{{ states.climate.thermostat.attributes.preset_mode }}'
+#       friendly_name: "Ecobee Preset"
+
+####################################
+#  Motion sensors on input_boolean #
+####################################
+
+#- platform: template
+#  sensors:
+#    motion_front_door:
+#      friendly_name: Front Door Motion
+#      value_template: "{{ states.input_boolean.office_occupancy.state == 'on' }}"
+#      entity_id: binary_sensor.motion_front_door
+#      device_class: motion

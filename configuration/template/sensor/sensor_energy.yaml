@@ -1,0 +1,22 @@
+#############################
+##### TEMPLATE - Energy #####
+#############################
+
+- sensor:
+  - name: "Tesla Charger Power Home"
+    unique_id: tesla_charger_power_home
+    icon: mdi:lightning-bolt
+    unit_of_measurement: "kW"
+    state: >-
+      {% if is_state('sensor.tesla_geofence', 'Home') %}
+        {{ states.sensor.tesla_charger_power.state }}
+      {% else %}
+        0
+      {% endif %}
+
+- sensor:
+  - name: "Server Closet Power"
+    unit_of_measurement: kW
+    state: >
+      {{  (((((float(states('sensor.ups_load'), 10.0)) / 100) * 2000) * 0.7) | round(1)) / 1000 }}
+    state_class: measurement

@@ -12,33 +12,6 @@
   api_key: !secret tautulli_api
   host: !secret tautulli_ip
 
-# Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
-# - platform: template
-#   sensors:
-#     ecobee_preset:
-#       value_template: '{{ states.climate.thermostat.attributes.preset_mode }}'
-#       friendly_name: "Ecobee Preset"
-
-# Harmony Remote sensor for current activity
-- platform: template
-  sensors:
-      harmony_hub_activity:
-        value_template: '{{ state_attr("remote.harmony_hub", "current_activity") }}'
-        friendly_name: 'Media Room'
-
 # Folder for mp4 videos
 - platform: folder
   folder: /tmp/hass
-
-
-####################################
-#  Motion sensors on input_boolean #
-####################################
-
-#- platform: template
-#  sensors:
-#    motion_front_door:
-#      friendly_name: Front Door Motion
-#      value_template: "{{ states.input_boolean.office_occupancy.state == 'on' }}"
-#      entity_id: binary_sensor.motion_front_door
-#      device_class: motion

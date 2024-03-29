@@ -1,0 +1,90 @@
+#################################################
+###  TEMPLATE - Average Temperature for rooms ###
+#################################################
+- sensor:
+
+# Define below multiple sensors into one
+# only rely on these sensors for automations and views
+
+# -- Movie Room --
+  - name: "Movie Room Temperature"
+    unique_id: movie_room_avg_temp
+    unit_of_measurement: '°F'
+    state: >-
+      {{ '%0.3g'|format(float(states('sensor.movie_room_motion_sensor_temperature'), 65.0)) }}
+
+# -- Laundry Room --
+  - name: "Laundry Room Temperature"
+    unique_id: laundry_room_avg_temp
+    unit_of_measurement: '°F'
+    state: >-
+      {{'%0.3g'|format((float(states('sensor.laundry_motion_sensor_temperature'), 65.0) 
+      + float(states('sensor.basement_door_sensor_temperature'), 65.0)) / 2) }}
+
+# -- Kitchen --
+  - name: "Kitchen Temperature"
+    unique_id: kitchen_avg_temp
+    unit_of_measurement: '°F'
+    state: >-
+      {{'%0.3g'|format((float(states('sensor.kitchen_motion_sensor_temperature'), 65.0) 
+      + float(states('sensor.kitchen_window_sensor_temperature'), 65.0)) / 2) }}
+
+
+#  -- Master Bedroom --
+  - name: "Master Bedroom Temperature"
+    unique_id: master_bedroom_avg_temp
+    unit_of_measurement: '°F'
+    state: >-
+      {{'%0.3g'|format((float(states('sensor.ryans_bedside_button_temperature'), 65.0) 
+      + float(states('sensor.bedroom_light_button_temperature'), 65.0)
+      + float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0)) / 3) }}
+
+# -- Guest Room -- only one sensor currently
+# - platform: template
+#   sensors:
+#     guest_room_avg_temp:
+#       friendly_name: "Guest Room Temperature"
+#       unit_of_measurement: '°F'
+#       value_template: >-
+#         {{ '%0.3g'|format(float(states('sensor.laundry_motion_sensor_temperature'), 65.0)) }}
+
+# -- Ryan's Office --
+  - name: "Ryan's Office Temperature"
+    unique_id: ryans_office_avg_temp
+    unit_of_measurement: '°F'
+    state: >-
+      {{'%0.3g'|format(
+      (
+      float(states('sensor.ryans_office_motion_sensor_temperature'), 65.0) +
+      float(states('sensor.ryans_office_door_sensor_temperature'), 65.0) +
+      float(states('sensor.ryans_office_rear_window_sensor_temperature'), 65.0) +
+      float(states('sensor.ryans_office_side_window_sensor_temperature'), 65.0)
+      ) / 4) }}
+
+
+# -- Kelly's Office -- only one sensor currently
+# - platform: template
+#   sensors:
+#     kellys_office_avg_temp:
+#       friendly_name: "Guest Room Temperature"
+#       unit_of_measurement: '°F'
+#       value_template: >-
+#         {{ '%0.3g'|format(float(states('sensor.laundry_motion_sensor_temperature'), 65.0)) }}
+
+#  -- Family Room --
+  - name: "Family Room Temperature"
+    unique_id: family_room_avg_temp
+    unit_of_measurement: '°F'
+    state: >-
+      {{'%0.3g'|format((float(states('sensor.family_room_front_window_1_sensor_temperature'), 65.0) 
+      + float(states('sensor.family_room_front_window_2_sensor_temperature'), 65.0)
+      + float(states('sensor.family_room_slider_temperature'), 65.0)) / 3) }}
+
+#  -- Living Room --
+  - name: "Living Room Temperature"
+    unique_id: living_room_avg_temp
+    unit_of_measurement: '°F'
+    state: >-
+      {{'%0.3g'|format((float(states('sensor.front_door_sensor_temperature'), 65.0) 
+      + float(states('sensor.living_room_front_window_sensor_temperature'), 65.0)
+      + float(states('sensor.living_room_side_window_1_sensor_temperature'), 65.0)) / 3) }}

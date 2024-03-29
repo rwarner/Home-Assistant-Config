@@ -1,6 +1,6 @@
-###################
-##### Energy #####
-##################
+###########################
+##### SENSOR - Energy #####
+###########################
 
 - platform: integration
   name: Server Closet Energy
@@ -11,16 +11,3 @@
   name: Tesla Energy
   source: sensor.tesla_charger_power_home
   method: left
-
-- platform: template
-  sensors:
-    tesla_charger_power_home:
-      friendly_name: 'Tesla Charger Power Home'
-      icon_template: mdi:lightning-bolt
-      unit_of_measurement: "kW"
-      value_template: >-
-        {% if is_state('sensor.tesla_geofence', 'Home') %}
-          {{ states.sensor.tesla_charger_power.state }}
-        {% else %}
-          0
-        {% endif %}

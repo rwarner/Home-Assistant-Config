@@ -1,12 +1,12 @@
-####################################
-### BINARY SENSOR CONFIGURATION  ###
-####################################
+######################################
+##### TEMPLATE - Critical Device #####
+######################################
 
-# Binary sensor for device critical, if one of them goes offline
-- platform: template
-  sensors:
-    device_critical:
-      value_template: >-
+- binary_sensor:
+  # Binary sensor for device critical, if one of them goes offline
+  - name: "Device Critical"
+    unique_id: device_critical
+    state: >-
         "{{ is_state('states.sensor.rear_patio_camera','Offline')
         or is_state('states.sensor.side_patio_camera', 'Offline')
         or is_state('states.sensor.doorbell_camera', 'Offline')
@@ -15,4 +15,3 @@
         or is_state('states.sensor.logitech_harmony_hub', 'Offline')
         or is_state('states.sensor.synology_nas', 'Offline')
         or is_state('states.sensor.yamaha_receiver', 'Offline') }}"
-      friendly_name: 'Device Critical'

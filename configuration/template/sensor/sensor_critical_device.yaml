@@ -1,11 +1,11 @@
-##################################
-##### Critical Device Status #####
-##################################
+######################################
+##### TEMPLATE - Critical Device #####
+######################################
 
-- platform: template
-  sensors:
-    mac_mini_server:
-      value_template: "{% if states.device_tracker.mac_mini_server %}
+- sensor:
+  - name: "Mac Mini Server"
+    unique_id: mac_mini_server
+    state: "{% if states.device_tracker.mac_mini_server %}
       {% if is_state('device_tracker.mac_mini_server', 'home') %}
         Online
       {% else %}
@@ -14,9 +14,10 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Mac Mini Server'
-    synology_nas:
-      value_template: "{% if states.device_tracker.synology_nas %}
+
+  - name: "Synology NAS"
+    unique_id: synology_nas
+    state: "{% if states.device_tracker.synology_nas %}
       {% if is_state('device_tracker.synology_nas', 'home') %}
         Online
       {% else %}
@@ -25,9 +26,10 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Synology NAS'
-    kitchen_tablet:
-      value_template: "{% if states.device_tracker.kitchen_fire_tablet %}
+
+  - name: "Kitchen Tablet"
+    unique_id: kitchen_tablet
+    state: "{% if states.device_tracker.kitchen_fire_tablet %}
       {% if is_state('device_tracker.kitchen_fire_tablet', 'home') %}
         Online
       {% else %}
@@ -36,9 +38,10 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Kitchen Tablet'
-    hdhomerun_extend:
-      value_template: "{% if states.device_tracker.hdhomerun_extend %}
+    
+  - name: "HDHomeRun Extend"
+    unique_id: hdhomerun_extend
+    state: "{% if states.device_tracker.hdhomerun_extend %}
       {% if is_state('device_tracker.hdhomerun_extend', 'home') %}
         Online
       {% else %}
@@ -47,9 +50,10 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'HDHomeRun Extend'
-    logitech_harmony_hub:
-      value_template: "{% if states.device_tracker.logitech_harmony_hub %}
+      
+  - name: "Logitech Harmony Hub"
+    unique_id: logitech_harmony_hub
+    state: "{% if states.device_tracker.logitech_harmony_hub %}
       {% if is_state('device_tracker.logitech_harmony_hub', 'home') %}
         Online
       {% else %}
@@ -58,9 +62,10 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Logitech Harmony Hub'
-    yamaha_reciever:
-      value_template: "{% if states.device_tracker.yamaha_rx_v675 %}
+      
+  - name: "Yamaha Receiver"
+    unique_id: yamaha_reciever
+    state: "{% if states.device_tracker.yamaha_rx_v675 %}
       {% if is_state('device_tracker.yamaha_rx_v675', 'home') %}
         Online
       {% else %}
@@ -69,9 +74,11 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Yamaha Receiver'
-    rear_porch_camera:
-      value_template: "{% if states.device_tracker.rear_porch_camera %}
+      
+  - name: "Rear Porch Camera"
+    unique_id: rear_porch_camera
+    icon: mdi:cctv
+    state: "{% if states.device_tracker.rear_porch_camera %}
       {% if is_state('device_tracker.rear_porch_camera', 'home') %}
         Online
       {% else %}
@@ -80,10 +87,11 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Rear Porch Camera'
-      icon_template: mdi:cctv
-    side_patio_camera:
-      value_template: "{% if states.device_tracker.side_patio_camera %}
+      
+  - name: "Side Patio Camera"
+    unique_id: side_patio_camera
+    icon: mdi:cctv
+    state: "{% if states.device_tracker.side_patio_camera %}
       {% if is_state('device_tracker.side_patio_camera', 'home') %}
         Online
       {% else %}
@@ -92,10 +100,11 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Front Door Camera'
-      icon_template: mdi:cctv
-    garage_camera:
-      value_template: "{% if states.device_tracker.garage_camera %}
+      
+  - name: "Garage Camera"
+    unique_id: garage_camera
+    icon: mdi:cctv
+    state: "{% if states.device_tracker.garage_camera %}
       {% if is_state('device_tracker.garage_camera', 'home') %}
         Online
       {% else %}
@@ -104,10 +113,11 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Garage Camera'
-      icon_template: mdi:cctv
-    doorbell_camera:
-      value_template: "{% if states.device_tracker.doorbell %}
+      
+  - name: "Doorbell Camera"
+    unique_id: doorbell_camera
+    icon: mdi:cctv
+    state: "{% if states.device_tracker.doorbell %}
       {% if is_state('device_tracker.doorbell', 'home') %}
         Online
       {% else %}
@@ -116,10 +126,11 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Doorbell Camera'
-      icon_template: mdi:cctv
-    living_room_camera:
-      value_template: "{% if states.device_tracker.living_room_camera %}
+
+  - name: "Living Room Camera"
+    unique_id: living_room_camera
+    icon: mdi:cctv
+    state: "{% if states.device_tracker.living_room_camera %}
       {% if is_state('device_tracker.living_room_camera', 'home') %}
         Online
       {% else %}
@@ -128,5 +139,3 @@
       {% else %}
         Unknown
       {% endif %}"
-      friendly_name: 'Living Room Camera'
-      icon_template: mdi:cctv
