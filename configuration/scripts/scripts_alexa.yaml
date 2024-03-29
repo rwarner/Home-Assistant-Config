@@ -146,4 +146,4 @@ alexa_reset_all_volume:
       data:
         entity_id: 
           - media_player.kitchen_echo_show_15
-        volume_level: '0.5'
+        volume_level: '0.7'
