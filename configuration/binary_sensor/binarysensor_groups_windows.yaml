@@ -6,36 +6,54 @@
   unique_id: house_windows
   name: House Windows
   entities:
+    - binary_sensor.kellys_office_windows
+    - binary_sensor.ryans_office_windows
+    - binary_sensor.master_bedroom_windows
+    - binary_sensor.guest_room_windows
     - binary_sensor.living_room_windows
     - binary_sensor.kitchen_windows
     - binary_sensor.family_room_windows
+    - binary_sensor.movie_room_windows
+    - binary_sensor.laundry_room_windows
 
-# - platform: group
-#   name: Kellys Office Windows
-#   entities:
-#     - binary_sensor.sample_window_sensor
+    - binary_sensor.half_bath_window_sensor
+    - binary_sensor.upstairs_bathroom_window_sensor
 
-# - platform: group
-#   name: Ryans Office Windows
-#   entities:
-#     - binary_sensor.sample_window_sensor
+### Second Floor ###
+- platform: group
+  name: Kellys Office Windows
+  entities:
+    - binary_sensor.kellys_office_rear_window_sensor
+    - binary_sensor.kellys_office_side_window_sensor
 
-# - platform: group
-#   name: Master Bedroom Windows
-#   entities:
-#     - binary_sensor.sample_window_sensor
+- platform: group
+  name: Ryans Office Windows
+  entities:
+    - binary_sensor.ryans_office_rear_window_sensor
+    - binary_sensor.ryans_office_side_window_sensor
 
-# - platform: group
-#   name: Guest Room Windows
-#   entities:
-#     - binary_sensor.sample_window_sensor
+- platform: group
+  name: Master Bedroom Windows
+  entities:
+    - binary_sensor.master_bedroom_front_window_sensor
+    - binary_sensor.master_bedroom_side_window_sensor
 
+- platform: group
+  name: Guest Room Windows
+  entities:
+    - binary_sensor.guest_room_front_window_sensor
+    - binary_sensor.guest_room_side_window_sensor
+
+
+### First Floor ###
 - platform: group
   name: Living Room Windows
   unique_id: living_room_windows
   entities:
     - binary_sensor.living_room_front_window_sensor
     - binary_sensor.living_room_side_window_1_sensor
+    - binary_sensor.living_room_side_window_2_sensor
+    - binary_sensor.living_room_rear_window_sensor
 
 - platform: group
   name: Kitchen Windows
@@ -49,13 +67,20 @@
   entities:
     - binary_sensor.family_room_front_window_1_sensor
     - binary_sensor.family_room_front_window_2_sensor
+    - binary_sensor.family_room_side_window_1_sensor
+    - binary_sensor.family_room_side_window_2_sensor
+    - binary_sensor.family_room_rear_window_1_sensor
+    - binary_sensor.family_room_rear_window_2_sensor
+    - binary_sensor.family_room_rear_window_3_sensor
 
-# - platform: group
-#   name: Laundry Room Windows
-#   entities:
-#     - binary_sensor.sample_window_sensor
 
-# - platform: group
-#   name: Movie Room Windows
-#   entities:
-#     - binary_sensor.sample_window_sensor
+### Basement ###
+- platform: group
+  name: Laundry Room Windows
+  entities:
+    - binary_sensor.laundry_room_window_sensor
+
+- platform: group
+  name: Movie Room Windows
+  entities:
+    - binary_sensor.movie_room_window_sensor
