@@ -44,9 +44,6 @@ config:
 
 http:
 
-# Discover some devices automatically
-discovery:
-
 # View all events in a logbook
 logbook:
 
@@ -123,37 +120,27 @@ media_player:
 wemo:
   static:
     - !secret wemo_ip_1 
-    #- !secret wemo_ip_2
+    # - !secret wemo_ip_2 # Christmas tree
     #If needing to re-setup, launch HASS without switch ON -- plug in Wemo, then restart again
     #almost like you need the switch to be offline when first setting up
     #Still not statically set on network, but required without ports
 
-camera:
-  # - platform: generic
-  #   name: Rear Porch Camera
-  #   still_image_url: !secret unifi_rear_porch_camera_still
-  #   stream_source: !secret unifi_rear_porch_camera_source
-  #   verify_ssl: false
-  # - platform: generic
-  #   name: Living Room Camera
-  #   still_image_url: !secret unifi_living_room_camera_still
-  #   stream_source: !secret unifi_living_room_camera_source
-  #   verify_ssl: false
-  # Changed to FFMPEG due to doorbell not compatible with HomeHabit tablet view
-  - platform: ffmpeg
-    name: Doorbell Camera
-    input: !secret unifi_doorbell_camera_source
-  - platform: ffmpeg
-    name: Rear Patio Camera
-    input: !secret unifi_rear_patio_camera_source
-  - platform: ffmpeg
-    name: Side Patio Camera
-    #still_image_url: !secret unifi_side_patio_camera_still
-    input: !secret unifi_side_patio_camera_source
-    # verify_ssl: false
-  - platform: ffmpeg
-    name: Under Porch Camera
-    input: !secret unifi_under_porch_camera_source
+# camera:
+#   # Changed to FFMPEG due to doorbell not compatible with HomeHabit tablet view
+#   - platform: ffmpeg
+#     name: Doorbell Camera
+#     input: !secret unifi_doorbell_camera_source
+#   - platform: ffmpeg
+#     name: Rear Patio Camera
+#     input: !secret unifi_rear_patio_camera_source
+#   - platform: ffmpeg
+#     name: Side Patio Camera
+#     #still_image_url: !secret unifi_side_patio_camera_still
+#     input: !secret unifi_side_patio_camera_source
+#     # verify_ssl: false
+#   - platform: ffmpeg
+#     name: Under Porch Camera
+#     input: !secret unifi_under_porch_camera_source
 
 # Custom HACS variable integation
 # https://github.com/rogro82/hass-variables
@@ -235,10 +222,12 @@ homekit:
       - binary_sensor.*_windows
       - binary_sensor.*_motion_sensor
       - sensor.*_avg_temp
+      - sensor.*_water_sensor_moisture
     include_entities:
       - alarm_control_panel.alarm
       - light.living_room_fireplace
-      - light.living_room_lamp
+      - light.living_room_desk_lamp
+      - light.living_room_floor_lamp
       - light.family_room_lights
       - light.master_bedroom_lights
       - light.outside_front_door
@@ -247,19 +236,15 @@ homekit:
       - light.kitchen_lights
       - light.kitchen_pendants
       - light.ryans_office_desk_lamp
+      - light.movie_room_lights
       - camera.doorbell_high
       - camera.unifi_rear_patio_high
+      - camera.unifi_mid_yard_high
       - camera.unifi_side_patio_high
       - camera.unifi_under_porch_high
-      # - climate.family_room_ac
       - switch.fan
       - sensor.washer_washer_machine_state
       - sensor.dryer_dryer_machine_state
-      #- light.media_room_movie_screen
-      #- camera.unifi_front_door
-      #- camera.unifi_living_room
-      #- camera.unifi_rear_porch
-      #- switch.garage_door_toggle
   entity_config:
     binary_sensor.front_outdoor_motion_sensor:
       linked_battery_sensor: sensor.front_outdoor_motion_sensor_battery_level
@@ -285,27 +270,22 @@ homekit:
     lock.basement_door_deadbolt:
       linked_battery_sensor: sensor.basement_door_deadbolt_battery_level
       low_battery_threshold: 30
+    binary_sensor.kitchen_water_sensor_moisture:
+      linked_battery_sensor: sensor.kitchen_water_sensor_battery_level
+      low_battery_threshold: 30
+    binary_sensor.downstairs_bathroom_water_sensor_moisture:
+      linked_battery_sensor: sensor.downstairs_bathroom_water_sensor_battery_level
+      low_battery_threshold: 30
     camera.doorbell_high:
       linked_motion_sensor: binary_sensor.motion_camera_doorbell
       support_audio: True
 
-####################################
-#  Energy Usage Monitoring Sensors #
-####################################
-template:
-  - sensor:
-      - name: "Server Closet Power"
-        unit_of_measurement: kW
-        state: >
-          {{  (((((float(states('sensor.ups_load'), 10.0)) / 100) * 2000) * 0.7) | round(1)) / 1000 }}
-        state_class: measurement
-  
+ 
 #################################
 ##### EXTERNAL FILES BELOW ######
 #################################
 automation: !include_dir_merge_list automation/
 
-binary_sensor: !include configuration/binary_sensor.yaml
 binary_sensor groups: !include_dir_merge_list configuration/binary_sensor/
 
 cover: !include configuration/cover.yaml
@@ -329,3 +309,5 @@ switch: !include configuration/switch.yaml
 mqtt: !include configuration/mqtt.yaml
 
 rest_command: !include configuration/rest_command.yaml
+
+template: !include_dir_merge_list configuration/template/
