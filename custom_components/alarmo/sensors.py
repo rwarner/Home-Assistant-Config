@@ -50,6 +50,7 @@ ATTR_GROUP_ID = "group_id"
 ATTR_TIMEOUT = "timeout"
 ATTR_EVENT_COUNT = "event_count"
 ATTR_ENTITIES = "entities"
+ATTR_NEW_ENTITY_ID = "new_entity_id"
 
 SENSOR_STATES_OPEN = [STATE_ON, STATE_OPEN, STATE_UNLOCKED]
 SENSOR_STATES_CLOSED = [STATE_OFF, STATE_CLOSED, STATE_LOCKED]
@@ -161,6 +162,10 @@ class SensorHandler:
 
     def async_watch_sensor_states(self, area_id: str = None, old_state: str = None, state: str = None):
         """watch sensors based on the state of the alarm entities."""
+
+        if not state:
+            return
+
         sensors_list = []
         for area in self.hass.data[const.DOMAIN]["areas"].keys():
             sensors_list.extend(self.active_sensors_for_alarm_state(area))
@@ -191,11 +196,16 @@ class SensorHandler:
                 if state and state.state and sensor_state != STATE_UNKNOWN:
                     _LOGGER.debug("Initial state for {} is {}".format(entity, parse_sensor_state(state)))
 
-    def active_sensors_for_alarm_state(self, area_id: str, state: str = None):
+        if area_id:
+            self.update_ready_to_arm_status(area_id)
+
+    def active_sensors_for_alarm_state(self, area_id: str, to_state: str = None):
         """Compose a list of sensors that are active for the state"""
         alarm_entity = self.hass.data[const.DOMAIN]["areas"][area_id]
 
-        if not state:
+        if to_state:
+            state = to_state
+        else:
             state = alarm_entity.arm_mode if alarm_entity.arm_mode else alarm_entity.state
 
         entities = []
@@ -209,6 +219,10 @@ class SensorHandler:
                 or config[ATTR_ALWAYS_ON]
             ):
                 entities.append(entity)
+            elif not to_state and config["type"] != SENSOR_TYPE_MOTION:
+                # always watch all sensors other than motion sensors, to indicate readiness for arming
+                entities.append(entity)
+
         return entities
 
     def validate_arming_event(self, area_id: str, target_state: str = None, **kwargs):
@@ -259,9 +273,11 @@ class SensorHandler:
 
         old_state = parse_sensor_state(old_state)
         new_state = parse_sensor_state(new_state)
+        sensor_config = self._config[entity]
         if old_state == STATE_UNKNOWN:
             # sensor is unknown at startup, state which comes after is considered as initial state
             _LOGGER.debug("Initial state for {} is {}".format(entity, new_state))
+            self.update_ready_to_arm_status(sensor_config["area"])
             return
         if old_state == new_state:
             # not a state change - ignore
@@ -269,9 +285,17 @@ class SensorHandler:
 
         _LOGGER.debug("entity {} changed: old_state={}, new_state={}".format(entity, old_state, new_state))
 
-        sensor_config = self._config[entity]
         alarm_entity = self.hass.data[const.DOMAIN]["areas"][sensor_config["area"]]
         alarm_state = alarm_entity.state
+
+        if (
+            alarm_entity.arm_mode and
+            alarm_entity.arm_mode not in sensor_config[const.ATTR_MODES] and
+            not sensor_config[ATTR_ALWAYS_ON]
+        ):
+            # sensor is not active in this arm mode, ignore
+            self.update_ready_to_arm_status(sensor_config["area"])
+            return
 
         res = sensor_state_allowed(new_state, sensor_config, alarm_state)
 
@@ -284,11 +308,13 @@ class SensorHandler:
 
         if res:
             # nothing to do here, sensor state is OK
+            self.update_ready_to_arm_status(sensor_config["area"])
             return
 
         open_sensors = self.process_group_event(entity, new_state)
         if not open_sensors:
             # triggered sensor is part of a group and should be ignored
+            self.update_ready_to_arm_status(sensor_config["area"])
             return
 
         if sensor_config[ATTR_ALWAYS_ON]:
@@ -319,6 +345,8 @@ class SensorHandler:
                 skip_delay=True,
                 open_sensors=open_sensors
             )
+
+        self.update_ready_to_arm_status(sensor_config["area"])
 
     def start_arm_timer(self, entity):
         """start timer for automatical arming"""
@@ -383,3 +411,27 @@ class SensorHandler:
                 open_sensors[entity] = group_events[entity][ATTR_STATE]
             _LOGGER.debug("tripped sensor {} caused the triggering of group {}".format(entity, group[ATTR_NAME]))
             return open_sensors
+
+    def update_ready_to_arm_status(self, area_id):
+        """calculate whether the system is ready for arming (based on the sensor states)."""
+        alarm_entity = self.hass.data[const.DOMAIN]["areas"][area_id]
+
+        arm_modes = [
+            mode
+            for (mode, config) in alarm_entity._config[const.ATTR_MODES].items()
+            if config[const.ATTR_ENABLED]
+        ]
+
+        if alarm_entity.state in const.ARM_MODES or alarm_entity.state == STATE_ALARM_ARMING and alarm_entity.arm_mode:
+            arm_modes.remove(alarm_entity.arm_mode)
+
+        def arm_mode_is_ready(mode):
+            (blocking_sensors, _bypassed_sensors) = self.validate_arming_event(area_id, mode)
+            result = not(len(blocking_sensors))
+            return result
+
+        arm_modes = list(filter(arm_mode_is_ready, arm_modes))
+        prev_arm_modes = alarm_entity._ready_to_arm_modes
+
+        if arm_modes != prev_arm_modes:
+            alarm_entity.ready_to_arm_modes = arm_modes

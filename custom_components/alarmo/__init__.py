@@ -35,7 +35,8 @@ from .websockets import async_register_websockets
 from .sensors import (
     SensorHandler,
     ATTR_GROUP,
-    ATTR_ENTITIES
+    ATTR_ENTITIES,
+    ATTR_NEW_ENTITY_ID,
 )
 from .automations import AutomationHandler
 from .mqtt import MqttHandler
@@ -219,6 +220,16 @@ class AlarmoCoordinator(DataUpdateCoordinator):
         if ATTR_GROUP in data:
             group = data[ATTR_GROUP]
             del data[ATTR_GROUP]
+
+        if ATTR_NEW_ENTITY_ID in data:
+            # delete old sensor entry when changing the entity_id
+            new_entity_id = data[ATTR_NEW_ENTITY_ID]
+            del data[ATTR_NEW_ENTITY_ID]
+            self.store.async_delete_sensor(entity_id)
+            self.assign_sensor_to_group(new_entity_id, group)
+            self.assign_sensor_to_group(entity_id, None)
+            entity_id = new_entity_id
+
         if const.ATTR_REMOVE in data:
             self.store.async_delete_sensor(entity_id)
             self.assign_sensor_to_group(entity_id, None)
@@ -356,6 +367,7 @@ class AlarmoCoordinator(DataUpdateCoordinator):
         return result["group_id"] if result else None
 
     def assign_sensor_to_group(self, entity_id: str, group_id: str):
+        updated = False
         old_group = self.async_get_group_for_sensor(entity_id)
         if old_group and group_id != old_group:
             # remove sensor from group
@@ -366,17 +378,19 @@ class AlarmoCoordinator(DataUpdateCoordinator):
                 })
             else:
                 self.store.async_delete_sensor_group(old_group)
+            updated = True
         if group_id:
             # add sensor to group
-            el = self.store.async_get_sensor_group(group_id)
-            if not el:
+            group = self.store.async_get_sensor_group(group_id)
+            if not group:
                 _LOGGER.error("Failed to assign entity {} to group {}".format(entity_id, group_id))
-                return
-            self.store.async_update_sensor_group(group_id, {
-                ATTR_ENTITIES: el[ATTR_ENTITIES] + [entity_id]
-            })
-
-        async_dispatcher_send(self.hass, "alarmo_sensors_updated")
+            elif entity_id not in group[ATTR_ENTITIES]:
+                self.store.async_update_sensor_group(group_id, {
+                    ATTR_ENTITIES: group[ATTR_ENTITIES] + [entity_id]
+                })
+                updated = True
+        if updated:
+            async_dispatcher_send(self.hass, "alarmo_sensors_updated")
 
     def async_update_sensor_group_config(self, group_id: str = None, data: dict = {}):
         if const.ATTR_REMOVE in data:
