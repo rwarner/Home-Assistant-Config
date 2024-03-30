@@ -3,17 +3,13 @@
 ############################
   
 - alias: LAUNDRY - Notify house washer is done
-  id: laundry_notify_house_washer_is_done
+  id: 98b90d3c-7815-11ee-b962-0242ac120002
   trigger:
   - platform: state
     entity_id: sensor.washer_washer_machine_state
     to: 'run'
     for:
       minutes: 20
-  condition:
-    - condition: state
-      entity_id: sensor.family_status 
-      state: 'Home'
   action:
     - wait_for_trigger:
       - platform: state
@@ -24,17 +20,13 @@
         message: Your clothes have finished washing
 
 - alias: LAUNDRY - Notify house dryer is done
-  id: laundry_notify_house_dryer_is_done
+  id: 9c564aa4-7815-11ee-b962-0242ac120002
   trigger:
   - platform: state
     entity_id: sensor.dryer_dryer_machine_state
     to: 'run'
     for:
       minutes: 20
-  condition:
-    - condition: state
-      entity_id: sensor.family_status 
-      state: 'Home'
   action:
     - wait_for_trigger:
       - platform: state
@@ -45,17 +37,13 @@
         message: Your clothes have finished drying
 
 - alias: LAUNDRY - Notify house dryer is in wrinklePrevent
-  id: laundry_notify_house_dryer_is_in_wrinklePrevent
+  id: 9feaba60-7815-11ee-b962-0242ac120002
   trigger:
   - platform: state
     entity_id: sensor.dryer_dryer_machine_state
     to: 'run'
     for:
       minutes: 20
-  condition:
-    - condition: state
-      entity_id: sensor.family_status 
-      state: 'Home'
   action:
     - wait_for_trigger:
       - platform: state

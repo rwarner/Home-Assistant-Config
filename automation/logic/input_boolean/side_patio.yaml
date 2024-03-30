@@ -2,7 +2,8 @@
 ### SIDE PATIO CONFIGURATION / AUTOMATION ####
 ##############################################
 
-- alias: SIDE PATIO - Whether or not someone is at rear patio
+- alias: SIDE PATIO - Whether or not someone is at side patio
+  id: 02789ad6-7815-11ee-b962-0242ac120002
   max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
     - platform: state

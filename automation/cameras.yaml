@@ -5,6 +5,7 @@
 
 # Set mode to queued so that there isn't conflicting runs when called while another is running
 - alias: CAMERAS - Capture on front door motion
+  id: 044d29d4-7816-11ee-b962-0242ac120002
   mode: queued
   trigger:
     platform: state
@@ -20,6 +21,7 @@
 
 # Set mode to queued so that there isn't conflicting runs when called while another is running
 - alias: CAMERAS - Capture on rear patio motion
+  id: 089bf6aa-7816-11ee-b962-0242ac120002
   mode: queued
   trigger:
     - platform: state
@@ -35,6 +37,7 @@
 
 # Set mode to queued so that there isn't conflicting runs when called while another is running
 - alias: CAMERAS - Capture on side patio motion
+  id: 0cb19542-7816-11ee-b962-0242ac120002
   mode: queued
   trigger:
     - platform: state

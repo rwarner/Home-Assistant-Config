@@ -3,6 +3,7 @@
 ######################################
 
 - alias: ALERT (AWAY) - Motion at Front Door, notify Mobile App
+  id: 604862be-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -20,17 +21,18 @@
         title: "Front Door Motion"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.unifi_doorbell" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
-          clickAction: "/lovelace/camera_view"
+          entity_id: camera.doorbell_high
+          url: "/lovelace/camera_view"
           actions:
-          - action: "URI"
-            title: "Open Unifi"
-            uri: 'app://com.ubnt.unifi.protect'
+          - action: PROTECT
+            title: Launch Protect App
+            url: unifi-protect://
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Motion at Rear Patio, notify Mobile App
+  id: 65d969a8-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -55,6 +57,7 @@
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Motion at Side Patio, notify Mobile App
+  id: 6b54a302-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -79,6 +82,7 @@
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Motion in house
+  id: 71fe36c8-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -104,13 +108,14 @@
         data:
           ttl: 0
           priority: high
-          clickAction: "/lovelace/camera_view"
+          url: "/lovelace/camera_view"
           actions:
               - action: "trigger_alarm"
                 title: "Trigger Alarm"
     - delay: '00:02:00' # Prevent multiple runs of this within 2 minute intervals
 
 - alias: ALERT (AWAY) - Window Opened in house
+  id: 775f8b94-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -130,13 +135,14 @@
         data:
           ttl: 0
           priority: high
-          clickAction: "/lovelace/camera_view"
+          url: "/lovelace/camera_view"
           actions:
               - action: "trigger_alarm"
                 title: "Trigger Alarm"
     - delay: '00:02:00' # Prevent multiple runs of this within 2 minute intervals
 
 - alias: ALERT (AWAY) - Door Opened into house
+  id: 7ed3915e-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -156,13 +162,14 @@
         data:
           ttl: 0
           priority: high
-          clickAction: "/lovelace/camera_view"
+          url: "/lovelace/camera_view"
           actions:
               - action: "trigger_alarm"
                 title: "Trigger Alarm"
     - delay: '00:02:00' # Prevent multiple runs of this within 2 minute intervals
 
 - alias: ALERT (AWAY) - Garage has opened
+  id: 84f80f60-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -186,6 +193,7 @@
           clickAction: "/lovelace/camera_view"
 
 - alias: ALERT (AWAY) - Basement door has been unlocked
+  id: 8a751ece-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -203,12 +211,17 @@
         title: "Basement door unlocked"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.unifi_rear_porch" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
-          clickAction: "/lovelace/camera_view"
+          entity_id: camera.unifi_under_porch_high
+          url: "/lovelace/camera_view"
+          actions:
+          - action: PROTECT
+            title: Launch Protect App
+            url: unifi-protect://
 
 - alias: ALERT (AWAY) - Front door has been unlocked
+  id: 90f76b94-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -226,12 +239,17 @@
         title: "Front door unlocked"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.unifi_front_porch" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
-          clickAction: "/lovelace/camera_view"
+          entity_id: camera.doorbell_high
+          url: "/lovelace/camera_view"
+          actions:
+          - action: PROTECT
+            title: Launch Protect App
+            url: unifi-protect://
 
 - alias: "ALERT (AWAY) - Alarm Triggered, notify mobile / in house"
+  id: 98828ac4-7814-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: alarm_control_panel.alarm
@@ -247,9 +265,10 @@
         data:
           ttl: 0
           priority: high
-          clickAction: "/"
+          url: "/"
 
 - alias: "ALERT (AWAY) - Alarm Pending to Triggered, notify NoonLight IFTTT"
+  id: 9eaec2fa-7814-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: alarm_control_panel.alarm
@@ -267,4 +286,4 @@
         data:
           ttl: 0
           priority: high
-          clickAction: "/"
+          url: "/"

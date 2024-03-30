@@ -2,6 +2,7 @@
 ##### GOING LIGHT AUTOMATIONS ####
 ##################################
 - alias: GOING LIGHT - Turn off lights outside when light outside
+  id: 54332a62-7815-11ee-b962-0242ac120002
   trigger:
     # Make sure that it's dark outside
     - platform: state
@@ -17,4 +18,5 @@
       before: '11:00:00'
   action:
     - service: light.turn_off
+      continue_on_error: true
       entity_id: light.outside_lights

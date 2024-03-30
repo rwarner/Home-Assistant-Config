@@ -9,6 +9,7 @@
 # tasks for one of us to mark as home when both arriving, maybe leaving
 
 - alias: PERSON - Mark person as just arrived
+  id: 20d463de-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
     - platform: state
@@ -46,6 +47,7 @@
 
 
 - alias: PERSON - Mark person as home
+  id: 274c2d00-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
     - platform: state
@@ -79,6 +81,7 @@
           {% endif %}
  
 - alias: PERSON - Mark person as just left
+  id: 2cbe0f1a-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
     - platform: state
@@ -102,6 +105,7 @@
           {% endif %}
  
 - alias: PERSON - Mark person as not_home
+  id: 31b7c1e6-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
     - platform: state
@@ -127,6 +131,7 @@
           {% endif %}
  
 - alias: PERSON - Mark person as extended not_home
+  id: 36b4266c-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
     - platform: state
@@ -153,6 +158,7 @@
         
         
 - alias: PERSON - Mark Family as Away if both go from Just Left to Away
+  id: 3b6672fa-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
     - platform: state
@@ -188,6 +194,7 @@
         entity_id: sensor.family_status
 
 - alias: PERSON - Mark Family as Home if someone goes from Away to Just Arrived
+  id: 4126d874-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
     - platform: state

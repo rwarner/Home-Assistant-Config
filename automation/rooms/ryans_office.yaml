@@ -43,6 +43,7 @@
 #       entity_id: light.ryans_office_lights
 
 - alias: RYANS OFFICE - Good morning on first movement
+  id: b64c9d8c-7815-11ee-b962-0242ac120002
   mode: single
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
@@ -62,22 +63,27 @@
       entity_id: sensor.ryans_office_motion_sensor_illuminance
       below: 30
     - service: light.turn_on
+      continue_on_error: true
       entity_id: light.ryans_office_lights
 
 - alias: RYANS OFFICE - Turn off lights from switch
+  id: bb7b3494-7815-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: switch.ryan_s_office_switch_2
       to: 'off'
   action:
     - service: light.turn_off
+      continue_on_error: true
       entity_id: light.ryans_office_lights
 
 - alias: RYANS OFFICE - Turn on lights from switch
+  id: bfdbfb40-7815-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: switch.ryan_s_office_switch_2
       to: 'on'
   action:
     - service: light.turn_on
+      continue_on_error: true
       entity_id: light.ryans_office_lights

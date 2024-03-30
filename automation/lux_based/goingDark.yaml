@@ -2,38 +2,46 @@
 ##### GOING DARK AUTOMATIONS ####
 #################################
 
-#   Turn on Family Room Lights to 90%, Outside to 100%
+#   Turn on Family Room Lights, Outside to 100%
 #   turn off unneeded lights if nobody is home
 - alias: GOING DARK - Turn on lights when outside gets dark
+  id: 4c3cbda0-7815-11ee-b962-0242ac120002
   trigger:
     # Make sure that it's dark outside
     - platform: state
       entity_id: input_boolean.dark_outside
-      to: 'on'
+      to: "on"
   condition:
     # Only proceed, if we haven't used this in the last 12 hours
-    - condition: template 
-      value_template: "{{ (state_attr('states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered)) > 43200) }}"
+    - condition: template
+      value_template: >-
+        {{
+        (state_attr('states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes',
+        'last_triggered') == none) or
+        ((as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered))
+        > 43200) }}
   action:
     - service: light.turn_on
+      continue_on_error: true
       data:
-        entity_id: 
+        entity_id:
           - light.family_room_lights
           - light.kitchen_lights
           - light.living_room_lights
-        brightness_pct: 90
         transition: 10
     - service: light.turn_on
+      continue_on_error: true
       data:
-        entity_id: 
+        entity_id:
           - light.outside_lights
         brightness_pct: 100
         transition: 2
-      # Only proceed if someone is not home
-      # turn off lights that we don't want to leave on
+    # Only proceed if someone is not home
+    # turn off lights that we don't want to leave on
     - condition: state
       entity_id: alarm_control_panel.alarm
       state: armed_away
     - service: light.turn_off
-      entity_id: 
+      continue_on_error: true
+      entity_id:
         - light.kitchen_ceiling_lights

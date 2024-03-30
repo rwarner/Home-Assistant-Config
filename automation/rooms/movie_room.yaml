@@ -2,39 +2,42 @@
 ### MOVIE ROOM AUTOMATIONS  ###
 ###############################
 
-# - alias: MOVIE ROOM - Turn on Light from motion (only when Projector is off, light is low)
-#   mode: restart # Restart on every motion, ensure that the light is always on
-#   max_exceeded: silent # Hide warnings when triggered while in delay.
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.movie_room_motion_sensor
-#       from: 'off'
-#       to: 'on'
-#   condition:
-#   # Make sure that the projector is off, could be watching something
-#     - condition: state
-#       entity_id: sensor.harmony_hub_activity 
-#       state: 'PowerOff'
-#   # Check if the light is dark OR if the automation has recently been triggered
-#   # this allows us to skip luminance checks on restart
-#     - condition: or
-#       conditions:
-#       # Automation has recently been trigger by a restart within 8 min window
-#       # (3 min till turn off, 5 min till lux/illuminance sensor updates)
-#         - condition: template
-#           value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.movie_room_turn_on_light_from_motion_only_when_projector_is_off_light_is_low.attributes.last_triggered)) < 480 }}"
-#       # Make sure that the light level is below 10 lx
-#         - condition: numeric_state
-#           entity_id: sensor.movie_room_motion_sensor_illuminance
-#           below: 10
-#   action:
-#     - service: light.turn_on
-#       data:
-#         entity_id: light.movie_room_lights
-#         brightness_pct: 100
-#     # Wait until motion goes off
-#     - wait_template: "{{ is_state('binary_sensor.mmovie_room_motion_sensor', 'off') }}"
-#     - delay:
-#         minutes: 3
-#     - service: light.turn_off
-#       entity_id: light.movie_room_lights
+- alias: MOVIE ROOM - Turn on Light from motion (only when Projector is off, light is low)
+  id: b28ed294-8cad-11ee-b9d1-0242ac120002
+  mode: restart # Restart on every motion, ensure that the light is always on
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.movie_room_motion_sensor
+      from: "off"
+      to: "on"
+  condition:
+    # Make sure that the projector is off, could be watching something
+    - condition: state
+      entity_id: sensor.harmony_hub_activity
+      state: PowerOff
+  # Check if the light is dark OR if the automation has recently been triggered
+  # this allows us to skip luminance checks on restart
+    - condition: or
+      conditions:
+        # Automation has recently been trigger by a restart within 8 min window
+        # (3 min till turn off, 5 min till lux/illuminance sensor updates)
+        - condition: template
+          value_template: >-
+            {{
+            (as_timestamp(now())-as_timestamp(states.automation.movie_room_turn_on_light_from_motion_only_when_projector_is_off_light_is_low.attributes.last_triggered))
+            < 480 }}
+        # Make sure that the light level is below 10 lx
+        - condition: numeric_state
+          entity_id: sensor.movie_room_motion_sensor_illuminance
+          below: 10
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.movie_room_lights
+    # Wait until motion goes off
+    - wait_template: "{{ is_state('binary_sensor.movie_room_motion_sensor', 'off') }}"
+    - delay:
+        minutes: 3
+    - service: light.turn_off
+      entity_id: light.movie_room_lights

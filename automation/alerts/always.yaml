@@ -27,31 +27,34 @@
 #               - action: "close_garage_door"
 #                 title: "Close Garage"
 
-
 - alias: ALERT - Doorbell rang, notify Mobile App and House
+  id: 287a519e-7814-11ee-b962-0242ac120002
   trigger:
-  - platform: state
-    entity_id: binary_sensor.doorbell_push # Press of the doorbell
-    from: 'off'
-    to: 'on'
+    - platform: state
+      entity_id: binary_sensor.doorbell_push # Press of the doorbell
+      from: "off"
+      to: "on"
   action:
-    - service: unifiprotect.set_doorbell_message
-      data:
-        entity_id: camera.unifi_doorbell
-        message: "Please wait"
-        duration: 1 # Display for 1 minute
     - service: script.alexa_notify_house
       data_template:
-        message: "Doorbell Rang"
-    - delay: '00:00:02' # Wait 2 seconds so we don't get their finger in the camera
+        message: Doorbell Rang
+    - delay: "00:00:02" # Wait 2 seconds so we don't get their finger in the camera
     - service: notify.ryan_devices
       data:
-        title: "Doorbell Rang"
+        title: Doorbell Rang
         message: ""
         data:
-          entity_id: camera.doorbell_camera
+          ttl: 0
+          priority: high
+          entity_id: camera.doorbell_high
+          url: /lovelace/camera_view
+          actions:
+            - action: PROTECT
+              title: Launch Protect App
+              url: unifi-protect://
 
 - alias: ALERT - When a critical device goes offline to mobile app
+  id: 3039b6f4-7814-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: 
@@ -94,6 +97,7 @@
 
 
 - alias: ALERT - HA Persistent Notifications to Mobile App
+  id: 36810da0-7814-11ee-b962-0242ac120002
   trigger:
   - event_data:
       domain: persistent_notification
@@ -108,6 +112,7 @@
       message: "{{trigger.event.data.service_data.message}}"
 
 - alias: ALERT - HA Update Available to Mobile App
+  id: 416cb260-ee0b-11ee-a951-0242ac120002
   trigger:
     - platform: state
       entity_id: binary_sensor.home_assistant_website_update_available
@@ -121,80 +126,148 @@
       data:
         ttl: 0
         priority: high
-        clickAction: "{{ state_attr('sensor.home_assistant_website', 'release_notes') }}"
+        url: "{{ state_attr('sensor.home_assistant_website', 'release_notes') }}"
 
 - alias: ALERT - Low battery on sensor, notify Mobile App
+  id: 3c4cf9b0-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: numeric_state
-    entity_id:
-      - sensor.bedroom_light_button_battery_level
-      - sensor.kitchen_motion_sensor_battery_level
-      - sensor.laundry_motion_sensor_battery_level
-      - sensor.ryans_bedside_button_battery_level
-      - sensor.media_room_deadbolt_battery_level
-      - sensor.ryans_office_motion_sensor_battery_level
-      - sensor.media_room_motion_sensor_battery_level
-      - sensor.master_bedroom_motion_sensor_battery_level
-      - sensor.front_outdoor_motion_sensor_battery_level
-      - sensor.front_door_deadbolt_battery_level
-    below: 30
+    - platform: numeric_state
+      entity_id:
+        - sensor.kellys_office_rear_window_sensor_battery_level
+        - sensor.kellys_office_side_window_sensor_battery_level
+        - sensor.upstairs_bathroom_window_sensor_battery_level
+        - sensor.ryans_office_rear_window_sensor_battery_level
+        - sensor.ryans_office_side_window_sensor_battery_level
+        - sensor.master_bedroom_front_window_sensor_battery_level
+        - sensor.master_bedroom_side_window_sensor_battery_level
+        - sensor.guest_room_front_window_sensor_battery_level
+        - sensor.guest_room_side_window_sensor_battery_level
+        - sensor.living_room_front_window_sensor_battery_level
+        - sensor.living_room_side_window_1_sensor_battery_level
+        - sensor.living_room_side_window_2_sensor_battery_level
+        - sensor.living_room_rear_window_sensor_battery_level
+        - sensor.half_bath_window_sensor_battery_level
+        - sensor.kitchen_window_sensor_battery_level
+        - sensor.family_room_front_window_1_sensor_battery_level
+        - sensor.family_room_front_window_2_sensor_battery_level
+        - sensor.family_room_side_window_1_sensor_battery_level
+        - sensor.family_room_side_window_2_sensor_battery_level
+        - sensor.family_room_rear_window_1_sensor_battery_level
+        - sensor.family_room_rear_window_2_sensor_battery_level
+        - sensor.family_room_rear_window_3_sensor_battery_level
+        - sensor.laundry_room_window_sensor_battery_level
+        - sensor.movie_room_window_sensor_battery_level
+        - sensor.bedroom_light_button_battery_level
+        - sensor.ryans_bedside_button_battery_level
+        - sensor.basement_door_deadbolt_battery_level
+        - sensor.front_door_deadbolt_battery_level
+        - sensor.kitchen_motion_sensor_battery_level
+        - sensor.laundry_motion_sensor_battery_level
+        - sensor.ryans_office_motion_sensor_battery_level
+        - sensor.media_room_motion_sensor_battery_level
+        - sensor.master_bedroom_motion_sensor_battery_level
+        - sensor.front_outdoor_motion_sensor_battery_level
+        - sensor.basement_door_sensor_battery_level
+        - sensor.front_door_sensor_battery_level
+        - sensor.ryans_office_door_sensor_battery_level
+        - sensor.porch_slider_sensor_battery_level
+        - sensor.family_room_slider_battery_level
+        - sensor.kitchen_water_sensor_battery_level
+        - sensor.downstairs_bathroom_water_sensor_battery_level
+      below: 30
   action:
     - service: notify.ryan_devices
       data:
-        title: "Sensor Battery Low"
+        title: Sensor Battery Low
         message: "{{trigger.from_state.attributes.friendly_name}} is low"
         data:
-          clickAction: "/lovelace/devices_view"
+          url: /lovelace/devices_view
 
 - alias: ALERT - Sensor went unavailable, notify Mobile App
+  id: 43a40884-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: state
-    entity_id:
-      - binary_sensor.family_room_front_window_1_sensor
-      - binary_sensor.family_room_front_window_2_sensor
-      - binary_sensor.living_room_front_window_sensor
-      - binary_sensor.living_room_side_window_1_sensor
-      - binary_sensor.kitchen_window_sensor
-      - binary_sensor.basement_door_sensor
-      - binary_sensor.front_door_sensor
-      - binary_sensor.ryans_office_door_sensor
-    to: "unavailable"
+    - platform: state
+      entity_id:
+        - binary_sensor.kellys_office_rear_window_sensor
+        - binary_sensor.kellys_office_side_window_sensor
+        - binary_sensor.upstairs_bathroom_window_sensor
+        - binary_sensor.ryans_office_rear_window_sensor
+        - binary_sensor.ryans_office_side_window_sensor
+        - binary_sensor.master_bedroom_front_window_sensor
+        - binary_sensor.master_bedroom_side_window_sensor
+        - binary_sensor.guest_room_front_window_sensor
+        - binary_sensor.guest_room_side_window_sensor
+        - binary_sensor.living_room_front_window_sensor
+        - binary_sensor.living_room_side_window_1_sensor
+        - binary_sensor.living_room_side_window_2_sensor
+        - binary_sensor.living_room_rear_window_sensor
+        - binary_sensor.half_bath_window_sensor
+        - binary_sensor.kitchen_window_sensor
+        - binary_sensor.family_room_front_window_1_sensor
+        - binary_sensor.family_room_front_window_2_sensor
+        - binary_sensor.family_room_side_window_1_sensor
+        - binary_sensor.family_room_side_window_2_sensor
+        - binary_sensor.family_room_rear_window_1_sensor
+        - binary_sensor.family_room_rear_window_2_sensor
+        - binary_sensor.family_room_rear_window_3_sensor
+        - binary_sensor.laundry_room_window_sensor
+        - binary_sensor.movie_room_window_sensor
+        - binary_sensor.bedroom_light_button
+        - binary_sensor.ryans_bedside_button
+        - binary_sensor.kitchen_motion_sensor
+        - binary_sensor.laundry_motion_sensor
+        - binary_sensor.ryans_office_motion_sensor
+        - binary_sensor.media_room_motion_sensor
+        - binary_sensor.master_bedroom_motion_sensor
+        - binary_sensor.front_outdoor_motion_sensor
+        - binary_sensor.basement_door_sensor
+        - binary_sensor.front_door_sensor
+        - binary_sensor.ryans_office_door_sensor
+        - binary_sensor.porch_slider_sensor
+        - binary_sensor.family_room_slider
+        - binary_sensor.kitchen_water_sensor_moisture
+        - binary_sensor.downstairs_bathroom_water_sensor_moisture
+      to: unavailable
+      for:
+        minutes: 5
   action:
     - service: notify.ryan_devices
       data:
-        title: "Sensor Unavailable"
+        title: Sensor Unavailable
         message: "{{trigger.from_state.attributes.friendly_name}} is unavailable, reset"
         data:
-          clickAction: "/lovelace/devices_view"
+          url: /lovelace/devices_view
 
 - alias: ALERT - Notify when the physical mail comes
+  id: 48cfaaa2-7814-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: binary_sensor.mailbox_sensor
-      to: 'on'
+      to: "on"
   condition:
-      condition: state
+    - condition: state
       entity_id: input_boolean.mail_arrived
-      state: 'off'
+      state: "off"
   action:
     - service: notify.ryan_devices
       data:
         # UTF-8 issue as of 2022.8
         #title: "\uD83D\uDCEB\uD83D\uDCEB  Mail has arrived  \uD83D\uDCEB\uD83D\uDCEB"
-        title: "Mail has arrived"
+        title: Mail has arrived
         message: ""
     - service: script.alexa_notify_kitchen
       data_template:
-        message: "You've got mail"
+        message: You've got mail
     - service: script.alexa_notify_ryans_office
       data_template:
-        message: "You've got mail"
+        message: You've got mail
     - service: homeassistant.turn_on
       entity_id: input_boolean.mail_arrived
+
 
 ########################################
 ############# Discord Below ############
@@ -204,6 +277,7 @@
 # Sticking with Discord for now, since we can upload a small video
 # watch directly on there
 - alias: ALERT - When a motion detection video is created
+  id: 54e81d38-7814-11ee-b962-0242ac120002
   trigger:
     - platform: event
       event_type: folder_watcher

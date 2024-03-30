@@ -37,6 +37,7 @@
 
 
 - alias: FRONT DOOR - Whether or not someone is at the front door
+  id: f304bee0-7814-11ee-b962-0242ac120002
   #max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
     - platform: state

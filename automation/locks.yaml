@@ -6,36 +6,49 @@
 # Checking for if Ryan / Kelly / All_devices has changed within the last 10 minutes
 # or if sensor.family_status is "Away" and our phones haven't connected to WiFi yet
 # Only if it's currently "dark_outside"
+
 - alias: LOCKS - When unlocking the door, turn on lights inside if before/after sun and nobody is home
+  id: 2ab660a4-7816-11ee-b962-0242ac120002
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
       entity_id: lock.front_door_deadbolt
-      from: 'locked'
-      to: 'unlocked'
+      from: locked
+      to: unlocked
   condition:
-    condition: and
-    conditions:
-      - condition: or
-        conditions:
-          - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.kelly_status.last_changed)) < 600 }}"
-          - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.ryan_status.last_changed)) < 600 }}"
-          - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.family_status.last_changed)) < 600 }}"
-          - condition: state
-            entity_id: sensor.family_status
-            state: 'Away'
-      - condition: state
-        entity_id: input_boolean.dark_outside
-        state: 'on'
+    - condition: and
+      conditions:
+        - condition: or
+          conditions:
+            - condition: template
+              value_template: >-
+                {{
+                (as_timestamp(now())-as_timestamp(states.sensor.kelly_status.last_changed))
+                < 600 }}
+            - condition: template
+              value_template: >-
+                {{
+                (as_timestamp(now())-as_timestamp(states.sensor.ryan_status.last_changed))
+                < 600 }}
+            - condition: template
+              value_template: >-
+                {{
+                (as_timestamp(now())-as_timestamp(states.sensor.family_status.last_changed))
+                < 600 }}
+            - condition: state
+              entity_id: sensor.family_status
+              state: Away
+        - condition: state
+          entity_id: input_boolean.dark_outside
+          state: "on"
   action:
     - service: light.turn_on
-      entity_id: light.living_room_fireplace
-      # Wait until someone walks into the Kitchen
+      continue_on_error: true
+      entity_id: light.living_room_lights
+    # Wait until someone walks into the Kitchen
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
     - service: light.turn_on
+      continue_on_error: true
       entity_id: light.kitchen_lights # Lamps and Pendants
       # Turn off Living Room Fireplace lights after 5 minutes
     # - delay:
@@ -45,57 +58,68 @@
 
 
 - alias: LOCKS - When unlocking the door, Alexa welcome home
+  id: 30735d30-7816-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: lock.front_door_deadbolt
-      from: 'locked'
-      to: 'unlocked'
+      from: locked
+      to: unlocked
   condition:
-    condition: and
-    conditions:
-      # Ignore any unlocks if the door has unlocked in the last 10 minutes
-      - condition: template
-        value_template: "{{ (as_timestamp(now())-as_timestamp(trigger.from_state.last_changed)) > 600 }}"
-      - condition: or
-        conditions:
-          # If in the last ten minutes, either phones have changed or the group family has changed.
-          # Or if nobody is home at all when entering (typical)
-          - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.kelly_status.last_changed)) < 600 }}"
-          - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.ryan_status.last_changed)) < 600 }}"
-          - condition: template
-            value_template: "{{ (as_timestamp(now())-as_timestamp(states.sensor.family_status.last_changed)) < 600 }}"
-          - condition: state
-            entity_id: sensor.family_status
-            state: 'Away'
+    - condition: and
+      conditions:
+        # Ignore any unlocks if the door has unlocked in the last 10 minutes
+        - condition: template
+          value_template: >-
+            {{ (as_timestamp(now())-as_timestamp(trigger.from_state.last_changed))
+            > 600 }}
+        - condition: or
+          conditions:
+            # If in the last ten minutes, either phones have changed or the group family has changed.
+            # Or if nobody is home at all when entering (typical)
+            - condition: template
+              value_template: >-
+                {{
+                (as_timestamp(now())-as_timestamp(states.sensor.kelly_status.last_changed))
+                < 600 }}
+            - condition: template
+              value_template: >-
+                {{
+                (as_timestamp(now())-as_timestamp(states.sensor.ryan_status.last_changed))
+                < 600 }}
+            - condition: template
+              value_template: >-
+                {{
+                (as_timestamp(now())-as_timestamp(states.sensor.family_status.last_changed))
+                < 600 }}
+            - condition: state
+              entity_id: sensor.family_status
+              state: Away
   action:
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
-    - delay: 
+    - delay:
         seconds: 2
     - service: script.alexa_notify_kitchen
       data_template:
-        title: "Welcome home!"
+        title: Welcome home!
         message: >
-          {% if is_state('sensor.ryan_status', 'Just Arrived') and is_state('sensor.kelly_status', 'Just Arrived') %}
-          Welcome home, Ryan and Kelly!
-          {% elif is_state('sensor.ryan_status', 'Just Arrived') and (is_state('sensor.kelly_status', 'Away') or is_state('sensor.kelly_status', 'Home')) %}
-          Welcome home, Ryan!
-          {% elif (is_state('sensor.ryan_status', 'Away') or is_state('sensor.ryan_status', 'Home')) and is_state('sensor.kelly_status', 'Just Arrived') %}
-          Welcome home, Kelly!
-          {% else %}
-          Welcome home!
-          {% endif %}
+          {% if is_state('sensor.ryan_status', 'Just Arrived') and
+          is_state('sensor.kelly_status', 'Just Arrived') %} Welcome home, Ryan
+          and Kelly! {% elif is_state('sensor.ryan_status', 'Just Arrived') and
+          (is_state('sensor.kelly_status', 'Away') or
+          is_state('sensor.kelly_status', 'Home')) %} Welcome home, Ryan! {% elif
+          (is_state('sensor.ryan_status', 'Away') or
+          is_state('sensor.ryan_status', 'Home')) and
+          is_state('sensor.kelly_status', 'Just Arrived') %} Welcome home, Kelly!
+          {% else %} Welcome home! {% endif %}
 
-          {% if states.sensor.tautilli_data.state == "" %}
-          {% else %}
-          {{ states.sensor.tautilli_data.state }} has been added to Plex while you were away. 
-          {% endif %}
-
+          {% if is_state('sensor.tautilli_data', " ") or
+          is_state('sensor.tautilli_data',"unknown") %} {% else %} {{
+          states.sensor.tautilli_data.state }} has been added to Plex while you
+          were away.  {% endif %}
+    
     #Reset variable after using it for announcement
     - service: variable.update_sensor
       data:
-        value: ""
+        value: " "
       target:
         entity_id: sensor.tautilli_data
-

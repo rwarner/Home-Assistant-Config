@@ -3,6 +3,7 @@
 ################################################
 
 - alias: RYANS OFFICE - First movement of the day in ryans office
+  id: 4a9712fc-7810-11ee-b962-0242ac120002
   max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
     - platform: state

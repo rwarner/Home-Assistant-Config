@@ -5,6 +5,7 @@
 # 9:00 p.m : Outside lights off, if we are both home
 #            Sun - Friday
 - alias: NIGHT - Outside lights off 9:00pm, both home during week
+  id: 5f5f285c-a9be-11ee-a506-0242ac120002
   trigger:
     - platform: time
       at: '21:00:00'
@@ -27,6 +28,7 @@
           - fri
   action:
       service: light.turn_off
+      continue_on_error: true
       entity_id: light.outside_lights
 
 
@@ -41,16 +43,19 @@
 
 # 11:30 p.m: Turn off outside lights regardless
 - alias: NIGHT - Turn off outside lights at 11:30pm
+  id: e5d00364-7815-11ee-b962-0242ac120002
   trigger:
     - platform: time
       at: '23:30:00'
   action:
       service: light.turn_off
+      continue_on_error: true
       entity_id: light.outside_lights
 
 
 # 12:30 a.m: Lock door regardless
 - alias: NIGHT - Lock door at 12:30 a.m.
+  id: e9db2d4e-7815-11ee-b962-0242ac120002
   trigger:
     - platform: time
       at: '00:30:00'

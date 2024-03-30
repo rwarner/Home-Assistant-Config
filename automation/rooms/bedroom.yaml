@@ -26,6 +26,7 @@
 
 ########## BEDROOM LIGHT BUTTON ##########
 - alias: BEDROOM - Turn on light in Bedroom (Bedroom Light Button)
+  id: 62088754-7815-11ee-b962-0242ac120002
   trigger:
   - event_data:
       command: button_single
@@ -37,6 +38,7 @@
     service: script.toggle_bedroom_lights
 
 - alias: BEDROOM - Turn on fan from light button in Bedroom (Bedroom Light Button)
+  id: 681094ca-7815-11ee-b962-0242ac120002
   trigger:
   - event_data:
       command: button_double
@@ -50,6 +52,7 @@
         - switch.fan
 
 - alias: BEDROOM - Turn on fan and light in Bedroom (Bedroom Light Button)
+  id: 6d0ab406-7815-11ee-b962-0242ac120002
   trigger:
   - event_data:
       command: button_hold
@@ -67,6 +70,7 @@
 
 ############ Ryan's Bedside Button #############
 - alias: BEDROOM - Turn on light in Bedroom (Ryan Button)
+  id: 72546ace-7815-11ee-b962-0242ac120002
   trigger:
   - event_data:
       command: button_single
@@ -78,6 +82,7 @@
     service: script.toggle_bedroom_lights
 
 - alias: BEDROOM - Turn on fan in Bedroom (Ryan Button)
+  id: 79d021da-7815-11ee-b962-0242ac120002
   trigger:
   - event_data:
       command: button_double
@@ -94,6 +99,7 @@
 
 ############ Motion Sensor #############
 - alias: BEDROOM - Turn on Light from motion (Off after 5 min, between 10 am and 9:30pm)
+  id: 7f97ba74-7815-11ee-b962-0242ac120002
   mode: restart # Restart on every motion, ensure that the light is always on
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:

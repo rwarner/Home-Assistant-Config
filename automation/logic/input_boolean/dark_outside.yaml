@@ -4,6 +4,7 @@
 
 # Darker than 500 Lux Outside 
 - alias: GOING DARK - Set dark_outside input_boolean to On, dark out
+  id: d8a964ba-7814-11ee-b962-0242ac120002
   trigger:
     # Make sure that the light level is below 500 lx
     - platform: numeric_state
@@ -28,6 +29,7 @@
 
 # Brighter than 400 Lux Outside 
 - alias: GOING DARK - Set dark_outside input_boolean to off, light out
+  id: dedd58d2-7814-11ee-b962-0242ac120002
   trigger:
     # Make sure that the light level is above 400 lx
     - platform: numeric_state

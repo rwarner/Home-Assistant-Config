@@ -1,5 +1,6 @@
 # 6:00 a.m.
 - alias: MORNING - Reset first_movement_ryans_office to off
+  id: caff6d18-7815-11ee-b962-0242ac120002
   trigger:
     - platform: time
       at: '06:00:00'
@@ -9,6 +10,7 @@
 
 # 8:00 a.m.
 - alias: MORNING - Set all Alexa volume to 60% everyday
+  id: cf4face8-7815-11ee-b962-0242ac120002
   trigger:
     - platform: time
       at: '08:00:00'
@@ -17,6 +19,7 @@
 
 # 8:00 a.m.
 - alias: MORNING - Reset mailbox input_boolean to off
+  id: d366c2b2-7815-11ee-b962-0242ac120002
   trigger:
     - platform: time
       at: '08:00:00'
@@ -26,25 +29,38 @@
 
 # 8:00 a.m.
 - alias: MORNING - Reset all lights to default brightness
+  id: dbe63fa8-7815-11ee-b962-0242ac120002
   trigger:
-      - platform: time
-        at: '08:00:00'
+    - platform: time
+      at: "08:00:00"
   action:
     - service: light.turn_on
+      continue_on_error: true
       target:
-        entity_id: 
-          - light.family_room_lights
-          - light.living_room_fireplace
-          - light.kitchen_lights
-          - light.kitchen_ceiling_lights
-          - light.ryans_office_desk_lamp
+        entity_id:
+          - light.living_room_floor_lamp
       data:
-        brightness_pct: 100
-    - service: light.turn_off
+        brightness_pct: 75
+    - service: light.turn_on
+      continue_on_error: true
       target:
-        entity_id: 
+        entity_id:
           - light.family_room_lights
           - light.living_room_fireplace
+          - light.living_room_desk_lamp
           - light.kitchen_lights
           - light.kitchen_ceiling_lights
           - light.ryans_office_desk_lamp
+          - light.movie_room_lights
+      data:
+        brightness_pct: 90
+    - service: light.turn_off
+      continue_on_error: true
+      target:
+        entity_id:
+          - light.family_room_lights
+          - light.living_room_lights
+          - light.kitchen_lights
+          - light.kitchen_ceiling_lights
+          - light.ryans_office_desk_lamp
+          - light.movie_room_lights

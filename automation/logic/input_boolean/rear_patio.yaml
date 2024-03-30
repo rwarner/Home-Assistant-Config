@@ -3,6 +3,7 @@
 ##############################################
 
 - alias: REAR PATIO - Whether or not someone is at rear patio
+  id: fab052b2-7814-11ee-b962-0242ac120002
   max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
     - platform: state

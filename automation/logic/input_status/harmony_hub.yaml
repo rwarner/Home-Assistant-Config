@@ -1,4 +1,5 @@
 - alias: HARMONY - Harmony Hub input_select
+  id: 106148a0-7815-11ee-b962-0242ac120002
   trigger:
     platform: state
     entity_id: input_select.harmony_hub

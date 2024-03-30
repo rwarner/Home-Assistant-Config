@@ -3,34 +3,37 @@
 ###################################
 
 - alias: DEVICE_TRACK - Nobody home, lock doors, arm alexa, set Tstat to Away, turn off Lights, etc..
+  id: 13f53d22-7816-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: sensor.family_status
-      from: 'Home'
-      to: 'Away'
+      from: Home
+      to: Away
   action:
-    - service: lock.lock                                # Lock Media Room Deadbolt
-      entity_id: lock.basement_door_deadbolt
-    - service: lock.lock                                # Lock Front Door Deadbolt
-      entity_id: lock.front_door_deadbolt
-    - service: alarm_control_panel.alarm_arm_away       # Arm Alexa for guard mode
+    - service: lock.lock
+      entity_id: lock.basement_door_deadbolt      # Lock Basement Deadbolt
+    - service: lock.lock
+      entity_id: lock.front_door_deadbolt         # Lock Front Door Deadbolt
+    - service: alarm_control_panel.alarm_arm_away
       entity_id: alarm_control_panel.alarm
     # - service: climate.set_preset_mode                  # Set thermostat for Away mode
     #   data:
     #     entity_id: climate.thermostat, climate.media_room
     #     preset_mode: 'Away'
-    - service: light.turn_off                           # Turn off all lights in home
+    - service: light.turn_off                     # Turn off all lights in home
+      continue_on_error: true
       entity_id: all
     # Only proceed if its dark outside with the following services
     - condition: state
       entity_id: input_boolean.dark_outside
-      state: 'on'
+      state: "on"
     # Keep lights that should be on while away, on
     - service: light.turn_on
+      continue_on_error: true
       entity_id: light.sun_based_lights_away
 
-
 - alias: DEVICE_TRACK - Someone arrived home, disable alarm, set Thermostat to Home
+  id: 18b64342-7816-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: sensor.family_status

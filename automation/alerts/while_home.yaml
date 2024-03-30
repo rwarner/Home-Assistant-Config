@@ -3,6 +3,7 @@
 ######################################
 
 - alias: ALERT - Notify Alexa of Front Door only if Ryan is home
+  id: c55a299e-7814-11ee-b962-0242ac120002
   trigger:
     - platform: state
       entity_id: 
@@ -26,12 +27,13 @@
         message: "Front Door"
 
 - alias: ALERT - Notify when a window was opened
+  id: cc8db9b0-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - platform: state
       entity_id: binary_sensor.house_windows
-      to: 'on'
+      to: "on"
   condition:
     - condition: state
       entity_id: alarm_control_panel.alarm
@@ -39,6 +41,6 @@
   action:
     - service: script.alexa_notify_house
       data_template:
-        message: "Window Opened"
-    - delay: '00:02:00' # Prevent multiple runs of this within 2 minute intervals
+        message: Window Opened
+    - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
     

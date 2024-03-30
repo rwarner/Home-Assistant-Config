@@ -3,6 +3,7 @@
 ############################
 
 - alias: MQTT - Announce movie has been added to Plex on Alexa
+  id: 3fa0f542-7816-11ee-b962-0242ac120002
   trigger:
     - platform: mqtt
       topic: homeassistant/tautilli
@@ -21,22 +22,29 @@
         title: "New Movie Added"
         message: "{{ trigger.payload_json['body'] }} was recently added to Plex."
 
+
 - alias: MQTT - Save movie has been added to Plex on Alexa for later
+  id: 443e686e-7816-11ee-b962-0242ac120002
   trigger:
     - platform: mqtt
       topic: homeassistant/tautilli
   condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: sensor.family_status
-        state: 'Away'
-      - condition: time
-        before: '07:00:00'
-        after: '23:30:00'
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: sensor.family_status
+          state: Away
+        - condition: time
+          before: "07:00:00"
+          after: "23:30:00"
   action:
     - service: variable.update_sensor
       data_template:
-        value: "{{ trigger.payload_json['body'] }}, {{ states.sensor.tautilli_data.state }}"
+        value: >
+          {% if is_state('sensor.tautilli_data', " ") or
+          is_state('sensor.tautilli_data',"unknown") %} {{
+          trigger.payload_json['body'] }} {% else %} {{
+          trigger.payload_json['body'] }}, {{ states.sensor.tautilli_data.state
+          }}  {% endif %}
       target:
         entity_id: sensor.tautilli_data
