@@ -118,6 +118,7 @@ media_player:
 #     power_sensor: binary_sensor.tv_power
 
 wemo:
+  discovery: false
   static:
     - !secret wemo_ip_1 
     # - !secret wemo_ip_2 # Christmas tree
