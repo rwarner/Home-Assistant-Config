@@ -128,6 +128,48 @@
         priority: high
         url: "{{ state_attr('sensor.home_assistant_website', 'release_notes') }}"
 
+- alias: ALERT - PiHole Update Available to Mobile App
+  id: d1a268a0-f2d6-11ee-a951-0242ac120002
+  trigger:
+    - platform: state
+      entity_id: update.pi_hole_ftl_update_available
+      from: 'off'
+      to: 'on'
+  action:
+    service: notify.ryan_devices
+    data:
+      title: "New Version of Pi-Hole FTL Available"
+      message: "New Version: {{ state_attr('update.pi_hole_ftl_update_available', 'latest_version') }} | Installed: {{ state_attr('update.pi_hole_ftl_update_available', 'installed_version') }}"   
+      data:
+        ttl: 0
+        priority: high
+        url: "{{ state_attr('update.pi_hole_ftl_update_available', 'release_url') }}"
+
+- alias: ALERT - UPS Switched to Online
+  id: c4594c24-f905-11ee-a951-0242ac120002
+  trigger:
+    - platform: state
+      entity_id: sensor.ups_status
+      to: 'Online'
+  action:
+    service: notify.ryan_devices
+    data:
+      title: "Home Power Online"
+      message: "Power has returned"
+
+- alias: ALERT - UPS Switched to Battery Mode
+  id: 2decd0ae-f904-11ee-a951-0242ac120002
+  trigger:
+    - platform: state
+      entity_id: sensor.ups_status
+      from: 'Online'
+      to: 'On Battery Battery Discharging'
+  action:
+    service: notify.ryan_devices
+    data:
+      title: "Home Power Outage"
+      message: "UPS Battery Runtime: {{ states('sensor.ups_battery_runtime') }} minutes"
+
 - alias: ALERT - Low battery on sensor, notify Mobile App
   id: 3c4cf9b0-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
