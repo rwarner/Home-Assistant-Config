@@ -43,3 +43,6 @@ OZW_Log.txt
 options.xml
 zwscene.xml
 zwcfg_0xe4c19993.xml
+
+# Go 2 RTC
+go2rtc*
