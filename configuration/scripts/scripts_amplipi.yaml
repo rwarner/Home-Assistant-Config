@@ -1,0 +1,63 @@
+###### Amplipi #######
+
+# Current sounds on /home/pi/Music:
+#
+#   all-windows-closed
+#   attention
+#   doorbell-rang
+#   doorbell-sound
+#   dryer-done
+#   dryer-preventing-wrinkles
+#   front-door
+#   washer-done
+#   window-opened
+#   youve-got-mail
+
+# Example usage: 
+# service: script.amplipi_announce_tts
+# data:
+#   message: "This is a message"
+#   volume: "0.5"
+#   where: family_room
+amplipi_announce_tts:
+  sequence:
+      - service: rest_command.create_tts
+        data:
+          message: "{{ message }}"
+        response_variable: create_tts_response
+      - if: "{{ create_tts_response['status'] == 200 }}"
+        then:
+          - alias: "Parse data"
+            variables:
+              url_variable: "{{ create_tts_response['content']['url'] }}"
+          # - service: rest_command.amplipi_announce_media
+          #   data:
+          #     type: attention
+          #     volume: "0.5"
+          #     where: "{{ where }}"
+          #   alias: Ding the Speakers
+          - service: rest_command.amplipi_announce_url
+            data:
+              url: "{{ url_variable }}"
+              volume: "{{ volume }}"
+              where: "{{ where }}"
+
+# Example usage: 
+# service: script.amplipi_announce_media
+# data:
+#   type: doorbell-sound
+#   where: family_room
+amplipi_announce_media:
+  sequence:
+    # - service: rest_command.amplipi_announce_media
+    #   data:
+    #     type: attention
+    #     volume: "0.5"
+    #     where: "{{ where }}"
+    #   alias: Ding the Speakers
+    - service: rest_command.amplipi_announce_media
+      data:
+        type: "{{ type }}"
+        volume: "0.5"
+        where: "{{ where }}"
+      alias: Play the media

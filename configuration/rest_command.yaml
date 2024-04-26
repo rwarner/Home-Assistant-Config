@@ -2,9 +2,55 @@
 ####### REST COMMAND CONFIGURATION  ######
 ##########################################
 
-amplipi_announce:
+amplipi_announce_media:
     url: !secret amplipi_announce_url
-    method: POST
-    payload: '{"media": "{{ media_url }}" }'
-    content_type:  'application/json'
+    method: post
+    payload: > 
+          {% if where == 'family_room' %}
+            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [0], "source_id": 0 }
+          {% elif where == 'ryans_office' %}
+            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [1], "source_id": 0 }
+          {% elif where == 'master_bedroom' %}
+            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [2], "source_id": 0 }
+          {% elif where == 'rear_porch' %}
+            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [3], "source_id": 0 }
+          {% elif where == 'kitchen' %}
+            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [4], "source_id": 0 }
+          {% else %}
+            {# Play on the "Inside" group of the house #}
+            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "groups" : [102], "source_id": 0 }
+          {% endif %}
+    headers:
+      content-type: 'application/json'
+    verify_ssl: false
+
+amplipi_announce_url:
+    url: !secret amplipi_announce_url
+    method: post
+    payload: > 
+          {% if where == 'family_room' %}
+            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [0], "source_id": 0 }
+          {% elif where == 'ryans_office' %}
+            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [1], "source_id": 0 }
+          {% elif where == 'master_bedroom' %}
+            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [2], "source_id": 0 }
+          {% elif where == 'rear_porch' %}
+            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [3], "source_id": 0 }
+          {% elif where == 'kitchen' %}
+            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [4], "source_id": 0 }
+          {% else %}
+            {# Play on the "Inside" group of the house #}
+            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "groups" : [102], "source_id": 0 }
+          {% endif %}
+    headers:
+      content-type: 'application/json'
+    verify_ssl: false
+
+create_tts:
+    url: http://localhost:8123/api/tts_get_url
+    method: post
+    payload: '{ "message": "{{ message }}", "engine_id": "cloud" }'
+    headers:
+      content-type: 'application/json'
+      authorization: !secret tts_token
     verify_ssl: false

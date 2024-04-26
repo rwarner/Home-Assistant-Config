@@ -39,8 +39,26 @@
       entity_id: alarm_control_panel.alarm
       state: disarmed
   action:
-    - service: script.alexa_notify_house
-      data_template:
-        message: Window Opened
+    - service: script.amplipi_announce_media
+      data:
+        type: window-opened
     - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
     
+- alias: ALERT - Notify when all windows have been closed
+  id: 99a24142-faa5-11ee-a951-0242ac120002
+  mode: single # Only run once at a time  
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.house_windows
+      from: "on"
+      to: "off"
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.alarm
+      state: disarmed
+  action:
+    - service: script.amplipi_announce_media
+      data:
+        type: all-windows-closed
+    - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
