@@ -15,9 +15,9 @@
       - platform: state
         entity_id: sensor.washer_washer_machine_state
         to: 'stop'
-    - service: script.alexa_notify_house
+    - service: script.amplipi_announce_media
       data:
-        message: Your clothes have finished washing
+        type: washer-done
 
 - alias: LAUNDRY - Notify house dryer is done
   id: 9c564aa4-7815-11ee-b962-0242ac120002
@@ -32,9 +32,9 @@
       - platform: state
         entity_id: sensor.dryer_dryer_machine_state
         to: 'stop'
-    - service: script.alexa_notify_house
+    - service: script.amplipi_announce_media
       data:
-        message: Your clothes have finished drying
+        type: dryer-done
 
 - alias: LAUNDRY - Notify house dryer is in wrinklePrevent
   id: 9feaba60-7815-11ee-b962-0242ac120002
@@ -49,9 +49,9 @@
       - platform: state
         entity_id: sensor.dryer_dryer_job_state
         to: 'wrinklePrevent'
-    - service: script.alexa_notify_house
+    - service: script.amplipi_announce_media
       data:
-        message: The dryer is in preventing wrinkles mode, time to take them out
+        type: dryer-preventing-wrinkles
 
 # - alias: LAUNDRY - Notify house laundry is done after 1 hour
 #   id: laundry_notify_house_laundry_is_done_after_1_hour

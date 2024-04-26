@@ -17,10 +17,10 @@
         after: '07:00:00'
         before: '23:30:00'
   action:
-    - service: script.alexa_notify_house
-      data_template: # !!! MUST BE DEFINED AS DATA_TEMPLATE FOR USING TRIGGER PAYLOAD
-        title: "New Movie Added"
+    - service: script.amplipi_announce_tts
+      data:
         message: "{{ trigger.payload_json['body'] }} was recently added to Plex."
+        volume: "0.5"
 
 
 - alias: MQTT - Save movie has been added to Plex on Alexa for later

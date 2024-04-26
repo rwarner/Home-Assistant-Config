@@ -98,9 +98,8 @@
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
     - delay:
         seconds: 2
-    - service: script.alexa_notify_kitchen
-      data_template:
-        title: Welcome home!
+    - service: script.amplipi_announce_tts
+      data:
         message: >
           {% if is_state('sensor.ryan_status', 'Just Arrived') and
           is_state('sensor.kelly_status', 'Just Arrived') %} Welcome home, Ryan
@@ -116,6 +115,8 @@
           is_state('sensor.tautilli_data',"unknown") %} {% else %} {{
           states.sensor.tautilli_data.state }} has been added to Plex while you
           were away.  {% endif %}
+        volume: "0.5"
+        where: kitchen
     
     #Reset variable after using it for announcement
     - service: variable.update_sensor

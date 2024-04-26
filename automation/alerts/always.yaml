@@ -35,9 +35,9 @@
       from: "off"
       to: "on"
   action:
-    - service: script.alexa_notify_house
-      data_template:
-        message: Doorbell Rang
+    - service: script.amplipi_announce_media
+      data:
+        type: doorbell-sound
     - delay: "00:00:02" # Wait 2 seconds so we don't get their finger in the camera
     - service: notify.ryan_devices
       data:
@@ -301,12 +301,10 @@
         #title: "\uD83D\uDCEB\uD83D\uDCEB  Mail has arrived  \uD83D\uDCEB\uD83D\uDCEB"
         title: Mail has arrived
         message: ""
-    - service: script.alexa_notify_kitchen
-      data_template:
-        message: You've got mail
-    - service: script.alexa_notify_ryans_office
-      data_template:
-        message: You've got mail
+    - service: script.amplipi_announce_tts
+      data:
+        message: "You've got mail"
+        volume: "0.5"
     - service: homeassistant.turn_on
       entity_id: input_boolean.mail_arrived
 
