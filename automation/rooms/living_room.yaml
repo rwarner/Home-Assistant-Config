@@ -1,0 +1,24 @@
+####################################
+##### LIVING ROOM AUTOMATIONS   ####
+####################################
+
+# Set mode to queued so that there isn't conflicting runs when called while another is running
+- alias: LIVING ROOM - Cycle AmpliPi Presets for Vinyl Player
+  id: 3a57b102-8a1f-4295-a51b-6a34f9829e37
+  mode: queued
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+  - event_data:
+      command: button_single
+      device_ieee: !secret vinyl_record_button_ieee
+    event_type: zha_event
+    platform: event
+  condition: []
+  action:
+    - service: script.amplipi_cycle_preset
+    
+    # Intentionally set a delay to give AmpliPi until it's ready
+    - wait_for_trigger:
+      - platform: state
+        entity_id: script.amplipi_announce_tts
+        to: 'off'

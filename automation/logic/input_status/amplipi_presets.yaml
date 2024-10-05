@@ -1,0 +1,28 @@
+- alias: AMPLIPI - AmpliPi Preset input_select
+  id: 3de8315f-d95d-4827-9df3-1b62adb94746
+  trigger:
+    platform: state
+    entity_id: input_select.amplipi_presets
+  action:
+      # Send the appropriate rest command for the matching state set
+      # in the input_select.amplipi_presets
+    - service: >
+          {% if states.input_select.amplipi_presets.state == "Restore Default" %}
+            rest_command.amplipi_preset_default
+          {% elif states.input_select.amplipi_presets.state == "Vinyl First Floor" %}
+            rest_command.amplipi_preset_vinyl_first_floor
+          {% elif states.input_select.amplipi_presets.state == "Vinyl Inside Home" %}
+            rest_command.amplipi_preset_vinyl_inside_home
+          {% endif %}
+    - service: script.amplipi_announce_tts
+      # The following will speak the returned value aloud to notify the button pusher
+      # of which preset is currently set
+      data:
+        message: >
+          {% if states.input_select.amplipi_presets.state == "Restore Default" %}
+            Default Mode
+          {% elif states.input_select.amplipi_presets.state == "Vinyl First Floor" %}
+            First Floor
+          {% elif states.input_select.amplipi_presets.state == "Vinyl Inside Home" %}
+            Whole Home Inside
+          {% endif %}

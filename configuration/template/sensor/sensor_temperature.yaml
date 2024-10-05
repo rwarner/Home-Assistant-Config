@@ -76,15 +76,21 @@
     unique_id: family_room_avg_temp
     unit_of_measurement: '°F'
     state: >-
-      {{'%0.3g'|format((float(states('sensor.family_room_front_window_1_sensor_temperature'), 65.0) 
-      + float(states('sensor.family_room_front_window_2_sensor_temperature'), 65.0)
-      + float(states('sensor.family_room_slider_temperature'), 65.0)) / 3) }}
+      {{'%0.3g'|format(
+      (
+      float(states('sensor.family_room_front_window_1_sensor_temperature'), 65.0) + 
+      float(states('sensor.family_room_front_window_2_sensor_temperature'), 65.0) +
+      float(states('sensor.family_room_rear_window_1_sensor_temperature'), 65.0) +
+      float(states('sensor.family_room_rear_window_2_sensor_temperature'), 65.0) +
+      float(states('sensor.family_room_rear_window_3_sensor_temperature'), 65.0) +
+      float(states('sensor.family_room_side_window_1_sensor_temperature'), 65.0) +
+      float(states('sensor.family_room_side_window_2_sensor_temperature'), 65.0) +
+      float(states('sensor.family_room_slider_temperature'), 65.0)
+      ) / 8) }}
 
 #  -- Living Room --
   - name: "Living Room Temperature"
     unique_id: living_room_avg_temp
     unit_of_measurement: '°F'
     state: >-
-      {{'%0.3g'|format((float(states('sensor.front_door_sensor_temperature'), 65.0) 
-      + float(states('sensor.living_room_front_window_sensor_temperature'), 65.0)
-      + float(states('sensor.living_room_side_window_1_sensor_temperature'), 65.0)) / 3) }}
+      {{ '%0.3g'|format(float(states('sensor.living_room_vinyl_record_button_temperature'), 65.0)) }}

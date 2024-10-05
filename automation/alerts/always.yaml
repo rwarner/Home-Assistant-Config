@@ -38,6 +38,7 @@
     - service: script.amplipi_announce_media
       data:
         type: doorbell-sound
+        where: home_alert
     - delay: "00:00:02" # Wait 2 seconds so we don't get their finger in the camera
     - service: notify.ryan_devices
       data:
@@ -218,6 +219,7 @@
         - sensor.family_room_slider_battery_level
         - sensor.kitchen_water_sensor_battery_level
         - sensor.downstairs_bathroom_water_sensor_battery_level
+        - sensor.lawn_mower_sensor_battery_level
       below: 30
   action:
     - service: notify.ryan_devices
@@ -273,6 +275,7 @@
         - binary_sensor.family_room_slider
         - binary_sensor.kitchen_water_sensor_moisture
         - binary_sensor.downstairs_bathroom_water_sensor_moisture
+        - sensor.lawn_mower_sensor_battery_level
       to: unavailable
       for:
         minutes: 5
@@ -304,10 +307,71 @@
     - service: script.amplipi_announce_tts
       data:
         message: "You've got mail"
-        volume: "0.5"
     - service: homeassistant.turn_on
       entity_id: input_boolean.mail_arrived
 
+- alias: ALERT - Water detected on moisture sensor, notify mobile app
+  id: 4db93146-7814-11ee-b962-0242ac120002
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.downstairs_bathroom_water_sensor_moisture
+      from: "off"
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.kitchen_water_sensor_moisture
+      from: "off"
+      to: "on"
+  action:
+    - service: script.amplipi_announce_tts
+      data:
+        message: "Water detected: {{trigger.from_state.attributes.friendly_name}}"
+        where: home_alert
+    - service: notify.ryan_devices
+      data:
+        title: "Water detected: {{trigger.from_state.attributes.friendly_name}}"
+        message: ""
+        data:
+          ttl: 0
+          priority: high
+
+
+- alias: ALERT - Lawn Mower detected away for a long time, notify mobile app
+  id: f4de014a-e2c2-4da6-a79c-2dde29603ac4
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.lawn_mower
+      from: "off"
+      to: "on"
+      for:
+        hours: 4
+  action:
+    - service: script.amplipi_announce_tts
+      data:
+        message: "Check on Lawn Mower, might be stuck"
+    - service: notify.ryan_devices
+      data:
+        title: "Lawn Mower Stuck"
+        message: "Has been out for 4 hours"
+        data:
+          ttl: 0
+          priority: high
+
+
+- alias: ALERT - Lawn Mower has returned
+  id: 26bf48c4-f680-4d64-bcf5-eaa5eae68b5f
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.lawn_mower
+      from: "on"
+      to: "off"
+  action:
+    - service: notify.ryan_devices
+      data:
+        title: "Lawn Mower Finished"
+        message: ""
+        data:
+          ttl: 0
+          priority: high
 
 ########################################
 ############# Discord Below ############

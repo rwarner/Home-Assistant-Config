@@ -14,11 +14,11 @@
 #   youve-got-mail
 
 # Example usage: 
-# service: script.amplipi_announce_tts
-# data:
-#   message: "This is a message"
-#   volume: "0.5"
-#   where: family_room
+#   service: script.amplipi_announce_tts
+#   data:
+#     message: "This is a message"
+#     volume: "0.5"
+#     where: family_room
 amplipi_announce_tts:
   sequence:
       - service: rest_command.create_tts
@@ -39,14 +39,16 @@ amplipi_announce_tts:
           - service: rest_command.amplipi_announce_url
             data:
               url: "{{ url_variable }}"
-              volume: "{{ volume }}"
-              where: "{{ where }}"
+              volume: "{{ volume if volume is defined else 0.6 }}"
+              where: "{{ where }}" 
+          # Intentionally set a 5 second delay to give AmpliPi a moment
+          - delay: "00:00:02"
 
 # Example usage: 
-# service: script.amplipi_announce_media
-# data:
-#   type: doorbell-sound
-#   where: family_room
+#   service: script.amplipi_announce_media
+#   data:
+#     type: doorbell-sound
+#     where: family_room
 amplipi_announce_media:
   sequence:
     # - service: rest_command.amplipi_announce_media
@@ -58,6 +60,17 @@ amplipi_announce_media:
     - service: rest_command.amplipi_announce_media
       data:
         type: "{{ type }}"
-        volume: "0.5"
+        volume: "{{ volume if volume is defined else 0.6 }}"
         where: "{{ where }}"
       alias: Play the media
+    # Intentionally set a 5 second delay to give AmpliPi a moment
+    - delay: "00:00:02"
+
+# Cycles through presets set on the AmpliPi
+# See input_select.amplipi_presets, rest_command, secrets.yaml
+amplipi_cycle_preset:
+  sequence:
+    - service: input_select.select_next
+      target:
+        entity_id: input_select.amplipi_presets
+  mode: single

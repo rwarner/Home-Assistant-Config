@@ -14,13 +14,13 @@
         entity_id: sensor.family_status
         state: 'Home'
       - condition: time
-        after: '07:00:00'
-        before: '23:30:00'
+        # After 8 am, before 9:30 p.m.
+        after: '08:00:00'
+        before: '21:30:00'
   action:
     - service: script.amplipi_announce_tts
       data:
         message: "{{ trigger.payload_json['body'] }} was recently added to Plex."
-        volume: "0.5"
 
 
 - alias: MQTT - Save movie has been added to Plex on Alexa for later

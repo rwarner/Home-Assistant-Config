@@ -23,3 +23,10 @@ harmony_hub:
 #     - Running
 #     - Done
 #   initial: Idle
+
+amplipi_presets:
+  name: AmpliPi Presets
+  options:
+    - Restore Default
+    - Vinyl First Floor
+    - Vinyl Inside Home
