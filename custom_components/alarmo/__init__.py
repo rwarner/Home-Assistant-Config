@@ -77,9 +77,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     if entry.unique_id is None:
         hass.config_entries.async_update_entry(entry, unique_id=coordinator.id, data={})
 
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, PLATFORM)
-    )
+    await hass.config_entries.async_forward_entry_setups(entry, [PLATFORM])
 
     # Register the panel (frontend)
     await async_register_panel(hass)
@@ -320,7 +318,7 @@ class AlarmoCoordinator(DataUpdateCoordinator):
                 _LOGGER.info("Cannot process the push action, since there are multiple areas.")
                 return
 
-            arm_mode = alarm_entity._arm_mode
+            arm_mode = alarm_entity._revert_state if alarm_entity._revert_state in const.ARM_MODES else alarm_entity._arm_mode
             res = re.search(r"^ALARMO_ARM_", action)
             if res:
                 arm_mode = action.replace("ALARMO_", "").lower().replace("arm", "armed")
@@ -336,7 +334,7 @@ class AlarmoCoordinator(DataUpdateCoordinator):
                 alarm_entity.async_handle_arm_request(arm_mode, skip_code=True)
             elif action == const.EVENT_ACTION_DISARM:
                 _LOGGER.info("Received request for disarming")
-                alarm_entity.async_alarm_disarm(code=None, skip_code=True)
+                alarm_entity.alarm_disarm(None, skip_code=True)
             else:
                 _LOGGER.info("Received request for arming with mode {}".format(arm_mode))
                 alarm_entity.async_handle_arm_request(arm_mode, skip_code=True)
