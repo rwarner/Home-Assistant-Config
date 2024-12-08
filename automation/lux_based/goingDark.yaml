@@ -45,3 +45,27 @@
       continue_on_error: true
       entity_id:
         - light.kitchen_ceiling_lights
+
+- alias: GOING DARK - Close curtains when it's getting dark
+  id: 5f9f9787-3108-4c69-997b-ba7fbdee9285
+  trigger:
+    # Make sure that it's dark outside
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      to: "on"
+  action:
+    # Left and Right are synced in SwitchBot bluetooth app
+    - service: cover.close_cover
+      entity_id: cover.family_room_curtain_right
+
+
+- alias: GOING DARK - Close kitchen blind when it's getting dark
+  id: 0fb20f88-00d5-4d74-8e2a-3183b16ca7c0
+  trigger:
+    # Make sure that it's dark outside
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      to: "on"
+  action:
+    - service: cover.close_cover
+      entity_id: cover.kitchen_window_shade_cover

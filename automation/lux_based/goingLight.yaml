@@ -4,7 +4,6 @@
 - alias: GOING LIGHT - Turn off lights outside when light outside
   id: 54332a62-7815-11ee-b962-0242ac120002
   trigger:
-    # Make sure that it's dark outside
     - platform: state
       entity_id: input_boolean.dark_outside
       to: 'off'
@@ -20,3 +19,13 @@
     - service: light.turn_off
       continue_on_error: true
       entity_id: light.outside_lights
+
+- alias: GOING LIGHT - Open kitchen blind when it's getting light outside
+  id: 4998a9e4-f851-4ddc-8b08-be079f42ff11
+  trigger:
+    - platform: state
+      entity_id: input_boolean.dark_outside
+      to: "off"
+  action:
+    - service: cover.open_cover
+      entity_id: cover.kitchen_window_shade_cover
