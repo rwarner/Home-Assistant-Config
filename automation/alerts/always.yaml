@@ -373,6 +373,16 @@
           ttl: 0
           priority: high
 
+- alias: "ALERT - Home Assistant Successfully Started"
+  id: 50cedff8-4cd9-4d85-9ea9-dc1726324335
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    - service: script.amplipi_announce_tts
+      data:
+        message: "Home Assistant, online"
+
 ########################################
 ############# Discord Below ############
 ########################################
