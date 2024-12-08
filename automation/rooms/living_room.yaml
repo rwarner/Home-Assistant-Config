@@ -8,17 +8,36 @@
   mode: queued
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-  - event_data:
-      command: button_single
-      device_ieee: !secret vinyl_record_button_ieee
-    event_type: zha_event
-    platform: event
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_ieee: !secret vinyl_record_button_ieee
   condition: []
   action:
-    - service: script.amplipi_cycle_preset
+    choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.command == 'button_single' }}"
+        sequence:
+          # Single button press, cycle through the amplipi presets
+          - service: script.amplipi_cycle_preset
     
-    # Intentionally set a delay to give AmpliPi until it's ready
-    - wait_for_trigger:
-      - platform: state
-        entity_id: script.amplipi_announce_tts
-        to: 'off'
+          # Intentionally set a delay to give AmpliPi until it's ready
+          - wait_for_trigger:
+            - platform: state
+              entity_id: script.amplipi_announce_tts
+              to: 'off'
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.command == 'button_double' }}"
+        sequence:
+        # Double button press, go directly to default mode
+          - service: input_select.select_option
+            entity_id: input_select.amplipi_presets
+            data_template:
+              option: "Restore Default"
+          # Intentionally set a delay to give AmpliPi until it's ready
+          - wait_for_trigger:
+            - platform: state
+              entity_id: script.amplipi_announce_tts
+              to: 'off'

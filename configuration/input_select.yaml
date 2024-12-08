@@ -14,19 +14,16 @@ harmony_hub:
     - Power Off
   icon: mdi:monitor
 
-# See also: sensor.dryer_status which points to this input_select value
-# 2/26/21 not in use
-# dryer_status:
-#   name: Dryer Status
-#   options:
-#     - Idle
-#     - Running
-#     - Done
-#   initial: Idle
-
 amplipi_presets:
   name: AmpliPi Presets
   options:
     - Restore Default
+    - Vinyl Living Room
     - Vinyl First Floor
     - Vinyl Inside Home
+
+amplipi_dynamic_presets:
+  name: AmpliPi Presets
+  options:
+    - "Loading..."  # Placeholder option
+  initial: "Loading..."  # Set initial option to the same placeholder

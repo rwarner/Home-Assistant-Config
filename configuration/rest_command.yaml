@@ -16,6 +16,8 @@ amplipi_announce_media:
             { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [3]}
           {% elif where == 'kitchen' %}
             { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [4]}
+          {% elif where == 'living_room' %}
+            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [5]}
           {% elif where == 'home_alert' %}
             {# Override hours to play doorbell for example #}
             { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "groups" : [102]}
@@ -54,6 +56,8 @@ amplipi_announce_url:
             { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [3]}
           {% elif where == 'kitchen' %}
             { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [4]}
+          {% elif where == 'living_room' %}
+            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [5]}
           {% elif where == 'home_alert' %}
             {# Override hours to play doorbell for example #}
             { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "groups" : [102]}
@@ -88,6 +92,13 @@ amplipi_preset_default:
       content-type: 'application/json'
     verify_ssl: false
 
+amplipi_preset_vinyl_living_room:
+    url: !secret amplipi_preset_vinyl_living_room
+    method: post
+    headers:
+      content-type: 'application/json'
+    verify_ssl: false
+
 amplipi_preset_vinyl_first_floor:
     url: !secret amplipi_preset_vinyl_first_floor
     method: post
@@ -97,6 +108,26 @@ amplipi_preset_vinyl_first_floor:
 
 amplipi_preset_vinyl_inside_home:
     url: !secret amplipi_preset_vinyl_inside_home
+    method: post
+    headers:
+      content-type: 'application/json'
+    verify_ssl: false
+
+# Get all the presets from the AmpliPi console
+amplipi_get_presets:
+    url: !secret amplipi_get_presets
+    method: GET
+    headers:
+      Accept: "application/json"
+    verify_ssl: false
+
+# Set a specific preset on the AmpliPi, one that already exists
+# e.g.
+# - service: rest_command.amplipi_set_preset
+#     data:
+#       preset: "{{ matching_preset_id }}"
+amplipi_set_preset:
+    url: http://192.168.2.75/api/presets/{{ preset }}/load
     method: post
     headers:
       content-type: 'application/json'
