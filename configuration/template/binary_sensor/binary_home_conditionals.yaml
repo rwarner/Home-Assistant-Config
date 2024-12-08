@@ -1,0 +1,46 @@
+########################################
+##### TEMPLATE - Home Conditionals #####
+########################################
+
+- binary_sensor:
+  - name: "Doors Opened"
+    unique_id: doors_opened
+    device_class: door
+    state: >
+      {% set doors = expand('binary_sensor.house_doors') | list %}
+      {% set on_doors = doors | selectattr('state', 'equalto', 'on') | list %}
+      {{ on_doors | length > 0 }}
+
+
+- binary_sensor:
+  - name: "Windows Opened"
+    unique_id: windows_opened
+    device_class: window
+    state: >
+      {% set doors = expand('binary_sensor.house_windows') | list %}
+      {% set on_doors = doors | selectattr('state', 'equalto', 'on') | list %}
+      {{ on_doors | length > 0 }}
+      
+- binary_sensor:
+    - name: "Battery Warning"
+      state: >
+        {% set ns = namespace(low_battery_entities=[]) %}
+        {% for entity in states.sensor 
+            | selectattr('entity_id', 'search', '_battery_level') 
+            | rejectattr('entity_id', 'search', 'iphone|ipad|tesla') %}
+          {% if entity.state == 'unavailable' or (entity.state != 'unknown' and entity.state | int < 35) %}
+            {% set ns.low_battery_entities = ns.low_battery_entities + [entity.entity_id] %}
+          {% endif %}
+        {% endfor %}
+        {{ 'on' if ns.low_battery_entities else 'off' }}
+      attributes:
+        low_battery_sensors: >
+          {% set ns = namespace(low_battery_entities=[]) %}
+          {% for entity in states.sensor 
+              | selectattr('entity_id', 'search', '_battery_level') 
+              | rejectattr('entity_id', 'search', 'iphone|ipad|tesla') %}
+            {% if entity.state == 'unavailable' or (entity.state != 'unknown' and entity.state | int < 35) %}
+              {% set ns.low_battery_entities = ns.low_battery_entities + [entity.entity_id] %}
+            {% endif %}
+          {% endfor %}
+          {{ ns.low_battery_entities }}
