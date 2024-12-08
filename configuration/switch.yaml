@@ -1,3 +1,26 @@
 ####################################
 ####### SWITCH CONFIGURATION  ######
 ####################################
+
+# Electric fireplace
+#   - Controlled by Broadlink RM4 Mini IR commands w/ Broadlink Integration
+- platform: template
+  switches:
+    fireplace:
+      friendly_name: "Fireplace"
+      unique_id: fireplace
+      turn_on:
+        service: remote.send_command
+        target:
+          entity_id: remote.living_room_remote
+        data:
+          device: fireplace
+          command: power
+      turn_off:
+        service: remote.send_command
+        target:
+          entity_id: remote.living_room_remote
+        data:
+          device: fireplace
+          command: power
+          num_repeats: 2
