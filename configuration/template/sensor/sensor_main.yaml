@@ -20,6 +20,36 @@
     unique_id: harmony_hub_activity
     state: '{{ state_attr("remote.harmony_hub", "current_activity") }}'
 
+  - name: Sonarr Upcoming Shows
+    unique_id: sonarr_upcoming_shows
+    state: >
+      {% set ignored_attributes = ['unit_of_measurement', 'friendly_name'] %}
+      {% set upcoming = namespace(value=[]) %}
+      {% set attributes = states.sensor.sonarr_upcoming.attributes %}
+
+      {% for show, episode in attributes.items() %}
+        {% if show not in ignored_attributes and episode is not none %}
+          {% set upcoming.value = upcoming.value + [show ~ ': ' ~ episode] %}
+        {% endif %}
+      {% endfor %}
+
+      {# Return the upcoming shows as a list #}
+      {{ upcoming.value | join('\n') if upcoming.value else 'No upcoming shows' }}
+    attributes:
+      show_count: >
+        {% set ignored_attributes = ['unit_of_measurement', 'friendly_name'] %}
+        {% set count = namespace(value=0) %}
+        {% set attributes = states.sensor.sonarr_upcoming.attributes %}
+
+        {% for show, episode in attributes.items() %}
+          {% if show not in ignored_attributes and episode is not none %}
+            {% set count.value = count.value + 1 %}
+          {% endif %}
+        {% endfor %}
+        {{ count.value }}
+
+
+
 # Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
 # - platform: template
 #   sensors:
