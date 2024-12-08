@@ -31,6 +31,9 @@ energy:
 logger:
   default: error #Set to info, for more information when needed
 
+  # logs:
+  #   homeassistant.components.rest_command: debug
+
 # Enables the Person integration for handling "home and away"
 person:
 
@@ -38,6 +41,22 @@ system_health:
 
 # Enables the frontend
 frontend:
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
+  themes: !include_dir_merge_named themes
+
+# Custom YAML Dashboards
+lovelace:
+  mode: storage
+  # Add yaml dashboards      
+  dashboards:
+    new-dash:
+      mode: yaml
+      title: YAML
+      icon: mdi:home-assistant
+      show_in_sidebar: true
+      filename: configuration/dashboards/new-dash.yaml
+
 
 # Enables configuration UI
 config:
@@ -60,10 +79,6 @@ stream:
 recorder:
   purge_keep_days: 14
 
-# Watches the folder for changes, solely for recording purposes
-folder_watcher:
-  - folder: /tmp/hass/
-
 weather:
 
 # Enable functionality for Discord mobile notification alerts
@@ -79,7 +94,7 @@ notify:
   - name: kelly_devices
     platform: group
     services:
-      - service: mobile_app_kelly_s_iphone_13_pro_max
+      - service: mobile_app_kellys_iphone_15_pro_max
 
 media_source:
 
@@ -120,7 +135,7 @@ media_player:
 wemo:
   discovery: false
   static:
-    - !secret wemo_ip_1 
+    - !secret wemo_ip_1 # Master Bedroom Fan
     # - !secret wemo_ip_2 # Christmas tree
     #If needing to re-setup, launch HASS without switch ON -- plug in Wemo, then restart again
     #almost like you need the switch to be offline when first setting up
@@ -142,31 +157,6 @@ wemo:
 #   - platform: ffmpeg
 #     name: Under Porch Camera
 #     input: !secret unifi_under_porch_camera_source
-
-# Custom HACS variable integation
-# https://github.com/rogro82/hass-variables
-# Changed from input_select_dropdown to variables for being
-# able to keep states through restarts
-# variable:
-#   ryan_status:
-#     restore: true
-#   kelly_status:
-#     restore: true
-#   family_status:
-#     restore: true
-#   tautilli_data:
-#     value: ""
-#     restore: true
-
-# smartir:
-
-# climate:
-#   - platform: smartir
-#     name: Living Room AC
-#     unique_id: living_room_ac
-#     device_code: 2040
-#     controller_data: remote.living_room_remote
-#     power_sensor: binary_sensor.living_room_ac_power
 
 # Z-Wave USB0, Zigbee USB1 (Manually upgraded firmware on USB stick)
 # zwave:
@@ -224,6 +214,7 @@ homekit:
       - binary_sensor.*_motion_sensor
       - sensor.*_avg_temp
       - sensor.*_water_sensor_moisture
+      - cover.*
     include_entities:
       - alarm_control_panel.alarm
       - light.living_room_fireplace
