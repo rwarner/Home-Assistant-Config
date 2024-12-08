@@ -38,3 +38,19 @@
 #     - delay:
 #         minutes: 3
 #     - service: script.turn_off_kitchen_tablet
+
+- alias: KITCHEN - Turn off ceiling lights when no motion
+  id: 86a4980e-08bc-454e-ae82-09d6d8adccff
+  # mode: restart # Restart on every motion, ensure that the light is always on
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.kitchen_motion_sensor
+      from: 'on'
+      to: 'off'
+      for:
+        minutes: 10
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.kitchen_ceiling_lights
