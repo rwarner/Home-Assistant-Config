@@ -1,17 +1,16 @@
 This is my Home Assistant Configuration for my smart home. Feel free to look around. Hope it can be helpful for those learning or wondering how to improve their own Home Assistant like I did in the beginning. Poking around others setups was really helpful to me in the start.
 
-<img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/rwarner?style=social">
+<!-- <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/rwarner?style=social"> -->
 Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to buy me a piece of za</a> 🍕
 
 ## Current Server Hardware
 
-[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2023.7.1%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-20.04.6%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.11.4-brightgreen)
+[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2024.11.3%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-20.04.6%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.12.2-brightgreen)
  - Intel Core i5-6400 2.7 GHz Quad-Core Processor
- - ASRock H110M-ITX Mini ITX LGA1151 Motherboard
- - Crucial 8 GB DDR4
+ - Jetway NF594-Q170 Mini-ITX Motherboard
+ - Timetec 16GB SODIMM Ram
  - SanDisk 120 GB SSD
- - Cooler Master Elite 110 Mini ITX Tower Case
- - SeaSonic M12II 520W PSU
+ - InWin RF100S-S265 (1U Server Case)
 
 
 ## <a name="SmartHomeEquipment">Smart Home Equipment</a>
