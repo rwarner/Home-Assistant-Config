@@ -13,10 +13,10 @@
   condition:
     # Only execute once per day
     - "{{ state_attr(this.entity_id, 'last_triggered').date() < now().date() }}"
-    # Only after 12:00 pm and before 9pm
+    # Only after 3:00 pm and before 9pm
     # November was hitting 500 lux before 2:30 p.m.
     - condition: time
-      after: '12:00:00'
+      after: '15:00:00'
       before: '21:00:00'
 
     # # Only proceed, if we haven't used the light out in the last 6 hours
