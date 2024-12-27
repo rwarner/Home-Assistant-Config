@@ -2,7 +2,8 @@
 ####### TEMPLATE - MAIN  ######
 ###############################
 
-##### UNIQUE_ID DOES NOT SET ENTITY_ID IN FRONT END ####
+##### UNIQUE_ID DOES NOT SET ENTITY_ID IN FRONT END, 
+##### BUT IS REQUIRED FOR UI CHANGES ON ENTITY
 
 - sensor:
 

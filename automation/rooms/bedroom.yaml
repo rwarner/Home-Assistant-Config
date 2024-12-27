@@ -22,7 +22,7 @@
 #        - fri
 #  action:
 #      service: homeassistant.turn_off
-#      entity_id: switch.fan
+#      entity_id: switch.master_bedroom_fan
 
 
 - alias: BEDROOM - Control Light and Fan (Kelly's Light Button)
@@ -46,14 +46,14 @@
         sequence:
           - service: switch.toggle
             target:
-              entity_id: switch.fan
+              entity_id: switch.master_bedroom_fan
       - conditions:
           - condition: template
             value_template: "{{ trigger.event.data.command == 'button_hold' }}"
         sequence:
           - service: switch.toggle
             target:
-              entity_id: switch.fan
+              entity_id: switch.master_bedroom_fan
           - service: script.toggle_bedroom_lights
 
 
@@ -79,7 +79,7 @@
         sequence:
           - service: switch.toggle
             target:
-              entity_id: switch.fan
+              entity_id: switch.master_bedroom_fan
 
 
 
