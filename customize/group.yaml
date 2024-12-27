@@ -1,7 +1,0 @@
-####################################
-######### GROUP CUSTOMIZATION  #####
-####################################
-
-group.all_devices:
-  hidden: false
-  friendly_name: "Who's Home"
