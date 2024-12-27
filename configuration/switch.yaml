@@ -4,10 +4,12 @@
 
 # Electric fireplace
 #   - Controlled by Broadlink RM4 Mini IR commands w/ Broadlink Integration
+#     https://www.home-assistant.io/integrations/broadlink
 - platform: template
   switches:
     fireplace:
       friendly_name: "Fireplace"
+      # Unique ID required for UI changes
       unique_id: fireplace
       turn_on:
         service: remote.send_command
@@ -23,4 +25,7 @@
         data:
           device: fireplace
           command: power
+          # Was a bit finicky without the delay and hold
           num_repeats: 2
+          delay_secs: 1
+          hold_secs: 0.5
