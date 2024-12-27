@@ -20,7 +20,7 @@
       continue_on_error: true
       entity_id: light.outside_lights
 
-- alias: GOING LIGHT - Open kitchen blind when it's getting light outside
+- alias: GOING LIGHT - Open blinds when it's getting light outside
   id: 4998a9e4-f851-4ddc-8b08-be079f42ff11
   trigger:
     - platform: state
@@ -28,4 +28,6 @@
       to: "off"
   action:
     - service: cover.open_cover
-      entity_id: cover.kitchen_window_shade_cover
+      entity_id:
+        - cover.ryans_office_shades
+        - cover.kitchen_window_shade_cover
