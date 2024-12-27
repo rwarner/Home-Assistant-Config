@@ -6,27 +6,6 @@
 ######### Companion App Below ##########
 ########################################
 
-# - alias: ALERT - Garage door left open, notify Mobile App
-#   trigger:
-#   - platform: state
-#     entity_id: cover.garage_door
-#     to: 'opened'
-#     for:
-#       minutes: 30
-#   action:
-#     - service: notify.ryan_devices
-#       data:
-#         title: "Garage Door is Open"
-#         message: "Do you want to close it?"
-#         data:
-#           ttl: 0
-#           priority: high
-#           data:  
-#             clickAction: "/lovelace/camera_view"
-#             actions:
-#               - action: "close_garage_door"
-#                 title: "Close Garage"
-
 - alias: ALERT - Doorbell rang, notify Mobile App and House
   id: 287a519e-7814-11ee-b962-0242ac120002
   trigger:
@@ -47,12 +26,8 @@
         data:
           ttl: 0
           priority: high
-          entity_id: camera.doorbell_high
+          image: "/api/camera_proxy/camera.outside_doorbell" # Captures image immediately, sends via notification
           url: /lovelace/camera_view
-          actions:
-            - action: PROTECT
-              title: Launch Protect App
-              url: unifi-protect://
 
 - alias: ALERT - When a critical device goes offline to mobile app
   id: 3039b6f4-7814-11ee-b962-0242ac120002

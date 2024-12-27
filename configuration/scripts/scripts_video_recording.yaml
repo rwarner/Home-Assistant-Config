@@ -5,7 +5,7 @@ capture_front_door_video:
     # - delay: '00:00:02'
     - service: camera.record
       data:
-        entity_id: camera.doorbell_high
+        entity_id: camera.outside_doorbell
         filename: '/tmp/hass/front_door_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 15
         lookback: 2

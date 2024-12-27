@@ -20,7 +20,7 @@ include:
     - binary_sensor.basement_laundry_sensor_motion
     #- sensor.bedroom_fan_button
     #- sensor.bedroom_light_button
-    - switch.fan
+    - switch.master_bedroom_fan
     - light.media_room_lights
     - light.kitchen_lights
     - light.family_room_lights

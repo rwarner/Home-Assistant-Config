@@ -23,12 +23,8 @@
         data:
           ttl: 0
           priority: high
-          entity_id: camera.doorbell_high
+          image: "/api/camera_proxy/camera.outside_doorbell" # Captures image immediately, sends via notification
           url: "/lovelace/camera_view"
-          actions:
-          - action: PROTECT
-            title: Launch Protect App
-            url: unifi-protect://
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Motion at Rear Patio, notify Mobile App
@@ -50,7 +46,7 @@
         title: "Rear Patio Motion"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.unifi_rear_patio_high" #Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.outside_rear_patio" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"
@@ -75,7 +71,7 @@
         title: "Side Patio Motion"
         message: ""
         data:
-          image: "/api/camera_proxy/camera.unifi_side_patio_high" #Captures image immediately, sends via notification
+          image: "/api/camera_proxy/camera.outside_side_patio" #Captures image immediately, sends via notification
           ttl: 0
           priority: high
           clickAction: "/lovelace/camera_view"
@@ -168,30 +164,6 @@
                 title: "Trigger Alarm"
     - delay: '00:02:00' # Prevent multiple runs of this within 2 minute intervals
 
-- alias: ALERT (AWAY) - Garage has opened
-  id: 84f80f60-7814-11ee-b962-0242ac120002
-  mode: single # Only run once at a time  
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    platform: state
-    entity_id:
-      - cover.garage_door
-    to: 'open'
-  condition:
-    - condition: state
-      entity_id: alarm_control_panel.alarm
-      state: armed_away
-  action:
-    - service: notify.ryan_devices
-      data:
-        title: "Garage Door opened at home"
-        message: ""
-        data:
-          image: "/api/camera_proxy/camera.unifi_garage" #Captures image immediately, sends via notification
-          ttl: 0
-          priority: high
-          clickAction: "/lovelace/camera_view"
-
 - alias: ALERT (AWAY) - Basement door has been unlocked
   id: 8a751ece-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  
@@ -213,7 +185,7 @@
         data:
           ttl: 0
           priority: high
-          entity_id: camera.unifi_under_porch_high
+          entity_id: camera.outside_under_porch
           url: "/lovelace/camera_view"
           actions:
           - action: PROTECT
@@ -241,12 +213,8 @@
         data:
           ttl: 0
           priority: high
-          entity_id: camera.doorbell_high
+          image: "/api/camera_proxy/camera.outside_doorbell" # Captures image immediately, sends via notification
           url: "/lovelace/camera_view"
-          actions:
-          - action: PROTECT
-            title: Launch Protect App
-            url: unifi-protect://
 
 - alias: "ALERT (AWAY) - Alarm Triggered, notify mobile / in house"
   id: 98828ac4-7814-11ee-b962-0242ac120002
