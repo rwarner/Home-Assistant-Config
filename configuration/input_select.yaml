@@ -9,7 +9,7 @@ harmony_hub:
   options:
     - Select Input
     - Watch Shield TV
-    - Play Xbox One
+    - Play PS4
     - Play Switch
     - Power Off
   icon: mdi:monitor

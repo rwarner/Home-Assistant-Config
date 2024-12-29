@@ -6,12 +6,12 @@ harmony_shield_tv:
       data:
         activity: "Watch Shield TV"
 
-harmony_xbox_one:
+harmony_ps4:
   sequence:
     - service: remote.turn_on
       entity_id: remote.harmony_hub
       data:
-        activity: "Play Xbox One"
+        activity: "Play PS4"
 
 harmony_switch:
   sequence:

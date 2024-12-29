@@ -78,11 +78,6 @@ recorder:
 
 weather:
 
-# Enable functionality for Discord mobile notification alerts
-# notify:
-#   - platform: discord
-#     name: discord
-#     token: !secret discord_token
 notify:
   - name: ryan_devices
     platform: group
@@ -121,13 +116,6 @@ media_player:
       HDMI1: "Shield TV"
       HDMI2: "Playstation 4"
       HDMI3: "Nintendo Switch"
-
-#  # - platform: plex   # Super unreliable for some reason
-
-# Z-Wave USB0, Zigbee USB1 (Manually upgraded firmware on USB stick)
-# zwave:
-#   usb_path: /dev/ttyUSB0
-#   network_key: !secret zwave_network_key
 
 input_boolean:
   mail_arrived:
@@ -252,27 +240,18 @@ homekit:
 automation: !include_dir_merge_list automation/
 
 binary_sensor groups: !include_dir_merge_list configuration/binary_sensor/
-
-cover: !include configuration/cover.yaml
-
 light: !include_dir_merge_list configuration/lights/
-
-history: !include configuration/history.yaml
-
-input_select: !include configuration/input_select.yaml
-
-sensor: !include_dir_merge_list configuration/sensor/
+mqtt: !include_dir_merge_list configuration/mqtt/
+rest_command: !include_dir_merge_list configuration/rest_command/
+template: !include_dir_merge_list configuration/template/
 
 # Scripts need to be merge_named rather than merge_list
 # backup: https://community.home-assistant.io/t/script-editor-and-split-up-files/40459
 script: !include_dir_merge_named configuration/scripts/
+sensor: !include_dir_merge_list configuration/sensor/
 
+cover: !include configuration/cover.yaml
+history: !include configuration/history.yaml
+input_select: !include configuration/input_select.yaml
 shell_command: !include configuration/shell_command.yaml
-
 switch: !include configuration/switch.yaml
-
-mqtt: !include configuration/mqtt.yaml
-
-rest_command: !include configuration/rest_command.yaml
-
-template: !include_dir_merge_list configuration/template/

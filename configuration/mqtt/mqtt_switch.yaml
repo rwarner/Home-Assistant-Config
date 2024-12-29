@@ -1,0 +1,25 @@
+####################################
+########## MQTT - Switch  ##########
+####################################
+
+switch:
+
+  - name: "Ryan's Office Switch 1"
+    state_topic: "home/Ryans Office/wp/relay1/status"
+    command_topic: "home/Ryans Office/wp/relay1/cmd"
+    payload_on: "on"
+    payload_off: "off"
+    state_on: "on"
+    state_off: "off"
+    optimistic: false
+    retain: true
+
+  - name: "Ryan's Office Switch 2"
+    state_topic: "home/Ryans Office/wp/relay2/status"
+    command_topic: "home/Ryans Office/wp/relay2/cFteslamd"
+    payload_on: "on"
+    payload_off: "off"
+    state_on: "on"
+    state_off: "off"
+    optimistic: false
+    retain: true

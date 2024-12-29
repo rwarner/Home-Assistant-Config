@@ -8,8 +8,8 @@
     - service: >
           {% if states.input_select.harmony_hub.state == "Watch Shield TV" %}
             script.harmony_shield_tv
-          {% elif states.input_select.harmony_hub.state == "Play Xbox One" %}
-            script.harmony_xbox_one
+          {% elif states.input_select.harmony_hub.state == "Play PS4" %}
+            script.harmony_ps4
           {% elif states.input_select.harmony_hub.state == "Play Switch" %}
             script.harmony_switch
           {% elif states.input_select.harmony_hub.state == "Power Off" %}

@@ -1,5 +1,5 @@
 ##########################################
-####### REST COMMAND CONFIGURATION  ######
+####### REST COMMAND - AmpliPi  ##########
 ##########################################
 
 amplipi_announce_media:
@@ -131,13 +131,4 @@ amplipi_set_preset:
     method: post
     headers:
       content-type: 'application/json'
-    verify_ssl: false
-
-create_tts:
-    url: http://localhost:8123/api/tts_get_url
-    method: post
-    payload: '{ "message": "{{ message }}", "engine_id": "cloud" }'
-    headers:
-      content-type: 'application/json'
-      authorization: !secret tts_token
     verify_ssl: false
