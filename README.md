@@ -1,7 +1,7 @@
 This is my Home Assistant Configuration for my smart home. Feel free to look around. Hope it can be helpful for those learning or wondering how to improve their own Home Assistant like I did in the beginning. Poking around others setups was really helpful to me in the start.
 
 
-Follow along here: ![](https://img.shields.io/youtube/channel/subscribers/UC3dCbgHgGZIzqADs3EVcFbA?style=social&label=Warner%20Discovers)
+Follow along here: <a href="https://www.youtube.com/WarnerDiscovers">![](https://img.shields.io/youtube/channel/subscribers/UC3dCbgHgGZIzqADs3EVcFbA?style=social&label=Warner%20Discovers)</a>
 
 Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to buy me a piece of za</a> 🍕
 
