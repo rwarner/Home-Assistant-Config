@@ -16,10 +16,10 @@
 #   variables:
 #     url_variable: "{{ create_tts_response['content']['url'] }}"
 create_tts:
-    url: http://localhost:8123/api/tts_get_url
-    method: post
-    payload: '{ "message": "{{ message }}", "engine_id": "cloud" }'
-    headers:
-      content-type: 'application/json'
-      authorization: !secret tts_token
-    verify_ssl: false
+  url: http://localhost:8123/api/tts_get_url
+  method: post
+  payload: '{ "message": "{{ message }}", "engine_id": "cloud" }'
+  headers:
+    content-type: 'application/json'
+    authorization: !secret tts_token
+  verify_ssl: false

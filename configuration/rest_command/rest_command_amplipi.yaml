@@ -3,123 +3,123 @@
 ##########################################
 
 amplipi_announce_media:
-    url: !secret amplipi_announce_url
-    method: post
-    payload: > 
-          {% if where == 'family_room' %}
-            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [0]}
-          {% elif where == 'ryans_office' %}
-            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [1]}
-          {% elif where == 'master_bedroom' %}
-            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [2]}
-          {% elif where == 'rear_porch' %}
-            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [3]}
-          {% elif where == 'kitchen' %}
-            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [4]}
-          {% elif where == 'living_room' %}
-            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [5]}
-          {% elif where == 'home_alert' %}
-            {# Override hours to play doorbell for example #}
+  url: !secret amplipi_announce_url
+  method: post
+  payload: > 
+        {% if where == 'family_room' %}
+          { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [0]}
+        {% elif where == 'ryans_office' %}
+          { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [1]}
+        {% elif where == 'master_bedroom' %}
+          { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [2]}
+        {% elif where == 'rear_porch' %}
+          { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [3]}
+        {% elif where == 'kitchen' %}
+          { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [4]}
+        {% elif where == 'living_room' %}
+          { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "zones" : [5]}
+        {% elif where == 'home_alert' %}
+          {# Override hours to play doorbell for example #}
+          { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "groups" : [102]}
+        {% else %}
+          {% if (now() > today_at("9:00") and now() < today_at("21:30")) %}
+            {#  
+                If it is between the hours of
+                9am and 9:30pm
+                Play on the "Inside" group of the house (Everywhere)
+            #}
             { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "groups" : [102]}
           {% else %}
-            {% if (now() > today_at("9:00") and now() < today_at("21:30")) %}
-              {#  
-                  If it is between the hours of
-                  9am and 9:30pm
-                  Play on the "Inside" group of the house (Everywhere)
-              #}
-              { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "groups" : [102]}
-            {% else %}
-              {#  
-                  If it is
-                  before 9am or after 9:30pm
-                  Play on the "First Floor" group of the house
-              #}
-              { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "groups" : [103]}
-            {% endif %}
+            {#  
+                If it is
+                before 9am or after 9:30pm
+                Play on the "First Floor" group of the house
+            #}
+            { "media":"/home/pi/Music/{{ type }}.mp3" , "vol_f" : "{{ volume }}", "groups" : [103]}
           {% endif %}
-    headers:
-      content-type: 'application/json'
-    verify_ssl: false
+        {% endif %}
+  headers:
+    content-type: 'application/json'
+  verify_ssl: false
 
 amplipi_announce_url:
-    url: !secret amplipi_announce_url
-    method: post
-    payload: > 
-          {% if where == 'family_room' %}
-            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [0]}
-          {% elif where == 'ryans_office' %}
-            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [1]}
-          {% elif where == 'master_bedroom' %}
-            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [2]}
-          {% elif where == 'rear_porch' %}
-            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [3]}
-          {% elif where == 'kitchen' %}
-            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [4]}
-          {% elif where == 'living_room' %}
-            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [5]}
-          {% elif where == 'home_alert' %}
-            {# Override hours to play doorbell for example #}
+  url: !secret amplipi_announce_url
+  method: post
+  payload: > 
+        {% if where == 'family_room' %}
+          { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [0]}
+        {% elif where == 'ryans_office' %}
+          { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [1]}
+        {% elif where == 'master_bedroom' %}
+          { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [2]}
+        {% elif where == 'rear_porch' %}
+          { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [3]}
+        {% elif where == 'kitchen' %}
+          { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [4]}
+        {% elif where == 'living_room' %}
+          { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "zones" : [5]}
+        {% elif where == 'home_alert' %}
+          {# Override hours to play doorbell for example #}
+          { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "groups" : [102]}
+        {% else %}
+          {% if (now() > today_at("9:00") and now() < today_at("21:30")) %}
+            {#  
+                If it is between the hours of
+                9am and 9:30pm
+                Play on the "Inside" group of the house (Everywhere)
+            #}
             { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "groups" : [102]}
           {% else %}
-            {% if (now() > today_at("9:00") and now() < today_at("21:30")) %}
-              {#  
-                  If it is between the hours of
-                  9am and 9:30pm
-                  Play on the "Inside" group of the house (Everywhere)
-              #}
-              { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "groups" : [102]}
-            {% else %}
-              {#  
-                  If it is
-                  before 9am and after 9:30pm
-                  Play only on the "First Floor" group of the house
-              #}
-              { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "groups" : [103]}
-            {% endif %}
+            {#  
+                If it is
+                before 9am and after 9:30pm
+                Play only on the "First Floor" group of the house
+            #}
+            { "media" : "{{ url }}" , "vol_f" : "{{ volume }}", "groups" : [103]}
           {% endif %}
-    headers:
-      content-type: 'application/json'
-    verify_ssl: false
+        {% endif %}
+  headers:
+    content-type: 'application/json'
+  verify_ssl: false
 
 # Can potentially improve all of these by setting a universal "secret" for
 # amplipi URL and then appending specific APIs. Universal secret might have
 # to be done through a template value or something
 amplipi_preset_default:
-    url: !secret amplipi_preset_default
-    method: post
-    headers:
-      content-type: 'application/json'
-    verify_ssl: false
+  url: !secret amplipi_preset_default
+  method: post
+  headers:
+    content-type: 'application/json'
+  verify_ssl: false
 
 amplipi_preset_vinyl_living_room:
-    url: !secret amplipi_preset_vinyl_living_room
-    method: post
-    headers:
-      content-type: 'application/json'
-    verify_ssl: false
+  url: !secret amplipi_preset_vinyl_living_room
+  method: post
+  headers:
+    content-type: 'application/json'
+  verify_ssl: false
 
 amplipi_preset_vinyl_first_floor:
-    url: !secret amplipi_preset_vinyl_first_floor
-    method: post
-    headers:
-      content-type: 'application/json'
-    verify_ssl: false
+  url: !secret amplipi_preset_vinyl_first_floor
+  method: post
+  headers:
+    content-type: 'application/json'
+  verify_ssl: false
 
 amplipi_preset_vinyl_inside_home:
-    url: !secret amplipi_preset_vinyl_inside_home
-    method: post
-    headers:
-      content-type: 'application/json'
-    verify_ssl: false
+  url: !secret amplipi_preset_vinyl_inside_home
+  method: post
+  headers:
+    content-type: 'application/json'
+  verify_ssl: false
 
 # Get all the presets from the AmpliPi console
 amplipi_get_presets:
-    url: !secret amplipi_get_presets
-    method: GET
-    headers:
-      Accept: "application/json"
-    verify_ssl: false
+  url: !secret amplipi_get_presets
+  method: GET
+  headers:
+    Accept: "application/json"
+  verify_ssl: false
 
 # Set a specific preset on the AmpliPi, one that already exists
 # e.g.
@@ -127,8 +127,8 @@ amplipi_get_presets:
 #     data:
 #       preset: "{{ matching_preset_id }}"
 amplipi_set_preset:
-    url: http://192.168.2.75/api/presets/{{ preset }}/load
-    method: post
-    headers:
-      content-type: 'application/json'
-    verify_ssl: false
+  url: http://192.168.2.75/api/presets/{{ preset }}/load
+  method: post
+  headers:
+    content-type: 'application/json'
+  verify_ssl: false

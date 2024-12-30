@@ -243,11 +243,12 @@ binary_sensor groups: !include_dir_merge_list configuration/binary_sensor/
 light: !include_dir_merge_list configuration/lights/
 mqtt: !include_dir_merge_list configuration/mqtt/
 rest_command: !include_dir_merge_list configuration/rest_command/
-template: !include_dir_merge_list configuration/template/
 
-# Scripts need to be merge_named rather than merge_list
+# Scripts and Rest Commands need to be merge_named rather than merge_list
 # backup: https://community.home-assistant.io/t/script-editor-and-split-up-files/40459
+template: !include_dir_merge_named configuration/template/
 script: !include_dir_merge_named configuration/scripts/
+
 sensor: !include_dir_merge_list configuration/sensor/
 
 cover: !include configuration/cover.yaml
