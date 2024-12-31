@@ -238,18 +238,16 @@ homekit:
 ##### EXTERNAL FILES BELOW ######
 #################################
 automation: !include_dir_merge_list automation/
-
 binary_sensor groups: !include_dir_merge_list configuration/binary_sensor/
 light: !include_dir_merge_list configuration/lights/
-mqtt: !include_dir_merge_list configuration/mqtt/
-rest_command: !include_dir_merge_list configuration/rest_command/
 
-# Scripts and Rest Commands need to be merge_named rather than merge_list
-# backup: https://community.home-assistant.io/t/script-editor-and-split-up-files/40459
-template: !include_dir_merge_named configuration/template/
+# Mqtt, Rest Commands, and Scripts need to be merge_named rather than merge_list
+mqtt: !include_dir_merge_named configuration/mqtt/
+rest_command: !include_dir_merge_named configuration/rest_command/
 script: !include_dir_merge_named configuration/scripts/
 
 sensor: !include_dir_merge_list configuration/sensor/
+template: !include_dir_merge_list configuration/template/
 
 cover: !include configuration/cover.yaml
 history: !include configuration/history.yaml
