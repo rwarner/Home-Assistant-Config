@@ -23,3 +23,11 @@
   entities:
     - light.outside_front_door_left
     - light.outside_front_door_right
+
+- platform: group
+  name: Dining Table
+  unique_id: family_room_dining_table
+  entities:
+    - light.dining_table_light_left_light
+    - light.dining_table_light_middle_light
+    - light.dining_table_light_right_light

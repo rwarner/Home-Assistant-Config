@@ -29,15 +29,6 @@
     - service: alarm_control_panel.alarm_disarm
       target:
         entity_id: alarm_control_panel.alarm
-    #  Alexa Guard currently sends a notification already
-    #- service: notify.ryan_devices
-    #  data:
-    #    title: "Alarm Disarmed"
-    #    message: ""
-    #    data:
-    #      ttl: 0
-    #      priority: high
-    #      clickAction: "/"
 
 - alias: ALARM - Send Notification when home is disarmed
   id: fd9a8cb2-7815-11ee-b962-0242ac120002

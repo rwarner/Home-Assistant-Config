@@ -101,19 +101,6 @@
         Unknown
       {% endif %}"
       
-  - name: "Garage Camera"
-    unique_id: garage_camera
-    icon: mdi:cctv
-    state: "{% if states.device_tracker.garage_camera %}
-      {% if is_state('device_tracker.garage_camera', 'home') %}
-        Online
-      {% else %}
-        Offline
-      {% endif %}
-      {% else %}
-        Unknown
-      {% endif %}"
-      
   - name: "Doorbell Camera"
     unique_id: doorbell_camera
     icon: mdi:cctv

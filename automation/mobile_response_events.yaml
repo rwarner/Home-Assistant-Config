@@ -2,16 +2,6 @@
 ### MOBILE RESPONSE AUTOMATIONS ###
 ###################################
 
-# - alias: MOBILE RESPONSE - Close Garage Door
-#   id: 3805f3aa-7816-11ee-b962-0242ac120002
-#   trigger:
-#     platform: event
-#     event_type: mobile_app_notification_action
-#     event_data:
-#       action: close_garage_door
-#   action:
-#     service: script.close_garage_door
-
 - alias: MOBILE RESPONSE - Trigger Alarm / Noonlight
   id: 5459c342-ee13-11ee-a951-0242ac120002
   trigger:

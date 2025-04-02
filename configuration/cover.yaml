@@ -9,12 +9,22 @@
     - cover.ryans_office_shades
     - cover.family_room_curtains
     - cover.kitchen_window_shade_cover
+    - cover.living_room_shades
+    - cover.family_room_shades
 
 - platform: group
   unique_id: ryans_office_shades
   name: Ryans Office Shades
   entities:
     - cover.ryans_office_side_window_shade_cover
+    - cover.ryans_office_rear_window_shade_cover
+
+- platform: group
+  name: Living Room Shades
+  unique_id: living_room_shades
+  entities:
+    - cover.living_room_front_shade_cover
+    - cover.living_room_side_1_window_shade_cover
 
 - platform: group
   name: Family Room Curtains
@@ -22,3 +32,11 @@
   entities:
     - cover.family_room_curtain_left
     - cover.family_room_curtain_right
+
+
+- platform: group
+  name: Family Room Shades
+  unique_id: family_room_shades
+  entities:
+    - cover.family_room_left_front_shade_cover
+    - cover.family_room_right_front_shade_cover

@@ -16,6 +16,7 @@
   unique_id: ryans_office_lights
   entities:
     - light.ryans_office_desk_lamp
+    - light.ryans_office_desk_uplighting
 
  ### Outside ###
 - platform: group
@@ -40,6 +41,7 @@
   entities:
     - light.family_room_center_lamp
     - light.family_room_corner_lamp
+    - light.family_room_dining_table
 
  ## Living Room ###
 - platform: group

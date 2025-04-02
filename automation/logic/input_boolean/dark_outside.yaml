@@ -2,7 +2,7 @@
 ### DARK_OUTSIDE CONFIGURATION / AUTOMATION ####
 ################################################
 
-# Darker than 500 Lux Outside 
+# Darker than 100 Lux Outside 
 - alias: GOING DARK - Set dark_outside input_boolean to On, dark out
   id: d8a964ba-7814-11ee-b962-0242ac120002
   trigger:
