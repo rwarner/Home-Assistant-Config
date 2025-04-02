@@ -1,0 +1,16 @@
+####################################
+####### LOCK CONFIGURATION  ########
+####################################
+
+- platform: template
+  name: Front Door Deadbolt
+  unique_id: front_door_deadbolt
+  value_template: "{{ is_state('input_boolean.front_door_deadbolt', 'on') }}"
+  lock:
+    service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.front_door_deadbolt
+  unlock:
+    service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.front_door_deadbolt
