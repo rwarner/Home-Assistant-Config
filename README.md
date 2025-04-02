@@ -7,7 +7,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ## Current Server Hardware
 
-[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2024.11.3%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-20.04.6%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.12.2-brightgreen)
+[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2025.1.2%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-24.04.1%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.13.1-brightgreen)
  - [Intel Core i5-6400 2.7 GHz Quad-Core Processor](https://amzn.to/3C0RaOq)
  - [Jetway NF594-Q170 Mini-ITX Motherboard](https://www.jetwaycomputer.com/NF594.html)
  - [Timetec 16GB SODIMM Ram](https://amzn.to/4gEnCWg)
@@ -81,7 +81,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          <img src="images/unifi_8_60w_switch.png" alt="">
       </td>
       <td colspan="2">
-         Smaller POE switch, for use in garage POE for cameras and Unifi AP-IW.
+         Smaller POE switch
       </td>
    </tr>
 
@@ -93,7 +93,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          <img src="images/unifi_flex_mini.png" alt="">
       </td>
       <td colspan="2">
-         Unifi Switch used for my Basement Office. Powered by POE!
+         Unifi Switch used for my Office. Powered by POE!
       </td>
    </tr>
  
