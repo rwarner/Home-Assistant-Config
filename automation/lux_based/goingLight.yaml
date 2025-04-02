@@ -31,3 +31,5 @@
       entity_id:
         - cover.ryans_office_shades
         - cover.kitchen_window_shade_cover
+        - cover.living_room_shades
+        - cover.family_room_shades

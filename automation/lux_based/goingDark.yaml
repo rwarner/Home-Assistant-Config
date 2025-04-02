@@ -8,7 +8,7 @@
   id: 4c3cbda0-7815-11ee-b962-0242ac120002
   trigger:
     # Make sure that it's dark outside
-    - platform: state
+    - trigger: state
       entity_id: input_boolean.dark_outside
       to: "on"
   condition:
@@ -21,38 +21,37 @@
         ((as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered))
         > 43200) }}
   action:
-    - service: light.turn_on
-      continue_on_error: true
-      data:
-        entity_id:
-          - light.family_room_lights
-          - light.kitchen_lights
-          - light.living_room_lights
-        transition: 10
-    - service: light.turn_on
-      continue_on_error: true
-      data:
-        entity_id:
-          - light.outside_lights
-        brightness_pct: 100
-        transition: 2
-    # Only proceed if someone is not home
-    # turn off lights that we don't want to leave on
-    - condition: state
-      entity_id: alarm_control_panel.alarm
-      state: armed_away
-    - service: light.turn_off
-      continue_on_error: true
-      entity_id:
-        - light.kitchen_ceiling_lights
+  # If we are away, turn on away scene
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: alarm_control_panel.alarm
+            state: armed_away
+        sequence:
+          - action: scene.turn_on
+            data:
+              entity_id: scene.evening_lights_away
+              transition: 10
+    # Otherwise, default to home scene
+    default:
+      - action: scene.turn_on
+        data:
+          entity_id: scene.evening_lights_home
+          transition: 10
 
 - alias: GOING DARK - Close all curtains and shades when it's getting dark
   id: 5f9f9787-3108-4c69-997b-ba7fbdee9285
   trigger:
+    # Make sure that the light level is below 100 lx
+    # Don't rely on the "dark outside variable, since closing
+    # since closing the curtains can be done slightly later than the lights
+    - trigger: numeric_state
+      entity_id: sensor.front_outdoor_motion_sensor_illuminance
+      below: 20
     # Make sure that it's dark outside
-    - platform: state
-      entity_id: input_boolean.dark_outside
-      to: "on"
+    # - platform: state
+    #   entity_id: input_boolean.dark_outside
+    #   to: "on"
   action:
-    - service: cover.close_cover
+    - action: cover.close_cover
       entity_id: cover.house_covers

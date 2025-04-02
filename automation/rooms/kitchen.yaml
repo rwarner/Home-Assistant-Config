@@ -54,3 +54,43 @@
     - service: light.turn_off
       data:
         entity_id: light.kitchen_ceiling_lights
+
+- alias: KITCHEN - Control undercabinet lights with motion
+  id: 82cae31f-921a-4954-8d04-1d2577090f34
+  mode: restart  # Ensures the timer restarts if motion is detected again
+  max_exceeded: silent  # Suppresses warnings during delay
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.undercabinet_motion_sensor
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.kitchen_motion_sensor
+      to: 'off'
+      for:
+        minutes: 5
+  action:
+    - choose:
+        # Turn on the light when motion is detected in kitchen area
+        - conditions:
+            - condition: state
+              entity_id: binary_sensor.undercabinet_motion_sensor
+              state: 'on'
+            - condition: time
+              # After 8 am
+              after: '08:00:00'
+          sequence:
+            - service: light.turn_on
+              data:
+                entity_id: light.kitchen_undercabinet_lights
+        # Turn off the light when motion in all of kitchen stops for 5 minutes
+        - conditions:
+            - condition: state
+              entity_id: binary_sensor.kitchen_motion_sensor
+              state: 'off'
+            - condition: state
+              entity_id: binary_sensor.undercabinet_motion_sensor
+              state: 'off'
+          sequence:
+            - service: light.turn_off
+              data:
+                entity_id: light.kitchen_undercabinet_lights

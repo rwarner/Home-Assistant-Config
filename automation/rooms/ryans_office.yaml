@@ -2,45 +2,55 @@
 ##### RYANS OFFICE AUTOMATIONS  ####
 ####################################
 
-# - alias: RYANS OFFICE - Turn on lights from motion
-#   mode: single
-#   max_exceeded: silent # Hide warnings when triggered while in delay.
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.ryans_office_motion_sensor
-#       from: 'off'
-#       to: 'on'
-#   condition:
-#     - condition: state
-#       entity_id: light.ryans_office_lights 
-#       state: 'off'
-#   action:
-#     - service: light.turn_on
-#       entity_id: light.ryans_office_lights
-#     - service: light.turn_on
-#       data:
-#         entity_id: light.ryans_desk_uplighting
-#         brightness_step_pct: 100
-#         rgb_color: [145,226,255] #Default preferred blue
+- alias: RYANS OFFICE - Control lights with motion
+  id: c02009a1-2392-49d0-8671-8f55e142b158
+  mode: restart  # Ensures the timer restarts if motion is detected again
+  max_exceeded: silent  # Hide warnings when triggered while in delay
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ryans_office_motion_sensor
+      from: 'off'
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.ryans_office_motion_sensor
+      from: 'on'
+      to: 'off'
+      for:
+        minutes: 15
+  condition:
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: 'on'
+  action:
+    - choose:
+        # Turn on the lights when motion is detected
+        - conditions:
+            - condition: state
+              entity_id: binary_sensor.ryans_office_motion_sensor
+              state: 'on'
+            - condition: state
+              entity_id: light.ryans_office_lights
+              state: 'off'
+          sequence:
+            - service: light.turn_on
+              entity_id: light.ryans_office_lights
+            # - service: light.turn_on
+            #   data:
+            #     entity_id: light.ryans_desk_uplighting
+            #     brightness_step_pct: 100
+            #     rgb_color: [145,226,255]  # Default preferred blue
+        # Turn off the lights when no motion is detected for 5 minutes
+        - conditions:
+            - condition: state
+              entity_id: binary_sensor.ryans_office_motion_sensor
+              state: 'off'
+            - condition: state
+              entity_id: light.ryans_office_lights
+              state: 'on'
+          sequence:
+            - service: light.turn_off
+              entity_id: light.ryans_office_lights
 
-
-# - alias: RYANS OFFICE - Turn off lights from motion
-#   mode: single
-#   max_exceeded: silent # Hide warnings when triggered while in delay.
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.ryans_office_motion_sensor
-#       from: 'on'
-#       to: 'off'
-#       for:
-#         minutes: 5
-#   condition:
-#     - condition: state
-#       entity_id: light.ryans_office_lights 
-#       state: 'on'
-#   action:
-#     - service: light.turn_off
-#       entity_id: light.ryans_office_lights
 
 - alias: RYANS OFFICE - Good morning on first movement
   id: b64c9d8c-7815-11ee-b962-0242ac120002
@@ -62,29 +72,34 @@
       # Turn on light, if level is below 30 lx
     - condition: numeric_state
       entity_id: sensor.ryans_office_motion_sensor_illuminance
-      below: 30
+      below: 70
     - service: light.turn_on
       continue_on_error: true
       entity_id: light.ryans_office_lights
 
-- alias: RYANS OFFICE - Turn off lights from switch
-  id: bb7b3494-7815-11ee-b962-0242ac120002
+- alias: RYANS OFFICE - Control lights from switch
+  id: 310bebf8-4d8d-4cf5-bbe1-1adfc1b9518c
+  mode: single  # Ensures only one instance runs at a time
   trigger:
     - platform: state
       entity_id: switch.ryan_s_office_switch_2
-      to: 'off'
   action:
-    - service: light.turn_off
-      continue_on_error: true
-      entity_id: light.ryans_office_lights
-
-- alias: RYANS OFFICE - Turn on lights from switch
-  id: bfdbfb40-7815-11ee-b962-0242ac120002
-  trigger:
-    - platform: state
-      entity_id: switch.ryan_s_office_switch_2
-      to: 'on'
-  action:
-    - service: light.turn_on
-      continue_on_error: true
-      entity_id: light.ryans_office_lights
+    - choose:
+        # Turn on the lights when the switch is turned on
+        - conditions:
+            - condition: state
+              entity_id: switch.ryan_s_office_switch_2
+              state: 'on'
+          sequence:
+            - service: light.turn_on
+              continue_on_error: true
+              entity_id: light.ryans_office_lights
+        # Turn off the lights when the switch is turned off
+        - conditions:
+            - condition: state
+              entity_id: switch.ryan_s_office_switch_2
+              state: 'off'
+          sequence:
+            - service: light.turn_off
+              continue_on_error: true
+              entity_id: light.ryans_office_lights

@@ -100,7 +100,7 @@
       from: 'on'
       to: 'off'
       for:
-        minutes: 3
+        minutes: 5
   condition:
     # Only between the hours of 10 am and 9:30 p.m.
     - condition: time
@@ -136,93 +136,4 @@
               target:
                 entity_id: light.master_bedroom_lights
 
-# - alias: BEDROOM - Turn on Light from Motion (Off after 5 min, between 10 am and 9:30 pm)
-#   id: 7f97ba74-7815-11ee-b962-0242ac120002
-#   max_exceeded: silent # Hide warnings when triggered while in delay.
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.master_bedroom_motion_sensor
-#       from: 'off'
-#       to: 'on'
-#   condition:
-#     # Only if lights are off
-#     - condition: state
-#       entity_id: light.master_bedroom_lights 
-#       state: 'off'
-#     # Only between the hours of 10 am and 9:30 p.m.
-#     - condition: time
-#       after: '10:00:00'
-#       before: '21:30:00'
-#     # Make sure that the light level is below 10 lx
-#     - condition: numeric_state
-#       entity_id: sensor.master_bedroom_motion_sensor_illuminance
-#       below: 10
-#   action:
-#     - service: light.turn_on
-#       target:
-#         entity_id: light.master_bedroom_lights
-#       data:
-#         brightness_pct: 100
-
-# - alias: BEDROOM - Turn off light from no motion (3 Min)
-#   id: c3a51366-6469-4df5-9a8f-ba950e15e9bc
-#   max_exceeded: silent # Hide warnings when triggered while in delay.
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.master_bedroom_motion_sensor
-#       from: 'on'
-#       to: 'off'
-#       for:
-#         minutes: 3
-#   condition:
-#     # Only if lights are off
-#     - condition: state
-#       entity_id: light.master_bedroom_lights 
-#       state: 'on'
-#     # Only between the hours of 10 am and 9:30 p.m.
-#     - condition: time
-#       after: '10:00:00'
-#       before: '21:30:00'
-#   action:
-#     - service: light.turn_off
-#       target:
-#         entity_id: light.master_bedroom_lights
-
-# - alias: BEDROOM - Turn on Light from motion (Off after 5 min, between 10 am and 9:30pm)
-#   id: 7f97ba74-7815-11ee-b962-0242ac120002
-#   mode: restart # Restart on every motion, ensure that the light is always on
-#   max_exceeded: silent 
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.master_bedroom_motion_sensor
-#       from: 'off'
-#       to: 'on'
-#   condition:
-#     # Only between the hours of 10 am and 9:30 p.m.
-#     - condition: time
-#       after: '10:00:00'
-#       before: '21:30:00'
-#     # Check if the light is dark OR if the automation has recently been triggered
-#     # this allows us to skip luminance checks on restart
-#     - condition: or
-#       conditions:
-#       # Automation has recently been trigger by a restart within 10 min window 
-#       # (5 min till turn off, 5 min till lux/illuminance sensor updates)
-#         - condition: template
-#           value_template: "{{ (as_timestamp(now())-as_timestamp(states.automation.bedroom_turn_on_light_from_motion_off_after_5_min_between_10_am_and_9_30pm.attributes.last_triggered)) < 600 }}"
-#       # Make sure that the light level is below 10 lx
-#         - condition: numeric_state
-#           entity_id: sensor.master_bedroom_motion_sensor_illuminance
-#           below: 10
-#   action:
-#     - service: light.turn_on
-#       data:
-#         entity_id: light.master_bedroom_lights
-#         brightness_pct: 100
-#     # Wait until motion goes off
-#     - wait_template: "{{ is_state('binary_sensor.master_bedroom_motion_sensor', 'off') }}"
-#     - delay:
-#         minutes: 5
-#     - service: light.turn_off
-#       entity_id: light.master_bedroom_lights
 #####################################
