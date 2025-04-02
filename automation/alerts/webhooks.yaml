@@ -1,0 +1,46 @@
+####################################
+####### WEBHOOKS AUTOMATIONS  ######
+####################################
+
+- alias: WEBHOOK - Sonarr Download Stuck
+  id: d48dff9b-2dc7-4527-8f6d-d55944512a05
+  triggers:
+    - trigger: webhook
+      webhook_id: sonarr_stuck
+      allowed_methods:
+        - POST
+      local_only: true
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Sonarr Stuck"
+        message: "Import needs manual intervention"
+
+- alias: WEBHOOK - Radarr Download Stuck
+  id: 4619be56-2d9b-420b-b71c-3490d5c74937
+  triggers:
+    - trigger: webhook
+      webhook_id: radarr_stuck
+      allowed_methods:
+        - POST
+      local_only: true
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Radarr Stuck"
+        message: "Import needs manual intervention"
+
+
+- alias: WEBHOOK - Prowlarr Health Issue
+  id: c00305b5-3fe4-4dc7-a1fc-552a299d9609
+  triggers:
+    - trigger: webhook
+      webhook_id: prowlarr_health
+      allowed_methods:
+        - POST
+      local_only: true
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Prowlarr Health"
+        message: "Problem with indexer"
