@@ -43,6 +43,7 @@ OZW_Log.txt
 options.xml
 zwscene.xml
 zwcfg_0xe4c19993.xml
+.python-version
 
 # Go 2 RTC
 go2rtc*
