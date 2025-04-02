@@ -6,7 +6,7 @@ homeassistant:
   country: US
   # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: 90
-  unit_system: imperial
+  unit_system: us_customary
   currency: USD
   time_zone: America/New_York
   auth_providers:
@@ -90,33 +90,6 @@ notify:
 
 media_source:
 
-media_player:
-  - platform: yamaha
-    host: !secret yamaha_ip #Not a static ip
-    source_ignore:
-      - "AUDIO1"
-      - "AUDIO2"
-      - "AV1"
-      - "AV2"
-      - "AV3"
-      - "AV4"
-      - "AV5"
-      - "AV6"
-      - "AirPlay"
-      - "HDMI5"
-      - "NET RADIO"
-      - "Pandora"
-      - "Rhapsody"
-      - "SERVER"
-      - "SiriusXM"
-      - "TUNER"
-      - "USB"
-      - "iPod (USB)"
-    source_names:
-      HDMI1: "Shield TV"
-      HDMI2: "Playstation 4"
-      HDMI3: "Nintendo Switch"
-
 input_boolean:
   mail_arrived:
     name: Whether or not the mail has arrived
@@ -130,6 +103,11 @@ input_boolean:
     name: First movement of the day in ryans office
   dark_outside:
     name: Whether or not it is dark outside
+  front_door_deadbolt:
+    # Used to create a "Lock" template to coordinate with
+    # the Aqara Smart Lock in Homekit
+    name: Front Door Deadbolt Status
+    icon: mdi:lock
 
 ifttt:
   key: !secret ifttt_api_key
@@ -174,6 +152,7 @@ homekit:
       - light.living_room_desk_lamp
       - light.living_room_floor_lamp
       - light.family_room_lights
+      - light.family_room_dining_table
       - light.master_bedroom_lights
       - light.outside_front_door
       - light.outside_side_patio
@@ -182,6 +161,7 @@ homekit:
       - light.kitchen_lights
       - light.kitchen_pendants
       - light.ryans_office_desk_lamp
+      - light.ryans_office_desk_uplighting
       - light.movie_room_lights
 
       - camera.outside_doorbell
@@ -196,8 +176,11 @@ homekit:
       - sensor.dryer_dryer_machine_state
 
       - cover.ryans_office_shades
-      - cover.family_room_curtains
+      - cover.living_room_shades
       - cover.kitchen_window_shade_cover
+      - cover.family_room_curtains
+      - cover.family_room_shades
+
   entity_config:
     binary_sensor.front_outdoor_motion_sensor:
       linked_battery_sensor: sensor.front_outdoor_motion_sensor_battery_level
@@ -252,5 +235,7 @@ template: !include_dir_merge_list configuration/template/
 cover: !include configuration/cover.yaml
 history: !include configuration/history.yaml
 input_select: !include configuration/input_select.yaml
+lock: !include configuration/lock.yaml
+scene: !include scenes.yaml
 shell_command: !include configuration/shell_command.yaml
 switch: !include configuration/switch.yaml
