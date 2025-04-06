@@ -6,17 +6,20 @@
   - name: "Tesla Charger Power Home"
     unique_id: tesla_charger_power_home
     icon: mdi:lightning-bolt
-    unit_of_measurement: "kW"
+    unit_of_measurement: kW
+    device_class: power
     state: >-
       {% if is_state('sensor.tesla_geofence', 'Home') %}
-        {{ states.sensor.tesla_charger_power.state }}
+        {{ states('sensor.tesla_charger_power') | float(0) }}
       {% else %}
         0
       {% endif %}
 
 - sensor:
   - name: "Server Closet Power"
+    unique_id: server_closet_power
     unit_of_measurement: kW
+    device_class: power
     state: >
       {{  (((((float(states('sensor.ups_load'), 10.0)) / 100) * 2000) * 0.7) | round(1)) / 1000 }}
     state_class: measurement

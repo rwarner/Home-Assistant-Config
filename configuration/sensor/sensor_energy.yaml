@@ -4,10 +4,20 @@
 
 - platform: integration
   name: Server Closet Energy
+  unique_id: sensor.server_closet_energy
   source: sensor.server_closet_power
   method: left
 
 - platform: integration
   name: Tesla Energy
+  unique_id: sensor.tesla_energy
   source: sensor.tesla_charger_power_home
   method: left
+
+- platform: integration
+  name: SolarPoint Energy Generated
+  unique_id: sensor.solarpoint_energy_generated
+  source: sensor.solarpoint_panel_power
+  unit_prefix: k
+  round: 2
+  method: trapezoidal

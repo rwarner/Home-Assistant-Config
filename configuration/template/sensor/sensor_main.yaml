@@ -49,8 +49,6 @@
         {% endfor %}
         {{ count.value }}
 
-
-
 # Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
 # - platform: template
 #   sensors:
