@@ -15,7 +15,13 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.1.1.0
   accept_errors: true
   unit_of_measurement: "A"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}
+
 
 # Track the amount of voltage that is stored within the battery. 
 # This data is provided in millivolts. Keeping the voltage at decent
@@ -27,7 +33,12 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.1.2.0
   accept_errors: true
   unit_of_measurement: "V"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}
 
 # This value is the power stored within the battery, measured in milliwatts.
 - platform: snmp
@@ -37,7 +48,12 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.1.3.0
   accept_errors: true
   unit_of_measurement: "W"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}
 
 # Track the temperature of the battery using this data. The data is provided in Kelvin.
 # The battery temperature will only be returned when the solar panels charge the batteries.
@@ -49,11 +65,17 @@
   accept_errors: true
   unit_of_measurement: "°F"
   value_template: >-
-    {% if (value | float) == 0 %}
-      {{ (value | float) }}
+    {% if value | regex_match('^\\d+(\\.\\d+)?$') %}
+      {% set v = value | float %}
+      {% if v == 0 %}
+        0
+      {% else %}
+        {{ ((v / 1000 - 273.15) * 9/5 + 32) | float }}
+      {% endif %}
     {% else %}
-      {{ (((value | float) / 1000) - 273.15) * 9/5 + 32 | float }}
+      unknown
     {% endif %}
+
 
 # The solar panel current is the number of milliamperes the solar panels are providing to the sunMax.
 - platform: snmp
@@ -63,7 +85,12 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.2.1.0
   accept_errors: true
   unit_of_measurement: "A"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}
 
 # This value is the voltage that is being provided by the solar panels, measured in millivolts.
 - platform: snmp
@@ -73,7 +100,12 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.2.2.0
   accept_errors: true
   unit_of_measurement: "V"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}
 
 # This value is the amount of power that the solar panel is currently providing to your system, measured in milliwatts.
 - platform: snmp
@@ -83,7 +115,12 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.2.3.0
   accept_errors: true
   unit_of_measurement: "W"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}
   device_class: power
 
 # The load current is the amount of current running through the SolarPoint to connected devices, measured in milliamperes.
@@ -94,7 +131,12 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.3.1.0
   accept_errors: true
   unit_of_measurement: "A"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}
 
 # The load voltage is the voltage running through the SolarPoint to connected devices, measure in millivolts.
 - platform: snmp
@@ -104,7 +146,12 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.3.2.0
   accept_errors: true
   unit_of_measurement: "V"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}
 
 # The load power is the current load from devices on the SolarPoint in milliwatts.
 - platform: snmp
@@ -114,4 +161,9 @@
   baseoid: .1.3.6.1.4.1.41112.1.11.1.3.3.0
   accept_errors: true
   unit_of_measurement: "W"
-  value_template: "{{((value | float) / 1000) | float}}"
+  value_template: >-
+    {% if value | float(default=none) is not none %}
+      {{ (value | float) / 1000 }}
+    {% else %}
+      {{ None }}
+    {% endif %}

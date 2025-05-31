@@ -1,14 +1,16 @@
 ################################
 ####  TEMPLATE - LAUNDRY  ######
 ################################
-
 - sensor:
   - name: "Washer Remaining Time"
     unique_id: washer_remaining_time
     state: >-
-      {% set rem_h = (as_timestamp(states.sensor.washer_washer_completion_time.state) - as_timestamp(now())) | timestamp_custom('%-H', false) %}
-      {% set rem_m = (as_timestamp(states.sensor.washer_washer_completion_time.state) - as_timestamp(now())) | timestamp_custom('%-M', false) %}
-      {% if is_state('sensor.washer_washer_machine_state', 'stop') or is_state('sensor.washer_washer_job_state', 'none')  %}
+      {% set comp_time = as_timestamp(states('sensor.washer_washer_completion_time'), default=0) %}
+      {% set now_time = as_timestamp(now()) %}
+      {% set delta = comp_time - now_time %}
+      {% set rem_h = (delta | timestamp_custom('%-H', false)) %}
+      {% set rem_m = (delta | timestamp_custom('%-M', false)) %}
+      {% if is_state('sensor.washer_washer_machine_state', 'stop') or is_state('sensor.washer_washer_job_state', 'none') or comp_time == 0 %}
         Not Running
       {% elif int(rem_h) > 0.9 and int(rem_h) < 2.0 %} 
         {{ rem_h }} hour(s) and {{ rem_m }} minute(s)
@@ -20,15 +22,19 @@
   - name: "Dryer Remaining Time"
     unique_id: dryer_remaining_time
     state: >-
-      {% set rem_h = (as_timestamp(states.sensor.dryer_dryer_completion_time.state) - as_timestamp(now())) | timestamp_custom('%-H', false) %}
-      {% set rem_m = (as_timestamp(states.sensor.dryer_dryer_completion_time.state) - as_timestamp(now())) | timestamp_custom('%-M', false) %}
-      {% if is_state('sensor.dryer_dryer_machine_state', 'stop') or is_state('sensor.dryer_dryer_job_state', 'none')  %}
+      {% set comp_time = as_timestamp(states('sensor.dryer_dryer_completion_time'), default=0) %}
+      {% set now_time = as_timestamp(now()) %}
+      {% set delta = comp_time - now_time %}
+      {% set rem_h = (delta | timestamp_custom('%-H', false)) %}
+      {% set rem_m = (delta | timestamp_custom('%-M', false)) %}
+      {% if is_state('sensor.dryer_dryer_machine_state', 'stop') or is_state('sensor.dryer_dryer_job_state', 'none') or comp_time == 0 %}
         Not Running
       {% elif int(rem_h) > 0.9 and int(rem_h) < 2.0 %} 
         {{ rem_h }} hour(s) and {{ rem_m }} minute(s)
       {% else %} 
         {{ rem_m }} minute(s) 
       {% endif %}
+
 
 
 # 2/26/21 not in use
