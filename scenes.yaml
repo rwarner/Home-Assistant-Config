@@ -161,11 +161,11 @@
       - color_temp
       color_mode: color_temp
       brightness: 230
-      color_temp_kelvin: 4237
-      color_temp: 236
+      color_temp_kelvin: 2624
+      color_temp: 235
       hs_color:
-      - 26.736
-      - 30.74
+      - 26.732
+      - 30.439
       rgb_color:
       - 255
       - 212
@@ -193,18 +193,18 @@
       effect: 'off'
       color_mode: color_temp
       brightness: 230
-      color_temp_kelvin: 4237
-      color_temp: 236
+      color_temp_kelvin: 2624
+      color_temp: 381
       hs_color:
-      - 26.736
-      - 30.74
+      - 28.567
+      - 68.208
       rgb_color:
       - 255
-      - 212
-      - 177
+      - 164
+      - 81
       xy_color:
-      - 0.406
-      - 0.361
+      - 0.533
+      - 0.389
       off_with_transition: false
       off_brightness:
       friendly_name: Kitchen Lamp
