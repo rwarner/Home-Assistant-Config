@@ -19,9 +19,7 @@
     unique_id: laundry_room_avg_temp
     unit_of_measurement: '°F'
     state_class: measurement
-    state: >-
-      {{'%0.3g'|format((float(states('sensor.laundry_motion_sensor_temperature'), 65.0) 
-      + float(states('sensor.basement_door_sensor_temperature'), 65.0)) / 2) }}
+    state: "{{ state_attr('climate.ecobee_laundry_room', 'current_temperature') }}"
 
 # -- Kitchen --
   - name: "Kitchen Temperature"
@@ -81,18 +79,7 @@
     unique_id: family_room_avg_temp
     unit_of_measurement: '°F'
     state_class: measurement
-    state: >-
-      {{'%0.3g'|format(
-      (
-      float(states('sensor.family_room_front_window_1_sensor_temperature'), 65.0) + 
-      float(states('sensor.family_room_front_window_2_sensor_temperature'), 65.0) +
-      float(states('sensor.family_room_rear_window_1_sensor_temperature'), 65.0) +
-      float(states('sensor.family_room_rear_window_2_sensor_temperature'), 65.0) +
-      float(states('sensor.family_room_rear_window_3_sensor_temperature'), 65.0) +
-      float(states('sensor.family_room_side_window_1_sensor_temperature'), 65.0) +
-      float(states('sensor.family_room_side_window_2_sensor_temperature'), 65.0) +
-      float(states('sensor.family_room_slider_temperature'), 65.0)
-      ) / 8) }}
+    state: "{{ state_attr('climate.family_room_mitsubishi', 'current_temperature') }}"
 
 #  -- Living Room --
   - name: "Living Room Temperature"
