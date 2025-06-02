@@ -6,6 +6,15 @@
 # Define below multiple sensors into one
 # only rely on these sensors for automations and views
 
+
+# -- Outside --
+  - name: "Outside Temperature"
+    unique_id: outside_avg_temp
+    unit_of_measurement: '°F'
+    state_class: measurement
+    state: >-
+      {{ '%0.3g'|format(float(states('sensor.family_room_mitsubishi_outside_air_temp'), 65.0)) }}
+
 # -- Movie Room --
   - name: "Movie Room Temperature"
     unique_id: movie_room_avg_temp

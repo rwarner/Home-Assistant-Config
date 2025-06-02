@@ -162,8 +162,9 @@
   accept_errors: true
   unit_of_measurement: "W"
   value_template: >-
-    {% if value | float(default=none) is not none %}
-      {{ (value | float) / 1000 }}
+    {% set val = value | float(default=none) %}
+    {% if val is not none %}
+      {{ (val / 1000) | round(2) }}
     {% else %}
-      {{ None }}
+      {{ '' }}
     {% endif %}
