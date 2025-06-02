@@ -13,12 +13,6 @@ image/
 tts/
 blueprints/
 
-#Ignoring specific custom components below
-custom_components/alexa_media/
-custom_components/hacs/
-custom_components/huesensor/
-custom_components/smartthinq_sensors/
-
 # Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
 ip_bans.yaml
 secrets.yaml
@@ -47,3 +41,11 @@ zwcfg_0xe4c19993.xml
 
 # Go 2 RTC
 go2rtc*
+
+# Ignore community plugins
+www/**
+custom_components/
+
+# But allow the images folder and all files in it
+!www/images/
+!www/images/**

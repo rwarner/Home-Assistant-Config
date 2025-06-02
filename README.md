@@ -14,6 +14,105 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
  - [Kingston 1TB mSata SSD](https://amzn.to/43lcWaI)
  - [InWin RF100S-S265 (1U Server Case)](https://amzn.to/4iVfqCk)
 
+<h2>Community Plugins Used</h2>
+
+<h3>🧩 Integrations</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Plugin</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HACS</td>
+      <td>Powerful UI to handle downloads of all your custom needs.</td>
+    </tr>
+    <tr>
+      <td>Adaptive Lighting</td>
+      <td>Adaptive Lighting custom component for Home Assistant.</td>
+    </tr>
+    <tr>
+      <td>WebRTC Camera</td>
+      <td>Real-time viewing of almost any camera stream using WebRTC.</td>
+    </tr>
+    <tr>
+      <td>Alexa Media Player</td>
+      <td>Control Amazon Alexa devices using the unofficial Alexa API.</td>
+    </tr>
+    <tr>
+      <td>Alarmo</td>
+      <td>Easy-to-use alarm system integration.</td>
+    </tr>
+    <tr>
+      <td>fontawesome</td>
+      <td>Use icons from FontAwesome in Home Assistant.</td>
+    </tr>
+    <tr>
+      <td>Variables+History</td>
+      <td>Variables component for Home Assistant with history support.</td>
+    </tr>
+    <tr>
+      <td>AmpliPi</td>
+      <td>Adds media player support for the AmpliPi MultiZone Audio Player.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>🖼️ Dashboards (Lovelace UI)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Plugin</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mushroom</td>
+      <td>Build a beautiful Home Assistant dashboard easily.</td>
+    </tr>
+    <tr>
+      <td>mini-graph-card</td>
+      <td>Minimalistic graph card for Lovelace UI.</td>
+    </tr>
+    <tr>
+      <td>button-card</td>
+      <td>❇️ Lovelace button card for flexible controls.</td>
+    </tr>
+    <tr>
+      <td>Mini Media Player</td>
+      <td>Minimalistic media card for Lovelace UI.</td>
+    </tr>
+    <tr>
+      <td>auto-entities</td>
+      <td>🔹 Automatically populate entities list in Lovelace cards.</td>
+    </tr>
+    <tr>
+      <td>card-mod</td>
+      <td>🔹 Add CSS styles to (almost) any Lovelace card.</td>
+    </tr>
+    <tr>
+      <td>fold-entity-row</td>
+      <td>🔹 A foldable row for entities card.</td>
+    </tr>
+    <tr>
+      <td>Kiosk Mode</td>
+      <td>🙈 Hides the Home Assistant header and/or sidebar.</td>
+    </tr>
+    <tr>
+      <td>card-tools</td>
+      <td>🔹 Collection of tools for other Lovelace plugins.</td>
+    </tr>
+    <tr>
+      <td>bignumber-card</td>
+      <td>A large-format number display card.</td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ## <a name="SmartHomeEquipment">Smart Home Equipment</a>
 
