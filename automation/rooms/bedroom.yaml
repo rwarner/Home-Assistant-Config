@@ -136,4 +136,22 @@
               target:
                 entity_id: light.master_bedroom_lights
 
+- alias: BEDROOM - Wake NSPanel on Motion
+  id: c762ac93-39a6-4acc-9362-7bb633b675e8
+  max_exceeded: silent
+  trigger:
+    - trigger: state
+      entity_id: binary_sensor.master_bedroom_motion_sensor
+      from: 'off'
+      to: 'on'
+  condition:
+    # 8:00 a.m. - 9:00 p.m.
+    - condition: time
+      after: '08:00:00'
+      before: '21:00:00'
+  action:
+    - action: esphome.master_bedroom_nspanel_wake_up
+      data:
+        reset_timer: true
+
 #####################################
