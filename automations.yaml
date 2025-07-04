@@ -1,0 +1,131 @@
+- id: '1749688835182'
+  alias: NSPanel Configuration - Living Room
+  description: ''
+  use_blueprint:
+    path: Blackymas/nspanel_blueprint.yaml
+    input:
+      timezone: America/New_York (EST5EDT,M3.2.0,M11.1.0)
+      outdoortemp: sensor.outside_avg_temp
+      entity01: light.living_room_desk_lamp
+      entity02: light.living_room_floor_lamp
+      left_button_name: Mantle Lights
+      time_format: '%-I:%M %p'
+      date_format: '%A, %-m/%-d'
+      hw_button_bar_left_always_show: true
+      relay_1_local_fallback: true
+      left_button_entity: switch.living_room_nspanel_relay_1
+      entity01_name: Desk Lamp
+      entity01_icon: mdi:desk-lamp
+      entity02_name: Floor Lamp
+      entity02_icon: mdi:floor-lamp
+      entity03: cover.living_room_shades
+      entity03_name: Shades
+      entity03_icon: ''
+      home_custom_button01: media_player.amplipi_zone_living_room
+      nspanel_name: 60046d2d2b9b35eefda356d2ee3a600d
+      button_page02_label: AmpliPi Vinyl Presets
+      entity09: script.amplipi_preset_restore_default
+      entity09_name: Restore Default
+      entity09_icon: mdi:restart
+      entity10: script.amplipi_preset_vinyl_living_room
+      entity10_name: Living Room
+      entity10_icon: mdi:sofa
+      entity11: script.amplipi_preset_vinyl_first_floor
+      entity11_name: First Floor
+      entity11_icon: mdi:home-floor-1
+      entity12: script.amplipi_preset_vinyl_inside_home
+      entity12_name: Inside Home
+      home_custom_button01_icon: mdi:speaker
+      home_custom_button01_name: Living Room Speakers
+      entity12_icon: mdi:home
+      button_pages_icon_size: '10'
+      button_page01_label: Device Control
+      climate: climate.living_room_mitsubishi
+      home_outdoor_temp_label_color:
+      - 50
+      - 189
+      - 0
+      entity04_icon: ''
+      climate_chip_always_visible: true
+- id: '1749930732533'
+  alias: NSPanel Configuration - Ryan's Office
+  description: ''
+  use_blueprint:
+    path: Blackymas/nspanel_blueprint.yaml
+    input:
+      nspanel_name: 87a46becfd7e8c5d4b9b844827693f5b
+      time_format: '%-I:%M %p'
+      date_format: '%A, %-m/%-d'
+      timezone: America/New_York (EST5EDT,M3.2.0,M11.1.0)
+      outdoortemp: sensor.outside_avg_temp
+      left_button_entity: switch.ryans_office_nspanel_relay_1
+      left_button_name: Ceiling Fan
+      hw_button_bar_left_always_show: true
+      relay_1_local_fallback: true
+      wake_up_sensors:
+      - binary_sensor.ryans_office_motion_sensor
+      entity01: light.ryans_office_desk_lamp
+      entity01_name: Desk Lamp
+      entity01_icon: mdi:desk-lamp
+      entity02: light.ryans_office_desk_uplighting
+      entity02_name: Desk Uplighting
+      entity02_icon: mdi:led-strip-variant
+      entity03: cover.ryans_office_shades
+      entity03_name: Shades
+      entity03_icon: ''
+      right_button_entity: light.ryans_office_lights
+      right_button_name: Desk Lights
+      home_custom_button01: media_player.amplipi_zone_ryans_office
+      home_custom_button01_icon: mdi:speaker
+      home_custom_button02: cover.ryans_office_shades
+      home_custom_button02_icon: ''
+      home_custom_button03: light.ryans_office_desk_lamp
+      home_custom_button03_icon: mdi:desk-lamp
+      home_custom_button04: light.ryans_office_desk_uplighting
+      home_custom_button04_icon: mdi:led-strip-variant
+      entity04: automation.ryans_office_control_lights_with_motion
+      entity04_name: Light Motion
+      entity04_icon: mdi:motion-sensor
+      home_outdoor_temp_font: '5'
+      home_outdoor_temp_label_color:
+      - 50
+      - 189
+      - 0
+- id: '1750795680724'
+  alias: NSPanel Configuration - Master Bedroom
+  description: ''
+  use_blueprint:
+    path: Blackymas/nspanel_blueprint.yaml
+    input:
+      nspanel_name: d9a071105d0ac19e8ef06e9a3ad96e2e
+      date_format: '%A, %-m/%-d'
+      time_format: '%-I:%M %p'
+      timezone: America/New_York (EST5EDT,M3.2.0,M11.1.0)
+      outdoortemp: sensor.outside_avg_temp
+      home_outdoor_temp_label_color:
+      - 5
+      - 189
+      - 0
+      home_outdoor_temp_font: '5'
+      indoortemp: sensor.master_bedroom_avg_temp
+      hw_button_bar_left_always_show: true
+      left_button_entity: switch.master_bedroom_nspanel_relay_1
+      relay_1_local_fallback: true
+      hw_button_bar_right_always_show: true
+      left_button_name: Ceiling Fan
+      right_button_entity: script.toggle_bedroom_lights
+      right_button_name: Side Lamps
+      entity01: automation.bedroom_turn_on_light_from_motion_off_after_5_min_between_10_am_and_9_30pm
+      entity01_name: Motion Control
+      entity01_icon: mdi:run
+      entity02: scene.master_bedroom_lights_dim
+      entity02_name: Dim Lamps
+      entity02_icon: mdi:lamp
+      entity03: light.master_bedroom_lights
+      entity03_name: Lamps
+      entity03_icon: mdi:lamps
+      entity04: switch.master_bedroom_fan
+      entity04_name: Fan
+      entity04_icon: mdi:fan
+      right_button_hold_select: Default
+      right_button_state_entity: light.master_bedroom_lights

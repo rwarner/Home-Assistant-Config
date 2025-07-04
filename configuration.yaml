@@ -21,7 +21,7 @@ homeassistant:
 # Enable Home Assistant Cloud functionality
 cloud:
 
-# Enable new energy mechansisms
+# Enable new energy mechanisms
 energy:
 
 # Logging functionality for Home Assistant
@@ -33,6 +33,9 @@ logger:
 
 # Enables the Person integration for handling "home and away"
 person:
+
+# Allows links to propogate through the Home Assistant instance
+my:
 
 system_health:
 
@@ -221,6 +224,9 @@ homekit:
 ##### EXTERNAL FILES BELOW ######
 #################################
 automation: !include_dir_merge_list automation/
+# Include any dynamically created UI automations or blueprints
+automation more: !include automations.yaml
+
 binary_sensor groups: !include_dir_merge_list configuration/binary_sensor/
 light: !include_dir_merge_list configuration/lights/
 
