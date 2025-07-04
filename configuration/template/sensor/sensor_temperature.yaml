@@ -13,7 +13,11 @@
     unit_of_measurement: '°F'
     state_class: measurement
     state: >-
-      {{ '%0.3g'|format(float(states('sensor.family_room_mitsubishi_outside_air_temp'), 65.0)) }}
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.family_room_mitsubishi_outside_air_temp'), 65.0) +
+        float(states('sensor.living_room_mitsubishi_outside_air_temp'), 65.0)
+      ) / 2) }}
 
 # -- Movie Room --
   - name: "Movie Room Temperature"
@@ -36,8 +40,12 @@
     unit_of_measurement: '°F'
     state_class: measurement
     state: >-
-      {{'%0.3g'|format((float(states('sensor.kitchen_motion_sensor_temperature'), 65.0) 
-      + float(states('sensor.kitchen_window_sensor_temperature'), 65.0)) / 2) }}
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.kitchen_motion_sensor_temperature'), 65.0) +
+        float(states('sensor.kitchen_window_sensor_temperature'), 65.0) +
+        float(states('sensor.master_bedroom_nspanel_temperature'), 65.0)
+      ) / 3) }}
 
 
 #  -- Master Bedroom --
@@ -46,9 +54,12 @@
     unit_of_measurement: '°F'
     state_class: measurement
     state: >-
-      {{'%0.3g'|format((float(states('sensor.ryans_bedside_button_temperature'), 65.0) 
-      + float(states('sensor.bedroom_light_button_temperature'), 65.0)
-      + float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0)) / 3) }}
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.ryans_bedside_button_temperature'), 65.0) +
+        float(states('sensor.bedroom_light_button_temperature'), 65.0) +
+        float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0)  
+      ) / 3) }}
 
 # -- Guest Room -- only one sensor currently
 # - platform: template
@@ -67,11 +78,10 @@
     state: >-
       {{'%0.3g'|format(
       (
-      float(states('sensor.ryans_office_motion_sensor_temperature'), 65.0) +
-      float(states('sensor.ryans_office_door_sensor_temperature'), 65.0) +
-      float(states('sensor.ryans_office_rear_window_sensor_temperature'), 65.0) +
-      float(states('sensor.ryans_office_side_window_sensor_temperature'), 65.0)
-      ) / 4) }}
+        float(states('sensor.ryans_office_motion_sensor_temperature'), 65.0) +
+        float(states('sensor.ryans_office_door_sensor_temperature'), 65.0) +
+        float(states('sensor.ryans_office_nspanel_temperature'), 65.0)
+      ) / 3) }}
 
 
 # -- Kelly's Office -- only one sensor currently
@@ -96,4 +106,10 @@
     unit_of_measurement: '°F'
     state_class: measurement
     state: >-
-      {{ '%0.3g'|format(float(states('sensor.living_room_vinyl_record_button_temperature'), 65.0)) }}
+      {{ '%0.3g' | format(
+        (
+          float(states('sensor.living_room_vinyl_record_button_temperature') or 65.0) +
+          float(states('sensor.living_room_nspanel_temperature') or 65.0) +
+          (state_attr('climate.living_room_mitsubishi', 'current_temperature') | float(65.0))
+        ) / 3
+      ) }}

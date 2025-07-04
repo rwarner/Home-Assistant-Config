@@ -4,7 +4,7 @@
 
 - platform: rest
   name: Amplipi Presets
-  resource: !secret amplipi_get_presets
+  resource: http://amplipi.local/api/presets
   method: GET
   headers:
     Accept: "application/json"

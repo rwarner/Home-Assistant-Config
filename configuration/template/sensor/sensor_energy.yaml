@@ -32,34 +32,38 @@
     state_class: measurement
     unit_of_measurement: "%"
     state: >
-      {% set voltage = states('sensor.solarpoint_battery_voltage') | float %}
-
-      {% set soc_map = [
-        [29.2, 100],
-        [26.8, 90],
-        [26.6, 80],
-        [26.4, 70],
-        [26.1, 60],
-        [26.0, 40],
-        [25.8, 30],
-        [25.6, 20],
-        [24.0, 10],
-        [20.0, 0]
-      ] %}
-
-      {% set percent = namespace(value=0) %}
-      {% for i in range(soc_map | length - 1) %}
-        {% set v1, p1 = soc_map[i] %}
-        {% set v2, p2 = soc_map[i + 1] %}
-        {% if voltage <= v1 and voltage >= v2 %}
-          {% set percent.value = ((voltage - v2) / (v1 - v2) * (p1 - p2) + p2) | round(1) %}
-        {% endif %}
-      {% endfor %}
-
-      {% if voltage >= soc_map[0][0] %}
-        100
-      {% elif voltage <= soc_map[-1][0] %}
-        0
+      {% set voltage_str = states('sensor.solarpoint_battery_voltage') %}
+      {% set voltage = voltage_str | float(default=None) %}
+      {% if voltage is none %}
+        {{ none }}
       {% else %}
-        {{ percent.value }}
+        {% set soc_map = [
+          [29.2, 100],
+          [26.8, 90],
+          [26.6, 80],
+          [26.4, 70],
+          [26.1, 60],
+          [26.0, 40],
+          [25.8, 30],
+          [25.6, 20],
+          [24.0, 10],
+          [20.0, 0]
+        ] %}
+
+        {% set percent = namespace(value=0) %}
+        {% for i in range(soc_map | length - 1) %}
+          {% set v1, p1 = soc_map[i] %}
+          {% set v2, p2 = soc_map[i + 1] %}
+          {% if voltage <= v1 and voltage >= v2 %}
+            {% set percent.value = ((voltage - v2) / (v1 - v2) * (p1 - p2) + p2) | round(1) %}
+          {% endif %}
+        {% endfor %}
+
+        {% if voltage >= soc_map[0][0] %}
+          100
+        {% elif voltage <= soc_map[-1][0] %}
+          0
+        {% else %}
+          {{ percent.value }}
+        {% endif %}
       {% endif %}

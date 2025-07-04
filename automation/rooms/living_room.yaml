@@ -20,11 +20,11 @@
             value_template: "{{ trigger.event.data.command == 'button_single' }}"
         sequence:
           # Single button press, cycle through the amplipi presets
-          - service: script.amplipi_cycle_preset
+          - action: script.amplipi_cycle_preset
     
           # Intentionally set a delay to give AmpliPi until it's ready
           - wait_for_trigger:
-            - platform: state
+            - trigger: state
               entity_id: script.amplipi_announce_tts
               to: 'off'
       - conditions:
@@ -32,12 +32,12 @@
             value_template: "{{ trigger.event.data.command == 'button_double' }}"
         sequence:
         # Double button press, go directly to default mode
-          - service: input_select.select_option
+          - action: input_select.select_option
             entity_id: input_select.amplipi_presets
             data_template:
               option: "Restore Default"
           # Intentionally set a delay to give AmpliPi until it's ready
           - wait_for_trigger:
-            - platform: state
+            - trigger: state
               entity_id: script.amplipi_announce_tts
               to: 'off'
