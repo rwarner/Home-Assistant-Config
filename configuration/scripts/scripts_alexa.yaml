@@ -11,7 +11,7 @@
 
 alexa_notify_kitchen:
   sequence:
-    - service: notify.alexa_media
+    - action: notify.alexa_media
       data_template:
         target: 
           - media_player.kitchen_echo_show_15
@@ -23,7 +23,7 @@ alexa_notify_kitchen:
 
 alexa_notify_second_floor:
   sequence:
-    - service: notify.alexa_media
+    - action: notify.alexa_media
       data_template:
         target: 
           - media_player.ryans_office_echo_show
@@ -36,7 +36,7 @@ alexa_notify_second_floor:
 
 alexa_notify_first_floor:
   sequence:
-    - service: notify.alexa_media
+    - action: notify.alexa_media
       data_template:
         target: 
           - media_player.kitchen_echo_show_15
@@ -50,7 +50,7 @@ alexa_notify_first_floor:
 
 alexa_notify_basement:
   sequence:
-    - service: notify.alexa_media
+    - action: notify.alexa_media
       data_template:
         target: 
           - media_player.movie_room_echo
@@ -63,7 +63,7 @@ alexa_notify_basement:
 
 alexa_notify_ryans_office:
   sequence:
-    - service: notify.alexa_media
+    - action: notify.alexa_media
       data_template:
         target: 
           - media_player.ryans_office_echo_show
@@ -77,7 +77,7 @@ alexa_notify_ryans_office:
 
 # alexa_notify_everywhere:
 #   sequence:
-#     - service: notify.alexa_media
+#     - action: notify.alexa_media
 #       data_template:
 #         target: 
 #           - media_player.everywhere
@@ -92,13 +92,13 @@ alexa_notify_ryans_office:
 # minimum of 1/2 a second delay in between from my testing
 alexa_notify_house:
   sequence:
-    #- service: media_player.volume_set
+    #- action: media_player.volume_set
     #  data:
     #    entity_id: media_player.everywhere
     #    volume_level: '0.6'
     #- delay:
     #    seconds: 3
-    #- service: media_player.play_media
+    #- action: media_player.play_media
     #  data:
     #    entity_id: 
     #      - media_player.media_room_echo
@@ -109,7 +109,7 @@ alexa_notify_house:
     #    media_content_id: amzn_sfx_doorbell_chime_01
     #- delay:
     #    milliseconds: 500
-    - service: notify.alexa_media
+    - action: notify.alexa_media
       data_template:
         data:
           type: announce
@@ -123,14 +123,14 @@ alexa_notify_house:
           - media_player.laundy_room_echo_dot
         title: "{{ title }}"
         message: "{{ message }}"
-    - service: script.alexa_notify_kitchen
+    - action: script.alexa_notify_kitchen
       data_template:
         title: "{{ title }}"
         message: "{{ message }}"
 
 alexa_reset_all_volume:
   sequence:
-    - service: media_player.volume_set
+    - action: media_player.volume_set
       data:
         entity_id: 
           - media_player.media_room_echo
@@ -142,7 +142,7 @@ alexa_reset_all_volume:
           - media_player.movie_room_echo
           - media_player.laundy_room_echo_dot
         volume_level: '0.6'
-    - service: media_player.volume_set
+    - action: media_player.volume_set
       data:
         entity_id: 
           - media_player.kitchen_echo_show_15

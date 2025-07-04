@@ -85,11 +85,11 @@ notify:
   - name: ryan_devices
     platform: group
     services:
-      - service: mobile_app_ryans_iphone_13_mini
+      - action: mobile_app_ryans_iphone_13_mini
   - name: kelly_devices
     platform: group
     services:
-      - service: mobile_app_kellys_iphone_15_pro_max
+      - action: mobile_app_kellys_iphone_15_pro_max
 
 media_source:
 

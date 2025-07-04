@@ -5,7 +5,7 @@
 - alias: ALERT - Notify Alexa of Front Door only if Ryan is home
   id: c55a299e-7814-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: 
         - input_boolean.someone_at_front_door
       to: 'on'
@@ -22,7 +22,7 @@
     #- condition: template
     #  value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.outside_front_door.last_changed)) > 15 }}"
   action:
-    - service: script.alexa_notify_house
+    - action: script.alexa_notify_house
       data:
         message: "Front Door"
 
@@ -31,7 +31,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.house_windows
       to: "on"
   condition:
@@ -39,7 +39,7 @@
       entity_id: alarm_control_panel.alarm
       state: disarmed
   action:
-    - service: script.amplipi_announce_media
+    - action: script.amplipi_announce_media
       data:
         type: window-opened
     - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
@@ -49,7 +49,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.house_windows
       from: "on"
       to: "off"
@@ -58,7 +58,7 @@
       entity_id: alarm_control_panel.alarm
       state: disarmed
   action:
-    - service: script.amplipi_announce_media
+    - action: script.amplipi_announce_media
       data:
         type: all-windows-closed
     - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals

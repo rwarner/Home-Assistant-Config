@@ -7,7 +7,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: state
+    trigger: state
     entity_id:
      - input_boolean.someone_at_front_door
     to: 'on'
@@ -16,7 +16,7 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Front Door Motion"
         message: ""
@@ -32,7 +32,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: state
+    trigger: state
     entity_id:
       - input_boolean.someone_at_rear_patio
     to: 'on'
@@ -41,7 +41,7 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Rear Patio Motion"
         message: ""
@@ -57,7 +57,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: state
+    trigger: state
     entity_id:
       - input_boolean.someone_at_side_patio
     to: 'on'
@@ -66,7 +66,7 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Side Patio Motion"
         message: ""
@@ -82,7 +82,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: state
+    trigger: state
     entity_id:
      - binary_sensor.living_room_occupancy
      - binary_sensor.thermostat_occupancy
@@ -97,7 +97,7 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Motion at home"
         message: "{{trigger.to_state.attributes.friendly_name}} has detected motion"
@@ -115,7 +115,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: state
+    trigger: state
     entity_id:
      - binary_sensor.house_windows
     to: 'on'
@@ -124,7 +124,7 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Alert at Home"
         message: "A window at home as been opened"
@@ -142,7 +142,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    platform: state
+    trigger: state
     entity_id:
      - binary_sensor.exterior_doors
     to: 'on'
@@ -151,7 +151,7 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Alert at Home"
         message: "Exterior door has been opened"
@@ -169,7 +169,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: lock.basement_door_deadbolt
       attribute: notification
       to: "Manual Unlock"
@@ -178,7 +178,7 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Basement door unlocked"
         message: ""
@@ -197,7 +197,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: lock.front_door_deadbolt
       attribute: notification
       to: "Manual Unlock"
@@ -206,7 +206,7 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Front door unlocked"
         message: ""
@@ -219,14 +219,14 @@
 - alias: "ALERT (AWAY) - Alarm Triggered, notify mobile / in house"
   id: 98828ac4-7814-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: alarm_control_panel.alarm
       from: "armed_away"
       to: "pending"
   action:
-    #- service: homeassistant.turn_on
+    #- action: homeassistant.turn_on
     #  entity_id: switch.siren
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Alarm Triggered"
         message: "Notifying emergency services in 60 seconds"
@@ -238,16 +238,16 @@
 - alias: "ALERT (AWAY) - Alarm Pending to Triggered, notify NoonLight IFTTT"
   id: 9eaec2fa-7814-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: alarm_control_panel.alarm
       from: "pending"
       to: "triggered"
   action:
     # Trigger IFTTT applet to notify Noonlight
-    - service: ifttt.trigger
+    - action: ifttt.trigger
       data_template:
         event: "alarm_triggered"
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Noonlight Notified"
         message: "Emergency services has been contacted"

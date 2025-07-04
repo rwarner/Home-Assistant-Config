@@ -12,16 +12,16 @@
   id: 20d463de-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: person.ryan
       from: 'not_home'
       to: 'home'
-    - platform: state
+    - trigger: state
       entity_id: person.kelly
       from: 'not_home'
       to: 'home'
   action:
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data_template:
         value: >
           {% if trigger.entity_id == 'person.ryan' %}
@@ -50,26 +50,26 @@
   id: 274c2d00-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: sensor.ryan_status
       to: 'Just Arrived'
       for:
         minutes: 10
-    - platform: state
+    - trigger: state
       entity_id: sensor.kelly_status
       to: 'Just Arrived'
       for:
         minutes: 10
-    - platform: state
+    - trigger: state
       entity_id: sensor.ryan_status
       from: 'Just Left'
       to: 'Just Arrived'
-    - platform: state
+    - trigger: state
       entity_id: sensor.kelly_status
       from: 'Just Left'
       to: 'Just Arrived'
   action:
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data:
         value: Home
       target:
@@ -84,16 +84,16 @@
   id: 2cbe0f1a-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: person.ryan
       from: 'home'
       to: 'not_home'
-    - platform: state
+    - trigger: state
       entity_id: person.kelly
       from: 'home'
       to: 'not_home'
   action:
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data:
         value: Just Left
       target:
@@ -108,18 +108,18 @@
   id: 31b7c1e6-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: sensor.ryan_status
       to: 'Just Left'
       for:
         minutes: 10
-    - platform: state
+    - trigger: state
       entity_id: sensor.kelly_status
       to: 'Just Left'
       for:
         minutes: 10
   action:
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data:
         value: Away
       target:
@@ -134,18 +134,18 @@
   id: 36b4266c-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: sensor.ryan_status
       to: 'Away'
       for:
         hours: 24
-    - platform: state
+    - trigger: state
       entity_id: sensor.kelly_status
       to: 'Away'
       for:
         hours: 24
   action:
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data:
         value: Extended Away
       target:
@@ -161,11 +161,11 @@
   id: 3b6672fa-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: sensor.ryan_status
       from: 'Just Left'
       to: 'Away'
-    - platform: state
+    - trigger: state
       entity_id: sensor.kelly_status
       from: 'Just Left'
       to: 'Away'
@@ -187,7 +187,7 @@
           entity_id: sensor.kelly_status
           state: 'Extended Away' 
   action:
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data:
         value: Away
       target:
@@ -197,19 +197,19 @@
   id: 4126d874-7815-11ee-b962-0242ac120002
   mode: parallel
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: sensor.ryan_status
       from: 'Away'
       to: 'Just Arrived'
-    - platform: state
+    - trigger: state
       entity_id: sensor.ryan_status
       from: 'Extended Away'
       to: 'Just Arrived'
-    - platform: state
+    - trigger: state
       entity_id: sensor.kelly_status
       from: 'Away'
       to: 'Just Arrived'
-    - platform: state
+    - trigger: state
       entity_id: sensor.kelly_status
       from: 'Extended Away'
       to: 'Just Arrived'
@@ -229,7 +229,7 @@
         entity_id: sensor.kelly_status
         state: 'Home'
   action:
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data:
         value: Home
       target:

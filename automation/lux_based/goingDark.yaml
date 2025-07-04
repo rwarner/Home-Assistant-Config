@@ -49,7 +49,7 @@
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       below: 20
     # Make sure that it's dark outside
-    # - platform: state
+    # - trigger: state
     #   entity_id: input_boolean.dark_outside
     #   to: "on"
   action:

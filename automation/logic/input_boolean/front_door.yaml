@@ -7,7 +7,7 @@
 # - alias: FRONT DOOR - Whether or not someone is at the front door
 #   #max_exceeded: silent # Hide warnings when triggered while in delay
 #   trigger:
-#     - platform: state
+#     - trigger: state
 #       entity_id: binary_sensor.front_outdoor_motion_sensor
 #       to: 'on'
 #   action: 
@@ -27,12 +27,12 @@
 #     #   entity_id: sensor.doorbell_detected_object
 #     #   state: 'person'
 #     # Most likely, someone is at the front door turn on input boolean
-#     - service: homeassistant.turn_on
+#     - action: homeassistant.turn_on
 #       entity_id: input_boolean.someone_at_front_door
 #     # Wait 3 minutes before turning off the boolean
 #     - delay:
 #         minutes: 3
-#     - service: homeassistant.turn_off
+#     - action: homeassistant.turn_off
 #       entity_id: input_boolean.someone_at_front_door
 
 
@@ -40,15 +40,15 @@
   id: f304bee0-7814-11ee-b962-0242ac120002
   #max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.doorbell_person_detected
       to: 'on'
   action: 
     # Most likely, someone is at the front door turn on input boolean
-    - service: homeassistant.turn_on
+    - action: homeassistant.turn_on
       entity_id: input_boolean.someone_at_front_door
     # Wait 3 minutes before turning off the boolean
     - delay:
         minutes: 3
-    - service: homeassistant.turn_off
+    - action: homeassistant.turn_off
       entity_id: input_boolean.someone_at_front_door

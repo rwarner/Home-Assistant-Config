@@ -7,7 +7,7 @@
   id: d8a964ba-7814-11ee-b962-0242ac120002
   trigger:
     # Make sure that the light level is below 500 lx
-    - platform: numeric_state
+    - trigger: numeric_state
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       below: 500
   condition:
@@ -24,7 +24,7 @@
     #   value_template: "{{ (state_attr('states.automation.going_dark_set_dark_outside_input_boolean_to_off_light_out.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_dark_set_dark_outside_input_boolean_to_off_light_out.attributes.last_triggered)) > 21600) }}"
     
   action:
-    - service: homeassistant.turn_on
+    - action: homeassistant.turn_on
       entity_id: input_boolean.dark_outside
 
 # Brighter than 400 Lux Outside 
@@ -32,7 +32,7 @@
   id: dedd58d2-7814-11ee-b962-0242ac120002
   trigger:
     # Make sure that the light level is above 400 lx
-    - platform: numeric_state
+    - trigger: numeric_state
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       above: 400
   condition:
@@ -47,5 +47,5 @@
     #   after: '05:00:00'
     #   before: '09:00:00'
   action:
-    - service: homeassistant.turn_off
+    - action: homeassistant.turn_off
       entity_id: input_boolean.dark_outside

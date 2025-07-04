@@ -5,19 +5,19 @@
 - alias: "ALARM - Disable Alarm from Schlage Deadbolt"
   id: f2bdcc78-7815-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: lock.basement_door_deadbolt
       attribute: notification
       to: "Keypad Unlock"
-    - platform: state
+    - trigger: state
       entity_id: lock.basement_door_deadbolt
       attribute: notification
       to: "RF Unlock"
-    - platform: state
+    - trigger: state
       entity_id: lock.front_door_deadbolt
       attribute: notification
       to: "Keypad Unlock"
-    - platform: state
+    - trigger: state
       entity_id: lock.front_door_deadbolt
       attribute: notification
       to: "RF Unlock"
@@ -26,18 +26,18 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
-    - service: alarm_control_panel.alarm_disarm
+    - action: alarm_control_panel.alarm_disarm
       target:
         entity_id: alarm_control_panel.alarm
 
 - alias: ALARM - Send Notification when home is disarmed
   id: fd9a8cb2-7815-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: alarm_control_panel.alarm
       to: disarmed
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Home set to: Disarmed"
         message: ""
@@ -45,11 +45,11 @@
 - alias: ALARM - Send Notification when home is armed
   id: f939fd06-7815-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: alarm_control_panel.alarm
       to: armed_away
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Home set to: Armed Away"
         message: ""

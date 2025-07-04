@@ -11,7 +11,7 @@
   id: 2ab660a4-7816-11ee-b962-0242ac120002
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: lock.front_door_deadbolt
       from: locked
       to: unlocked
@@ -56,7 +56,7 @@
 - alias: LOCKS - When unlocking the door, Alexa welcome home
   id: 30735d30-7816-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: lock.front_door_deadbolt
       from: locked
       to: unlocked
@@ -94,7 +94,7 @@
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
     - delay:
         seconds: 2
-    - service: script.amplipi_announce_tts
+    - action: script.amplipi_announce_tts
       data:
         message: >
           {% if is_state('sensor.ryan_status', 'Just Arrived') and
@@ -114,7 +114,7 @@
         where: kitchen
     
     #Reset variable after using it for announcement
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data:
         value: " "
       target:

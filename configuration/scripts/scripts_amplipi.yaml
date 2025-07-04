@@ -30,7 +30,7 @@ amplipi_announce_tts:
           - alias: "Parse data"
             variables:
               url_variable: "{{ create_tts_response['content']['url'] }}"
-          # - service: rest_command.amplipi_announce_media
+          # - action: rest_command.amplipi_announce_media
           #   data:
           #     type: attention
           #     volume: "0.5"
@@ -51,7 +51,7 @@ amplipi_announce_tts:
 #     where: family_room
 amplipi_announce_media:
   sequence:
-    # - service: rest_command.amplipi_announce_media
+    # - action: rest_command.amplipi_announce_media
     #   data:
     #     type: attention
     #     volume: "0.5"

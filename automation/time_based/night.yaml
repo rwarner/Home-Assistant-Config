@@ -7,7 +7,7 @@
 - alias: NIGHT - Outside lights off 9:00pm, both home during week
   id: 5f5f285c-a9be-11ee-a506-0242ac120002
   trigger:
-    - platform: time
+    - trigger: time
       at: '21:00:00'
   condition:
     condition: and
@@ -27,9 +27,9 @@
           - thu
           - fri
   action:
-      service: light.turn_off
-      continue_on_error: true
-      entity_id: light.outside_lights
+    action: light.turn_off
+    continue_on_error: true
+    entity_id: light.outside_lights
 
 
 # 11:00 p.m: Turn off Unifi AP's LEDs
@@ -38,29 +38,29 @@
 #     - platform: time
 #       at: '23:00:00'
 #   action:
-#     - service: shell_command.unifi_ap_light_off
+#     - action: shell_command.unifi_ap_light_off
 
 
 # 11:30 p.m: Turn off outside lights regardless
 - alias: NIGHT - Turn off outside lights at 11:30pm
   id: e5d00364-7815-11ee-b962-0242ac120002
   trigger:
-    - platform: time
+    - trigger: time
       at: '23:30:00'
   action:
-      service: light.turn_off
-      continue_on_error: true
-      entity_id: light.outside_lights
+    action: light.turn_off
+    continue_on_error: true
+    entity_id: light.outside_lights
 
 
 # 12:30 a.m: Lock door regardless
 - alias: NIGHT - Lock door at 12:30 a.m.
   id: e9db2d4e-7815-11ee-b962-0242ac120002
   trigger:
-    - platform: time
+    - trigger: time
       at: '00:30:00'
   action:
-    - service: lock.lock
+    - action: lock.lock
       entity_id: lock.basement_door_deadbolt
-    - service: lock.lock
+    - action: lock.lock
       entity_id: lock.front_door_deadbolt

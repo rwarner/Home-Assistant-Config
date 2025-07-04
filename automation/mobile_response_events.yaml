@@ -5,11 +5,11 @@
 - alias: MOBILE RESPONSE - Trigger Alarm / Noonlight
   id: 5459c342-ee13-11ee-a951-0242ac120002
   trigger:
-    platform: event
+    trigger: event
     event_type: mobile_app_notification_action
     event_data:
       action: trigger_alarm
   action:
-    - service: alarm_control_panel.alarm_trigger
+    - action: alarm_control_panel.alarm_trigger
       target:
         entity_id: alarm_control_panel.alarm

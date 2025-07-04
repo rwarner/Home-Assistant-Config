@@ -28,7 +28,7 @@
 - alias: BEDROOM - Control Light and Fan (Kelly's Light Button)
   id: 62088754-7815-11ee-b962-0242ac120002
   trigger:
-    - platform: event
+    - trigger: event
       event_type: zha_event
       event_data:
         device_ieee: !secret bedroom_light_button_ieee
@@ -39,29 +39,29 @@
           - condition: template
             value_template: "{{ trigger.event.data.command == 'button_single' }}"
         sequence:
-          - service: script.toggle_bedroom_lights
+          - action: script.toggle_bedroom_lights
       - conditions:
           - condition: template
             value_template: "{{ trigger.event.data.command == 'button_double' }}"
         sequence:
-          - service: switch.toggle
+          - action: switch.toggle
             target:
               entity_id: switch.master_bedroom_fan
       - conditions:
           - condition: template
             value_template: "{{ trigger.event.data.command == 'button_hold' }}"
         sequence:
-          - service: switch.toggle
+          - action: switch.toggle
             target:
               entity_id: switch.master_bedroom_fan
-          - service: script.toggle_bedroom_lights
+          - action: script.toggle_bedroom_lights
 
 
 
 - alias: BEDROOM - Control Light and Fan (Ryan Button)
   id: 72546ace-7815-11ee-b962-0242ac120002
   trigger:
-    - platform: event
+    - trigger: event
       event_type: zha_event
       event_data:
         device_ieee: !secret bedroom_ryans_bedside_button_ieee
@@ -72,12 +72,12 @@
           - condition: template
             value_template: "{{ trigger.event.data.command == 'button_single' }}"
         sequence:
-          - service: script.toggle_bedroom_lights
+          - action: script.toggle_bedroom_lights
       - conditions:
           - condition: template
             value_template: "{{ trigger.event.data.command == 'button_double' }}"
         sequence:
-          - service: switch.toggle
+          - action: switch.toggle
             target:
               entity_id: switch.master_bedroom_fan
 
@@ -90,12 +90,12 @@
   max_exceeded: silent
   trigger:
     # Trigger when motion starts
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.master_bedroom_motion_sensor
       from: 'off'
       to: 'on'
     # Trigger when motion has been off for 3 minutes
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.master_bedroom_motion_sensor
       from: 'on'
       to: 'off'
@@ -119,7 +119,7 @@
               entity_id: sensor.master_bedroom_motion_sensor_illuminance
               below: 10
           sequence:
-            - service: light.turn_on
+            - action: light.turn_on
               target:
                 entity_id: light.master_bedroom_lights
               data:
@@ -132,7 +132,7 @@
               entity_id: light.master_bedroom_lights
               state: 'on'
           sequence:
-            - service: light.turn_off
+            - action: light.turn_off
               target:
                 entity_id: light.master_bedroom_lights
 

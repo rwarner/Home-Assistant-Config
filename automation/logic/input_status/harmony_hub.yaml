@@ -1,11 +1,11 @@
 - alias: HARMONY - Harmony Hub input_select
   id: 106148a0-7815-11ee-b962-0242ac120002
   trigger:
-    platform: state
+    trigger: state
     entity_id: input_select.harmony_hub
     from: 'Select Input'
   action:
-    - service: >
+    - action: >
           {% if states.input_select.harmony_hub.state == "Watch Shield TV" %}
             script.harmony_shield_tv
           {% elif states.input_select.harmony_hub.state == "Play PS4" %}
@@ -16,7 +16,7 @@
             script.harmony_poweroff
           {% else %}
           {% endif %}
-    - service: input_select.select_option
+    - action: input_select.select_option
       entity_id: input_select.harmony_hub
       data_template:
         option: "Select Input"

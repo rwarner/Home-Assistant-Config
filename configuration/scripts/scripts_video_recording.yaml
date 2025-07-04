@@ -3,7 +3,7 @@ capture_front_door_video:
   mode: queued
   sequence:
     # - delay: '00:00:02'
-    - service: camera.record
+    - action: camera.record
       data:
         entity_id: camera.outside_doorbell
         filename: '/tmp/hass/front_door_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
@@ -14,7 +14,7 @@ capture_rear_patio_video:
   mode: queued
   sequence:
     # - delay: '00:00:02'
-    - service: camera.record
+    - action: camera.record
       data:
         entity_id: camera.rear_patio_camera
         filename: '/tmp/hass/rear_patio_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
@@ -25,7 +25,7 @@ capture_side_patio_video:
   mode: queued
   sequence:
     # - delay: '00:00:02'
-    - service: camera.record
+    - action: camera.record
       data:
         entity_id: camera.side_patio_camera
         filename: '/tmp/hass/side_patio_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'

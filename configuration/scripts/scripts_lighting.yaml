@@ -4,7 +4,7 @@
 # Color temperature warmer (470) night and early.
 toggle_bedroom_lights:
   sequence:
-    - service: light.toggle
+    - action: light.toggle
       entity_id: 
         - light.master_bedroom_lights
     # Only continue if light is on, delay a bit
@@ -13,7 +13,7 @@ toggle_bedroom_lights:
     - condition: state
       entity_id: light.master_bedroom_lights
       state: 'on'
-    - service: light.turn_on
+    - action: light.turn_on
       continue_on_error: true
       data_template:
         entity_id: light.master_bedroom_lights

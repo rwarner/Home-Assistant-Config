@@ -6,7 +6,7 @@
   id: 1fd1b260-7816-11ee-b962-0242ac120002
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: input_boolean.someone_at_front_door
       to: "on"
   condition:
@@ -17,7 +17,7 @@
       entity_id: input_boolean.dark_outside
       state: "on"
   action:
-    - service: light.turn_on
+    - action: light.turn_on
       continue_on_error: true
       entity_id: light.outside_front_door
     # If it's after 9:00 pm, or before 5:00 am turn off the light
@@ -25,6 +25,6 @@
       after: "21:00:00"
       before: "05:00:00"
     - delay: "00:03:00"
-    - service: light.turn_off
+    - action: light.turn_off
       continue_on_error: true
       entity_id: light.outside_front_door

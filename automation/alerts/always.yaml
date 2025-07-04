@@ -9,17 +9,17 @@
 - alias: ALERT - Doorbell rang, notify Mobile App and House
   id: 287a519e-7814-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.doorbell_push # Press of the doorbell
       from: "off"
       to: "on"
   action:
-    - service: script.amplipi_announce_media
+    - action: script.amplipi_announce_media
       data:
         type: doorbell-sound
         where: home_alert
     - delay: "00:00:02" # Wait 2 seconds so we don't get their finger in the camera
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: Doorbell Rang
         message: ""
@@ -32,7 +32,7 @@
 - alias: ALERT - When a critical device goes offline to mobile app
   id: 3039b6f4-7814-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: 
         - sensor.hdhomerun_extend
         - sensor.kitchen_tablet
@@ -62,7 +62,7 @@
             false
           {% endif %}
   action:
-    service: notify.ryan_devices
+    action: notify.ryan_devices
     data:
       title: "Critical Device Alert"
       message: "{{trigger.to_state.attributes.friendly_name}} has gone offline."
@@ -79,10 +79,10 @@
       domain: persistent_notification
       service: create
     event_type: call_service
-    platform: event
+    trigger: event
   condition: []
   action:
-    service: notify.ryan_devices
+    action: notify.ryan_devices
     data:
       title: "{{trigger.event.data.service_data.title}}"
       message: "{{trigger.event.data.service_data.message}}"
@@ -90,12 +90,12 @@
 - alias: ALERT - HA Update Available to Mobile App
   id: 416cb260-ee0b-11ee-a951-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.home_assistant_website_update_available
       from: 'off'
       to: 'on'
   action:
-    service: notify.ryan_devices
+    action: notify.ryan_devices
     data:
       title: "New Version of HASS Available"
       message: "Release Notes for {{ states('sensor.home_assistant_website') }}: {{ state_attr('sensor.home_assistant_website', 'release_notes') }}"   
@@ -107,12 +107,12 @@
 - alias: ALERT - PiHole Update Available to Mobile App
   id: d1a268a0-f2d6-11ee-a951-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: update.pi_hole_ftl_update_available
       from: 'off'
       to: 'on'
   action:
-    service: notify.ryan_devices
+    action: notify.ryan_devices
     data:
       title: "New Version of Pi-Hole FTL Available"
       message: "New Version: {{ state_attr('update.pi_hole_ftl_update_available', 'latest_version') }} | Installed: {{ state_attr('update.pi_hole_ftl_update_available', 'installed_version') }}"   
@@ -124,11 +124,11 @@
 - alias: ALERT - UPS Switched to Online
   id: c4594c24-f905-11ee-a951-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: sensor.ups_status
       to: 'Online'
   action:
-    service: notify.ryan_devices
+    action: notify.ryan_devices
     data:
       title: "Home Power Online"
       message: "Power has returned"
@@ -136,12 +136,12 @@
 - alias: ALERT - UPS Switched to Battery Mode
   id: 2decd0ae-f904-11ee-a951-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: sensor.ups_status
       from: 'Online'
       to: 'On Battery Battery Discharging'
   action:
-    service: notify.ryan_devices
+    action: notify.ryan_devices
     data:
       title: "Home Power Outage"
       message: "UPS Battery Runtime: {{ states('sensor.ups_battery_runtime') }} minutes"
@@ -151,7 +151,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: numeric_state
+    - trigger: numeric_state
       entity_id:
         - sensor.kellys_office_rear_window_sensor_battery_level
         - sensor.kellys_office_side_window_sensor_battery_level
@@ -197,7 +197,7 @@
         - sensor.lawn_mower_sensor_battery_level
       below: 30
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: Sensor Battery Low
         message: "{{trigger.from_state.attributes.friendly_name}} is low"
@@ -209,7 +209,7 @@
   mode: single # Only run once at a time  
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id:
         - binary_sensor.kellys_office_rear_window_sensor
         - binary_sensor.kellys_office_side_window_sensor
@@ -255,7 +255,7 @@
       for:
         minutes: 5
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: Sensor Unavailable
         message: "{{trigger.from_state.attributes.friendly_name}} is unavailable, reset"
@@ -265,7 +265,7 @@
 - alias: ALERT - Notify when the physical mail comes
   id: 48cfaaa2-7814-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.mailbox_sensor
       to: "on"
   condition:
@@ -273,35 +273,35 @@
       entity_id: input_boolean.mail_arrived
       state: "off"
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         # UTF-8 issue as of 2022.8
         #title: "\uD83D\uDCEB\uD83D\uDCEB  Mail has arrived  \uD83D\uDCEB\uD83D\uDCEB"
         title: Mail has arrived
         message: ""
-    - service: script.amplipi_announce_tts
+    - action: script.amplipi_announce_tts
       data:
         message: "You've got mail"
-    - service: homeassistant.turn_on
+    - action: homeassistant.turn_on
       entity_id: input_boolean.mail_arrived
 
 - alias: ALERT - Water detected on moisture sensor, notify mobile app
   id: 4db93146-7814-11ee-b962-0242ac120002
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.downstairs_bathroom_water_sensor_moisture
       from: "off"
       to: "on"
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.kitchen_water_sensor_moisture
       from: "off"
       to: "on"
   action:
-    - service: script.amplipi_announce_tts
+    - action: script.amplipi_announce_tts
       data:
         message: "Water detected: {{trigger.from_state.attributes.friendly_name}}"
         where: home_alert
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Water detected: {{trigger.from_state.attributes.friendly_name}}"
         message: ""
@@ -313,17 +313,17 @@
 - alias: ALERT - Lawn Mower detected away for a long time, notify mobile app
   id: f4de014a-e2c2-4da6-a79c-2dde29603ac4
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.lawn_mower
       from: "off"
       to: "on"
       for:
         hours: 4
   action:
-    - service: script.amplipi_announce_tts
+    - action: script.amplipi_announce_tts
       data:
         message: "Check on Lawn Mower, might be stuck"
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Lawn Mower Stuck"
         message: "Has been out for 4 hours"
@@ -335,12 +335,12 @@
 - alias: ALERT - Lawn Mower has returned
   id: 26bf48c4-f680-4d64-bcf5-eaa5eae68b5f
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.lawn_mower
       from: "on"
       to: "off"
   action:
-    - service: notify.ryan_devices
+    - action: notify.ryan_devices
       data:
         title: "Lawn Mower Finished"
         message: ""
@@ -351,10 +351,10 @@
 - alias: "ALERT - Home Assistant Successfully Started"
   id: 50cedff8-4cd9-4d85-9ea9-dc1726324335
   trigger:
-    - platform: homeassistant
+    - trigger: homeassistant
       event: start
   action:
-    - service: script.amplipi_announce_tts
+    - action: script.amplipi_announce_tts
       data:
         message: "Home Assistant, online"
 
@@ -368,15 +368,15 @@
 - alias: ALERT - When a motion detection video is created
   id: 54e81d38-7814-11ee-b962-0242ac120002
   trigger:
-    - platform: event
+    - trigger: event
       event_type: folder_watcher
       event_data:
         event_type: created
   action:
     - delay: '00:00:20' # Wait until file is done being modified
-    - service: shell_command.convert_camera_recording
+    - action: shell_command.convert_camera_recording
     - delay: '00:00:20' # Wait until file is done being modified
-    - service: notify.home_assistant # Discord notification name change to Discord server name
+    - action: notify.home_assistant # Discord notification name change to Discord server name
       data_template:
         message: 'Motion: {{ trigger.event.data.file }}'
         target: "658174234480082997"
@@ -386,4 +386,4 @@
             - "/tmp/hass/converted/recording.mp4"
             #- "{{ trigger.event.data.path }}"
     - delay: '00:00:15'
-    - service: shell_command.clear_video_directory
+    - action: shell_command.clear_video_directory

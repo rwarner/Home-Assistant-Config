@@ -8,7 +8,7 @@
   mode: queued
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: event
+    - trigger: event
       event_type: zha_event
       event_data:
         device_ieee: !secret vinyl_record_button_ieee

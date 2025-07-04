@@ -5,63 +5,63 @@
 - alias: LAUNDRY - Notify house washer is done
   id: 98b90d3c-7815-11ee-b962-0242ac120002
   trigger:
-  - platform: state
+  - trigger: state
     entity_id: sensor.washer_washer_machine_state
     to: 'run'
     for:
       minutes: 20
   action:
     - wait_for_trigger:
-      - platform: state
+      - trigger: state
         entity_id: sensor.washer_washer_machine_state
         to: 'stop'
-    - service: script.amplipi_announce_media
+    - action: script.amplipi_announce_media
       data:
         type: washer-done
 
 - alias: LAUNDRY - Notify house dryer is done
   id: 9c564aa4-7815-11ee-b962-0242ac120002
   trigger:
-  - platform: state
+  - trigger: state
     entity_id: sensor.dryer_dryer_machine_state
     to: 'run'
     for:
       minutes: 20
   action:
     - wait_for_trigger:
-      - platform: state
+      - trigger: state
         entity_id: sensor.dryer_dryer_machine_state
         to: 'stop'
-    - service: script.amplipi_announce_media
+    - action: script.amplipi_announce_media
       data:
         type: dryer-done
 
 - alias: LAUNDRY - Notify house dryer is in wrinklePrevent
   id: 9feaba60-7815-11ee-b962-0242ac120002
   trigger:
-  - platform: state
+  - trigger: state
     entity_id: sensor.dryer_dryer_machine_state
     to: 'run'
     for:
       minutes: 20
   action:
     - wait_for_trigger:
-      - platform: state
+      - trigger: state
         entity_id: sensor.dryer_dryer_job_state
         to: 'wrinklePrevent'
-    - service: script.amplipi_announce_media
+    - action: script.amplipi_announce_media
       data:
         type: dryer-preventing-wrinkles
 
 # - alias: LAUNDRY - Notify house laundry is done after 1 hour
 #   id: laundry_notify_house_laundry_is_done_after_1_hour
 #   trigger:
-#   - platform: state
+#   - trigger: state
 #     entity_id: sensor.washer_washer_machine_state
 #     to: 'stop'
 #     for:
 #       hours: 1
-#   - platform: state
+#   - trigger: state
 #     entity_id: sensor.dryer_dryer_machine_state
 #     to: 'stop'
 #     for:
@@ -71,7 +71,7 @@
 #       entity_id: sensor.family_status 
 #       state: 'Home'
 #   action:
-#     - service: script.alexa_notify_house
+#     - action: script.alexa_notify_house
 #       data_template:
 #         message: >
 #           {% if trigger.entity_id == 'sensor.washer_washer_machine_state' %}
@@ -83,7 +83,7 @@
 # - alias: Notify Washing maschine job state
 #   description: ''
 #   trigger:
-#     - platform: state
+#     - trigger: state
 #       entity_id: sensor.washer_job_state
 #   condition:
 #     - condition: not
@@ -92,7 +92,7 @@
 #           entity_id: sensor.washer_job_state
 #           state: none
 #   action:
-#     - service: notify.notify
+#     - action: notify.notify
 #       data:
 #         title: 🧺 Washing machine state changed
 #         message: |-

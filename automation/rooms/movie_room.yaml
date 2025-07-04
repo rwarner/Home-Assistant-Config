@@ -7,7 +7,7 @@
   mode: restart # Restart on every motion, ensure that the light is always on
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.movie_room_motion_sensor
       from: "off"
       to: "on"
@@ -32,12 +32,12 @@
           entity_id: sensor.movie_room_motion_sensor_illuminance
           below: 10
   action:
-    - service: light.turn_on
+    - action: light.turn_on
       data:
         entity_id: light.movie_room_lights
     # Wait until motion goes off
     - wait_template: "{{ is_state('binary_sensor.movie_room_motion_sensor', 'off') }}"
     - delay:
         minutes: 3
-    - service: light.turn_off
+    - action: light.turn_off
       entity_id: light.movie_room_lights

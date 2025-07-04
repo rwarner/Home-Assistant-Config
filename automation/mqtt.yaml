@@ -5,7 +5,7 @@
 - alias: MQTT - Announce movie has been added to Plex on Alexa
   id: 3fa0f542-7816-11ee-b962-0242ac120002
   trigger:
-    - platform: mqtt
+    - trigger: mqtt
       topic: homeassistant/tautilli
   condition:
     condition: and
@@ -18,7 +18,7 @@
         after: '08:00:00'
         before: '21:30:00'
   action:
-    - service: script.amplipi_announce_tts
+    - action: script.amplipi_announce_tts
       data:
         message: "{{ trigger.payload_json['body'] }} was recently added to Plex."
 
@@ -26,7 +26,7 @@
 - alias: MQTT - Save movie has been added to Plex on Alexa for later
   id: 443e686e-7816-11ee-b962-0242ac120002
   trigger:
-    - platform: mqtt
+    - trigger: mqtt
       topic: homeassistant/tautilli
   condition:
     - condition: or
@@ -38,7 +38,7 @@
           before: "07:00:00"
           after: "23:30:00"
   action:
-    - service: variable.update_sensor
+    - action: variable.update_sensor
       data_template:
         value: >
           {% if is_state('sensor.tautilli_data', " ") or

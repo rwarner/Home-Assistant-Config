@@ -5,21 +5,21 @@
 ## Switch kitchen tablet to Doorbell live view when doorbell is rung
 # - alias: KITCHEN - Doorbell rang, change tablet to doorbell view
 #   trigger:
-#   - platform: state
+#   - trigger: state
 #     entity_id: binary_sensor.doorbell_push # Press of the doorbell
 #     to: 'on'
-#   - platform: state
+#   - trigger: state
 #     entity_id: input_boolean.someone_at_front_door # Someone at front door
 #     to: 'on'
 #   action:
-#     - service: script.turn_on_tablet_doorbell
+#     - action: script.turn_on_tablet_doorbell
 
 #### Turn on Tablet if someone is in the kitchen 
 # - alias: KITCHEN - Turn on tablet in kitchen, sensed motion
 #   mode: restart # Restart on every motion, ensure that the light is always on
 #   max_exceeded: silent # Hide warnings when triggered while in delay.
 #   trigger:
-#     - platform: state
+#     - trigger: state
 #       entity_id: binary_sensor.kitchen_motion_sensor
 #       from: 'off'
 #       to: 'on'
@@ -32,26 +32,26 @@
 #       before: '01:30:00'
 #       after: '06:00:00'
 #   action:
-#     - service: script.turn_on_kitchen_tablet
+#     - action: script.turn_on_kitchen_tablet
 #     # Wait until motion goes off
 #     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'off') }}"
 #     - delay:
 #         minutes: 3
-#     - service: script.turn_off_kitchen_tablet
+#     - action: script.turn_off_kitchen_tablet
 
 - alias: KITCHEN - Turn off ceiling lights when no motion
   id: 86a4980e-08bc-454e-ae82-09d6d8adccff
   # mode: restart # Restart on every motion, ensure that the light is always on
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.kitchen_motion_sensor
       from: 'on'
       to: 'off'
       for:
         minutes: 10
   action:
-    - service: light.turn_off
+    - action: light.turn_off
       data:
         entity_id: light.kitchen_ceiling_lights
 
@@ -60,10 +60,10 @@
   mode: restart  # Ensures the timer restarts if motion is detected again
   max_exceeded: silent  # Suppresses warnings during delay
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.undercabinet_motion_sensor
       to: 'on'
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.kitchen_motion_sensor
       to: 'off'
       for:
@@ -79,7 +79,7 @@
               # After 8 am
               after: '08:00:00'
           sequence:
-            - service: light.turn_on
+            - action: light.turn_on
               data:
                 entity_id: light.kitchen_undercabinet_lights
         # Turn off the light when motion in all of kitchen stops for 5 minutes
@@ -91,6 +91,6 @@
               entity_id: binary_sensor.undercabinet_motion_sensor
               state: 'off'
           sequence:
-            - service: light.turn_off
+            - action: light.turn_off
               data:
                 entity_id: light.kitchen_undercabinet_lights

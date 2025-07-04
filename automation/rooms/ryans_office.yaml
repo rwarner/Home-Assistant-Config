@@ -7,11 +7,11 @@
   mode: restart  # Ensures the timer restarts if motion is detected again
   max_exceeded: silent  # Hide warnings when triggered while in delay
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.ryans_office_motion_sensor
       from: 'off'
       to: 'on'
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.ryans_office_motion_sensor
       from: 'on'
       to: 'off'
@@ -32,9 +32,9 @@
               entity_id: light.ryans_office_lights
               state: 'off'
           sequence:
-            - service: light.turn_on
+            - action: light.turn_on
               entity_id: light.ryans_office_lights
-            # - service: light.turn_on
+            # - action: light.turn_on
             #   data:
             #     entity_id: light.ryans_desk_uplighting
             #     brightness_step_pct: 100
@@ -48,7 +48,7 @@
               entity_id: light.ryans_office_lights
               state: 'on'
           sequence:
-            - service: light.turn_off
+            - action: light.turn_off
               entity_id: light.ryans_office_lights
 
 
@@ -57,7 +57,7 @@
   mode: single
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: input_boolean.first_movement_ryans_office
       to: 'on'
   condition:
@@ -65,7 +65,7 @@
       after: '06:00:00'
       before: '11:30:00'
   action:
-    - service: script.amplipi_announce_tts
+    - action: script.amplipi_announce_tts
       data:
         message: "Good morning, Ryan."
         where: ryans_office
@@ -73,7 +73,7 @@
     - condition: numeric_state
       entity_id: sensor.ryans_office_motion_sensor_illuminance
       below: 70
-    - service: light.turn_on
+    - action: light.turn_on
       continue_on_error: true
       entity_id: light.ryans_office_lights
 
@@ -81,7 +81,7 @@
   id: 310bebf8-4d8d-4cf5-bbe1-1adfc1b9518c
   mode: single  # Ensures only one instance runs at a time
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: switch.ryan_s_office_switch_2
   action:
     - choose:
@@ -91,7 +91,7 @@
               entity_id: switch.ryan_s_office_switch_2
               state: 'on'
           sequence:
-            - service: light.turn_on
+            - action: light.turn_on
               continue_on_error: true
               entity_id: light.ryans_office_lights
         # Turn off the lights when the switch is turned off
@@ -100,6 +100,6 @@
               entity_id: switch.ryan_s_office_switch_2
               state: 'off'
           sequence:
-            - service: light.turn_off
+            - action: light.turn_off
               continue_on_error: true
               entity_id: light.ryans_office_lights

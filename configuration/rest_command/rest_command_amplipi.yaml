@@ -84,7 +84,7 @@ amplipi_announce_url:
 
 # Set a specific preset on the AmpliPi, one that already exists
 # e.g.
-# - service: rest_command.amplipi_set_preset
+# - action: rest_command.amplipi_set_preset
 #     data:
 #       preset: "{{ matching_preset_id }}"
 #

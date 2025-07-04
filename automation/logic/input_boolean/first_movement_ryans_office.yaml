@@ -6,7 +6,7 @@
   id: 4a9712fc-7810-11ee-b962-0242ac120002
   max_exceeded: silent # Hide warnings when triggered while in delay
   trigger:
-    - platform: state
+    - trigger: state
       entity_id: binary_sensor.ryans_office_motion_sensor
       to: 'on'
   condition:
@@ -14,5 +14,5 @@
       entity_id: input_boolean.first_movement_ryans_office
       state: 'off'
   action:
-    - service: homeassistant.turn_on
+    - action: homeassistant.turn_on
       entity_id: input_boolean.first_movement_ryans_office

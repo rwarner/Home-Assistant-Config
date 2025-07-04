@@ -1,7 +1,7 @@
 ###### Kitchen Tablet #######
 turn_on_kitchen_tablet:
   sequence:
-    - service: mqtt.publish
+    - action: mqtt.publish
       data:
         topic: homeassistant
         payload: "wakedevice"
@@ -9,7 +9,7 @@ turn_on_kitchen_tablet:
 
 turn_off_kitchen_tablet:
   sequence:
-    - service: mqtt.publish
+    - action: mqtt.publish
       data:
         topic: homeassistant
         payload: "sleepdevice"
@@ -17,7 +17,7 @@ turn_off_kitchen_tablet:
 
 turn_on_tablet_doorbell:
   sequence:
-    - service: mqtt.publish
+    - action: mqtt.publish
       data:
         topic: homeassistant
         payload: "doorbell"
