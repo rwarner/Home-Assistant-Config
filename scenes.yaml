@@ -1406,3 +1406,1839 @@
       entity_only: true
     media_player.amplipi_source_4:
       entity_only: true
+- id: '1751595884305'
+  name: Spotify - Ryan's Office
+  entities:
+    media_player.amplipi_zone_family_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Family Room Echo Bluetooth - rca
+      source: Source 1
+      amplipi_zone_id: 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=91554a73b7ff2af3b65702002219a4f33c28988e17ec52014d73f2ad9eec89e1&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Family Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_kitchen:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=8e4c32e3dc5147fccf6dfcd7c87b2f0fe8ad4fd70d65f6e10ba00664c2d3096a&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Kitchen'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_living_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Living Room Echo Bluetooth - rca
+      source: Source 4
+      amplipi_zone_id: 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_living_room?token=79270b872fa1ab35b2ec48c0b7acadc89e96690027dfc676fdbe3382c8220f4b&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Living Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_rear_porch:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 3
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_rear_porch?token=54b39ae3c0b44c96141ac9c2fd1750788b9905dc27bc2a1d81339fb0b11b560c&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Rear Porch'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_master_bedroom:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.675
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=18be426f80d87aa2e0489f0f423e52adc6b0556c93196b0e1b34f5438267a2d7&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Master Bedroom'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_ryans_office:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.4625
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 1
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=a39148b999e742a59d9618de590d99a6cf13f04e270df060f96e68cdc206c467&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Ryans Office'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_1:
+      source_list:
+      - None
+      - Family Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Family Room Echo Bluetooth - rca
+      app_name: rca
+      source: Family Room Echo Bluetooth
+      amplipi_source_id: 0
+      amplipi_source_zones:
+      - 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_1?token=f8214754f93943c6ac0552750e285c52a9045d675644680a77d6e67a8758d5aa&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 1'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_2:
+      source_list:
+      - None
+      - Kitchen Echo Show Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: music
+      media_title: Kitchen Echo Show Bluetooth - rca
+      app_name: rca
+      source: Kitchen Echo Show Bluetooth
+      amplipi_source_id: 1
+      amplipi_source_zones:
+      - 3
+      - 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_2?token=40114827149e4e06df00b9bb375268f524c3b909526069523a44cc4e4ecd2e0e&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 2'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_3:
+      source_list:
+      - None
+      - Vinyl Player
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.5687500000000001
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to AmpliPi on Spotify Connect
+      app_name: spotify
+      source: AmpliPi
+      amplipi_source_id: 2
+      amplipi_source_zones:
+      - 1
+      - 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=f00a9e98d652a843c396704333ac2e09ff3b7cebdb3d0cee722840df7c53fbc4&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Input 3'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_4:
+      source_list:
+      - None
+      - Living Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Living Room Echo Bluetooth - rca
+      app_name: rca
+      source: Living Room Echo Bluetooth
+      amplipi_source_id: 3
+      amplipi_source_zones:
+      - 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_4?token=5b5a862d8cf20abd2367729c6bdd6d9666e429351817f7a795c9bade098e5525&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 4'
+      supported_features: 659212
+      state: idle
+  icon: mdi:speaker
+  metadata:
+    media_player.amplipi_zone_family_room:
+      entity_only: true
+    media_player.amplipi_zone_kitchen:
+      entity_only: true
+    media_player.amplipi_zone_living_room:
+      entity_only: true
+    media_player.amplipi_zone_rear_porch:
+      entity_only: true
+    media_player.amplipi_zone_master_bedroom:
+      entity_only: true
+    media_player.amplipi_zone_ryans_office:
+      entity_only: true
+    media_player.amplipi_source_1:
+      entity_only: true
+    media_player.amplipi_source_2:
+      entity_only: true
+    media_player.amplipi_source_3:
+      entity_only: true
+    media_player.amplipi_source_4:
+      entity_only: true
+- id: '1751595941939'
+  name: Spotify - Second Floor
+  entities:
+    media_player.amplipi_zone_family_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Family Room Echo Bluetooth - rca
+      source: Source 1
+      amplipi_zone_id: 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=91554a73b7ff2af3b65702002219a4f33c28988e17ec52014d73f2ad9eec89e1&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Family Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_kitchen:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=8e4c32e3dc5147fccf6dfcd7c87b2f0fe8ad4fd70d65f6e10ba00664c2d3096a&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Kitchen'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_living_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Living Room Echo Bluetooth - rca
+      source: Source 4
+      amplipi_zone_id: 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_living_room?token=79270b872fa1ab35b2ec48c0b7acadc89e96690027dfc676fdbe3382c8220f4b&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Living Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_rear_porch:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 3
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_rear_porch?token=54b39ae3c0b44c96141ac9c2fd1750788b9905dc27bc2a1d81339fb0b11b560c&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Rear Porch'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_master_bedroom:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.675
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=18be426f80d87aa2e0489f0f423e52adc6b0556c93196b0e1b34f5438267a2d7&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Master Bedroom'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_ryans_office:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.4625
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 1
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=a39148b999e742a59d9618de590d99a6cf13f04e270df060f96e68cdc206c467&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Ryans Office'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_1:
+      source_list:
+      - None
+      - Family Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Family Room Echo Bluetooth - rca
+      app_name: rca
+      source: Family Room Echo Bluetooth
+      amplipi_source_id: 0
+      amplipi_source_zones:
+      - 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_1?token=f8214754f93943c6ac0552750e285c52a9045d675644680a77d6e67a8758d5aa&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 1'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_2:
+      source_list:
+      - None
+      - Kitchen Echo Show Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: music
+      media_title: Kitchen Echo Show Bluetooth - rca
+      app_name: rca
+      source: Kitchen Echo Show Bluetooth
+      amplipi_source_id: 1
+      amplipi_source_zones:
+      - 3
+      - 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_2?token=40114827149e4e06df00b9bb375268f524c3b909526069523a44cc4e4ecd2e0e&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 2'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_3:
+      source_list:
+      - None
+      - Vinyl Player
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.5687500000000001
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to AmpliPi on Spotify Connect
+      app_name: spotify
+      source: AmpliPi
+      amplipi_source_id: 2
+      amplipi_source_zones:
+      - 1
+      - 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=f00a9e98d652a843c396704333ac2e09ff3b7cebdb3d0cee722840df7c53fbc4&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Input 3'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_4:
+      source_list:
+      - None
+      - Living Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Living Room Echo Bluetooth - rca
+      app_name: rca
+      source: Living Room Echo Bluetooth
+      amplipi_source_id: 3
+      amplipi_source_zones:
+      - 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_4?token=5b5a862d8cf20abd2367729c6bdd6d9666e429351817f7a795c9bade098e5525&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 4'
+      supported_features: 659212
+      state: idle
+  icon: mdi:speaker
+  metadata:
+    media_player.amplipi_zone_family_room:
+      entity_only: true
+    media_player.amplipi_zone_kitchen:
+      entity_only: true
+    media_player.amplipi_zone_living_room:
+      entity_only: true
+    media_player.amplipi_zone_rear_porch:
+      entity_only: true
+    media_player.amplipi_zone_master_bedroom:
+      entity_only: true
+    media_player.amplipi_zone_ryans_office:
+      entity_only: true
+    media_player.amplipi_source_1:
+      entity_only: true
+    media_player.amplipi_source_2:
+      entity_only: true
+    media_player.amplipi_source_3:
+      entity_only: true
+    media_player.amplipi_source_4:
+      entity_only: true
+- id: '1751596018087'
+  name: Spotify - First floor
+  entities:
+    media_player.amplipi_zone_family_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 1
+      amplipi_zone_id: 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=91554a73b7ff2af3b65702002219a4f33c28988e17ec52014d73f2ad9eec89e1&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Family Room'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_kitchen:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 1
+      amplipi_zone_id: 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=8e4c32e3dc5147fccf6dfcd7c87b2f0fe8ad4fd70d65f6e10ba00664c2d3096a&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Kitchen'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_living_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 1
+      amplipi_zone_id: 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_living_room?token=79270b872fa1ab35b2ec48c0b7acadc89e96690027dfc676fdbe3382c8220f4b&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Living Room'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_rear_porch:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 1
+      amplipi_zone_id: 3
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_rear_porch?token=54b39ae3c0b44c96141ac9c2fd1750788b9905dc27bc2a1d81339fb0b11b560c&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Rear Porch'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_master_bedroom:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.675
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      source: Source 3
+      amplipi_zone_id: 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=18be426f80d87aa2e0489f0f423e52adc6b0556c93196b0e1b34f5438267a2d7&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Master Bedroom'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_ryans_office:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.4625
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      source: Source 3
+      amplipi_zone_id: 1
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=a39148b999e742a59d9618de590d99a6cf13f04e270df060f96e68cdc206c467&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Ryans Office'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_1:
+      source_list:
+      - None
+      - Family Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.8125
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to AmpliPi on Spotify Connect
+      app_name: spotify
+      source: AmpliPi
+      amplipi_source_id: 0
+      amplipi_source_zones:
+      - 0
+      - 3
+      - 4
+      - 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_1?token=f8214754f93943c6ac0552750e285c52a9045d675644680a77d6e67a8758d5aa&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Input 1'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_2:
+      source_list:
+      - None
+      - Kitchen Echo Show Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: unknown
+      is_volume_muted: unknown
+      media_content_type: music
+      media_title: Kitchen Echo Show Bluetooth - rca
+      app_name: rca
+      source: Kitchen Echo Show Bluetooth
+      amplipi_source_id: 1
+      amplipi_source_zones: []
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_2?token=40114827149e4e06df00b9bb375268f524c3b909526069523a44cc4e4ecd2e0e&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 2'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_3:
+      source_list:
+      - None
+      - Vinyl Player
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.5687500000000001
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      app_name: airplay
+      source: Master Bedroom (Airplay)
+      amplipi_source_id: 2
+      amplipi_source_zones:
+      - 1
+      - 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=f00a9e98d652a843c396704333ac2e09ff3b7cebdb3d0cee722840df7c53fbc4&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Input 3'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_4:
+      source_list:
+      - None
+      - Living Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: unknown
+      is_volume_muted: unknown
+      media_content_type: music
+      media_title: Living Room Echo Bluetooth - rca
+      app_name: rca
+      source: Living Room Echo Bluetooth
+      amplipi_source_id: 3
+      amplipi_source_zones: []
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_4?token=5b5a862d8cf20abd2367729c6bdd6d9666e429351817f7a795c9bade098e5525&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 4'
+      supported_features: 659212
+      state: idle
+  icon: mdi:speaker
+  metadata:
+    media_player.amplipi_zone_family_room:
+      entity_only: true
+    media_player.amplipi_zone_kitchen:
+      entity_only: true
+    media_player.amplipi_zone_living_room:
+      entity_only: true
+    media_player.amplipi_zone_rear_porch:
+      entity_only: true
+    media_player.amplipi_zone_master_bedroom:
+      entity_only: true
+    media_player.amplipi_zone_ryans_office:
+      entity_only: true
+    media_player.amplipi_source_1:
+      entity_only: true
+    media_player.amplipi_source_2:
+      entity_only: true
+    media_player.amplipi_source_3:
+      entity_only: true
+    media_player.amplipi_source_4:
+      entity_only: true
+- id: '1751596087753'
+  name: Spotify - Family Room
+  entities:
+    media_player.amplipi_zone_family_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 1
+      amplipi_zone_id: 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=91554a73b7ff2af3b65702002219a4f33c28988e17ec52014d73f2ad9eec89e1&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Family Room'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_kitchen:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=8e4c32e3dc5147fccf6dfcd7c87b2f0fe8ad4fd70d65f6e10ba00664c2d3096a&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Kitchen'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_living_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Living Room Echo Bluetooth - rca
+      source: Source 4
+      amplipi_zone_id: 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_living_room?token=79270b872fa1ab35b2ec48c0b7acadc89e96690027dfc676fdbe3382c8220f4b&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Living Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_rear_porch:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 3
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_rear_porch?token=54b39ae3c0b44c96141ac9c2fd1750788b9905dc27bc2a1d81339fb0b11b560c&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Rear Porch'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_master_bedroom:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.675
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      source: Source 3
+      amplipi_zone_id: 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=18be426f80d87aa2e0489f0f423e52adc6b0556c93196b0e1b34f5438267a2d7&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Master Bedroom'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_ryans_office:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.4625
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      source: Source 3
+      amplipi_zone_id: 1
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=a39148b999e742a59d9618de590d99a6cf13f04e270df060f96e68cdc206c467&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Ryans Office'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_1:
+      source_list:
+      - None
+      - Family Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to AmpliPi on Spotify Connect
+      app_name: spotify
+      source: AmpliPi
+      amplipi_source_id: 0
+      amplipi_source_zones:
+      - 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_1?token=f8214754f93943c6ac0552750e285c52a9045d675644680a77d6e67a8758d5aa&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Input 1'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_2:
+      source_list:
+      - None
+      - Kitchen Echo Show Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: music
+      media_title: Kitchen Echo Show Bluetooth - rca
+      app_name: rca
+      source: Kitchen Echo Show Bluetooth
+      amplipi_source_id: 1
+      amplipi_source_zones:
+      - 3
+      - 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_2?token=40114827149e4e06df00b9bb375268f524c3b909526069523a44cc4e4ecd2e0e&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 2'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_3:
+      source_list:
+      - None
+      - Vinyl Player
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.5687500000000001
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      app_name: airplay
+      source: Master Bedroom (Airplay)
+      amplipi_source_id: 2
+      amplipi_source_zones:
+      - 1
+      - 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=f00a9e98d652a843c396704333ac2e09ff3b7cebdb3d0cee722840df7c53fbc4&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Input 3'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_4:
+      source_list:
+      - None
+      - Living Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Living Room Echo Bluetooth - rca
+      app_name: rca
+      source: Living Room Echo Bluetooth
+      amplipi_source_id: 3
+      amplipi_source_zones:
+      - 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_4?token=5b5a862d8cf20abd2367729c6bdd6d9666e429351817f7a795c9bade098e5525&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 4'
+      supported_features: 659212
+      state: idle
+  icon: mdi:speaker
+  metadata:
+    media_player.amplipi_zone_family_room:
+      entity_only: true
+    media_player.amplipi_zone_kitchen:
+      entity_only: true
+    media_player.amplipi_zone_living_room:
+      entity_only: true
+    media_player.amplipi_zone_rear_porch:
+      entity_only: true
+    media_player.amplipi_zone_master_bedroom:
+      entity_only: true
+    media_player.amplipi_zone_ryans_office:
+      entity_only: true
+    media_player.amplipi_source_1:
+      entity_only: true
+    media_player.amplipi_source_2:
+      entity_only: true
+    media_player.amplipi_source_3:
+      entity_only: true
+    media_player.amplipi_source_4:
+      entity_only: true
+- id: '1751596306934'
+  name: Spotify - Kitchen
+  entities:
+    media_player.amplipi_zone_family_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Family Room Echo Bluetooth - rca
+      source: Source 1
+      amplipi_zone_id: 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=91554a73b7ff2af3b65702002219a4f33c28988e17ec52014d73f2ad9eec89e1&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Family Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_kitchen:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 2
+      amplipi_zone_id: 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=8e4c32e3dc5147fccf6dfcd7c87b2f0fe8ad4fd70d65f6e10ba00664c2d3096a&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Kitchen'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_living_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Living Room Echo Bluetooth - rca
+      source: Source 4
+      amplipi_zone_id: 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_living_room?token=79270b872fa1ab35b2ec48c0b7acadc89e96690027dfc676fdbe3382c8220f4b&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Living Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_rear_porch:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 2
+      amplipi_zone_id: 3
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_rear_porch?token=54b39ae3c0b44c96141ac9c2fd1750788b9905dc27bc2a1d81339fb0b11b560c&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Rear Porch'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_master_bedroom:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.675
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      source: Source 3
+      amplipi_zone_id: 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=18be426f80d87aa2e0489f0f423e52adc6b0556c93196b0e1b34f5438267a2d7&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Master Bedroom'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_ryans_office:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.4625
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      source: Source 3
+      amplipi_zone_id: 1
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=a39148b999e742a59d9618de590d99a6cf13f04e270df060f96e68cdc206c467&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Ryans Office'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_1:
+      source_list:
+      - None
+      - Family Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Family Room Echo Bluetooth - rca
+      app_name: rca
+      source: Family Room Echo Bluetooth
+      amplipi_source_id: 0
+      amplipi_source_zones:
+      - 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_1?token=f8214754f93943c6ac0552750e285c52a9045d675644680a77d6e67a8758d5aa&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 1'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_2:
+      source_list:
+      - None
+      - Kitchen Echo Show Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: music
+      media_title: Connect to AmpliPi on Spotify Connect
+      app_name: spotify
+      source: AmpliPi
+      amplipi_source_id: 1
+      amplipi_source_zones:
+      - 3
+      - 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_2?token=40114827149e4e06df00b9bb375268f524c3b909526069523a44cc4e4ecd2e0e&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Input 2'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_3:
+      source_list:
+      - None
+      - Vinyl Player
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.5687500000000001
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      app_name: airplay
+      source: Master Bedroom (Airplay)
+      amplipi_source_id: 2
+      amplipi_source_zones:
+      - 1
+      - 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=f00a9e98d652a843c396704333ac2e09ff3b7cebdb3d0cee722840df7c53fbc4&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Input 3'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_4:
+      source_list:
+      - None
+      - Living Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Living Room Echo Bluetooth - rca
+      app_name: rca
+      source: Living Room Echo Bluetooth
+      amplipi_source_id: 3
+      amplipi_source_zones:
+      - 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_4?token=5b5a862d8cf20abd2367729c6bdd6d9666e429351817f7a795c9bade098e5525&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 4'
+      supported_features: 659212
+      state: idle
+  icon: mdi:speaker
+  metadata:
+    media_player.amplipi_zone_family_room:
+      entity_only: true
+    media_player.amplipi_zone_kitchen:
+      entity_only: true
+    media_player.amplipi_zone_living_room:
+      entity_only: true
+    media_player.amplipi_zone_rear_porch:
+      entity_only: true
+    media_player.amplipi_zone_master_bedroom:
+      entity_only: true
+    media_player.amplipi_zone_ryans_office:
+      entity_only: true
+    media_player.amplipi_source_1:
+      entity_only: true
+    media_player.amplipi_source_2:
+      entity_only: true
+    media_player.amplipi_source_3:
+      entity_only: true
+    media_player.amplipi_source_4:
+      entity_only: true
+- id: '1751596355601'
+  name: Spotify - Living Room
+  entities:
+    media_player.amplipi_zone_family_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Family Room Echo Bluetooth - rca
+      source: Source 1
+      amplipi_zone_id: 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=91554a73b7ff2af3b65702002219a4f33c28988e17ec52014d73f2ad9eec89e1&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Family Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_kitchen:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=8e4c32e3dc5147fccf6dfcd7c87b2f0fe8ad4fd70d65f6e10ba00664c2d3096a&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Kitchen'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_living_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 4
+      amplipi_zone_id: 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_living_room?token=79270b872fa1ab35b2ec48c0b7acadc89e96690027dfc676fdbe3382c8220f4b&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Living Room'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_rear_porch:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 3
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_rear_porch?token=54b39ae3c0b44c96141ac9c2fd1750788b9905dc27bc2a1d81339fb0b11b560c&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Rear Porch'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_master_bedroom:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.675
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      source: Source 3
+      amplipi_zone_id: 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=18be426f80d87aa2e0489f0f423e52adc6b0556c93196b0e1b34f5438267a2d7&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Master Bedroom'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_ryans_office:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.4625
+      is_volume_muted: true
+      media_content_type: speaker
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      source: Source 3
+      amplipi_zone_id: 1
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=a39148b999e742a59d9618de590d99a6cf13f04e270df060f96e68cdc206c467&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Ryans Office'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_1:
+      source_list:
+      - None
+      - Family Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Family Room Echo Bluetooth - rca
+      app_name: rca
+      source: Family Room Echo Bluetooth
+      amplipi_source_id: 0
+      amplipi_source_zones:
+      - 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_1?token=f8214754f93943c6ac0552750e285c52a9045d675644680a77d6e67a8758d5aa&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 1'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_2:
+      source_list:
+      - None
+      - Kitchen Echo Show Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: music
+      media_title: Kitchen Echo Show Bluetooth - rca
+      app_name: rca
+      source: Kitchen Echo Show Bluetooth
+      amplipi_source_id: 1
+      amplipi_source_zones:
+      - 3
+      - 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_2?token=40114827149e4e06df00b9bb375268f524c3b909526069523a44cc4e4ecd2e0e&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 2'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_3:
+      source_list:
+      - None
+      - Vinyl Player
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.5687500000000001
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to Master Bedroom (Airplay) on Airplay
+      app_name: airplay
+      source: Master Bedroom (Airplay)
+      amplipi_source_id: 2
+      amplipi_source_zones:
+      - 1
+      - 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=f00a9e98d652a843c396704333ac2e09ff3b7cebdb3d0cee722840df7c53fbc4&cache=50bafce87253bfd1
+      friendly_name: 'AmpliPi: Input 3'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_4:
+      source_list:
+      - None
+      - Living Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to AmpliPi on Spotify Connect
+      app_name: spotify
+      source: AmpliPi
+      amplipi_source_id: 3
+      amplipi_source_zones:
+      - 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_4?token=5b5a862d8cf20abd2367729c6bdd6d9666e429351817f7a795c9bade098e5525&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Input 4'
+      supported_features: 675645
+      state: playing
+  icon: mdi:speaker
+  metadata:
+    media_player.amplipi_zone_family_room:
+      entity_only: true
+    media_player.amplipi_zone_kitchen:
+      entity_only: true
+    media_player.amplipi_zone_living_room:
+      entity_only: true
+    media_player.amplipi_zone_rear_porch:
+      entity_only: true
+    media_player.amplipi_zone_master_bedroom:
+      entity_only: true
+    media_player.amplipi_zone_ryans_office:
+      entity_only: true
+    media_player.amplipi_source_1:
+      entity_only: true
+    media_player.amplipi_source_2:
+      entity_only: true
+    media_player.amplipi_source_3:
+      entity_only: true
+    media_player.amplipi_source_4:
+      entity_only: true
+- id: '1751596449984'
+  name: Spotify - Outside
+  entities:
+    media_player.amplipi_zone_family_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Family Room Echo Bluetooth - rca
+      source: Source 1
+      amplipi_zone_id: 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=91554a73b7ff2af3b65702002219a4f33c28988e17ec52014d73f2ad9eec89e1&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Family Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_kitchen:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Kitchen Echo Show Bluetooth - rca
+      source: Source 2
+      amplipi_zone_id: 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=8e4c32e3dc5147fccf6dfcd7c87b2f0fe8ad4fd70d65f6e10ba00664c2d3096a&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Kitchen'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_living_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Living Room Echo Bluetooth - rca
+      source: Source 4
+      amplipi_zone_id: 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_living_room?token=79270b872fa1ab35b2ec48c0b7acadc89e96690027dfc676fdbe3382c8220f4b&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Living Room'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_rear_porch:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 3
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_rear_porch?token=54b39ae3c0b44c96141ac9c2fd1750788b9905dc27bc2a1d81339fb0b11b560c&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Rear Porch'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_master_bedroom:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.675
+      is_volume_muted: true
+      media_content_type: speaker
+      amplipi_zone_id: 2
+      device_class: speaker
+      friendly_name: 'AmpliPi: Master Bedroom'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_ryans_office:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.4625
+      is_volume_muted: true
+      media_content_type: speaker
+      amplipi_zone_id: 1
+      device_class: speaker
+      friendly_name: 'AmpliPi: Ryans Office'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_1:
+      source_list:
+      - None
+      - Family Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Family Room Echo Bluetooth - rca
+      app_name: rca
+      source: Family Room Echo Bluetooth
+      amplipi_source_id: 0
+      amplipi_source_zones:
+      - 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_1?token=f8214754f93943c6ac0552750e285c52a9045d675644680a77d6e67a8758d5aa&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 1'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_2:
+      source_list:
+      - None
+      - Kitchen Echo Show Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Kitchen Echo Show Bluetooth - rca
+      app_name: rca
+      source: Kitchen Echo Show Bluetooth
+      amplipi_source_id: 1
+      amplipi_source_zones:
+      - 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_2?token=40114827149e4e06df00b9bb375268f524c3b909526069523a44cc4e4ecd2e0e&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 2'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_3:
+      source_list:
+      - None
+      - Vinyl Player
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to AmpliPi on Spotify Connect
+      app_name: spotify
+      source: AmpliPi
+      amplipi_source_id: 2
+      amplipi_source_zones:
+      - 3
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=f00a9e98d652a843c396704333ac2e09ff3b7cebdb3d0cee722840df7c53fbc4&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Input 3'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_4:
+      source_list:
+      - None
+      - Living Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Living Room Echo Bluetooth - rca
+      app_name: rca
+      source: Living Room Echo Bluetooth
+      amplipi_source_id: 3
+      amplipi_source_zones:
+      - 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_4?token=5b5a862d8cf20abd2367729c6bdd6d9666e429351817f7a795c9bade098e5525&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 4'
+      supported_features: 659212
+      state: idle
+  icon: mdi:speaker
+  metadata:
+    media_player.amplipi_zone_family_room:
+      entity_only: true
+    media_player.amplipi_zone_kitchen:
+      entity_only: true
+    media_player.amplipi_zone_living_room:
+      entity_only: true
+    media_player.amplipi_zone_rear_porch:
+      entity_only: true
+    media_player.amplipi_zone_master_bedroom:
+      entity_only: true
+    media_player.amplipi_zone_ryans_office:
+      entity_only: true
+    media_player.amplipi_source_1:
+      entity_only: true
+    media_player.amplipi_source_2:
+      entity_only: true
+    media_player.amplipi_source_3:
+      entity_only: true
+    media_player.amplipi_source_4:
+      entity_only: true
+- id: '1751596539216'
+  name: Spotify - Whole Home Inside
+  entities:
+    media_player.amplipi_zone_family_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 0
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=91554a73b7ff2af3b65702002219a4f33c28988e17ec52014d73f2ad9eec89e1&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Family Room'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_kitchen:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 4
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=8e4c32e3dc5147fccf6dfcd7c87b2f0fe8ad4fd70d65f6e10ba00664c2d3096a&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Kitchen'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_living_room:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_living_room?token=79270b872fa1ab35b2ec48c0b7acadc89e96690027dfc676fdbe3382c8220f4b&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Living Room'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_rear_porch:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.825
+      is_volume_muted: true
+      media_content_type: speaker
+      amplipi_zone_id: 3
+      device_class: speaker
+      friendly_name: 'AmpliPi: Rear Porch'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_zone_master_bedroom:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8125
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 2
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=18be426f80d87aa2e0489f0f423e52adc6b0556c93196b0e1b34f5438267a2d7&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Master Bedroom'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_zone_ryans_office:
+      source_list:
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.8125
+      is_volume_muted: false
+      media_content_type: speaker
+      media_title: Connect to AmpliPi on Spotify Connect
+      source: Source 3
+      amplipi_zone_id: 1
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=a39148b999e742a59d9618de590d99a6cf13f04e270df060f96e68cdc206c467&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Ryans Office'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_1:
+      source_list:
+      - None
+      - Family Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: unknown
+      is_volume_muted: unknown
+      media_content_type: music
+      media_title: Family Room Echo Bluetooth - rca
+      app_name: rca
+      source: Family Room Echo Bluetooth
+      amplipi_source_id: 0
+      amplipi_source_zones: []
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_1?token=f8214754f93943c6ac0552750e285c52a9045d675644680a77d6e67a8758d5aa&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 1'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_2:
+      source_list:
+      - None
+      - Kitchen Echo Show Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: unknown
+      is_volume_muted: unknown
+      media_content_type: music
+      media_title: Kitchen Echo Show Bluetooth - rca
+      app_name: rca
+      source: Kitchen Echo Show Bluetooth
+      amplipi_source_id: 1
+      amplipi_source_zones: []
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_2?token=40114827149e4e06df00b9bb375268f524c3b909526069523a44cc4e4ecd2e0e&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 2'
+      supported_features: 659212
+      state: idle
+    media_player.amplipi_source_3:
+      source_list:
+      - None
+      - Vinyl Player
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: 0.8125
+      is_volume_muted: false
+      media_content_type: music
+      media_title: Connect to AmpliPi on Spotify Connect
+      app_name: spotify
+      source: AmpliPi
+      amplipi_source_id: 2
+      amplipi_source_zones:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 5
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=f00a9e98d652a843c396704333ac2e09ff3b7cebdb3d0cee722840df7c53fbc4&cache=97ccd767d6189f84
+      friendly_name: 'AmpliPi: Input 3'
+      supported_features: 675645
+      state: playing
+    media_player.amplipi_source_4:
+      source_list:
+      - None
+      - Living Room Echo Bluetooth
+      - Groove Salad
+      - Tomorrowland One World Radio
+      - BBC Radio 1
+      - Master Bedroom (Airplay)
+      - AmpliPi
+      group_members:
+      volume_level: unknown
+      is_volume_muted: unknown
+      media_content_type: music
+      media_title: Living Room Echo Bluetooth - rca
+      app_name: rca
+      source: Living Room Echo Bluetooth
+      amplipi_source_id: 3
+      amplipi_source_zones: []
+      device_class: speaker
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_4?token=5b5a862d8cf20abd2367729c6bdd6d9666e429351817f7a795c9bade098e5525&cache=e16430993208d1e7
+      friendly_name: 'AmpliPi: Input 4'
+      supported_features: 659212
+      state: idle
+  icon: mdi:speaker
+  metadata:
+    media_player.amplipi_zone_family_room:
+      entity_only: true
+    media_player.amplipi_zone_kitchen:
+      entity_only: true
+    media_player.amplipi_zone_living_room:
+      entity_only: true
+    media_player.amplipi_zone_rear_porch:
+      entity_only: true
+    media_player.amplipi_zone_master_bedroom:
+      entity_only: true
+    media_player.amplipi_zone_ryans_office:
+      entity_only: true
+    media_player.amplipi_source_1:
+      entity_only: true
+    media_player.amplipi_source_2:
+      entity_only: true
+    media_player.amplipi_source_3:
+      entity_only: true
+    media_player.amplipi_source_4:
+      entity_only: true
