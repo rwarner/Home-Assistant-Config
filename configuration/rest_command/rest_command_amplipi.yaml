@@ -3,7 +3,7 @@
 ##########################################
 
 amplipi_announce_media:
-  url: !secret amplipi_announce_url
+  url: http://amplipi.local/api/announce
   method: post
   payload: > 
         {% if where == 'family_room' %}
@@ -43,7 +43,7 @@ amplipi_announce_media:
   verify_ssl: false
 
 amplipi_announce_url:
-  url: !secret amplipi_announce_url
+  url: http://amplipi.local/api/announce
   method: post
   payload: > 
         {% if where == 'family_room' %}
@@ -82,52 +82,19 @@ amplipi_announce_url:
     content-type: 'application/json'
   verify_ssl: false
 
-# Can potentially improve all of these by setting a universal "secret" for
-# amplipi URL and then appending specific APIs. Universal secret might have
-# to be done through a template value or something
-amplipi_preset_default:
-  url: !secret amplipi_preset_default
-  method: post
-  headers:
-    content-type: 'application/json'
-  verify_ssl: false
-
-amplipi_preset_vinyl_living_room:
-  url: !secret amplipi_preset_vinyl_living_room
-  method: post
-  headers:
-    content-type: 'application/json'
-  verify_ssl: false
-
-amplipi_preset_vinyl_first_floor:
-  url: !secret amplipi_preset_vinyl_first_floor
-  method: post
-  headers:
-    content-type: 'application/json'
-  verify_ssl: false
-
-amplipi_preset_vinyl_inside_home:
-  url: !secret amplipi_preset_vinyl_inside_home
-  method: post
-  headers:
-    content-type: 'application/json'
-  verify_ssl: false
-
-# Get all the presets from the AmpliPi console
-amplipi_get_presets:
-  url: !secret amplipi_get_presets
-  method: GET
-  headers:
-    Accept: "application/json"
-  verify_ssl: false
-
 # Set a specific preset on the AmpliPi, one that already exists
 # e.g.
 # - service: rest_command.amplipi_set_preset
 #     data:
 #       preset: "{{ matching_preset_id }}"
+#
+#   - Restore Default:    10000
+#   - Vinyl Living Room:  10001
+#   - Vinyl First Floor:  10002
+#   - Vinyl Inside Home:  10003
+#
 amplipi_set_preset:
-  url: http://192.168.2.75/api/presets/{{ preset }}/load
+  url: http://amplipi.local/api/presets/{{ preset }}/load
   method: post
   headers:
     content-type: 'application/json'

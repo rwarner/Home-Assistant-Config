@@ -21,7 +21,7 @@
 #     where: family_room
 amplipi_announce_tts:
   sequence:
-      - service: rest_command.create_tts
+      - action: rest_command.create_tts
         data:
           message: "{{ message }}"
         response_variable: create_tts_response
@@ -36,12 +36,12 @@ amplipi_announce_tts:
           #     volume: "0.5"
           #     where: "{{ where }}"
           #   alias: Ding the Speakers
-          - service: rest_command.amplipi_announce_url
+          - action: rest_command.amplipi_announce_url
             data:
               url: "{{ url_variable }}"
               volume: "{{ volume if volume is defined else 0.6 }}"
               where: "{{ where }}" 
-          # Intentionally set a 5 second delay to give AmpliPi a moment
+          # Intentionally set a 2 second delay to give AmpliPi a moment
           - delay: "00:00:02"
 
 # Example usage: 
@@ -57,20 +57,132 @@ amplipi_announce_media:
     #     volume: "0.5"
     #     where: "{{ where }}"
     #   alias: Ding the Speakers
-    - service: rest_command.amplipi_announce_media
+    - action: rest_command.amplipi_announce_media
       data:
         type: "{{ type }}"
         volume: "{{ volume if volume is defined else 0.6 }}"
         where: "{{ where }}"
       alias: Play the media
-    # Intentionally set a 5 second delay to give AmpliPi a moment
+    # Intentionally set a 2 second delay to give AmpliPi a moment
     - delay: "00:00:02"
 
 # Cycles through presets set on the AmpliPi
 # See input_select.amplipi_presets, rest_command, secrets.yaml
 amplipi_cycle_preset:
   sequence:
-    - service: input_select.select_next
+    - action: input_select.select_next
       target:
         entity_id: input_select.amplipi_presets
   mode: single
+
+
+# Direct calls for a specific Preset
+# e.g. Using as buttons on NSPanel to change specific preset
+amplipi_preset_restore_default:
+  alias: "AmpliPi: Restore Default"
+  sequence:
+    - action: script.amplipi_set_preset
+      data:
+        preset_name: "Restore Default"
+
+amplipi_preset_vinyl_living_room:
+  alias: "AmpliPi: Vinyl Living Room"
+  sequence:
+    - action: script.amplipi_set_preset
+      data:
+        preset_name: "Vinyl Living Room"
+
+amplipi_preset_vinyl_first_floor:
+  alias: "AmpliPi: Vinyl First Floor"
+  sequence:
+    - action: script.amplipi_set_preset
+      data:
+        preset_name: "Vinyl First Floor"
+
+amplipi_preset_vinyl_inside_home:
+  alias: "AmpliPi: Vinyl Inside Home"
+  sequence:
+    - action: script.amplipi_set_preset
+      data:
+        preset_name: "Vinyl Inside Home"
+
+
+# Convenient script to:
+#   - Set associating input_select to matching preset
+#     &
+#   - Set AmpliPi to a specific preset
+#
+# e.g.
+# service: script.amplipi_set_preset
+#   data:
+#     preset_name: "Restore Default"
+amplipi_set_preset:
+  alias: "AmpliPi: Set Preset by Name"
+  fields:
+    preset_name:
+      description: "Name of the preset to activate"
+      required: true
+  sequence:
+    # 1. Set the input_select so the UI reflects the change
+    - action: input_select.select_option
+      data:
+        entity_id: input_select.amplipi_presets
+        option: "{{ preset_name }}"
+
+    # 2. Call the actual handler script (logic)
+    - action: script.amplipi_handle_preset
+      data:
+        preset_name: "{{ preset_name }}"
+
+
+# Script to handle setting the AmpliPi to a preset
+# Will announce the preset, then set it via Home Assistant
+# scenes set in the UI
+#
+#   e.g.
+#   - action: script.amplipi_handle_preset
+#     data:
+#       preset_name: "Vinyl Living Room"
+amplipi_handle_preset:
+  alias: "AmpliPi: Handle Preset Selection"
+  mode: restart
+  fields:
+    preset_name:
+      description: "Preset name to activate"
+      example: "Vinyl Living Room"
+  sequence:
+    - variables:
+        target_preset: "{{ preset_name or states('input_select.amplipi_presets') }}"
+    - choose:
+        - conditions: "{{ target_preset == 'Restore Default' }}"
+          sequence:
+            - action: script.amplipi_announce_tts
+              data:
+                message: "Default Mode"
+            - action: scene.turn_on
+              target:
+                entity_id: scene.amplipi_default
+        - conditions: "{{ target_preset == 'Vinyl Living Room' }}"
+          sequence:
+            - action: script.amplipi_announce_tts
+              data:
+                message: "Living Room"
+            - action: scene.turn_on
+              target:
+                entity_id: scene.amplipi_vinyl_living_room
+        - conditions: "{{ target_preset == 'Vinyl First Floor' }}"
+          sequence:
+            - action: script.amplipi_announce_tts
+              data:
+                message: "First Floor"
+            - action: scene.turn_on
+              target:
+                entity_id: scene.amplipi_vinyl_first_floor
+        - conditions: "{{ target_preset == 'Vinyl Inside Home' }}"
+          sequence:
+            - action: script.amplipi_announce_tts
+              data:
+                message: "Whole Home Inside"
+            - action: scene.turn_on
+              target:
+                entity_id: scene.amplipi_vinyl_whole_home_inside

@@ -1,35 +1,14 @@
+# Required automation for listening to the input_status to change the AmpliPi
+# See the script that's handling deeper logic
 - alias: AMPLIPI - AmpliPi Preset input_select
   id: 3de8315f-d95d-4827-9df3-1b62adb94746
   trigger:
-    platform: state
-    entity_id: input_select.amplipi_presets
+    - trigger: state
+      entity_id: input_select.amplipi_presets
   action:
-      # Send the appropriate rest command for the matching state set
-      # in the input_select.amplipi_presets
-    - service: >
-          {% if states.input_select.amplipi_presets.state == "Restore Default" %}
-            rest_command.amplipi_preset_default
-          {% elif states.input_select.amplipi_presets.state == "Vinyl Living Room" %}
-            rest_command.amplipi_preset_vinyl_living_room
-          {% elif states.input_select.amplipi_presets.state == "Vinyl First Floor" %}
-            rest_command.amplipi_preset_vinyl_first_floor
-          {% elif states.input_select.amplipi_presets.state == "Vinyl Inside Home" %}
-            rest_command.amplipi_preset_vinyl_inside_home
-          {% endif %}
-    - service: script.amplipi_announce_tts
-      # The following will speak the returned value aloud to notify the button pusher
-      # of which preset is currently set
+    - action: script.amplipi_handle_preset
       data:
-        message: >
-          {% if states.input_select.amplipi_presets.state == "Restore Default" %}
-            Default Mode
-          {% elif states.input_select.amplipi_presets.state == "Vinyl Living Room" %}
-            Living Room
-          {% elif states.input_select.amplipi_presets.state == "Vinyl First Floor" %}
-            First Floor
-          {% elif states.input_select.amplipi_presets.state == "Vinyl Inside Home" %}
-            Whole Home Inside
-          {% endif %}
+        preset_name: "{{ trigger.to_state.state }}"
 
 
 # Every hour, fetch all the presets from the AmpliPi and store them
@@ -37,10 +16,10 @@
 - alias: "AMPLIPI - Fetch and Update AmpliPi Presets"
   id: 0830ca86-05a3-43b4-a6b9-50fe5bb2b0b9
   trigger:
-    platform: time_pattern
+    trigger: time_pattern
     hours: "/1"
   action:
-    - service: input_select.set_options
+    - action: input_select.set_options
       data_template:
         entity_id: input_select.amplipi_dynamic_presets
         options: >
@@ -60,7 +39,7 @@
 - alias: "AMPLIPI - Find Matching Preset ID"
   id: 3a243a2f-9b8c-4ecf-8e55-69834ce4ecbd
   trigger:
-    platform: state
+    trigger: state
     entity_id: input_select.amplipi_dynamic_presets
   condition:
     - condition: template
@@ -84,6 +63,6 @@
     - condition: template
       value_template: "{{ matching_preset_id != 'Not found' }}"
     # Call the rest_command with the matched preset ID
-    - service: rest_command.amplipi_set_preset
+    - action: rest_command.amplipi_set_preset
       data:
         preset: "{{ matching_preset_id }}"
