@@ -1065,8 +1065,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Family Room Echo Bluetooth - rca
       app_name: rca
@@ -1088,8 +1086,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Kitchen Echo Show Bluetooth - rca
       app_name: rca
@@ -1296,8 +1292,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Family Room Echo Bluetooth - rca
       app_name: rca
@@ -1371,8 +1365,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Living Room Echo Bluetooth - rca
       app_name: rca
@@ -2016,8 +2008,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Kitchen Echo Show Bluetooth - rca
       app_name: rca
@@ -2064,8 +2054,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Living Room Echo Bluetooth - rca
       app_name: rca
@@ -3133,8 +3121,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Family Room Echo Bluetooth - rca
       app_name: rca
@@ -3156,8 +3142,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Kitchen Echo Show Bluetooth - rca
       app_name: rca
@@ -3207,8 +3191,6 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: unknown
-      is_volume_muted: unknown
       media_content_type: music
       media_title: Living Room Echo Bluetooth - rca
       app_name: rca
