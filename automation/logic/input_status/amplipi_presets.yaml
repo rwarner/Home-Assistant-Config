@@ -11,26 +11,6 @@
         preset_name: "{{ trigger.to_state.state }}"
 
 
-# Every hour, fetch all the presets from the AmpliPi and store them
-# in a rest variable sensor called "sensor.amplipi_presets"
-- alias: "AMPLIPI - Fetch and Update AmpliPi Presets"
-  id: 0830ca86-05a3-43b4-a6b9-50fe5bb2b0b9
-  trigger:
-    trigger: time_pattern
-    hours: "/1"
-  action:
-    - action: input_select.set_options
-      data_template:
-        entity_id: input_select.amplipi_dynamic_presets
-        options: >
-          {% set preset_state = states('sensor.amplipi_presets') %}
-          {% if preset_state %}
-            {{ preset_state.split(', ') | list }}
-          {% else %}
-            []
-          {% endif %}
-
-
 # Listen to the dynamically loaded "input_select.amplipi_dynamic_presets"
 # When only a user executes a selection, look up the matching selected "name"
 # in the JSON which exists in "sensor.amplipi_presets" attribute "presets".
@@ -66,3 +46,57 @@
     - action: rest_command.amplipi_set_preset
       data:
         preset: "{{ matching_preset_id }}"
+
+
+#######################################
+# Setting INPUT_SELECT options dynmically below
+#######################################
+
+# Every hour, fetch all the presets from the AmpliPi and store them
+# in a rest variable sensor called "sensor.amplipi_presets"
+- alias: "AMPLIPI - Fetch and Update AmpliPi Presets"
+  id: 0830ca86-05a3-43b4-a6b9-50fe5bb2b0b9
+  trigger:
+    trigger: time_pattern
+    hours: "/1"
+  action:
+    - action: input_select.set_options
+      data_template:
+        entity_id: input_select.amplipi_dynamic_presets
+        options: >
+          {% set preset_state = states('sensor.amplipi_presets') %}
+          {% if preset_state %}
+            {{ preset_state.split(', ') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+# Set Amplipi Spotify input_select options based on the template
+# variable looking for all Spotify "Scenes"
+- alias: Update AmpliPi Spotify Preset Options
+  trigger:
+    - trigger: homeassistant
+      event: start
+    - trigger: state
+      entity_id: sensor.amplipi_spotify_scene_list
+  action:
+    - action: input_select.set_options
+      target:
+        entity_id: input_select.amplipi_spotify_presets
+      data:
+        options: "{{ state_attr('sensor.amplipi_spotify_scene_list', 'scenes') | default([]) }}"
+
+# Set Amplipi Vinyl input_select options based on the template
+# variable looking for all Vinyl "Scenes"
+- alias: Update AmpliPi Vinyl Preset Options
+  trigger:
+    - trigger: homeassistant
+      event: start
+    - trigger: state
+      entity_id: sensor.amplipi_vinyl_scene_list
+  action:
+    - action: input_select.set_options
+      target:
+        entity_id: input_select.amplipi_vinyl_presets
+      data:
+        options: "{{ state_attr('sensor.amplipi_vinyl_scene_list', 'scenes') | default([]) }}"

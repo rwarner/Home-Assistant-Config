@@ -1,0 +1,56 @@
+###############################
+####### Scene - AmpliPi  ######
+###############################
+
+# Announce which scene has been applied utilizing the ability
+# to listen to all scenes being activated, and utilizing any that
+# start with "scene.amplipi"
+- alias: "SCENE - AmpliPi Announce What Scene Was Set"
+  id: 99896361-e393-4f21-82d8-37df61cfb6cd
+
+  trigger:
+    - trigger: event
+      event_type: call_service
+      event_data:
+        domain: scene
+        service: turn_on
+
+  condition:
+    - condition: template
+
+      # Sometimes the scene that comes through is a list of scenes
+      # and sometimes it's an individual one, this is to accomodate
+      # for that. As well as only match with scenes that start with 
+      # "amplipi"
+      value_template: >
+        {% set ids = trigger.event.data.service_data.entity_id %}
+        {% if ids is string %}
+          {{ ids.startswith('scene.amplipi') }}
+        {% elif ids is iterable %}
+          {{ ids | select('match', '^scene\.amplipi') | list | length > 0 }}
+        {% else %}
+          false
+        {% endif %}
+
+
+  action:
+    # Currently there is no way to determine when is scene is done applying
+    # For now, we will put a 3 second delay to allow the devices to be set
+    # in Home Assistant without messing them up since an announcement is
+    # a temporary "Source"
+
+    # 10 second delay
+    - delay: "00:00:10"
+
+    # Send an announcement to the AmpliPi using the Scene's name. Converting
+    # any dashes to spaces and removing and "-"
+    - action: script.amplipi_announce_tts
+      data:
+        message: >
+          {{ (state_attr(trigger.event.data.service_data.entity_id, 'friendly_name') or 'Unknown')
+              .replace('-', ' ')
+              | title }} scene ready.
+        volume: '0.7'
+
+
+

@@ -76,37 +76,6 @@ amplipi_cycle_preset:
   mode: single
 
 
-# Direct calls for a specific Preset
-# e.g. Using as buttons on NSPanel to change specific preset
-amplipi_preset_restore_default:
-  alias: "AmpliPi: Restore Default"
-  sequence:
-    - action: script.amplipi_set_preset
-      data:
-        preset_name: "Restore Default"
-
-amplipi_preset_vinyl_living_room:
-  alias: "AmpliPi: Vinyl Living Room"
-  sequence:
-    - action: script.amplipi_set_preset
-      data:
-        preset_name: "Vinyl Living Room"
-
-amplipi_preset_vinyl_first_floor:
-  alias: "AmpliPi: Vinyl First Floor"
-  sequence:
-    - action: script.amplipi_set_preset
-      data:
-        preset_name: "Vinyl First Floor"
-
-amplipi_preset_vinyl_inside_home:
-  alias: "AmpliPi: Vinyl Inside Home"
-  sequence:
-    - action: script.amplipi_set_preset
-      data:
-        preset_name: "Vinyl Inside Home"
-
-
 # Convenient script to:
 #   - Set associating input_select to matching preset
 #     &

@@ -27,3 +27,15 @@ amplipi_dynamic_presets:
   options:
     - "Loading..."  # Placeholder option
   initial: "Loading..."  # Set initial option to the same placeholder
+
+amplipi_spotify_presets:
+  name: AmpliPi Spotify Presets
+  options:
+    - "Loading..."  # Placeholder option
+  initial: "Loading..."  # Set initial option to the same placeholder
+
+amplipi_vinyl_presets:
+  name: AmpliPi Vinyl Presets
+  options:
+    - "Loading..."  # Placeholder option
+  initial: "Loading..."  # Set initial option to the same placeholder

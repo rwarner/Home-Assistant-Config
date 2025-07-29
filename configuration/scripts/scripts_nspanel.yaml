@@ -1,0 +1,52 @@
+###### NS Panel #######
+
+# Direct calls for a specific Preset
+# e.g. Using as buttons on NSPanel to change specific preset
+amplipi_preset_restore_default:
+  alias: "AmpliPi: Restore Default"
+  sequence:
+    - action: script.amplipi_set_preset
+      data:
+        preset_name: "Restore Default"
+
+amplipi_preset_vinyl_living_room:
+  alias: "AmpliPi: Vinyl Living Room"
+  sequence:
+    - action: script.amplipi_set_preset
+      data:
+        preset_name: "Vinyl Living Room"
+
+amplipi_preset_vinyl_first_floor:
+  alias: "AmpliPi: Vinyl First Floor"
+  sequence:
+    - action: script.amplipi_set_preset
+      data:
+        preset_name: "Vinyl First Floor"
+
+amplipi_preset_vinyl_inside_home:
+  alias: "AmpliPi: Vinyl Inside Home"
+  sequence:
+    - action: script.amplipi_set_preset
+      data:
+        preset_name: "Vinyl Inside Home"
+
+amplipi_preset_spotify_living_room:
+  alias: "AmpliPi: Spotify Living Room"
+  sequence:
+    - action: scene.turn_on
+      target:
+        entity_id: scene.amplipi_spotify_living_room
+
+amplipi_preset_spotify_first_floor:
+  alias: "AmpliPi: Spotify First Floor"
+  sequence:
+    - action: scene.turn_on
+      target:
+        entity_id: scene.amplipi_spotify_first_floor
+
+amplipi_preset_spotify_whole_home_inside:
+  alias: "AmpliPi: Spotify Whole Home Inside"
+  sequence:
+    - action: scene.turn_on
+      target:
+        entity_id: scene.amplipi_spotify_whole_home_inside
