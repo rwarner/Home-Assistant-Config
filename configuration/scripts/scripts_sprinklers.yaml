@@ -1,0 +1,126 @@
+###### Sprinklers #######
+
+# Zone 1: Sidewalk Strip
+# Zone 2: Front Yard + Chimney
+# Zone 3: Rear Corner
+# Zone 4: Main Yard 1/2 + 1 Rear Head
+# Zone 5: Main Yard 1/2 + 2 Mid Heads
+# Zone 6: Back Drip Irrigation (N/A)
+# Zone 7: Back Yard
+
+# run_all_sprinklers:
+#   alias: "Run All Sprinklers"
+#   mode: single
+#   variables:
+#     # Set zone times here
+#     sprinkler_times: [15, 15, 10, 35, 35, 0, 3]
+#   sequence:
+#   - repeat:
+#       count: 7
+#       sequence:
+#         - choose:
+#             # Ignore any zones that are 0 runtime
+#             - conditions: "{{ sprinkler_times[repeat.index - 1] > 0 }}"
+#               sequence:
+#                 - action: rainbird.start_irrigation
+#                   data:
+#                     entity_id: "switch.rain_bird_sprinkler_{{ repeat.index }}"
+#                     duration: "{{ sprinkler_times[repeat.index - 1] }}"
+
+
+run_all_sprinklers:
+  alias: "Run All Sprinklers"
+  mode: single
+  sequence:
+    # 1. Get fresh daily forecast
+    - action: weather.get_forecasts
+      data:
+        type: daily
+      target:
+        entity_id: weather.tomorrow_io_home_daily
+      response_variable: daily_forecasts
+
+    # 2. Set variables *after* fetching fresh forecast
+    - variables:
+        fc: "{{ daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] }}"
+        sprinkler_times: [15, 15, 10, 35, 35, 0, 3]
+
+        # Seasonal multiplier: 0.0 in winter (Nov-Mar), 0.75 in spring/fall, 1.0 in summer
+        seasonal_multiplier: >-
+          {% set m = now().month %}
+          {% if m in [11, 12, 1, 2, 3] %}
+            0.0
+          {% elif m in [4, 5, 9, 10] %}
+            0.75
+          {% else %}
+            1.0
+          {% endif %}
+
+        # Rainfall in last 7 days from fresh forecast (inches)
+        rainfall_last_week: >-
+          {% set total = namespace(sum=0) %}
+          {% for day in fc[:7] %}
+            {% set total.sum = total.sum + (day.precipitation | default(0) | float) %}
+          {% endfor %}
+          {{ total.sum }}
+
+        # Rainfall multiplier — reduce watering if rain > 0.25"
+        rain_multiplier: >-
+          {% if rainfall_last_week >= 1.0 %} 0.0
+          {% elif rainfall_last_week >= 0.5 %} 0.5
+          {% elif rainfall_last_week >= 0.25 %} 0.75
+          {% else %} 1.0
+          {% endif %}
+
+        # Current outdoor temperature from sensor, default 60°F if unavailable
+        current_temp: "{{ states('sensor.outside_avg_temp') | float(60) }}"
+
+        # Temperature multiplier — no watering below 45°F, reduced watering between 45-65°F
+        temp_multiplier: >-
+          {% if current_temp < 45 %}
+            0.0
+          {% elif current_temp < 55 %}
+            0.5
+          {% elif current_temp < 65 %}
+            0.75
+          {% else %}
+            1.0
+          {% endif %}
+
+        # Current humidity from fresh forecast's first day (default 50%)
+        current_humidity: "{{ fc[0].humidity | default(50) | float }}"
+
+        # Humidity multiplier — reduce watering if humidity is high (>80%)
+        humidity_multiplier: >-
+          {% if current_humidity > 80 %}
+            0.8
+          {% else %}
+            1.0
+          {% endif %}
+
+        # Final multiplier combining all
+        final_multiplier: >
+          {{ (seasonal_multiplier | float) *
+             (rain_multiplier | float) *
+             (temp_multiplier | float) *
+             (humidity_multiplier | float) }}
+
+    # 3. Run sprinklers with adjusted times
+    - repeat:
+        count: 7
+        sequence:
+          - choose:
+              - conditions: >
+                  {{ sprinkler_times[repeat.index - 1] > 0 and final_multiplier > 0 }}
+                sequence:
+                  - variables:
+                      run_time: >
+                        {{ (sprinkler_times[repeat.index - 1] * final_multiplier)
+                          | round(0) | int }}
+                  - action: rainbird.start_irrigation
+                    data:
+                      entity_id: "switch.rain_bird_sprinkler_{{ repeat.index }}"
+                      duration: "{{ run_time }}"
+                  - delay:
+                      minutes: "{{ run_time }}"
+

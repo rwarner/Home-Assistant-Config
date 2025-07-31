@@ -1,0 +1,8 @@
+######################################
+####### INPUT DATETIME OPTIONS  ######
+######################################
+
+sprinkler_run_time:
+  name: Sprinkler Run Time
+  has_date: true
+  has_time: true

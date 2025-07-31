@@ -1,0 +1,202 @@
+#############################
+### SPRINKLER AUTOMATIONS ###
+#############################
+
+- alias: "SPRINKLER - Check forecast, make suggestion to run"
+  id: bd632bd6-8d11-4510-8fa0-99d23f73d215
+  mode: single
+  trigger:
+    # Check forecast at 9 PM daily
+    - trigger: time
+      id: evening_check
+      at: "21:00:00"
+
+    # Run at scheduled sprinkler time from input_datetime
+    - trigger: template
+      id: scheduled_run
+      value_template: >
+        {% set t = states('input_datetime.sprinkler_run_time') %}
+        {{ t != "" and now().strftime("%Y-%m-%d %H:%M") == t[:16] }}
+
+    # Triggered by mobile app notification action "Yes"
+    - trigger: event
+      id: mobile_yes
+      event_type: mobile_app_notification_action
+      event_data:
+        action: RUN_SPRINKLERS
+
+  action:
+    # 1. Get fresh daily forecast
+    - action: weather.get_forecasts
+      data:
+        type: daily
+      target:
+        entity_id: weather.tomorrow_io_home_daily
+      response_variable: daily_forecasts
+
+    # 2. Calculate all needed variables *after* forecast is fetched
+    - variables:
+        forecast: "{{ daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] }}"
+        threshold_prob: 50
+        threshold_amount: 0.2
+        current_temp: "{{ states('sensor.outside_avg_temp') | float(0) }}"
+        rainfall_last_week: >-
+          {{ states('input_number.precip_today') | float(0)
+             + states('input_number.precip_yesterday') | float(0)
+             + states('input_number.precip_two_days_ago') | float(0) }}
+        seasonal_multiplier: >-
+          {% set m = now().month %}
+          {% if m in [11, 12, 1, 2, 3] %}
+            0.0
+          {% elif m in [4, 5, 9, 10] %}
+            0.75
+          {% else %}
+            1.0
+          {% endif %}
+        
+        # Total expected precipitation in the next 2 days
+        next_2_days_precip: >-
+          {% set total = namespace(sum=0) %}
+          {% for day in forecast[:2] %}
+            {% set total.sum = total.sum + (day.precipitation | default(0) | float) %}
+          {% endfor %}
+          {{ total.sum }}
+
+        # True/False: Is meaningful rain expected in next 2 days
+        next_2_days_rain_expected: >-
+          {% set rain_expected = false %}
+          {% for day in forecast[:2] %}
+            {% set prob = day.precipitation_probability | default(0) | int %}
+            {% set amt = day.precipitation | default(0) | float %}
+            {% if prob >= threshold_prob and amt >= threshold_amount %}
+              {% set rain_expected = true %}
+            {% endif %}
+          {% endfor %}
+          {{ rain_expected }}
+        watering_suggested: >-
+          {{ (rainfall_last_week < 0.5)
+             and (not next_2_days_rain_expected)
+             and (current_temp > 50)
+             and (seasonal_multiplier > 0) }}
+
+    # 3. Branch based on trigger and conditions
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: evening_check
+            - condition: template
+              value_template: "{{ watering_suggested }}"
+          sequence:
+            - action: notify.ryan_devices
+              data:
+                title: "💧 Sprinkler Recommended 💧"
+                message: >
+                  Rain last 3 days: {{ rainfall_last_week | round(2) }} in
+
+                  Next 2 days: {{ next_2_days_precip | round(2) }} in
+
+                  Current temp: {{ current_temp | round(1) }}°F
+
+                  Seasonal multiplier: {{ seasonal_multiplier }}
+
+                  Criteria met:
+
+                  • Rain < 0.5" past 3 days → ✅
+
+                  • No meaningful rain expected → ✅
+
+                  • Temp > 50°F → ✅
+
+                  Run sprinklers tomorrow?
+                data:
+                  actions:
+                    - action: "RUN_SPRINKLERS"
+                      title: "Yes, Run"
+                    - action: "IGNORE"
+                      title: "No"
+
+
+        # User tapped Yes
+        - conditions:
+            - condition: trigger
+              id: mobile_yes
+            - condition: template
+              value_template: "{{ trigger.event.data.action == 'RUN_SPRINKLERS' }}"
+          sequence:
+            - variables:
+                # Get tomorrow's sunrise and subtract 45 minutes
+                best_time: >-
+                  {% set sunrise = as_timestamp(state_attr('sun.sun', 'next_rising')) %}
+                  {% set optimal = sunrise - (45 * 60) %}
+                  {{ optimal | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+
+            - action: input_datetime.set_datetime
+              target:
+                entity_id: input_datetime.sprinkler_run_time
+              data:
+                datetime: "{{ best_time }}"
+
+            - action: persistent_notification.create
+              data:
+                title: "Sprinkler Scheduled"
+                message: >
+                  Sprinklers scheduled for {{ best_time }} (~45 min before sunrise for optimal watering).
+
+
+        # Scheduled run
+        - conditions:
+            - condition: trigger
+              id: scheduled_run
+          sequence:
+            - action: script.run_all_sprinklers
+            - action: input_datetime.set_datetime
+              target:
+                entity_id: input_datetime.sprinkler_run_time
+              data:
+                datetime: "1970-01-01 00:00:00"
+
+
+
+- alias: "SPRINKLERS - Store daily precipitation history"
+  id: f6737dce-1dd1-48fc-8a89-3bb69d4e9da5
+  trigger:
+    - trigger: time
+      at: "23:59:00"
+  action:
+    # 1. Refresh forecast data so it's up to date
+    - action: weather.get_forecasts
+      data:
+        type: daily
+      target:
+        entity_id: weather.tomorrow_io_home_daily
+      response_variable: daily_forecasts
+
+    # 2. Extract today's precipitation from fresh forecast data
+    - variables:
+        today_precip: >-
+          {% set fc = daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] %}
+          {% if fc | count > 0 %}
+            {{ fc[0].precipitation | default(0) | float }}
+          {% else %}
+            0
+          {% endif %}
+
+    # 3. Shift stored precipitation values back by one day
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.precip_two_days_ago
+      data:
+        value: "{{ states('input_number.precip_yesterday') | float(0) }}"
+
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.precip_yesterday
+      data:
+        value: "{{ states('input_number.precip_today') | float(0) }}"
+
+    # 4. Store today's precipitation value
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.precip_today
+      data:
+        value: "{{ today_precip }}"

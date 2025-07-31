@@ -241,6 +241,8 @@ template: !include_dir_merge_list configuration/template/
 cover: !include configuration/cover.yaml
 history: !include configuration/history.yaml
 input_select: !include configuration/input_select.yaml
+input_datetime: !include configuration/input_datetime.yaml
+input_number: !include configuration/input_number.yaml
 lock: !include configuration/lock.yaml
 scene: !include scenes.yaml
 shell_command: !include configuration/shell_command.yaml
