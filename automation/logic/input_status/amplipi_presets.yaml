@@ -84,7 +84,14 @@
       target:
         entity_id: input_select.amplipi_spotify_presets
       data:
-        options: "{{ state_attr('sensor.amplipi_spotify_scene_list', 'scenes') | default([]) }}"
+        options: >
+          {% set opts = state_attr('sensor.amplipi_spotify_scene_list', 'scenes') %}
+          {% if opts and opts | length > 0 %}
+            {{ opts }}
+          {% else %}
+            ['No Scenes Found']
+          {% endif %}
+
 
 # Set Amplipi Vinyl input_select options based on the template
 # variable looking for all Vinyl "Scenes"
@@ -99,4 +106,10 @@
       target:
         entity_id: input_select.amplipi_vinyl_presets
       data:
-        options: "{{ state_attr('sensor.amplipi_vinyl_scene_list', 'scenes') | default([]) }}"
+        options: >
+          {% set opts = state_attr('sensor.amplipi_vinyl_scene_list', 'scenes') %}
+          {% if opts and opts | length > 0 %}
+            {{ opts }}
+          {% else %}
+            ['No Scenes Found']
+          {% endif %}

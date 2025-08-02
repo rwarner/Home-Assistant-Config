@@ -26,7 +26,7 @@
         {% set ids = trigger.event.data.service_data.entity_id %}
         {% if ids is string %}
           {{ ids.startswith('scene.amplipi') }}
-        {% elif ids is iterable %}
+        {% elif ids is iterable and ids is not string %}
           {{ ids | select('match', '^scene\.amplipi') | list | length > 0 }}
         {% else %}
           false
@@ -47,10 +47,16 @@
     - action: script.amplipi_announce_tts
       data:
         message: >
-          {{ (state_attr(trigger.event.data.service_data.entity_id, 'friendly_name') or 'Unknown')
+          {% set ids = trigger.event.data.service_data.entity_id %}
+          {% if ids is string %}
+            {% set ent = ids %}
+          {% elif ids is iterable and (ids | length > 0) %}
+            {% set ent = (ids | select('match', '^scene\.amplipi') | list | first) %}
+          {% else %}
+            {% set ent = None %}
+          {% endif %}
+
+          {{ (state_attr(ent, 'friendly_name') or 'Unknown')
               .replace('-', ' ')
               | title }} scene ready.
-        volume: '0.7'
-
-
-
+        volume: 0.7
