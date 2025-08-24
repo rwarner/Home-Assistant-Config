@@ -83,8 +83,6 @@ stream:
 recorder:
   purge_keep_days: 14
 
-weather:
-
 notify:
   - name: ryan_devices
     platform: group
