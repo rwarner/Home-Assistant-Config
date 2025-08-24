@@ -5,6 +5,7 @@
 # Announce which scene has been applied utilizing the ability
 # to listen to all scenes being activated, and utilizing any that
 # start with "scene.amplipi"
+#  - Only after 9:00 a.m.
 - alias: "SCENE - AmpliPi Announce What Scene Was Set"
   id: 99896361-e393-4f21-82d8-37df61cfb6cd
 
@@ -16,6 +17,11 @@
         service: turn_on
 
   condition:
+
+      # Only after 9:00 a.m.
+    - condition: time
+      after: "09:00:00"
+
     - condition: template
 
       # Sometimes the scene that comes through is a list of scenes
