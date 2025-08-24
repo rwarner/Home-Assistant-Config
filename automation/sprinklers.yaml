@@ -2,6 +2,41 @@
 ### SPRINKLER AUTOMATIONS ###
 #############################
 
+###
+# 
+# SPRINKLER - Check forecast, make suggestion to run
+# 
+# This automation intelligently recommends and schedules lawn watering based on
+# recent precipitation, forecasted rainfall, outdoor temperature, and the time
+# since the last irrigation event.
+# 
+# Features:
+#  - Runs nightly at 9:00 PM to evaluate if watering is needed.
+#  - Gathers up-to-date daily forecast data from the configured weather provider.
+#  - Considers the following criteria:
+#      1. Rainfall in the last 3 days is less than 0.5 inches.
+#      2. No meaningful rain (≥ 0.2 in, ≥ 50% probability) is expected in the next 2 days.
+#      3. Uses forecast high temperature (°F) and requires > 50°F.
+#      4. Seasonal multiplier > 0 (disables watering in winter, reduces in spring/fall).
+#      5. Sufficient days have passed since last watering:
+#         - < 75°F (forecast high) → ≥ 5 days
+#         - 75–85°F (forecast high) → ≥ 3.5 days
+#         - > 85°F (forecast high) → ≥ 2.5 days
+# 
+# User Interaction:
+#  - If all criteria are met, sends a push notification showing precipitation history,
+#    forecasted rain, temperature, days since last watering, and checkmarks for each condition.
+#  - Notification includes quick-action buttons:
+#      - "Yes, Run" → Schedules watering for ~45 minutes before tomorrow’s sunrise.
+#      - "No" → Ignores recommendation until next evaluation.
+# 
+# Watering Execution:
+#  - At the scheduled time, triggers `script.run_all_sprinklers`, which:
+#      - Adjusts run times for each zone based on seasonal, rainfall, temperature, and humidity multipliers.
+#      - Runs zones sequentially with appropriate delays between them.
+#  - Updates `input_datetime.last_sprinkler_run` so future runs respect the minimum-day
+# 
+###
 - alias: "SPRINKLER - Check forecast, make suggestion to run"
   id: bd632bd6-8d11-4510-8fa0-99d23f73d215
   mode: single
@@ -39,11 +74,13 @@
         forecast: "{{ daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] }}"
         threshold_prob: 50
         threshold_amount: 0.2
-        current_temp: "{{ states('sensor.outside_avg_temp') | float(0) }}"
+        forecast_high: "{{ forecast[0].temperature | float(0) }}"
         rainfall_last_week: >-
           {{ states('input_number.precip_today') | float(0)
              + states('input_number.precip_yesterday') | float(0)
              + states('input_number.precip_two_days_ago') | float(0) }}
+
+        # 0.0 in winter (Nov–Mar), 0.75 in spring/fall (Apr–May, Sep–Oct), 1.0 in summer (Jun–Aug)
         seasonal_multiplier: >-
           {% set m = now().month %}
           {% if m in [11, 12, 1, 2, 3] %}
@@ -73,11 +110,35 @@
             {% endif %}
           {% endfor %}
           {{ rain_expected }}
+        
+        days_since_last_watering: >-
+          {% set last_run = states('input_datetime.last_sprinkler_run') %}
+          {% if last_run not in ['unknown', 'unavailable', ''] %}
+            {% set last_ts = as_timestamp(last_run) %}
+            {% if last_ts is not none %}
+              {{ ((now() | as_timestamp - last_ts) / 86400) | round(1) }}
+            {% else %}
+              999
+            {% endif %}
+          {% else %}
+            999
+          {% endif %}
+
+        min_days_required: >-
+          {% if forecast_high < 75 %}
+            5
+          {% elif forecast_high < 85 %}
+            3.5
+          {% else %}
+            2.5
+          {% endif %}
+
         watering_suggested: >-
           {{ (rainfall_last_week < 0.5)
              and (not next_2_days_rain_expected)
-             and (current_temp > 50)
-             and (seasonal_multiplier > 0) }}
+             and (forecast_high > 50)
+             and (seasonal_multiplier > 0)
+             and (days_since_last_watering >= min_days_required) }}
 
     # 3. Branch based on trigger and conditions
     - choose:
@@ -89,23 +150,17 @@
           sequence:
             - action: notify.ryan_devices
               data:
-                title: "💧 Sprinkler Recommended 💧"
+                title: "💧 Run Sprinkler 💧"
                 message: >
                   Rain last 3 days: {{ rainfall_last_week | round(2) }} in
 
                   Next 2 days: {{ next_2_days_precip | round(2) }} in
 
-                  Current temp: {{ current_temp | round(1) }}°F
+                  Forecast high: {{ forecast_high | round(1) }}°F
 
                   Seasonal multiplier: {{ seasonal_multiplier }}
 
-                  Criteria met:
-
-                  • Rain < 0.5" past 3 days → ✅
-
-                  • No meaningful rain expected → ✅
-
-                  • Temp > 50°F → ✅
+                  Days since last watering: {{ days_since_last_watering }} (min: {{ min_days_required }})
 
                   Run sprinklers tomorrow?
                 data:
@@ -126,9 +181,14 @@
             - variables:
                 # Get tomorrow's sunrise and subtract 45 minutes
                 best_time: >-
-                  {% set sunrise = as_timestamp(state_attr('sun.sun', 'next_rising')) %}
-                  {% set optimal = sunrise - (45 * 60) %}
-                  {{ optimal | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+                  {% set sunrise_attr = state_attr('sun.sun', 'next_rising') %}
+                  {% if sunrise_attr is not none %}
+                    {% set sunrise = as_timestamp(sunrise_attr) %}
+                    {% set optimal = sunrise - (45 * 60) %}
+                    {{ optimal | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+                  {% else %}
+                    {{ now() | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+                  {% endif %}
 
             - action: input_datetime.set_datetime
               target:

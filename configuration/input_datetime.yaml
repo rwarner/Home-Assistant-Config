@@ -6,3 +6,8 @@ sprinkler_run_time:
   name: Sprinkler Run Time
   has_date: true
   has_time: true
+
+last_sprinkler_run:
+  name: Last Sprinkler Run
+  has_date: true
+  has_time: false
