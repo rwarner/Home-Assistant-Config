@@ -1,5 +1,6 @@
 homeassistant:
   name: Home
+  internal_url: !secret internal_url
   # Location required to calculate the time the sun rises and sets
   latitude: !secret latitude
   longitude: !secret longitude
@@ -62,6 +63,9 @@ lovelace:
 config:
 
 http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1    # Nginx is on the same host
 
 # View all events in a logbook
 logbook:
