@@ -353,25 +353,29 @@
       state: 'on'
     media_player.amplipi_zone_family_room:
       source_list:
+      - None
       - Source 1
       - Source 2
       - Source 3
       - Source 4
       group_members:
-      volume_level: 0.825
+      volume_level: 0.5687500000000001
       is_volume_muted: false
       media_content_type: speaker
-      media_title: Connect to AmpliPi on Spotify Connect
       source: Source 3
+      stream_connected: true
+      is_group: false
       amplipi_zone_id: 0
       device_class: speaker
-      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=096ed0ff72b46384151744a0d95e56b84dd72cc952b7a1ad3a1a1e7a0126f226&cache=97ccd767d6189f84
-      friendly_name: 'AmpliPi: Family Room'
-      supported_features: 675645
+      friendly_name: Family Room
+      supported_features: 675773
+      media_title: Connect to AmpliPi on Spotify Connect
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_family_room?token=a051cc3a26d0d301c7f3e4603e08e0b3d72215e48c3c87e0cc14a07241f5d767&cache=97ccd767d6189f84
       state: playing
     media_player.amplipi_source_3:
       source_list:
       - None
+      - Aux
       - Vinyl Player
       - Groove Salad
       - Tomorrowland One World Radio
@@ -379,95 +383,86 @@
       - Master Bedroom (Airplay)
       - AmpliPi
       group_members:
-      volume_level: 0.5687500000000001
       is_volume_muted: true
       media_content_type: music
       media_title: Connect to AmpliPi on Spotify Connect
-      app_name: spotify
       source: AmpliPi
       amplipi_source_id: 2
       amplipi_source_zones:
       - 0
       - 1
       - 2
-      device_class: speaker
-      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=ad09b219648cceafae8aae1c17130c0004c1a7683b2c15ba27d42652afaf53f5&cache=97ccd767d6189f84
-      friendly_name: 'AmpliPi: Input 3'
-      supported_features: 675645
+      - 4
+      stream_connected: true
+      device_class: source
+      entity_picture: /api/media_player_proxy/media_player.amplipi_source_3?token=4ec861ec4c95cde88c6ea36fa44e7278027e773e388827a52bc8469faed18f17&cache=97ccd767d6189f84
+      friendly_name: Source 3
+      supported_features: 675773
+      volume_level: 0.5687500000000001
       state: playing
     media_player.amplipi_zone_ryans_office:
       source_list:
+      - None
       - Source 1
       - Source 2
       - Source 3
       - Source 4
       group_members:
-      volume_level: 0.4625
+      volume_level: 0.5687500000000001
       is_volume_muted: true
       media_content_type: speaker
-      media_title: Connect to AmpliPi on Spotify Connect
       source: Source 3
+      stream_connected: true
+      is_group: false
       amplipi_zone_id: 1
       device_class: speaker
-      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=fceab02508d03c898ecf7fed4cab5faa74de48d851bdbcfb5fa7156fc58b5bcd&cache=97ccd767d6189f84
-      friendly_name: 'AmpliPi: Ryans Office'
-      supported_features: 675645
+      friendly_name: Ryans Office
+      supported_features: 675773
+      media_title: Connect to AmpliPi on Spotify Connect
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_ryans_office?token=c3ab0dae2375fbf8e556a5c797b4c5be290e828c60ea441fee54ea64fd03a244&cache=97ccd767d6189f84
       state: playing
     media_player.amplipi_zone_master_bedroom:
       source_list:
+      - None
       - Source 1
       - Source 2
       - Source 3
       - Source 4
       group_members:
-      volume_level: 0.675
+      volume_level: 0.5687500000000001
       is_volume_muted: true
       media_content_type: speaker
-      media_title: Connect to AmpliPi on Spotify Connect
       source: Source 3
+      stream_connected: true
+      is_group: false
       amplipi_zone_id: 2
       device_class: speaker
-      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=50278cd82d6d876224db53f2b0add61a5a86f614e5da3adff54b02531d0e4ad1&cache=97ccd767d6189f84
-      friendly_name: 'AmpliPi: Master Bedroom'
-      supported_features: 675645
+      friendly_name: Master Bedroom
+      supported_features: 675773
+      media_title: Connect to AmpliPi on Spotify Connect
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_master_bedroom?token=e7bcc856a02066b794e91a21bd2477db7e765fda4b89431262532c4ccc659886&cache=97ccd767d6189f84
       state: playing
-    media_player.spotify:
+    media_player.amplipi_zone_kitchen:
       source_list:
-      - 9269892b037bc36f0124748765a22bde5fc7c896
-      - AmpliPi
-      - Denon AVR-X4500H
-      sp_device_id:
-      sp_device_is_brand_sonos: false
-      sp_device_is_chromecast: false
-      sp_device_is_restricted: false
-      sp_device_music_source:
-      sp_device_name:
-      sp_item_type: unknown
-      sp_play_time_remaining_est:
-      sp_playing_type: unknown
-      sp_track_is_explicit: false
-      sp_user_country: US
-      sp_user_display_name: Ryan Warner
-      sp_user_email: kentoe@gmail.com
-      sp_user_has_web_player_credentials: false
-      sp_user_id: kentoe
-      sp_user_product: premium
-      sp_user_uri: spotify:user:kentoe
-      volume_step: 0.1
-      sp_source_list_hide:
-      - family room tv
-      - living room tv
-      - media room
-      icon: mdi:spotify
-      friendly_name: Spotify
-      supported_features: 2543551
-      volume_level: 0
-      is_volume_muted: true
-      media_position: 0
-      media_position_updated_at: '2025-06-25T22:02:54.247710+00:00'
-      shuffle: false
-      repeat: 'off'
-      state: idle
+      - None
+      - Source 1
+      - Source 2
+      - Source 3
+      - Source 4
+      group_members:
+      volume_level: 0.49875
+      is_volume_muted: false
+      media_content_type: speaker
+      source: Source 3
+      stream_connected: true
+      is_group: false
+      amplipi_zone_id: 4
+      device_class: speaker
+      friendly_name: Kitchen
+      supported_features: 675773
+      media_title: Connect to AmpliPi on Spotify Connect
+      entity_picture: /api/media_player_proxy/media_player.amplipi_zone_kitchen?token=0ac8501a062df53e3607812fdf1fdd33f0cce5b9f39560c2ecfe2ea479129ecc&cache=97ccd767d6189f84
+      state: playing
   icon: mdi:saxophone
   metadata:
     light.family_room_dining_table:
@@ -480,7 +475,7 @@
       entity_only: true
     media_player.amplipi_zone_master_bedroom:
       entity_only: true
-    media_player.spotify:
+    media_player.amplipi_zone_kitchen:
       entity_only: true
 - id: '1751420989860'
   name: Default Mode
