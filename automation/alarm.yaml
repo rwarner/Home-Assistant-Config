@@ -2,33 +2,36 @@
 ### ALARM AUTOMATIONS ###
 #########################
 
-- alias: "ALARM - Disable Alarm from Schlage Deadbolt"
-  id: f2bdcc78-7815-11ee-b962-0242ac120002
-  trigger:
-    - trigger: state
-      entity_id: lock.basement_door_deadbolt
-      attribute: notification
-      to: "Keypad Unlock"
-    - trigger: state
-      entity_id: lock.basement_door_deadbolt
-      attribute: notification
-      to: "RF Unlock"
-    - trigger: state
-      entity_id: lock.front_door_deadbolt
-      attribute: notification
-      to: "Keypad Unlock"
-    - trigger: state
-      entity_id: lock.front_door_deadbolt
-      attribute: notification
-      to: "RF Unlock"
-  condition:
-    - condition: state
-      entity_id: alarm_control_panel.alarm
-      state: armed_away
-  action:
-    - action: alarm_control_panel.alarm_disarm
-      target:
-        entity_id: alarm_control_panel.alarm
+# 09/16/25 - New deadbolt doesn't give us this detailed information
+# Aqara U100, since it is linked into HomeKit. Will disable
+# for now
+# - alias: "ALARM - Disable Alarm from Schlage Deadbolt"
+#   id: f2bdcc78-7815-11ee-b962-0242ac120002
+#   trigger:
+#     - trigger: state
+#       entity_id: lock.basement_door_deadbolt
+#       attribute: notification
+#       to: "Keypad Unlock"
+#     - trigger: state
+#       entity_id: lock.basement_door_deadbolt
+#       attribute: notification
+#       to: "RF Unlock"
+#     - trigger: state
+#       entity_id: lock.front_door_deadbolt
+#       attribute: notification
+#       to: "Keypad Unlock"
+#     - trigger: state
+#       entity_id: lock.front_door_deadbolt
+#       attribute: notification
+#       to: "RF Unlock"
+#   condition:
+#     - condition: state
+#       entity_id: alarm_control_panel.alarm
+#       state: armed_away
+#   action:
+#     - action: alarm_control_panel.alarm_disarm
+#       target:
+#         entity_id: alarm_control_panel.alarm
 
 - alias: ALARM - Send Notification when home is disarmed
   id: fd9a8cb2-7815-11ee-b962-0242ac120002

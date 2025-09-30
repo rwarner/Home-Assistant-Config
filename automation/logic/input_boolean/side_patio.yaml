@@ -2,25 +2,27 @@
 ### SIDE PATIO CONFIGURATION / AUTOMATION ####
 ##############################################
 
-- alias: SIDE PATIO - Whether or not someone is at side patio
-  id: 02789ad6-7815-11ee-b962-0242ac120002
-  max_exceeded: silent # Hide warnings when triggered while in delay
-  trigger:
-    - trigger: state
-      entity_id: binary_sensor.motion_camera_side_patio
-      to: 'on'
-  #condition:
-    # Make sure the rear porch is accurate / over 65 certainty
-    #- condition: numeric_state
-    #  entity_id: binary_sensor.motion_camera_rear_porch 
-    #  attribute: event_score
-    #  above: 65
-  action:
-    # Most likely, someone is at the rear porch turn on input boolean
-    - action: homeassistant.turn_on
-      entity_id: input_boolean.someone_at_side_patio
-    # Wait 3 minutes before turning off the boolean
-    - delay:
-        minutes: 3
-    - action: homeassistant.turn_off
-      entity_id: input_boolean.someone_at_side_patio
+# 09/16/25 - We don't have confidence scores anymore
+# reassess when newer camera has AI for Person detection
+# - alias: SIDE PATIO - Whether or not someone is at side patio
+#   id: 02789ad6-7815-11ee-b962-0242ac120002
+#   max_exceeded: silent # Hide warnings when triggered while in delay
+#   trigger:
+#     - trigger: state
+#       entity_id: binary_sensor.motion_camera_side_patio
+#       to: 'on'
+#   #condition:
+#     # Make sure the rear porch is accurate / over 65 certainty
+#     #- condition: numeric_state
+#     #  entity_id: binary_sensor.motion_camera_rear_porch 
+#     #  attribute: event_score
+#     #  above: 65
+#   action:
+#     # Most likely, someone is at the rear porch turn on input boolean
+#     - action: homeassistant.turn_on
+#       entity_id: input_boolean.someone_at_side_patio
+#     # Wait 3 minutes before turning off the boolean
+#     - delay:
+#         minutes: 3
+#     - action: homeassistant.turn_off
+#       entity_id: input_boolean.someone_at_side_patio

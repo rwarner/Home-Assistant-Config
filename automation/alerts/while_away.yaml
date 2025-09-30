@@ -27,55 +27,59 @@
           url: "/lovelace/camera_view"
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
-- alias: ALERT (AWAY) - Motion at Rear Patio, notify Mobile App
-  id: 65d969a8-7814-11ee-b962-0242ac120002
-  mode: single # Only run once at a time  
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    trigger: state
-    entity_id:
-      - input_boolean.someone_at_rear_patio
-    to: 'on'
-  condition:
-    - condition: state
-      entity_id: alarm_control_panel.alarm
-      state: armed_away
-  action:
-    - action: notify.ryan_devices
-      data:
-        title: "Rear Patio Motion"
-        message: ""
-        data:
-          image: "/api/camera_proxy/camera.outside_rear_patio" #Captures image immediately, sends via notification
-          ttl: 0
-          priority: high
-          clickAction: "/lovelace/camera_view"
-    - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
+# 09/16/25 - We don't have confidence scores anymore
+# reassess when newer camera has AI for Person detection
+# - alias: ALERT (AWAY) - Motion at Rear Patio, notify Mobile App
+#   id: 65d969a8-7814-11ee-b962-0242ac120002
+#   mode: single # Only run once at a time  
+#   max_exceeded: silent # Hide warnings when triggered while in delay.
+#   trigger:
+#     trigger: state
+#     entity_id:
+#       - input_boolean.someone_at_rear_patio
+#     to: 'on'
+#   condition:
+#     - condition: state
+#       entity_id: alarm_control_panel.alarm
+#       state: armed_away
+#   action:
+#     - action: notify.ryan_devices
+#       data:
+#         title: "Rear Patio Motion"
+#         message: ""
+#         data:
+#           image: "/api/camera_proxy/camera.outside_rear_patio" #Captures image immediately, sends via notification
+#           ttl: 0
+#           priority: high
+#           clickAction: "/lovelace/camera_view"
+#     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
-- alias: ALERT (AWAY) - Motion at Side Patio, notify Mobile App
-  id: 6b54a302-7814-11ee-b962-0242ac120002
-  mode: single # Only run once at a time  
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    trigger: state
-    entity_id:
-      - input_boolean.someone_at_side_patio
-    to: 'on'
-  condition:
-    - condition: state
-      entity_id: alarm_control_panel.alarm
-      state: armed_away
-  action:
-    - action: notify.ryan_devices
-      data:
-        title: "Side Patio Motion"
-        message: ""
-        data:
-          image: "/api/camera_proxy/camera.outside_side_patio" #Captures image immediately, sends via notification
-          ttl: 0
-          priority: high
-          clickAction: "/lovelace/camera_view"
-    - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
+# 09/16/25 - We don't have confidence scores anymore
+# reassess when newer camera has AI for Person detection
+# - alias: ALERT (AWAY) - Motion at Side Patio, notify Mobile App
+#   id: 6b54a302-7814-11ee-b962-0242ac120002
+#   mode: single # Only run once at a time  
+#   max_exceeded: silent # Hide warnings when triggered while in delay.
+#   trigger:
+#     trigger: state
+#     entity_id:
+#       - input_boolean.someone_at_side_patio
+#     to: 'on'
+#   condition:
+#     - condition: state
+#       entity_id: alarm_control_panel.alarm
+#       state: armed_away
+#   action:
+#     - action: notify.ryan_devices
+#       data:
+#         title: "Side Patio Motion"
+#         message: ""
+#         data:
+#           image: "/api/camera_proxy/camera.outside_side_patio" #Captures image immediately, sends via notification
+#           ttl: 0
+#           priority: high
+#           clickAction: "/lovelace/camera_view"
+#     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
 
 - alias: ALERT (AWAY) - Motion in house
   id: 71fe36c8-7814-11ee-b962-0242ac120002

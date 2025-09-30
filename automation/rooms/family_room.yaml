@@ -2,32 +2,33 @@
 ### FAMILY ROOM AUTOMATIONS  ###
 ################################
 
-- alias: FAMILY ROOM - Turn off family room at 11:00pm, unless occupancy detected
-  id: 899070a2-7815-11ee-b962-0242ac120002
-  trigger:
-    - trigger: time
-      at: '23:00:00'
-  condition:
-    - condition: state
-      entity_id: binary_sensor.family_room_occupancy 
-      state: 'off'
-    - condition: template
-      value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'playing') }}"
-  action:
-    - action: light.turn_off
-      entity_id: light.family_room_lights
+# 09/16/25 - No motion sensor at the moment
+# - alias: FAMILY ROOM - Turn off family room at 11:00pm, unless occupancy detected
+#   id: 899070a2-7815-11ee-b962-0242ac120002
+#   trigger:
+#     - trigger: time
+#       at: '23:00:00'
+#   condition:
+#     - condition: state
+#       entity_id: binary_sensor.family_room_occupancy 
+#       state: 'off'
+#     - condition: template
+#       value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'playing') }}"
+#   action:
+#     - action: light.turn_off
+#       entity_id: light.family_room_lights
 
-- alias: FAMILY ROOM - Turn off family room early (10:30pm), if living room is not being used
-  id: 8e55f8d2-7815-11ee-b962-0242ac120002
-  trigger:
-    - trigger: time
-      at: '22:30:00'
-  condition:
-    - condition: state
-      entity_id: binary_sensor.family_room_occupancy 
-      state: 'off'
-    - condition: template
-      value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'playing') }}"
-  action:
-    - action: light.turn_off
-      entity_id: light.family_room_lights
+# - alias: FAMILY ROOM - Turn off family room early (10:30pm), if living room is not being used
+#   id: 8e55f8d2-7815-11ee-b962-0242ac120002
+#   trigger:
+#     - trigger: time
+#       at: '22:30:00'
+#   condition:
+#     - condition: state
+#       entity_id: binary_sensor.family_room_occupancy 
+#       state: 'off'
+#     - condition: template
+#       value_template: "{{ not is_state('media_player.plex_fire_tv_living_room', 'playing') }}"
+#   action:
+#     - action: light.turn_off
+#       entity_id: light.family_room_lights

@@ -19,34 +19,39 @@
   action:
     - action: script.capture_front_door_video
 
-# Set mode to queued so that there isn't conflicting runs when called while another is running
-- alias: CAMERAS - Capture on rear patio motion
-  id: 089bf6aa-7816-11ee-b962-0242ac120002
-  mode: queued
-  trigger:
-    - trigger: state
-      entity_id: 
-        - input_boolean.someone_at_rear_patio
-      to: 'on'
-  condition:
-    - condition: state
-      entity_id: alarm_control_panel.alarm
-      state: armed_away
-  action:
-    - action: script.capture_rear_patio_video
+# 09/16/25 - Disabled for now until more reliable
+# motion sensing is implemented like an outdoor sensor
+# - alias: CAMERAS - Capture on rear patio motion
+#   id: 089bf6aa-7816-11ee-b962-0242ac120002
+#   # Set mode to queued so that there isn't conflicting runs when called while another is running
+#   mode: queued
+#   trigger:
+#     - trigger: state
+#       entity_id: 
+#         - input_boolean.someone_at_rear_patio
+#       to: 'on'
+#   condition:
+#     - condition: state
+#       entity_id: alarm_control_panel.alarm
+#       state: armed_away
+#   action:
+#     - action: script.capture_rear_patio_video
 
-# Set mode to queued so that there isn't conflicting runs when called while another is running
-- alias: CAMERAS - Capture on side patio motion
-  id: 0cb19542-7816-11ee-b962-0242ac120002
-  mode: queued
-  trigger:
-    - trigger: state
-      entity_id: 
-        - input_boolean.someone_at_side_patio
-      to: 'on'
-  condition:
-    - condition: state
-      entity_id: alarm_control_panel.alarm
-      state: armed_away
-  action:
-    - action: script.capture_side_patio_video
+
+# 09/16/25 - Disabled for now until more reliable
+# motion sensing is implemented like an outdoor sensor
+# - alias: CAMERAS - Capture on side patio motion
+#   id: 0cb19542-7816-11ee-b962-0242ac120002
+#   # Set mode to queued so that there isn't conflicting runs when called while another is running
+#   mode: queued
+#   trigger:
+#     - trigger: state
+#       entity_id: 
+#         - input_boolean.someone_at_side_patio
+#       to: 'on'
+#   condition:
+#     - condition: state
+#       entity_id: alarm_control_panel.alarm
+#       state: armed_away
+#   action:
+#     - action: script.capture_side_patio_video
