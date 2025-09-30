@@ -9,6 +9,7 @@
 .google.token
 .vscode
 backup/
+backups/
 image/
 tts/
 blueprints/
