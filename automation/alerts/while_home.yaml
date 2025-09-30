@@ -2,29 +2,30 @@
 ### ALERT: WHILE HOME AUTOMATIONS  ###
 ######################################
 
-- alias: ALERT - Notify Alexa of Front Door only if Ryan is home
-  id: c55a299e-7814-11ee-b962-0242ac120002
-  trigger:
-    - trigger: state
-      entity_id: 
-        - input_boolean.someone_at_front_door
-      to: 'on'
-  condition:
-    # If Ryan is home
-    - condition: template
-      value_template: "{{ is_state('sensor.ryan_status', 'Home') }}"
-    # If last triggered is null, or it hasn't been triggered in the last five minutes
-    - condition: template
-      value_template: "{{ state_attr('states.automation.notify_alexa_of_front_door_only_if_ryan_is_home.attributes', 'last_triggered') == none or (as_timestamp(now())-as_timestamp(states.automation.notify_alexa_of_front_door_only_if_ryan_is_home.attributes.last_triggered)) > 300 }}"
-    # If the front door light hasn't been turned off/on in the last 15 seconds
-    # was causing a notification when you turned the light on/off
-    # "last_changed", must be used for light entity not "last_triggered" like automations
-    #- condition: template
-    #  value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.outside_front_door.last_changed)) > 15 }}"
-  action:
-    - action: script.alexa_notify_house
-      data:
-        message: "Front Door"
+# 09/16/25 - Didn't seem neccessary recently
+# - alias: ALERT - Notify Alexa of Front Door only if Ryan is home
+#   id: c55a299e-7814-11ee-b962-0242ac120002
+#   trigger:
+#     - trigger: state
+#       entity_id: 
+#         - input_boolean.someone_at_front_door
+#       to: 'on'
+#   condition:
+#     # If Ryan is home
+#     - condition: template
+#       value_template: "{{ is_state('sensor.ryan_status', 'Home') }}"
+#     # If last triggered is null, or it hasn't been triggered in the last five minutes
+#     - condition: template
+#       value_template: "{{ state_attr('states.automation.notify_alexa_of_front_door_only_if_ryan_is_home.attributes', 'last_triggered') == none or (as_timestamp(now())-as_timestamp(states.automation.notify_alexa_of_front_door_only_if_ryan_is_home.attributes.last_triggered)) > 300 }}"
+#     # If the front door light hasn't been turned off/on in the last 15 seconds
+#     # was causing a notification when you turned the light on/off
+#     # "last_changed", must be used for light entity not "last_triggered" like automations
+#     #- condition: template
+#     #  value_template: "{{ (as_timestamp(now())-as_timestamp(states.light.outside_front_door.last_changed)) > 15 }}"
+#   action:
+#     - action: script.alexa_notify_house
+#       data:
+#         message: "Front Door"
 
 - alias: ALERT - Notify when a window was opened
   id: cc8db9b0-7814-11ee-b962-0242ac120002
@@ -61,4 +62,23 @@
     - action: script.amplipi_announce_media
       data:
         type: all-windows-closed
+    - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
+
+- alias: ALERT - Notify house when package has been dropped off
+  id: 4cd4297d-bb36-42b8-ab99-15188e34e49d
+  mode: single # Only run once at a time  
+  max_exceeded: silent # Hide warnings when triggered while in delay.
+  trigger:
+    - trigger: state
+      entity_id: binary_sensor.doorbell_package_detected
+      from: "off"
+      to: "on"
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.alarm
+      state: disarmed
+  action:
+    - action: script.amplipi_announce_tts
+      data:
+        message: "Package at front door"
     - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
