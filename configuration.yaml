@@ -218,7 +218,7 @@ homekit:
       linked_battery_sensor: sensor.downstairs_bathroom_water_sensor_battery_level
       low_battery_threshold: 30
     camera.outside_doorbell:
-      linked_motion_sensor: binary_sensor.motion_camera_doorbell
+      linked_motion_sensor: binary_sensor.doorbell_person_detected
       support_audio: True
 
  
