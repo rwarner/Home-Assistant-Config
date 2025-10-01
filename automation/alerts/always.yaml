@@ -14,10 +14,10 @@
       from: "off"
       to: "on"
   action:
-    - action: script.amplipi_announce_media
+    - action: script.announce_sound
       data:
-        type: doorbell-sound
-        where: home_alert
+        name: "doorbell-sound"
+        override: true
     - delay: "00:00:02" # Wait 2 seconds so we don't get their finger in the camera
     - action: notify.ryan_devices
       data:
@@ -287,7 +287,7 @@
         #title: "\uD83D\uDCEB\uD83D\uDCEB  Mail has arrived  \uD83D\uDCEB\uD83D\uDCEB"
         title: Mail has arrived
         message: ""
-    - action: script.amplipi_announce_tts
+    - action: script.announce_local
       data:
         message: "You've got mail"
     - action: homeassistant.turn_on
@@ -305,10 +305,9 @@
       from: "off"
       to: "on"
   action:
-    - action: script.amplipi_announce_tts
+    - action: script.announce_local
       data:
         message: "Water detected: {{trigger.from_state.attributes.friendly_name}}"
-        where: home_alert
     - action: notify.ryan_devices
       data:
         title: "Water detected: {{trigger.from_state.attributes.friendly_name}}"
@@ -329,7 +328,7 @@
 #       for:
 #         hours: 4
 #   action:
-#     - action: script.amplipi_announce_tts
+#     - action: script.announce_local
 #       data:
 #         message: "Check on Lawn Mower, might be stuck"
 #     - action: notify.ryan_devices
@@ -363,7 +362,7 @@
     - trigger: homeassistant
       event: start
   action:
-    - action: script.amplipi_announce_tts
+    - action: script.announce_local
       data:
         message: "Home Assistant, online"
 

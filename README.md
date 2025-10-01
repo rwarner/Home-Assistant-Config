@@ -53,10 +53,6 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
       <td>Variables+History</td>
       <td>Variables component for Home Assistant with history support.</td>
     </tr>
-    <tr>
-      <td>AmpliPi</td>
-      <td>Adds media player support for the AmpliPi MultiZone Audio Player.</td>
-    </tr>
   </tbody>
 </table>
 
@@ -524,20 +520,6 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          One or two around if needed, not used with Home Assistant at all.
       </td>
    </tr>
-
-
-   <tr>
-      <td align=center>
-         <a href="https://www.amplipro.com/product-page/amplipro-home-audio-controller">AmpliPi</a>
-      </td>
-      <td align=center>
-         <img src="" alt="">
-      </td>
-      <td colspan="2">
-         TTS output from Home Assistant in multiple rooms around the house. Alerts, doorbell, etc...
-      </td>
-   </tr>
-
  
 </table>
 

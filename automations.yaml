@@ -21,23 +21,12 @@
       entity03: cover.living_room_shades
       entity03_name: Shades
       entity03_icon: ''
-      home_custom_button01: media_player.amplipi_zone_living_room
       nspanel_name: 60046d2d2b9b35eefda356d2ee3a600d
-      button_page02_label: AmpliPi Vinyl Presets
-      entity09: scene.amplipi_default
-      entity09_name: Restore Default
-      entity09_icon: mdi:restart
-      entity10: scene.amplipi_spotify_living_room
-      entity10_name: Living Room
-      entity10_icon: mdi:sofa
-      entity11: scene.amplipi_vinyl_first_floor
-      entity11_name: First Floor
-      entity11_icon: mdi:home-floor-1
-      entity12: scene.amplipi_vinyl_whole_home_inside
-      entity12_name: Inside Home
-      home_custom_button01_icon: mdi:speaker
-      home_custom_button01_name: Living Room Speakers
-      entity12_icon: mdi:home
+      entity09_icon: ''
+      entity10_icon: ''
+      entity11_icon: ''
+      home_custom_button01_icon: ''
+      entity12_icon: ''
       button_pages_icon_size: '10'
       button_page01_label: Device Control
       climate: climate.living_room_mitsubishi
@@ -47,25 +36,12 @@
       - 0
       entity04_icon: ''
       climate_chip_always_visible: true
-      button_page03_label: Spotify Presets
-      entity17: scene.amplipi_default
-      entity17_name: Restore Default
-      entity17_icon: mdi:restart
-      entity18: scene.amplipi_spotify_living_room
-      entity18_name: Living Room
-      entity18_icon: mdi:sofa
-      entity19: scene.amplipi_spotify_first_floor
-      entity19_name: First Floor
-      entity19_icon: mdi:home-floor-1
-      entity05: scene.amplipi_vinyl_living_room
-      entity05_name: Vinyl
-      entity05_icon: mdi:record-player
-      entity06: scene.amplipi_spotify_living_room
-      entity06_name: Spotify
-      entity06_icon: mdi:spotify
-      entity20: scene.amplipi_spotify_whole_home_inside
-      entity20_name: Home Inside
-      entity20_icon: mdi:home
+      entity17_icon: ''
+      entity18_icon: ''
+      entity19_icon: ''
+      entity05_icon: ''
+      entity06_icon: ''
+      entity20_icon: ''
 - id: '1749930732533'
   alias: NSPanel Configuration - Ryan's Office
   description: ''
@@ -94,8 +70,7 @@
       entity03_icon: ''
       right_button_entity: light.ryans_office_lights
       right_button_name: Desk Lights
-      home_custom_button01: media_player.amplipi_zone_ryans_office
-      home_custom_button01_icon: mdi:speaker
+      home_custom_button01_icon: ''
       home_custom_button02: cover.ryans_office_shades
       home_custom_button02_icon: ''
       home_custom_button03: light.ryans_office_desk_lamp

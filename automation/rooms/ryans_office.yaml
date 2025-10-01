@@ -65,10 +65,11 @@
       after: '06:00:00'
       before: '11:30:00'
   action:
-    - action: script.amplipi_announce_tts
-      data:
-        message: "Good morning, Ryan."
-        where: ryans_office
+    # 09/30/25 - No specific room announcement available currently
+    # - action: script.announce_tts
+    #   data:
+    #     message: "Good morning, Ryan."
+    #     where: ryans_office
       # Turn on light, if level is below 30 lx
     - condition: numeric_state
       entity_id: sensor.ryans_office_motion_sensor_illuminance

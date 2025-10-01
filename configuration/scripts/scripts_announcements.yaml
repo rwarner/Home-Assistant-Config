@@ -1,0 +1,69 @@
+###### Announcements #######
+
+
+announce_local:
+  alias: "Announce via local aux with volume"
+  mode: parallel
+  fields:
+    message:
+      description: "Message to speak"
+    override:
+      description: "Set to true to allow playing outside 8am–9pm"
+      example: "true"
+  sequence:
+    - condition: or
+      conditions:
+        - condition: time
+          after: "08:00:00"
+          before: "21:00:00"
+        - condition: template
+          value_template: "{{ override | default(false) | bool }}"
+
+    - action: media_player.volume_set
+      target:
+        entity_id: media_player.local_audio
+      data:
+        volume_level: 1.0
+
+    - action: tts.speak
+      target:
+        entity_id: tts.home_assistant_cloud
+      data:
+        media_player_entity_id: media_player.local_audio
+        message: "{{ message }}"
+        language: "en-GB"
+        options:
+          voice: "Olivia"
+        cache: true
+
+announce_sound:
+  alias: "Play local sound"
+  mode: single
+  fields:
+    name:
+      description: "Base name of the mp3 in /config/www/sounds/"
+      example: "welcome_home"
+    override:
+      description: "Set to true to allow playing outside 8am–9pm"
+      example: "true"
+  sequence:
+    - condition: or
+      conditions:
+        - condition: time
+          after: "08:00:00"
+          before: "21:00:00"
+        - condition: template
+          value_template: "{{ override | default(false) | bool }}"
+
+    - action: media_player.volume_set
+      target:
+        entity_id: media_player.local_audio
+      data:
+        volume_level: 1.0
+
+    - action: media_player.play_media
+      target:
+        entity_id: media_player.local_audio
+      data:
+        media_content_id: "http://localhost:8123/local/sounds/{{ name }}.mp3"
+        media_content_type: music

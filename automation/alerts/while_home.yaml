@@ -40,9 +40,10 @@
       entity_id: alarm_control_panel.alarm
       state: disarmed
   action:
-    - action: script.amplipi_announce_media
+
+    - action: script.announce_sound
       data:
-        type: window-opened
+        name: "window-opened"
     - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
     
 - alias: ALERT - Notify when all windows have been closed
@@ -59,9 +60,10 @@
       entity_id: alarm_control_panel.alarm
       state: disarmed
   action:
-    - action: script.amplipi_announce_media
+    - action: script.announce_sound
       data:
-        type: all-windows-closed
+        name: "all-windows-closed"
+        override: true
     - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
 
 - alias: ALERT - Notify house when package has been dropped off
@@ -78,7 +80,7 @@
       entity_id: alarm_control_panel.alarm
       state: disarmed
   action:
-    - action: script.amplipi_announce_tts
+    - action: script.announce_local
       data:
         message: "Package at front door"
     - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals

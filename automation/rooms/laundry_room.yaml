@@ -15,9 +15,9 @@
       - trigger: state
         entity_id: sensor.washer_washer_machine_state
         to: 'stop'
-    - action: script.amplipi_announce_media
+    - action: script.announce_sound
       data:
-        type: washer-done
+        name: "washer-done"
 
 - alias: LAUNDRY - Notify house dryer is done
   id: 9c564aa4-7815-11ee-b962-0242ac120002
@@ -31,10 +31,10 @@
     - wait_for_trigger:
       - trigger: state
         entity_id: sensor.dryer_dryer_machine_state
-        to: 'stop'
-    - action: script.amplipi_announce_media
+        to: 'stop'    
+    - action: script.announce_sound
       data:
-        type: dryer-done
+        name: "dryer-done"
 
 - alias: LAUNDRY - Notify house dryer is in wrinklePrevent
   id: 9feaba60-7815-11ee-b962-0242ac120002
@@ -49,9 +49,9 @@
       - trigger: state
         entity_id: sensor.dryer_dryer_job_state
         to: 'wrinklePrevent'
-    - action: script.amplipi_announce_media
+    - action: script.announce_sound
       data:
-        type: dryer-preventing-wrinkles
+        name: "dryer-preventing-wrinkles"
 
 # - alias: LAUNDRY - Notify house laundry is done after 1 hour
 #   id: laundry_notify_house_laundry_is_done_after_1_hour
