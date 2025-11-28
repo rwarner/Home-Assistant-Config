@@ -2,50 +2,97 @@
 ### DARK_OUTSIDE CONFIGURATION / AUTOMATION ####
 ################################################
 
-# Darker than 100 Lux Outside 
-- alias: GOING DARK - Set dark_outside input_boolean to On, dark out
+- alias: GOING DARK - Set dark_outside On (evening, once/day)
   id: d8a964ba-7814-11ee-b962-0242ac120002
+  mode: single
   trigger:
-    # Make sure that the light level is below 500 lx
+    # Daily safety check at 3pm so we always evaluate at least once
+    - trigger: time
+      at: "15:00:00"
+
+    # Primary: sun below a reasonable "it's dark" threshold
+    - trigger: numeric_state
+      entity_id: sun.sun
+      attribute: elevation
+      below: -4
+      for: "00:02:00"
+
+    # Fallback: very dim outside (e.g., storms). Optional—remove if you don't want this.
     - trigger: numeric_state
       entity_id: sensor.front_outdoor_motion_sensor_illuminance
       below: 500
-  condition:
-    # Only execute once per day
-    - "{{ state_attr(this.entity_id, 'last_triggered').date() < now().date() }}"
-    # Only after 3:00 pm and before 9pm
-    # November was hitting 500 lux before 2:30 p.m.
-    - condition: time
-      after: '15:00:00'
-      before: '21:00:00'
+      for: "00:05:00"
 
-    # # Only proceed, if we haven't used the light out in the last 6 hours
-    # - condition: template 
-    #   value_template: "{{ (state_attr('states.automation.going_dark_set_dark_outside_input_boolean_to_off_light_out.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_dark_set_dark_outside_input_boolean_to_off_light_out.attributes.last_triggered)) > 21600) }}"
-    
+  condition:
+    # Inclusive: 3:00:00 PM or later
+    - condition: template
+      value_template: "{{ now() >= today_at('15:00:00') }}"
+
+    # Only if it's currently not marked dark
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: "off"
+
+    # Is it dark enough? (guards the 3pm time trigger)
+    - condition: or
+      conditions:
+        - condition: numeric_state
+          entity_id: sun.sun
+          attribute: elevation
+          below: -4
+        - condition: numeric_state
+          entity_id: sensor.front_outdoor_motion_sensor_illuminance
+          below: 500
+
+    # Only once per calendar day (use your automation entity_id)
+    - condition: template
+      value_template: >
+        {% set lt = state_attr('automation.going_dark_set_dark_outside_input_boolean_to_on_dark_out', 'last_triggered') %}
+        {{ lt is none or lt < today_at('00:00:00') }}
+
   action:
     - action: homeassistant.turn_on
-      entity_id: input_boolean.dark_outside
+      target:
+        entity_id: input_boolean.dark_outside
 
-# Brighter than 400 Lux Outside 
-- alias: GOING DARK - Set dark_outside input_boolean to off, light out
+
+
+
+# - alias: GOING LIGHT - Set dark_outside input_boolean to Off, bright out
+#   id: dedd58d2-7814-11ee-b962-0242ac120002
+#   mode: single
+#   trigger:
+#     - trigger: template
+#       value_template: >
+#         {{ states('sensor.front_outdoor_motion_sensor_illuminance')|float(0) > 400
+#            and 6 <= now().hour < 13 }}
+#       for: "00:10:00"
+#   condition:
+#     - condition: state
+#       entity_id: input_boolean.dark_outside
+#       state: "on"
+#   action:
+#     - action: homeassistant.turn_off
+#       target:
+#         entity_id: input_boolean.dark_outside
+
+- alias: GOING LIGHT - Set dark_outside input_boolean to Off, bright out
   id: dedd58d2-7814-11ee-b962-0242ac120002
+  mode: single
   trigger:
-    # Make sure that the light level is above 400 lx
     - trigger: numeric_state
-      entity_id: sensor.front_outdoor_motion_sensor_illuminance
-      above: 400
+      entity_id: sun.sun
+      attribute: elevation
+      above: 6         # try 5°, tune to 6–8° if still dim
+      for: "00:10:00"
   condition:
-    # Only execute once per day
-    - "{{ state_attr(this.entity_id, 'last_triggered').date() < now().date() }}"
-
-    # Only proceed, if we haven't used dark off in the last 6 hours
-    # - condition: template 
-    #   value_template: "{{ (state_attr('states.automation.going_dark_set_dark_outside_input_boolean_to_on_dark_out.attributes', 'last_triggered') == none) or ((as_timestamp(now())-as_timestamp(states.automation.going_dark_set_dark_outside_input_boolean_to_on_dark_out.attributes.last_triggered)) > 21600) }}"
-    # # Only after 4 pm and before 9pm
-    # - condition: time
-    #   after: '05:00:00'
-    #   before: '09:00:00'
+    - condition: time
+      after: "05:30:00"
+      before: "13:00:00"
+    - condition: state
+      entity_id: input_boolean.dark_outside
+      state: "on"
   action:
     - action: homeassistant.turn_off
-      entity_id: input_boolean.dark_outside
+      target:
+        entity_id: input_boolean.dark_outside
