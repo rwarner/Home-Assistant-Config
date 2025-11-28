@@ -7,7 +7,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ## Current Server Hardware
 
-[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2025.5.5%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-24.04.1%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.13.3-brightgreen)
+[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2025.11.3%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-24.04.1%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.13.3-brightgreen)
  - [Intel Core i5-6400 2.7 GHz Quad-Core Processor](https://amzn.to/3C0RaOq)
  - [Jetway NF594-Q170 Mini-ITX Motherboard](https://www.jetwaycomputer.com/NF594.html)
  - [Timetec 16GB SODIMM Ram](https://amzn.to/4gEnCWg)
