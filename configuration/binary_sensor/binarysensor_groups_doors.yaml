@@ -41,7 +41,7 @@
 #     - binary_sensor.sample_window_sensor
 
 # - platform: group
-#   name: Guest Room Doors
+#   name: Nursery Doors
 #   entities:
 #     - binary_sensor.sample_window_sensor
 

@@ -21,7 +21,7 @@
         media_content_type: custom
       target:
         entity_id:
-        - media_player.guest_room_echo_dot
+        - media_player.nursery_echo_dot
         - media_player.ryans_office_echo_show
         - media_player.kitchen_echo_show_15
         - media_player.living_room_echo_dot

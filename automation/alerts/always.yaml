@@ -166,8 +166,8 @@
         - sensor.ryans_office_side_window_sensor_battery_level
         - sensor.master_bedroom_front_window_sensor_battery_level
         - sensor.master_bedroom_side_window_sensor_battery_level
-        - sensor.guest_room_front_window_sensor_battery_level
-        - sensor.guest_room_side_window_sensor_battery_level
+        - sensor.nursery_front_window_sensor_battery_level
+        - sensor.nursery_side_window_sensor_battery_level
         - sensor.living_room_front_window_sensor_battery_level
         - sensor.living_room_side_window_1_sensor_battery_level
         - sensor.living_room_side_window_2_sensor_battery_level
@@ -224,8 +224,8 @@
         - binary_sensor.ryans_office_side_window_sensor
         - binary_sensor.master_bedroom_front_window_sensor
         - binary_sensor.master_bedroom_side_window_sensor
-        - binary_sensor.guest_room_front_window_sensor
-        - binary_sensor.guest_room_side_window_sensor
+        - binary_sensor.nursery_front_window_sensor
+        - binary_sensor.nursery_side_window_sensor
         - binary_sensor.living_room_front_window_sensor
         - binary_sensor.living_room_side_window_1_sensor
         - binary_sensor.living_room_side_window_2_sensor

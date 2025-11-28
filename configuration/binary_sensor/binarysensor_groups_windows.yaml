@@ -9,7 +9,7 @@
     - binary_sensor.kellys_office_windows
     - binary_sensor.ryans_office_windows
     - binary_sensor.master_bedroom_windows
-    - binary_sensor.guest_room_windows
+    - binary_sensor.nursery_windows
     - binary_sensor.living_room_windows
     - binary_sensor.kitchen_windows
     - binary_sensor.family_room_windows
@@ -39,10 +39,10 @@
     - binary_sensor.master_bedroom_side_window_sensor
 
 - platform: group
-  name: Guest Room Windows
+  name: Nursery Windows
   entities:
-    - binary_sensor.guest_room_front_window_sensor
-    - binary_sensor.guest_room_side_window_sensor
+    - binary_sensor.nursery_front_window_sensor
+    - binary_sensor.nursery_side_window_sensor
 
 
 ### First Floor ###

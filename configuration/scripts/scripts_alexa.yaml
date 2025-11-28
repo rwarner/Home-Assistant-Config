@@ -1,7 +1,7 @@
 ###### Alexa #######
 # Current alexas:
 # - media_player.ryans_office_echo_show
-# - media_player.guest_room_echo_dot
+# - media_player.nursery_echo_dot
 # - media_player.kitchen_echo_show_15
 # - media_player.living_room_echo_dot
 # - media_player.family_room_echo_dot
@@ -27,7 +27,7 @@ alexa_notify_second_floor:
       data_template:
         target: 
           - media_player.ryans_office_echo_show
-          - media_player.guest_room_echo_dot
+          - media_player.nursery_echo_dot
         title: "{{ title }}"
         message: "{{ message }}"
         data:
@@ -116,7 +116,7 @@ alexa_notify_house:
           method: all
         target: 
           - media_player.ryans_office_echo_show
-          - media_player.guest_room_echo_dot
+          - media_player.nursery_echo_dot
           - media_player.living_room_echo_dot
           - media_player.family_room_echo_dot
           - media_player.movie_room_echo
@@ -136,7 +136,7 @@ alexa_reset_all_volume:
           - media_player.media_room_echo
           - media_player.basement_echo_dot
           - media_player.ryans_office_echo_show
-          - media_player.guest_room_echo_dot
+          - media_player.nursery_echo_dot
           - media_player.living_room_echo_dot
           - media_player.family_room_echo_dot
           - media_player.movie_room_echo
