@@ -1,6 +1,5 @@
 ###### Announcements #######
 
-
 announce_local:
   alias: "Announce via local aux with volume"
   mode: parallel
@@ -25,6 +24,18 @@ announce_local:
       data:
         volume_level: 1.0
 
+    # ▶️ Play the attention tone
+    - action: media_player.play_media
+      target:
+        entity_id: media_player.local_audio
+      data:
+        media_content_id: "http://localhost:8123/local/sounds/attention.mp3"
+        media_content_type: music
+
+    # Wait until attention.mp3 finishes (1–2 seconds depending on clip length)
+    - delay: "00:00:01"
+
+    # 🗣️ Speak the message
     - action: tts.speak
       target:
         entity_id: tts.home_assistant_cloud
@@ -35,6 +46,7 @@ announce_local:
         options:
           voice: "Olivia"
         cache: true
+
 
 announce_sound:
   alias: "Play local sound"
@@ -61,6 +73,17 @@ announce_sound:
       data:
         volume_level: 1.0
 
+    # ▶️ Play the attention tone first
+    - action: media_player.play_media
+      target:
+        entity_id: media_player.local_audio
+      data:
+        media_content_id: "http://localhost:8123/local/sounds/attention.mp3"
+        media_content_type: music
+
+    - delay: "00:00:01"  # Adjust to match clip length
+
+    # 🎵 Then play the requested sound
     - action: media_player.play_media
       target:
         entity_id: media_player.local_audio
