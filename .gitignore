@@ -13,6 +13,7 @@ backups/
 image/
 tts/
 blueprints/
+deps/
 
 # Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
 ip_bans.yaml
@@ -46,7 +47,10 @@ go2rtc*
 # Ignore community plugins
 www/**
 custom_components/
+custom_icons/
 
 # But allow the images folder and all files in it
 !www/images/
 !www/images/**
+
+.ha_run.lock
