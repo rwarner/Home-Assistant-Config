@@ -8,161 +8,161 @@
 
 # Track the amount of current that is stored within the battery connected to the sunMax,
 # measured in milliamperes.
-- platform: snmp
-  name: SolarPoint Battery Current
-  unique_id: solarpoint_battery_current
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.1.1.0
-  accept_errors: true
-  unit_of_measurement: "A"
-  value_template: >-
-    {% set amps = value | float(default=None) %}
-    {{ (amps / 1000) if amps is not none else none }}
+# - platform: snmp
+#   name: SolarPoint Battery Current
+#   unique_id: solarpoint_battery_current
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.1.1.0
+#   accept_errors: true
+#   unit_of_measurement: "A"
+#   value_template: >-
+#     {% set amps = value | float(default=None) %}
+#     {{ (amps / 1000) if amps is not none else none }}
 
 
 
-# Track the amount of voltage that is stored within the battery. 
-# This data is provided in millivolts. Keeping the voltage at decent
-# levels will help prolong the life of the battery.
-- platform: snmp
-  name: SolarPoint Battery Voltage
-  unique_id: solarpoint_battery_voltage
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.1.2.0
-  accept_errors: true
-  unit_of_measurement: "V"
-  value_template: >-
-    {% if value | float(default=none) is not none %}
-      {{ (value | float) / 1000 }}
-    {% else %}
-      {{ None }}
-    {% endif %}
+# # Track the amount of voltage that is stored within the battery. 
+# # This data is provided in millivolts. Keeping the voltage at decent
+# # levels will help prolong the life of the battery.
+# - platform: snmp
+#   name: SolarPoint Battery Voltage
+#   unique_id: solarpoint_battery_voltage
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.1.2.0
+#   accept_errors: true
+#   unit_of_measurement: "V"
+#   value_template: >-
+#     {% if value | float(default=none) is not none %}
+#       {{ (value | float) / 1000 }}
+#     {% else %}
+#       {{ None }}
+#     {% endif %}
 
-# This value is the power stored within the battery, measured in milliwatts.
-- platform: snmp
-  name: SolarPoint Battery Power
-  unique_id: solarpoint_battery_power
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.1.3.0
-  accept_errors: true
-  unit_of_measurement: "W"
-  value_template: >-
-    {% if value | float(default=none) is not none %}
-      {{ (value | float) / 1000 }}
-    {% else %}
-      {{ None }}
-    {% endif %}
+# # This value is the power stored within the battery, measured in milliwatts.
+# - platform: snmp
+#   name: SolarPoint Battery Power
+#   unique_id: solarpoint_battery_power
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.1.3.0
+#   accept_errors: true
+#   unit_of_measurement: "W"
+#   value_template: >-
+#     {% if value | float(default=none) is not none %}
+#       {{ (value | float) / 1000 }}
+#     {% else %}
+#       {{ None }}
+#     {% endif %}
 
-# Track the temperature of the battery using this data. The data is provided in Kelvin.
-# The battery temperature will only be returned when the solar panels charge the batteries.
-- platform: snmp
-  name: SolarPoint Battery Charging Temperature
-  unique_id: solarpoint_battery_charging_temperature
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.1.4.0
-  accept_errors: true
-  unit_of_measurement: "°F"
-  value_template: >-
-    {% if value | regex_match('^\\d+(\\.\\d+)?$') %}
-      {% set v = value | float %}
-      {% if v == 0 %}
-        0
-      {% else %}
-        {{ ((v / 1000 - 273.15) * 9/5 + 32) | float }}
-      {% endif %}
-    {% else %}
-      unknown
-    {% endif %}
+# # Track the temperature of the battery using this data. The data is provided in Kelvin.
+# # The battery temperature will only be returned when the solar panels charge the batteries.
+# - platform: snmp
+#   name: SolarPoint Battery Charging Temperature
+#   unique_id: solarpoint_battery_charging_temperature
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.1.4.0
+#   accept_errors: true
+#   unit_of_measurement: "°F"
+#   value_template: >-
+#     {% if value | regex_match('^\\d+(\\.\\d+)?$') %}
+#       {% set v = value | float %}
+#       {% if v == 0 %}
+#         0
+#       {% else %}
+#         {{ ((v / 1000 - 273.15) * 9/5 + 32) | float }}
+#       {% endif %}
+#     {% else %}
+#       unknown
+#     {% endif %}
 
 
-# The solar panel current is the number of milliamperes the solar panels are providing to the sunMax.
-- platform: snmp
-  name: SolarPoint Panel Current
-  unique_id: solarpoint_panel_current
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.2.1.0
-  accept_errors: true
-  unit_of_measurement: "A"
-  value_template: >-
-    {% if value | float(default=none) is not none %}
-      {{ (value | float) / 1000 }}
-    {% else %}
-      {{ None }}
-    {% endif %}
+# # The solar panel current is the number of milliamperes the solar panels are providing to the sunMax.
+# - platform: snmp
+#   name: SolarPoint Panel Current
+#   unique_id: solarpoint_panel_current
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.2.1.0
+#   accept_errors: true
+#   unit_of_measurement: "A"
+#   value_template: >-
+#     {% if value | float(default=none) is not none %}
+#       {{ (value | float) / 1000 }}
+#     {% else %}
+#       {{ None }}
+#     {% endif %}
 
-# This value is the voltage that is being provided by the solar panels, measured in millivolts.
-- platform: snmp
-  name: SolarPoint Panel Voltage
-  unique_id: solarpoint_panel_voltage
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.2.2.0
-  accept_errors: true
-  unit_of_measurement: "V"
-  value_template: >-
-    {% if value | float(default=none) is not none %}
-      {{ (value | float) / 1000 }}
-    {% else %}
-      {{ None }}
-    {% endif %}
+# # This value is the voltage that is being provided by the solar panels, measured in millivolts.
+# - platform: snmp
+#   name: SolarPoint Panel Voltage
+#   unique_id: solarpoint_panel_voltage
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.2.2.0
+#   accept_errors: true
+#   unit_of_measurement: "V"
+#   value_template: >-
+#     {% if value | float(default=none) is not none %}
+#       {{ (value | float) / 1000 }}
+#     {% else %}
+#       {{ None }}
+#     {% endif %}
 
-# This value is the amount of power that the solar panel is currently providing to your system, measured in milliwatts.
-- platform: snmp
-  name: SolarPoint Panel Power
-  unique_id: solarpoint_panel_power
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.2.3.0
-  accept_errors: true
-  unit_of_measurement: "W"
-  value_template: >-
-    {% if value | float(default=none) is not none %}
-      {{ (value | float) / 1000 }}
-    {% else %}
-      {{ None }}
-    {% endif %}
-  device_class: power
+# # This value is the amount of power that the solar panel is currently providing to your system, measured in milliwatts.
+# - platform: snmp
+#   name: SolarPoint Panel Power
+#   unique_id: solarpoint_panel_power
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.2.3.0
+#   accept_errors: true
+#   unit_of_measurement: "W"
+#   value_template: >-
+#     {% if value | float(default=none) is not none %}
+#       {{ (value | float) / 1000 }}
+#     {% else %}
+#       {{ None }}
+#     {% endif %}
+#   device_class: power
 
-# The load current is the amount of current running through the SolarPoint to connected devices, measured in milliamperes.
-- platform: snmp
-  name: SolarPoint Load Current
-  unique_id: solarpoint_load_current
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.3.1.0
-  accept_errors: true
-  unit_of_measurement: "A"
-  value_template: >-
-    {% if value | float(default=none) is not none %}
-      {{ (value | float) / 1000 }}
-    {% else %}
-      {{ None }}
-    {% endif %}
+# # The load current is the amount of current running through the SolarPoint to connected devices, measured in milliamperes.
+# - platform: snmp
+#   name: SolarPoint Load Current
+#   unique_id: solarpoint_load_current
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.3.1.0
+#   accept_errors: true
+#   unit_of_measurement: "A"
+#   value_template: >-
+#     {% if value | float(default=none) is not none %}
+#       {{ (value | float) / 1000 }}
+#     {% else %}
+#       {{ None }}
+#     {% endif %}
 
-# The load voltage is the voltage running through the SolarPoint to connected devices, measure in millivolts.
-- platform: snmp
-  name: SolarPoint Load Voltage
-  unique_id: solarpoint_load_voltage
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.3.2.0
-  accept_errors: true
-  unit_of_measurement: "V"
-  value_template: >-
-    {% if value | float(default=none) is not none %}
-      {{ (value | float) / 1000 }}
-    {% else %}
-      {{ None }}
-    {% endif %}
+# # The load voltage is the voltage running through the SolarPoint to connected devices, measure in millivolts.
+# - platform: snmp
+#   name: SolarPoint Load Voltage
+#   unique_id: solarpoint_load_voltage
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.3.2.0
+#   accept_errors: true
+#   unit_of_measurement: "V"
+#   value_template: >-
+#     {% if value | float(default=none) is not none %}
+#       {{ (value | float) / 1000 }}
+#     {% else %}
+#       {{ None }}
+#     {% endif %}
 
-# The load power is the current load from devices on the SolarPoint in milliwatts.
-- platform: snmp
-  name: SolarPoint Load Power
-  unique_id: solarpoint_load_power
-  host: !secret solarpoint_ip
-  baseoid: .1.3.6.1.4.1.41112.1.11.1.3.3.0
-  accept_errors: true
-  unit_of_measurement: "W"
-  value_template: >-
-    {% set val = value | float(default=none) %}
-    {% if val is not none %}
-      {{ (val / 1000) | round(2) }}
-    {% else %}
-      {{ '' }}
-    {% endif %}
+# # The load power is the current load from devices on the SolarPoint in milliwatts.
+# - platform: snmp
+#   name: SolarPoint Load Power
+#   unique_id: solarpoint_load_power
+#   host: !secret solarpoint_ip
+#   baseoid: .1.3.6.1.4.1.41112.1.11.1.3.3.0
+#   accept_errors: true
+#   unit_of_measurement: "W"
+#   value_template: >-
+#     {% set val = value | float(default=none) %}
+#     {% if val is not none %}
+#       {{ (val / 1000) | round(2) }}
+#     {% else %}
+#       {{ '' }}
+#     {% endif %}
