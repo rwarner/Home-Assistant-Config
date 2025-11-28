@@ -170,6 +170,7 @@ homekit:
       - light.movie_room_lights
 
       - camera.outside_doorbell
+      - camera.outside_doorbell_package
       - camera.outside_rear_patio
       - camera.outside_mid_yard
       - camera.outside_side_patio
