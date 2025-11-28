@@ -1,5 +1,5 @@
 ####################################
 ########## SHELL COMMANDS  #########
 ####################################
-clear_video_directory: bash /home/homeassistant/.homeassistant/shell_scripts/clearVideoDir.sh
-convert_camera_recording: bash /home/homeassistant/.homeassistant/shell_scripts/recordVideo.sh
+clear_video_directory: bash /config/shell_scripts/clearVideoDir.sh
+convert_camera_recording: bash /config/shell_scripts/recordVideo.sh
