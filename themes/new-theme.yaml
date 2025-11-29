@@ -1,0 +1,159 @@
+#
+# Based off of the ios-dark-mode and flow themes, tweaked and organized
+# https://github.com/basnijholt/lovelace-ios-dark-mode-theme
+# https://github.com/basnijholt/lovelace-ios-themes
+# https://github.com/mrcharlesiv/Flow-Premium-Home-Assistant-Experience/blob/main/flow-theme.yaml
+#
+new-theme:
+  # --------- Colors ---------
+  white: "#FFF"
+  off-white: "#F1F1F1"
+
+  almost-black: "#23232e"
+  pretty-much-black: "#161616"
+  off-black: "#0a0a0a"
+  black: "#000"
+
+  grey-black: "#2c2c2e"
+
+  light-grey: "#d3d3d3"
+  darker-grey: "#555555"
+  dark-dark-grey: "#484848"
+
+  ios-dark-grey-blue: "#B6B6C1"  # Apple dark mode, grey/blue
+  ios-dark-blue: "#0984ff" # Apple dark mode, blue
+  ios-dark-green: "#30d158" # Apple dark mode, green
+  ios-dark-green-bright: "#30d257" # Apple dark mode, green brighter
+  ios-dark-orange: "#FF9F09"  # Apple dark mode, orange
+  
+  # --------- Transparency Colors ---------
+  black-transparent-5: rgba(0, 0, 0, 0.5)
+  white-transparent-5: rgba(255, 255, 255, 0.5)
+  light-blue-transparent-4: rgba(31, 141, 214, 0.4)
+
+  grey-transparent-8: rgba(55, 55, 55, 0.8)
+  dark-grey-transparent-9: rgba(25, 25, 25, 0.9)
+  dark-grey-transparent-5: rgba(25, 25, 25, 0.5)
+
+  ios-dark-grey-transparent-3: rgba(152, 152, 157, 0.3)  # Apple dark mode, grey, alpha 0.3
+  ios-dark-orange-transparent-7: rgba(255, 159, 9, 0.7)  # Apple dark mode, orange, alpha 0.7
+
+  # --------- Global ---------
+  background-image: "center / cover no-repeat fixed url('/local/images/homekit-blue.jpg')"
+  lovelace-background: var(--background-image)
+
+  primary-color: "#FF9F09" # Having trouble setting a var for this variable
+  light-primary-color: var(--ios-dark-grey-blue) # Icons on left menu 
+  accent-color: var(--ios-dark-green)
+
+  primary-background-color: var(--grey-black)
+  secondary-background-color: var(--dark-grey-transparent-9)
+  
+  divider-color: var(--ios-dark-grey-transparent-3)
+
+  # --------- Text ---------
+  primary-text-color: var(--white)
+  secondary-text-color: var(--light-grey)
+  text-primary-color: var(--white)
+  disabled-text-color: var(--darker-grey)  # XXX: https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/2
+  text-dark-color: var(--white)
+  
+  # --------- Sidebar Menu ---------
+  sidebar-background-color: var(--primary-background-color)
+  sidebar-icon-color: var(--light-primary-color)
+  sidebar-text-color: var(--off-white)
+  sidebar-selected-background-color: var(--primary-background-color)
+  sidebar-selected-icon-color: var(--white)
+  sidebar-selected-text-color: var(--sidebar-selected-icon-color)
+  
+  # --------- States and Badges ---------
+  state-icon-color: var(--white)
+  state-icon-active-color: var(--white) # Or make light icons yellow when active: rgba(255, 214, 10, 1)
+  state-icon-unavailable-color: var(--disabled-text-color)
+  paper-item-icon-active-color: var(--white) # see https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/30
+  
+  # --------- Sliders ---------
+  paper-slider-knob-color: var(--white)
+  paper-slider-knob-start-color: var(--paper-slider-knob-color)
+  paper-slider-pin-color: var(--paper-slider-knob-color)
+  paper-slider-active-color: var(--ios-dark-blue)
+  paper-slider-secondary-color: var(--paper-slider-knob-color)
+  paper-slider-container-color: var(--white-transparent-5)
+  paper-slider-font-color: var(--black)
+  ha-slider-background: none !important
+  
+  # --------- Labels ---------
+  label-badge-background-color: var(--almost-black)
+  label-badge-text-color: var(--off-white)
+  label-badge-red: var(--ios-dark-orange-transparent-7)
+  
+  # --------- Cards ---------
+  card-background-color: var(--secondary-background-color)  # Unused entities table background
+  paper-listbox-background-color: var(--primary-background-color)
+  ha-card-border-radius: 10px
+  ha-card-background: var(--black-transparent-5)
+  paper-card-background-color: var(--ha-card-background)
+  rgb-card-background-color: var(--off-black) # see https://github.com/basnijholt/lovelace-ios-themes/issues/60
+  ha-card-border-width: 0  # https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/82#event-7732695357
+  
+  # --------- Toggles ---------
+  paper-toggle-button-checked-button-color: var(--dark-dark-grey)
+  paper-toggle-button-checked-bar-color: var(--dark-dark-grey)
+  paper-toggle-button-unchecked-button-color: var(--paper-toggle-button-checked-button-color)
+  paper-toggle-button-unchecked-bar-color: var(--disabled-text-color)
+  
+  # --------- Table row ---------
+  table-row-background-color: var(--primary-background-color)
+  table-row-alternative-background-color: var(--secondary-background-color)
+  
+  # --------- Switches ---------
+  switch-checked-track-color: var(--ios-dark-green)
+  switch-checked-button-color: var(--ios-dark-green-bright) # Includes the dot on the switch, slightly brighter than the track color above
+
+  # --------- Other ---------
+  paper-dialog-background-color: var(--grey-transparent-8)  # e.g., background of more-info
+  paper-item-icon-color: white  # also should mini-media-player icon white (but doesn't work by itself)
+  more-info-header-background: var(--dark-grey-transparent-5)
+  lumo-body-text-color: var(--primary-text-color)  # see https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/42
+  app-header-background-color: var(--light-blue-transparent-4) # Background of tabs at the top, light blue
+  markdown-code-background-color: var(--dark-dark-grey)
+  code-editor-background-color: var(--pretty-much-black)
+  clear-background-color: var(--ha-card-background)  # see https://github.com/basnijholt/lovelace-ios-themes/issues/64
+  
+
+  # --------- Mini Media Player ---------
+  mini-media-player-base-color: var(--white)
+  mini-media-player-icon-color: var(--white)
+  mini-media-player-accent-color: var(--ios-dark-green)
+  mini-media-player-name-font-weight: 600
+
+  # --------- Custom ---------
+  mcg-title-letter-spacing: .15em
+  # Added for https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/72
+  # TODO: add description for lines below. Suggested in https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/72
+  input-ink-color: var(--primary-text-color)
+  input-fill-color: transparent
+  input-disabled-fill-color: transparent
+  input-label-ink-color: var(--primary-text-color)
+  input-disabled-ink-color: var(--disabled-text-color)
+  input-dropdown-icon-color: var(--primary-text-color)
+  input-idle-line-color: var(--secondary-text-color)
+  input-hover-line-color: var(--secondary-text-color)
+  codemirror-property: var(--accent-color)
+
+  # --------- Card Mod ---------
+  # Card Mod Theme Examples: 
+  #   - https://github.com/thomasloven/lovelace-card-mod/blob/master/test/themes/airy.yaml
+  card-mod-theme: new-theme # Must have same name as parent theme
+  card-mod-card: |
+    ha-card.top-nav-chip {
+      --chip-padding: 4px;
+    }
+    ha-card.top-nav-icons {
+      --card-primary-font-size: 30px !important;
+      --card-secondary-font-size: 30px;
+      --chip-padding: 4px;
+      --chip-icon-size: 15px;
+      --chip-background: rgba(0, 0, 0, 0) !important; /* Change this to your desired color */
+      --mush-card-primary-font-size: 28px;
+    }
