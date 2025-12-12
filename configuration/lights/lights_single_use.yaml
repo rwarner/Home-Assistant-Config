@@ -31,3 +31,10 @@
     - light.dining_table_light_left_light
     - light.dining_table_light_middle_light
     - light.dining_table_light_right_light
+
+- platform: group
+  name: Nursery Bookshelf Lamp
+  unique_id: nursery_bookshelf_lamp
+  entities:
+    - light.nursery_bookshelf_lamp_1
+    - light.nursery_bookshelf_lamp_2

@@ -7,7 +7,7 @@ homeassistant:
   country: US
   # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: 90
-  unit_system: us_customary
+  unit_system: imperial
   currency: USD
   time_zone: America/New_York
   auth_providers:
@@ -168,6 +168,8 @@ homekit:
       - light.ryans_office_desk_lamp
       - light.ryans_office_desk_uplighting
       - light.movie_room_lights
+      - light.nursery_floor_lamp
+      - light.nursery_bookshelf_lamp
 
       - camera.outside_doorbell
       - camera.outside_doorbell_package

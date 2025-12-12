@@ -59,8 +59,9 @@
 #     - light.media_room_movie_screen
 #     - light.media_room_entry_lamp
 
- ### Laundry Room ###
-# - platform: group
-#   name: Laundry Room Lights
-#   entities:
-#     - light.basement_laundry_light
+ ## Nursery ###
+- platform: group
+  name: Nursery Lights
+  entities:
+    - light.nursery_floor_lamp
+    - light.nursery_bookshelf_lamp
