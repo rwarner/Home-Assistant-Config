@@ -125,14 +125,18 @@
   id: b5af027a-ede3-4b55-9fe3-4cdca51c3c80
   mode: queued
   trigger:
+    # On battery
     - trigger: template
-      value_template: "{{ 'On Battery' in states('sensor.ups_status') }}"
       id: battery
+      value_template: "{{ 'On Battery' in states('sensor.ups_status') }}"
       for: "00:00:30"
+
+    # Power restored: only fire if we were previously on battery
     - trigger: state
-      entity_id: sensor.ups_status
-      to: "Online"
       id: online
+      entity_id: sensor.ups_status
+      from: "On Battery"
+      # any non-battery state, including "Online, Battery Charging" and "Online"
       for: "00:00:30"
   action:
     - choose:
@@ -149,7 +153,6 @@
               data:
                 title: "Home Power Online"
                 message: "Power has returned"
-
 
 
 - alias: ALERT - Low battery on sensor, notify Mobile App
