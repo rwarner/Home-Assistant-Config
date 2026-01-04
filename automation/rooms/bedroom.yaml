@@ -87,31 +87,28 @@
 ############ Motion Sensor #############
 - alias: BEDROOM - Light Control from Motion (On and Off based on Motion)
   id: 7f97ba74-7815-11ee-b962-0242ac120002
+  mode: restart  # Critical: allows new motion to reset the timer
   max_exceeded: silent
   trigger:
-    # Trigger when motion starts
     - trigger: state
       entity_id: binary_sensor.master_bedroom_motion_sensor
       from: 'off'
       to: 'on'
-    # Trigger when motion has been off for 3 minutes
     - trigger: state
       entity_id: binary_sensor.master_bedroom_motion_sensor
       from: 'on'
       to: 'off'
       for:
         minutes: 5
-  condition:
-    # Only between the hours of 10 am and 9:30 p.m.
-    - condition: time
-      after: '10:00:00'
-      before: '21:30:00'
   action:
     - choose:
-        # Turn on light if motion is detected and illuminance is low
+        # TURN ON: Motion detected during daytime hours with low light
         - conditions:
             - condition: template
               value_template: "{{ trigger.to_state.state == 'on' }}"
+            - condition: time
+              after: '10:00:00'
+              before: '21:30:00'
             - condition: state
               entity_id: light.master_bedroom_lights
               state: 'off'
@@ -124,7 +121,8 @@
                 entity_id: light.master_bedroom_lights
               data:
                 brightness_pct: 100
-        # Turn off light if no motion for 3 minutes
+        
+        # TURN OFF: No motion for 5 minutes (no time restriction)
         - conditions:
             - condition: template
               value_template: "{{ trigger.to_state.state == 'off' }}"
