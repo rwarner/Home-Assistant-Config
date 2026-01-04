@@ -1,0 +1,82 @@
+############################
+### NURSERY AUTOMATIONS  ###
+############################
+
+
+############ Motion Sensor #############
+- alias: NURSERY - Light Control from Motion (nursery before 11pm, bookshelf after)
+  id: 9542bf88-292c-4af8-b6f0-c3fd3dfbb6b0
+  mode: restart
+  max_exceeded: silent
+
+  trigger:
+    # Motion starts
+    - trigger: state
+      entity_id: binary_sensor.nursery_motion_sensor
+      from: "off"
+      to: "on"
+
+    # No motion for 30 minutes
+    - trigger: state
+      entity_id: binary_sensor.nursery_motion_sensor
+      from: "on"
+      to: "off"
+      for:
+        minutes: 30
+
+  action:
+    - choose:
+        # -----------------------
+        # MOTION ON
+        # -----------------------
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.to_state.state == 'on' }}"
+            - condition: state
+              entity_id: input_boolean.dark_outside
+              state: "on"
+          sequence:
+            - choose:
+                # 11:00am -> 11:00pm
+                # Both lights in Nursery
+                - conditions:
+                    - condition: time
+                      after: "11:00:00"
+                      before: "23:00:00"
+                  sequence:
+                    - action: light.turn_on
+                      target:
+                        entity_id: light.nursery_lights
+
+                # 11:00pm -> 11:00am (spans midnight): bookshelf lamp @ 10%
+                # BUT: don't switch if nursery lights are already on
+                - conditions:
+                    - condition: or
+                      conditions:
+                        - condition: time
+                          after: "23:00:00"
+                        - condition: time
+                          before: "11:00:00"
+                    - condition: state
+                      entity_id: light.nursery_lights
+                      state: "off"
+                  sequence:
+                    - action: light.turn_on
+                      target:
+                        entity_id: light.nursery_bookshelf_lamp
+                      data:
+                        brightness_pct: 10
+
+        # -----------------------
+        # MOTION OFF (30 min)
+        # -----------------------
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.to_state.state == 'off' }}"
+          sequence:
+            - action: light.turn_off
+              target:
+                entity_id:
+                  - light.nursery_lights
+
+#####################################
