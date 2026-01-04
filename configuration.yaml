@@ -7,7 +7,7 @@ homeassistant:
   country: US
   # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: 90
-  unit_system: imperial
+  unit_system: us_customary # New style, ignore error
   currency: USD
   time_zone: America/New_York
   auth_providers:
