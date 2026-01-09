@@ -1,0 +1,29 @@
+####################################
+####### SWITCH CONFIGURATION  ######
+####################################
+
+# Electric fireplace
+#   - Controlled by Broadlink RM4 Mini IR commands w/ Broadlink Integration
+#     https://www.home-assistant.io/integrations/broadlink
+- switch:
+    - unique_id: fireplace
+      name: Fireplace
+      turn_on:
+        - action: remote.send_command
+          target:
+            entity_id:
+              - remote.living_room_remote
+          data:
+            device: fireplace
+            command: power
+      turn_off:
+        - action: remote.send_command
+          target:
+            entity_id:
+              - remote.living_room_remote
+          data:
+            device: fireplace
+            command: power
+            num_repeats: 2
+            delay_secs: 1
+            hold_secs: 0.5
