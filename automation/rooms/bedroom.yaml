@@ -122,10 +122,13 @@
               data:
                 brightness_pct: 100
         
-        # TURN OFF: No motion for 5 minutes (no time restriction)
+        # TURN OFF: No motion for 5 minutes during daytime hours
         - conditions:
             - condition: template
               value_template: "{{ trigger.to_state.state == 'off' }}"
+            - condition: time
+              after: '10:00:00'
+              before: '21:30:00'
             - condition: state
               entity_id: light.master_bedroom_lights
               state: 'on'
