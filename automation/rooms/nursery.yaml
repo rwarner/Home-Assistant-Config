@@ -2,9 +2,8 @@
 ### NURSERY AUTOMATIONS  ###
 ############################
 
-
 ############ Motion Sensor #############
-- alias: NURSERY - Light Control from Motion (nursery before 11pm, bookshelf after)
+- alias: NURSERY - Light Control from Motion (nursery before 1030pm, bookshelf after)
   id: 9542bf88-292c-4af8-b6f0-c3fd3dfbb6b0
   mode: restart
   max_exceeded: silent
@@ -32,31 +31,55 @@
         - conditions:
             - condition: template
               value_template: "{{ trigger.to_state.state == 'on' }}"
-            - condition: state
-              entity_id: input_boolean.dark_outside
-              state: "on"
+            - condition: numeric_state
+              entity_id: sensor.nursery_motion_sensor_illuminance
+              below: 10
           sequence:
             - choose:
-                # 11:00am -> 11:00pm
+                # 8:00am -> 10:30pm
                 # Both lights in Nursery
+                #
+                # Goal: FIRST motion-trigger AFTER 8:00am sets a default brightness (80%).
+                # After that, we just turn the lights on normally (restoring last settings).
+                #
+                # How we detect "first after 8am" WITH a helper:
+                # - input_boolean.nursery_daytime_initialized == off  -> first trigger after 8:00am
+                # - set it to on after we apply brightness_pct: 80
                 - conditions:
                     - condition: time
-                      after: "11:00:00"
-                      before: "23:00:00"
+                      after: "08:00:00"
+                      before: "22:30:00"
                   sequence:
-                    - action: light.turn_on
-                      target:
-                        entity_id: light.nursery_lights
+                    - choose:
+                        # FIRST trigger after 8:00am -> force default brightness, then mark initialized
+                        - conditions:
+                            - condition: state
+                              entity_id: input_boolean.nursery_daytime_initialized
+                              state: "off"
+                          sequence:
+                            - action: light.turn_on
+                              target:
+                                entity_id: light.nursery_lights
+                              data:
+                                brightness_pct: 80  # <-- "start of daytime" brightness
+                            - action: input_boolean.turn_on
+                              target:
+                                entity_id: input_boolean.nursery_daytime_initialized
+                      default:
+                        # Subsequent triggers (same day after 8am) -> restore last light brightness
+                        - action: light.turn_on
+                          target:
+                            entity_id: light.nursery_lights
 
-                # 11:00pm -> 11:00am (spans midnight): bookshelf lamp @ 10%
+                # 10:30pm -> 8:00am (spans midnight): bookshelf lamp @ 10%
                 # BUT: don't switch if nursery lights are already on
                 - conditions:
                     - condition: or
                       conditions:
                         - condition: time
-                          after: "23:00:00"
+                          after: "22:30:00"
                         - condition: time
-                          before: "11:00:00"
+                          before: "08:00:00"
                     - condition: state
                       entity_id: light.nursery_lights
                       state: "off"
@@ -78,5 +101,5 @@
               target:
                 entity_id:
                   - light.nursery_lights
-
+                  - light.nursery_bookshelf_lamp
 #####################################

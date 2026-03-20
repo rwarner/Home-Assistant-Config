@@ -103,6 +103,7 @@
   action:
     - choose:
         # TURN ON: Motion detected during daytime hours with low light
+        # do not execute if Master Bedroom Fan is on
         - conditions:
             - condition: template
               value_template: "{{ trigger.to_state.state == 'on' }}"
@@ -115,6 +116,9 @@
             - condition: numeric_state
               entity_id: sensor.master_bedroom_motion_sensor_illuminance
               below: 10
+            - condition: state
+              entity_id: switch.master_bedroom_fan
+              state: 'off'
           sequence:
             - action: light.turn_on
               target:
@@ -123,6 +127,7 @@
                 brightness_pct: 100
         
         # TURN OFF: No motion for 5 minutes during daytime hours
+        # do not execute if Master Bedroom Fan is on
         - conditions:
             - condition: template
               value_template: "{{ trigger.to_state.state == 'off' }}"
@@ -132,6 +137,9 @@
             - condition: state
               entity_id: light.master_bedroom_lights
               state: 'on'
+            - condition: state
+              entity_id: switch.master_bedroom_fan
+              state: 'off'
           sequence:
             - action: light.turn_off
               target:

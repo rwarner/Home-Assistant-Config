@@ -123,3 +123,10 @@
       entity04_icon: mdi:fan
       right_button_hold_select: Default
       right_button_state_entity: light.master_bedroom_lights
+      custom_buttons_font_size: '8'
+      home_custom_button01: light.nursery_lights
+      home_custom_button01_icon: mdi:cradle
+      chip01: light.nursery_lights
+      chip01_icon: mdi:cradle
+      home_custom_button01_name: Nursery Lights
+      weather_entity: weather.tomorrow_io_home_daily

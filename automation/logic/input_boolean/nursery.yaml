@@ -1,0 +1,12 @@
+###########################################
+### NURSERY CONFIGURATION / AUTOMATION ####
+###########################################
+
+- alias: NURSERY - Reset daytime init flag
+  trigger:
+    - trigger: time
+      at: "08:00:00"
+  action:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.nursery_daytime_initialized

@@ -145,15 +145,22 @@ new-theme:
   # Card Mod Theme Examples: 
   #   - https://github.com/thomasloven/lovelace-card-mod/blob/master/test/themes/airy.yaml
   card-mod-theme: new-theme # Must have same name as parent theme
-  card-mod-card: |
-    ha-card.top-nav-chip {
-      --chip-padding: 4px;
-    }
-    ha-card.top-nav-icons {
-      --card-primary-font-size: 30px !important;
-      --card-secondary-font-size: 30px;
-      --chip-padding: 4px;
-      --chip-icon-size: 15px;
-      --chip-background: rgba(0, 0, 0, 0) !important; /* Change this to your desired color */
-      --mush-card-primary-font-size: 28px;
-    }
+
+  # !! 
+  # When updating the theme vales below and debugging you must hard reload
+  # the theme's "frontend.reload_themes" or reload specific integration with VS Code 
+  # !!
+  card-mod-card-yaml: |
+      .: |
+        :host(.top-nav-icons) ha-card { 
+          --chip-padding: 0px 10px;
+        }
+        /* Center the chips inside a chips-card marked with class top-nav-icons */
+        :host(.top-nav-icons) .chip-container {
+          justify-content: center !important;
+        }
+        /* Optional: spacing between pills */
+        :host(.top-nav-icons) .chip-container {
+          gap: 10px !important;
+        }
+        

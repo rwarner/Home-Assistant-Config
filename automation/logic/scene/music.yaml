@@ -1,0 +1,35 @@
+#############################
+####### Scene - Music  ######
+#############################
+
+- alias: "SCENE - Play Jazz When Jazz Dinner Scene is Activated"
+  id: 68f6a6ee-916a-4f7a-b9b9-98c64fc10a29
+
+  trigger:
+    trigger: state
+    entity_id: scene.jazz_dining
+    to: "on"
+
+  action:
+    # Currently there is no way to determine when is scene is done applying
+    # For now, we will put a 2 second delay to allow the devices to be set
+
+    # 5 second delay
+    - delay: "00:00:10"
+
+
+    - action: media_player.select_source
+      data:
+        entity_id: media_player.spotify
+        source: "Family Room"
+
+    - action: media_player.play_media
+      data:
+        entity_id: media_player.spotify
+        media_content_type: playlist
+        media_content_id: spotify:playlist:7MoymFSafE84j9nsKeCbzt
+    
+    - action: media_player.shuffle_set
+      data:
+        entity_id: media_player.spotify
+        shuffle: true

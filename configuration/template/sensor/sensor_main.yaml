@@ -56,6 +56,25 @@
 #       value_template: '{{ states.climate.thermostat.attributes.preset_mode }}'
 #       friendly_name: "Ecobee Preset"
 
+
+  - name: "Unavailable Battery Count"
+    unique_id: unavailable_battery_count
+    state: >
+      {{ expand(label_entities("Monitor Battery Level"))
+          | selectattr('state','eq','unavailable')
+          | list | count }}
+    attributes:
+      names: >
+        {{ expand(label_entities("Monitor Battery Level"))
+            | selectattr('state','eq','unavailable')
+            | map(attribute='name')
+            | list }}
+      entity_ids: >
+        {{ expand(label_entities("Monitor Battery Level"))
+            | selectattr('state','eq','unavailable')
+            | map(attribute='entity_id')
+            | list }}
+
 ####################################
 #  Motion sensors on input_boolean #
 ####################################

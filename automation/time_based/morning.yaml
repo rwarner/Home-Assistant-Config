@@ -77,7 +77,6 @@
           - light.living_room_floor_lamp
       data:
         brightness_pct: 75
-        transition: 10  # Long enough to seem "off" but saves brightness
     
     - action: light.turn_on
       continue_on_error: true
@@ -92,7 +91,6 @@
           - light.movie_room_lights
       data:
         brightness_pct: 90
-        transition: 10
     
     # Immediately turn off - Zigbee/Z-Wave will save the target brightness
     - action: light.turn_off
@@ -105,5 +103,3 @@
           - light.kitchen_ceiling_lights
           - light.ryans_office_desk_lamp
           - light.movie_room_lights
-      data:
-        transition: 0
