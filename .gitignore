@@ -54,3 +54,8 @@ custom_icons/
 !www/images/**
 
 .ha_run.lock
+
+# Claude Code
+CLAUDE.md
+.claude/
+docs/plans/
