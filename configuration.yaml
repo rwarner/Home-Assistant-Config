@@ -42,8 +42,6 @@ system_health:
 
 # Enables the frontend
 frontend:
-  extra_module_url:
-    - /hacsfiles/lovelace-card-mod/card-mod.js
   themes: !include_dir_merge_named themes
 
 # Custom YAML Dashboards
@@ -82,6 +80,13 @@ stream:
 # History enabled, keeps the last two weeks
 recorder:
   purge_keep_days: 14
+  exclude:
+    entity_globs:
+      - sensor.*_nspanel_*
+      - binary_sensor.*_nspanel_*
+      - number.*_nspanel_*
+      - select.*_nspanel_*
+      - button.*_nspanel_*
 
 notify:
   - name: ryan_devices
@@ -113,6 +118,10 @@ input_boolean:
     # the Aqara Smart Lock in Homekit
     name: Front Door Deadbolt Status
     icon: mdi:lock
+  nursery_daytime_initialized:
+    name: Nursery daytime initialized
+    icon: mdi:weather-sunny
+
 
 ifttt:
   key: !secret ifttt_api_key
