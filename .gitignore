@@ -29,16 +29,12 @@ known_devices.yaml
 *.sqlite
 home-assistant.log.*
 
-#Alexa media
+# Alexa media
 *.pickle
 
-#Specific Files
+# Specific Files
 .HA_VERSION
 .uuid
-OZW_Log.txt
-options.xml
-zwscene.xml
-zwcfg_0xe4c19993.xml
 .python-version
 
 # Go 2 RTC

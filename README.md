@@ -7,7 +7,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ## Current Server Hardware
 
-[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2025.11.3%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-24.04.1%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.13.3-brightgreen)
+[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2026.2.3%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-24.04.1%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.13.11-brightgreen)
  - [Intel Core i5-6400 2.7 GHz Quad-Core Processor](https://amzn.to/3C0RaOq)
  - [Jetway NF594-Q170 Mini-ITX Motherboard](https://www.jetwaycomputer.com/NF594.html)
  - [Timetec 16GB SODIMM Ram](https://amzn.to/4gEnCWg)
@@ -46,12 +46,20 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
       <td>Easy-to-use alarm system integration.</td>
     </tr>
     <tr>
-      <td>fontawesome</td>
-      <td>Use icons from FontAwesome in Home Assistant.</td>
-    </tr>
-    <tr>
       <td>Variables+History</td>
       <td>Variables component for Home Assistant with history support.</td>
+    </tr>
+    <tr>
+      <td>SpotifyPlus</td>
+      <td>Enhanced Spotify integration with additional controls.</td>
+    </tr>
+    <tr>
+      <td>QuietCool BLE</td>
+      <td>Bluetooth Low Energy integration for QuietCool fans.</td>
+    </tr>
+    <tr>
+      <td>Victron BLE</td>
+      <td>Bluetooth Low Energy integration for Victron battery monitors.</td>
     </tr>
   </tbody>
 </table>
@@ -97,14 +105,6 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
       <td>Kiosk Mode</td>
       <td>🙈 Hides the Home Assistant header and/or sidebar.</td>
     </tr>
-    <tr>
-      <td>card-tools</td>
-      <td>🔹 Collection of tools for other Lovelace plugins.</td>
-    </tr>
-    <tr>
-      <td>bignumber-card</td>
-      <td>A large-format number display card.</td>
-    </tr>
   </tbody>
 </table>
 
@@ -122,7 +122,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
- 
+
    <tr>
       <th align=center colspan="2">
          Device
@@ -131,7 +131,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Notes
       </th>
    </tr>
- 
+
    <tr>
       <td align=center>
          <a href="https://amzn.to/3ZUNGoI">Unifi AP U6 LR</a>
@@ -191,7 +191,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Unifi Switch used for my Office. Powered by POE!
       </td>
    </tr>
- 
+
    <tr>
       <td align=center>
          <a href="https://amzn.to/41TIRi1">Unifi UDM Pro</a>
@@ -213,7 +213,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
- 
+
    <tr>
       <th align=center colspan="2">
          Device
@@ -246,7 +246,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Used to control most of the Home Theater equipment via IR. Used prior to any smart home stuff. Now connected thrugh Home Assistant / Alexa to start movie viewing. "Alexa turn on Projector"
       </td>
    </tr>
- 
+
 </table>
 
 
@@ -256,7 +256,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
- 
+
    <tr>
       <th align=center colspan="2">
          Device
@@ -277,8 +277,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Hue Bulbs connected through Home Assistant's Zigbee connection. If anything, they help also provide the Zigbee network extend reach throughout the property.
       </td>
    </tr>
-   
-   
+
+
    <tr>
       <td align=center>
          <a href="https://www.samsung.com/us/smart-home/smartthings/buttons/samsung-smartthings-button-gp-u999sjvleaa/">Smart Things Button</a>
@@ -290,7 +290,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Used to control lights / fan in bedroom via night stand or on the wall. Utilized via the Zigbee network through Home Assistant.
       </td>
    </tr>
-   
+
    <tr>
       <td align=center>
          <a href="https://amzn.to/2M1ALyQ">Philips Hue Motion Sensors</a>
@@ -312,7 +312,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
- 
+
    <tr>
       <th align=center colspan="2">
          Device
@@ -333,7 +333,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Lock for doors using the Z-Wave connection with Home Assistant.
       </td>
    </tr>
-   
+
    <tr>
       <td align=center>
          <a href="https://amzn.to/38QF7lx">Leviton Decora Smart Dimmer</a>
@@ -345,7 +345,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Light switch dimmers used via the Z-Wave network through Home Assistant. Places where Hue bulbs didn't make sense.
       </td>
    </tr>
- 
+
 </table>
 
 <!----------------- NEW SECTION ------------------>
@@ -354,7 +354,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
- 
+
    <tr>
       <th align=center colspan="2">
          Device
@@ -375,7 +375,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Lightbulbs used in the Zigbee network through Home Assistant.
       </td>
    </tr>
- 
+
 </table>
 
 <!----------------- NEW SECTION ------------------>
@@ -384,7 +384,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
- 
+
    <tr>
       <th align=center colspan="2">
          Device
@@ -405,7 +405,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Lock for doors using the Z-Wave connection with Home Assistant.
       </td>
    </tr>
-   
+
    <tr>
       <td align=center>
          <a href="https://amzn.to/35Onqkz">Unifi G3 Flex</a> (Camera)
@@ -444,18 +444,6 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
    <tr>
       <td align=center>
-         <a href="https://www.samsung.com/us/smart-home/smartthings/sensors/samsung-smartthings-motion-sensor-2018-gp-u999sjvlbaa/">Smart Things Motion Sensors</a>
-      </td>
-      <td align=center>
-         <img src="images/hue_motion_sensor.png" alt="">
-      </td>
-      <td colspan="2">
-         Alerts for motion when not home, or other automations for movement / motion / occupancy. Connected through Zigbee network in Home Assistant.
-      </td>
-   </tr>
-
-   <tr>
-      <td align=center>
          <a href="https://amzn.to/2M1ALyQ">Philips Hue Motion Sensors</a>
       </td>
       <td align=center>
@@ -465,7 +453,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Alerts for motion when not home, or other automations for movement / motion / occupancy. Connected through Zigbee network in Home Assistant.
       </td>
    </tr>
- 
+
 </table>
 
 <!----------------- NEW SECTION ------------------>
@@ -474,7 +462,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
- 
+
    <tr>
       <th align=center colspan="2">
          Device
@@ -495,7 +483,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Main source of entertainment. Somewhat integration with Home Assistant.
       </td>
    </tr>
-   
+
    <tr>
       <td align=center>
          <a href="https://amzn.to/2LS9WNH">Nvidia Shield TV</a>
@@ -508,19 +496,6 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
       </td>
    </tr>
 
-
-   <tr>
-      <td align=center>
-         <a href="https://store.google.com/us/product/chromecast">Google Chromecast</a>
-      </td>
-      <td align=center>
-         <img src="images/google_chromecast.png" alt="">
-      </td>
-      <td colspan="2">
-         One or two around if needed, not used with Home Assistant at all.
-      </td>
-   </tr>
- 
 </table>
 
 <!----------------- NEW SECTION ------------------>
@@ -561,18 +536,6 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
          Standard use around the house
       </td>
    </tr>
-   
-   <tr>
-      <td align=center>
-         <a href="https://en.wikipedia.org/wiki/Amazon_Echo">Amazon Echo (Original)</a>
-      </td>
-      <td align=center>
-         <img src="images/echo_original.png" alt="">
-      </td>
-      <td colspan="2">
-         Standard use around the house
-      </td>
-   </tr>
 
    <tr>
       <td align=center>
@@ -594,7 +557,7 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 > [Back To Top](#SmartHomeEquipment)
 
 <table border="0">
- 
+
    <tr>
       <th align=center colspan="2">
          Device
