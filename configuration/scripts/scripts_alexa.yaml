@@ -12,7 +12,7 @@
 alexa_notify_kitchen:
   sequence:
     - action: notify.alexa_media
-      data_template:
+      data:
         target: 
           - media_player.kitchen_echo_show_15
         title: "{{ title }}"
@@ -24,7 +24,7 @@ alexa_notify_kitchen:
 alexa_notify_second_floor:
   sequence:
     - action: notify.alexa_media
-      data_template:
+      data:
         target: 
           - media_player.ryans_office_echo_show
           - media_player.nursery_echo_dot
@@ -37,7 +37,7 @@ alexa_notify_second_floor:
 alexa_notify_first_floor:
   sequence:
     - action: notify.alexa_media
-      data_template:
+      data:
         target: 
           - media_player.kitchen_echo_show_15
           - media_player.living_room_echo_dot
@@ -51,7 +51,7 @@ alexa_notify_first_floor:
 alexa_notify_basement:
   sequence:
     - action: notify.alexa_media
-      data_template:
+      data:
         target: 
           - media_player.movie_room_echo
           - media_player.laundy_room_echo_dot
@@ -64,7 +64,7 @@ alexa_notify_basement:
 alexa_notify_ryans_office:
   sequence:
     - action: notify.alexa_media
-      data_template:
+      data:
         target: 
           - media_player.ryans_office_echo_show
         title: "{{ title }}"
@@ -78,7 +78,7 @@ alexa_notify_ryans_office:
 # alexa_notify_everywhere:
 #   sequence:
 #     - action: notify.alexa_media
-#       data_template:
+#       data:
 #         target: 
 #           - media_player.everywhere
 #         title: "{{ title }}"
@@ -110,7 +110,7 @@ alexa_notify_house:
     #- delay:
     #    milliseconds: 500
     - action: notify.alexa_media
-      data_template:
+      data:
         data:
           type: announce
           method: all
@@ -124,7 +124,7 @@ alexa_notify_house:
         title: "{{ title }}"
         message: "{{ message }}"
     - action: script.alexa_notify_kitchen
-      data_template:
+      data:
         title: "{{ title }}"
         message: "{{ message }}"
 

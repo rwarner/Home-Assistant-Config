@@ -249,7 +249,7 @@
   action:
     # Trigger IFTTT applet to notify Noonlight
     - action: ifttt.trigger
-      data_template:
+      data:
         event: "alarm_triggered"
     - action: notify.ryan_devices
       data:

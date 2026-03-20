@@ -15,7 +15,7 @@ toggle_bedroom_lights:
       state: 'on'
     - action: light.turn_on
       continue_on_error: true
-      data_template:
+      data:
         entity_id: light.master_bedroom_lights
         brightness_pct: >
           {% if now().hour >= 21 %}
@@ -25,11 +25,11 @@ toggle_bedroom_lights:
           {% else %}
             100
           {% endif %}
-        color_temp: >
+        color_temp_kelvin: >
           {% if now().hour >= 21 %}
-            470
+            2128
           {% elif now().hour <= 7 %}
-            470
+            2128
           {% else %}
-            350
+            2857
           {% endif %}

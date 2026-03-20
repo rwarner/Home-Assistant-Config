@@ -18,5 +18,5 @@
           {% endif %}
     - action: input_select.select_option
       entity_id: input_select.harmony_hub
-      data_template:
+      data:
         option: "Select Input"

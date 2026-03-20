@@ -41,7 +41,7 @@
 
 - alias: KITCHEN - Turn off ceiling lights when no motion
   id: 86a4980e-08bc-454e-ae82-09d6d8adccff
-  # mode: restart # Restart on every motion, ensure that the light is always on
+  mode: restart # Restart on every motion, ensure that the light is always on
   max_exceeded: silent # Hide warnings when triggered while in delay.
   trigger:
     - trigger: state

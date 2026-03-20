@@ -22,7 +22,7 @@
       to: 'home'
   action:
     - action: variable.update_sensor
-      data_template:
+      data:
         value: >
           {% if trigger.entity_id == 'person.ryan' %}
             {% if states.sensor.ryan_status.state == 'Just Left' %}
