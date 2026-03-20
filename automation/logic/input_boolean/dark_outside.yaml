@@ -56,26 +56,6 @@
         entity_id: input_boolean.dark_outside
 
 
-
-
-# - alias: GOING LIGHT - Set dark_outside input_boolean to Off, bright out
-#   id: dedd58d2-7814-11ee-b962-0242ac120002
-#   mode: single
-#   trigger:
-#     - trigger: template
-#       value_template: >
-#         {{ states('sensor.front_outdoor_motion_sensor_illuminance')|float(0) > 400
-#            and 6 <= now().hour < 13 }}
-#       for: "00:10:00"
-#   condition:
-#     - condition: state
-#       entity_id: input_boolean.dark_outside
-#       state: "on"
-#   action:
-#     - action: homeassistant.turn_off
-#       target:
-#         entity_id: input_boolean.dark_outside
-
 - alias: GOING LIGHT - Set dark_outside input_boolean to Off, bright out
   id: dedd58d2-7814-11ee-b962-0242ac120002
   mode: single

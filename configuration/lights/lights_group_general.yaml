@@ -62,6 +62,7 @@
  ## Nursery ###
 - platform: group
   name: Nursery Lights
+  unique_id: nursery_lights
   entities:
     - light.nursery_floor_lamp
     - light.nursery_bookshelf_lamp

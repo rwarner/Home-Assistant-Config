@@ -82,16 +82,6 @@
         float(states('sensor.ryans_office_nspanel_temperature'), 65.0)
       ) / 3) }}
 
-
-# -- Kelly's Office -- only one sensor currently
-# - platform: template
-#   sensors:
-#     kellys_office_avg_temp:
-#       friendly_name: "Nursery Temperature"
-#       unit_of_measurement: '°F'
-#       value_template: >-
-#         {{ '%0.3g'|format(float(states('sensor.laundry_motion_sensor_temperature'), 65.0)) }}
-
 #  -- Family Room --
   - name: "Family Room Temperature"
     unique_id: family_room_avg_temp

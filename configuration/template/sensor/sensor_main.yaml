@@ -49,13 +49,6 @@
         {% endfor %}
         {{ count.value }}
 
-# Climate.thermostat doesn't demonstration changes to the preset_mode in the logbook or history
-# - platform: template
-#   sensors:
-#     ecobee_preset:
-#       value_template: '{{ states.climate.thermostat.attributes.preset_mode }}'
-#       friendly_name: "Ecobee Preset"
-
 
   - name: "Unavailable Battery Count"
     unique_id: unavailable_battery_count
@@ -75,14 +68,3 @@
             | map(attribute='entity_id')
             | list }}
 
-####################################
-#  Motion sensors on input_boolean #
-####################################
-
-#- platform: template
-#  sensors:
-#    motion_front_door:
-#      friendly_name: Front Door Motion
-#      value_template: "{{ states.input_boolean.office_occupancy.state == 'on' }}"
-#      entity_id: binary_sensor.motion_front_door
-#      device_class: motion
