@@ -7,7 +7,7 @@ homeassistant:
   country: US
   # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: 90
-  unit_system: us_customary # New style, ignore error
+  unit_system: us_customary
   currency: USD
   time_zone: America/New_York
   auth_providers:
@@ -27,10 +27,7 @@ energy:
 
 # Logging functionality for Home Assistant
 logger:
-  default: error #Set to info, for more information when needed
-
-  # logs:
-  #   homeassistant.components.rest_command: debug
+  default: error
 
 # Enables the Person integration for handling "home and away"
 person:
@@ -55,7 +52,6 @@ lovelace:
       icon: mdi:home-assistant
       show_in_sidebar: true
       filename: configuration/dashboards/new-dash.yaml
-
 
 # Enables configuration UI
 config:
@@ -105,10 +101,6 @@ input_boolean:
     name: Whether or not the mail has arrived
   someone_at_front_door:
     name: Whether or not someone is at the front door
-  someone_at_rear_patio:
-    name: Whether or not someone is at the rear patio
-  someone_at_side_patio:
-    name: Whether or not someone is at the side patio
   first_movement_ryans_office:
     name: First movement of the day in ryans office
   dark_outside:
@@ -122,15 +114,12 @@ input_boolean:
     name: Nursery daytime initialized
     icon: mdi:weather-sunny
 
-
 ifttt:
   key: !secret ifttt_api_key
 
 alarm_control_panel:
   - platform: manual
     name: Alarm
-    # code: !secret alarm_control_panel_code
-    # Don't require the code to arm the alarm
     code_arm_required: false
     # Arm again after triggering
     disarm_after_trigger: false
@@ -233,7 +222,6 @@ homekit:
       linked_motion_sensor: binary_sensor.doorbell_person_detected
       support_audio: True
 
- 
 #################################
 ##### EXTERNAL FILES BELOW ######
 #################################
