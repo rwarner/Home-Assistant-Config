@@ -88,10 +88,14 @@
       entity_id: person.ryan
       from: 'home'
       to: 'not_home'
+      for:
+        minutes: 2
     - trigger: state
       entity_id: person.kelly
       from: 'home'
       to: 'not_home'
+      for:
+        minutes: 2
   action:
     - action: variable.update_sensor
       data:
