@@ -4,14 +4,21 @@
 
 - alias: LAUNDRY - Notify house washer is done
   id: 98b90d3c-7815-11ee-b962-0242ac120002
-  mode: single
-  max_exceeded: silent
+  mode: restart
   trigger:
     - trigger: state
       entity_id: sensor.washer_washer_machine_state
-      from: 'run'
-      to: 'stop'
+      to: 'run'
+      for:
+        minutes: 5
   action:
+    - wait_for_trigger:
+        - trigger: state
+          entity_id: sensor.washer_washer_machine_state
+          from: 'run'
+          to: 'stop'
+      timeout: "04:00:00"
+      continue_on_timeout: false
     - action: script.announce_sound
       data:
         name: "washer-done"
@@ -21,14 +28,21 @@
 
 - alias: LAUNDRY - Notify house dryer is done
   id: 9c564aa4-7815-11ee-b962-0242ac120002
-  mode: single
-  max_exceeded: silent
+  mode: restart
   trigger:
     - trigger: state
       entity_id: sensor.dryer_dryer_machine_state
-      from: 'run'
-      to: 'stop'
+      to: 'run'
+      for:
+        minutes: 5
   action:
+    - wait_for_trigger:
+        - trigger: state
+          entity_id: sensor.dryer_dryer_machine_state
+          from: 'run'
+          to: 'stop'
+      timeout: "04:00:00"
+      continue_on_timeout: false
     - action: script.announce_sound
       data:
         name: "dryer-done"
