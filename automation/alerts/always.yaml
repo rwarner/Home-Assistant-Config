@@ -356,31 +356,43 @@
           open 5 min, {{ states('sensor.outside_avg_temp') }}°F outside
 
 ########################################
-############# Discord Below ############
+######## Discord + Mobile Video ########
 ########################################
 
-# Gif and MP4 not supported via mobile app notification
-# Sticking with Discord for now, since we can upload a small video
-# watch directly on there
 - alias: ALERT - When a motion detection video is created
   id: 54e81d38-7814-11ee-b962-0242ac120002
+  mode: queued
+  max: 3
   trigger:
     - trigger: event
       event_type: folder_watcher
       event_data:
         event_type: created
   action:
-    - delay: '00:00:20' # Wait until file is done being modified
+    - delay: '00:00:10' # Wait until file is done being written
     - action: shell_command.convert_camera_recording
-    - delay: '00:00:20' # Wait until file is done being modified
-    - action: notify.home_assistant # Discord notification name change to Discord server name
+    - delay: '00:00:10' # Wait for ffmpeg conversion
+
+    # Send to Discord for playback history
+    - action: notify.home_assistant
       data:
         message: 'Motion: {{ trigger.event.data.file }}'
         target: "658174234480082997"
         title: Device Alert
         data:
           images:
-            - "/tmp/hass/converted/recording.mp4"
-            #- "{{ trigger.event.data.path }}"
-    - delay: '00:00:15'
+            - "/tmp/hass/converted/{{ trigger.event.data.file | replace('.mp4', '') }}.mp4"
+
+    # Send snapshot to mobile for instant viewing
+    - action: notify.ryan_devices
+      data:
+        title: "Motion Detected"
+        message: "{{ trigger.event.data.file | replace('.mp4', '') | replace('_', ' ') | title }}"
+        data:
+          image: "/api/camera_proxy/camera.outside_doorbell"
+          ttl: 0
+          priority: high
+          url: "/lovelace/camera_view"
+
+    - delay: '00:00:05'
     - action: shell_command.clear_video_directory

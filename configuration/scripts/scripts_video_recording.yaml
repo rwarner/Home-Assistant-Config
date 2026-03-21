@@ -1,35 +1,14 @@
-###### Video Recording #######
+####################################
+### SCRIPTS - Video Recording    ###
+####################################
+
 capture_front_door_video:
+  alias: "Capture Front Door Video"
   mode: queued
   sequence:
-    # - delay: '00:00:02'
     - action: camera.record
       data:
         entity_id: camera.outside_doorbell
         filename: '/tmp/hass/front_door_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 15
         lookback: 2
-
-capture_rear_patio_video:
-  mode: queued
-  sequence:
-    # - delay: '00:00:02'
-    - action: camera.record
-      data:
-        entity_id: camera.rear_patio_camera
-        filename: '/tmp/hass/rear_patio_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
-        duration: 15
-        lookback: 2
-
-capture_side_patio_video:
-  mode: queued
-  sequence:
-    # - delay: '00:00:02'
-    - action: camera.record
-      data:
-        entity_id: camera.side_patio_camera
-        filename: '/tmp/hass/side_patio_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
-        duration: 15
-        lookback: 2
-
-############################################
