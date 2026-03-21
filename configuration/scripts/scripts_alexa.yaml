@@ -1,23 +1,13 @@
-###### Alexa #######
-# Current alexas:
-# - media_player.ryans_office_echo_show
-# - media_player.nursery_echo_dot
-# - media_player.kitchen_echo_show_15
-# - media_player.living_room_echo_dot
-# - media_player.family_room_echo_dot
-# - media_player.movie_room_echo
-# - media_player.laundry_room_echo_dot
-# - media_player.echo_show
+##############################
+### SCRIPTS - Alexa        ###
+##############################
 
 alexa_reset_all_volume:
   sequence:
     - action: media_player.volume_set
       data:
         entity_id:
-          - media_player.media_room_echo
-          - media_player.basement_echo_dot
           - media_player.ryans_office_echo_show
-          - media_player.nursery_echo_dot
           - media_player.living_room_echo_dot
           - media_player.family_room_echo_dot
           - media_player.movie_room_echo
