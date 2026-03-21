@@ -1,54 +1,50 @@
 ##############################
 ### ROOM - Laundry Room    ###
 ##############################
-  
+
 - alias: LAUNDRY - Notify house washer is done
   id: 98b90d3c-7815-11ee-b962-0242ac120002
+  mode: single
+  max_exceeded: silent
   trigger:
-  - trigger: state
-    entity_id: sensor.washer_washer_machine_state
-    to: 'run'
-    for:
-      minutes: 20
+    - trigger: state
+      entity_id: sensor.washer_washer_machine_state
+      from: 'run'
+      to: 'stop'
   action:
-    - wait_for_trigger:
-      - trigger: state
-        entity_id: sensor.washer_washer_machine_state
-        to: 'stop'
     - action: script.announce_sound
       data:
         name: "washer-done"
+    - action: counter.increment
+      target:
+        entity_id: counter.weekly_washer_cycles
 
 - alias: LAUNDRY - Notify house dryer is done
   id: 9c564aa4-7815-11ee-b962-0242ac120002
+  mode: single
+  max_exceeded: silent
   trigger:
-  - trigger: state
-    entity_id: sensor.dryer_dryer_machine_state
-    to: 'run'
-    for:
-      minutes: 20
+    - trigger: state
+      entity_id: sensor.dryer_dryer_machine_state
+      from: 'run'
+      to: 'stop'
   action:
-    - wait_for_trigger:
-      - trigger: state
-        entity_id: sensor.dryer_dryer_machine_state
-        to: 'stop'    
     - action: script.announce_sound
       data:
         name: "dryer-done"
+    - action: counter.increment
+      target:
+        entity_id: counter.weekly_dryer_cycles
 
 - alias: LAUNDRY - Notify house dryer is in wrinklePrevent
   id: 9feaba60-7815-11ee-b962-0242ac120002
+  mode: single
+  max_exceeded: silent
   trigger:
-  - trigger: state
-    entity_id: sensor.dryer_dryer_machine_state
-    to: 'run'
-    for:
-      minutes: 20
+    - trigger: state
+      entity_id: sensor.dryer_dryer_job_state
+      to: 'wrinklePrevent'
   action:
-    - wait_for_trigger:
-      - trigger: state
-        entity_id: sensor.dryer_dryer_job_state
-        to: 'wrinklePrevent'
     - action: script.announce_sound
       data:
         name: "dryer-preventing-wrinkles"
@@ -60,15 +56,14 @@
   trigger:
     - trigger: state
       entity_id: sensor.washer_washer_machine_state
+      from: 'run'
       to: 'stop'
       for:
         minutes: 30
   condition:
-    # Only remind if the dryer hasn't started
     - condition: state
       entity_id: sensor.dryer_dryer_machine_state
       state: 'stop'
-    # Only remind if someone is home
     - condition: state
       entity_id: sensor.family_status
       state: 'Home'
@@ -76,3 +71,30 @@
     - action: script.announce_local
       data:
         message: "The washer finished 30 minutes ago and the dryer hasn't started. Don't forget to transfer your clothes."
+
+- alias: LAUNDRY - Weekly summary and reset counters
+  id: 5c9d2e4f-7a3b-4c8d-b1e5-6f2a8d4c9b3e
+  trigger:
+    - trigger: time
+      at: '19:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - sun
+    - condition: state
+      entity_id: sensor.family_status
+      state: 'Home'
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Weekly Laundry Summary"
+        message: >
+          This week: {{ states('counter.weekly_washer_cycles') }} wash
+          {{ 'cycle' if states('counter.weekly_washer_cycles') | int == 1 else 'cycles' }}
+          and {{ states('counter.weekly_dryer_cycles') }} dry
+          {{ 'cycle' if states('counter.weekly_dryer_cycles') | int == 1 else 'cycles' }}.
+    - action: counter.reset
+      target:
+        entity_id:
+          - counter.weekly_washer_cycles
+          - counter.weekly_dryer_cycles
