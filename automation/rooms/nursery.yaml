@@ -1,6 +1,6 @@
-############################
-### NURSERY AUTOMATIONS  ###
-############################
+##########################
+### ROOM - Nursery     ###
+##########################
 
 ############ Motion Sensor #############
 - alias: NURSERY - Light Control from Motion (nursery before 1030pm, bookshelf after)

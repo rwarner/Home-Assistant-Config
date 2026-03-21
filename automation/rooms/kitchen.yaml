@@ -1,6 +1,6 @@
-############################
-### KITCHEN AUTOMATIONS  ###
-############################
+##########################
+### ROOM - Kitchen     ###
+##########################
 
 - alias: KITCHEN - Turn off ceiling lights when no motion
   id: 86a4980e-08bc-454e-ae82-09d6d8adccff

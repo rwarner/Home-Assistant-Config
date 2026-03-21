@@ -1,0 +1,19 @@
+################################
+### ALERTS - Camera Capture  ###
+################################
+
+# Set mode to queued so that there isn't conflicting runs when called while another is running
+- alias: CAMERAS - Capture on front door motion
+  id: 044d29d4-7816-11ee-b962-0242ac120002
+  mode: queued
+  trigger:
+    trigger: state
+    entity_id:
+     - input_boolean.someone_at_front_door
+    to: 'on'
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.alarm
+      state: armed_away
+  action:
+    - action: script.capture_front_door_video

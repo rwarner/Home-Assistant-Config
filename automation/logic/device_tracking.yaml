@@ -1,5 +1,5 @@
 ###################################
-### DEVICE TRACKING AUTOMATIONS ###
+### LOGIC - Device Tracking     ###
 ###################################
 
 - alias: DEVICE_TRACK - Nobody home, lock doors, arm alexa, set Tstat to Away, turn off Lights, etc..

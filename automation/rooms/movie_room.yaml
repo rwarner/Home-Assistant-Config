@@ -1,6 +1,6 @@
-###############################
-### MOVIE ROOM AUTOMATIONS  ###
-###############################
+##############################
+### ROOM - Movie Room      ###
+##############################
 
 - alias: MOVIE ROOM - Turn on Light from motion (only when Projector is off, light is low)
   id: b28ed294-8cad-11ee-b9d1-0242ac120002

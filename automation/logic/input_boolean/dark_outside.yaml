@@ -1,6 +1,6 @@
-################################################
-### DARK_OUTSIDE CONFIGURATION / AUTOMATION ####
-################################################
+################################
+### LOGIC - Dark Outside     ###
+################################
 
 - alias: GOING DARK - Set dark_outside On (evening, once/day)
   id: d8a964ba-7814-11ee-b962-0242ac120002

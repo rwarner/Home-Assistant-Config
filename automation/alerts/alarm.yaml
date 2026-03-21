@@ -1,0 +1,27 @@
+########################################
+### ALERTS - Alarm Notifications     ###
+########################################
+
+- alias: ALARM - Send Notification when home is disarmed
+  id: fd9a8cb2-7815-11ee-b962-0242ac120002
+  trigger:
+    - trigger: state
+      entity_id: alarm_control_panel.alarm
+      to: disarmed
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Home set to: Disarmed"
+        message: ""
+
+- alias: ALARM - Send Notification when home is armed
+  id: f939fd06-7815-11ee-b962-0242ac120002
+  trigger:
+    - trigger: state
+      entity_id: alarm_control_panel.alarm
+      to: armed_away
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Home set to: Armed Away"
+        message: ""

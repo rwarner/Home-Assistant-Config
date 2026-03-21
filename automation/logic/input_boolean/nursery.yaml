@@ -1,6 +1,6 @@
-###########################################
-### NURSERY CONFIGURATION / AUTOMATION ####
-###########################################
+################################
+### LOGIC - Nursery Init     ###
+################################
 
 - alias: NURSERY - Reset daytime init flag
   trigger:

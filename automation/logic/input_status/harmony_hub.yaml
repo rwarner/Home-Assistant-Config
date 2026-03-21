@@ -1,3 +1,7 @@
+################################
+### LOGIC - Harmony Hub      ###
+################################
+
 - alias: HARMONY - Harmony Hub input_select
   id: 106148a0-7815-11ee-b962-0242ac120002
   trigger:

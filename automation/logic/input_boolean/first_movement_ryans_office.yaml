@@ -1,6 +1,6 @@
-################################################
-### FIRST MOVEMENT CONFIGURATION / AUTOMATION ##
-################################################
+################################
+### LOGIC - First Movement   ###
+################################
 
 - alias: RYANS OFFICE - First movement of the day in ryans office
   id: 4a9712fc-7810-11ee-b962-0242ac120002

@@ -1,6 +1,6 @@
-#############################
-####### Scene - Music  ######
-#############################
+################################
+### LOGIC - Music Scene      ###
+################################
 
 - alias: "SCENE - Play Jazz When Jazz Dinner Scene is Activated"
   id: 68f6a6ee-916a-4f7a-b9b9-98c64fc10a29

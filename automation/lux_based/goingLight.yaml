@@ -1,6 +1,6 @@
-##################################
-##### GOING LIGHT AUTOMATIONS ####
-##################################
+#############################
+### LUX - Going Light     ###
+#############################
 - alias: GOING LIGHT - Turn off lights outside when light outside
   id: 54332a62-7815-11ee-b962-0242ac120002
   trigger:

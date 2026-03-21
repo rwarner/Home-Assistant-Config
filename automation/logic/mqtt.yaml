@@ -1,6 +1,6 @@
-############################
-###   MQTT AUTOMATIONS   ###
-############################
+########################
+### LOGIC - MQTT     ###
+########################
 
 - alias: MQTT - Announce movie has been added to Plex on Alexa
   id: 3fa0f542-7816-11ee-b962-0242ac120002

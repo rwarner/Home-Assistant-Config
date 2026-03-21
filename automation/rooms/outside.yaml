@@ -1,6 +1,6 @@
-############################
-### LIGHTING AUTOMATIONS ###
-############################
+##########################
+### ROOM - Outside     ###
+##########################
 
 - alias: LIGHTS - Turn on Front Porch Light, if motion detected
   id: 1fd1b260-7816-11ee-b962-0242ac120002

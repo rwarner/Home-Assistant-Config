@@ -1,6 +1,6 @@
-############################
-##### NIGHT AUTOMATIONS ####
-############################
+########################
+### TIME - Night     ###
+########################
 
 # 9:00 p.m : Outside lights off, if we are both home
 #            Sun - Friday
@@ -30,15 +30,6 @@
     action: light.turn_off
     continue_on_error: true
     entity_id: light.outside_lights
-
-
-# 11:00 p.m: Turn off Unifi AP's LEDs
-# - alias: NIGHT - 11:00 p.m, Turn off Unifi AP LED
-#   trigger:
-#     - platform: time
-#       at: '23:00:00'
-#   action:
-#     - action: shell_command.unifi_ap_light_off
 
 
 # 11:30 p.m: Turn off outside lights regardless
