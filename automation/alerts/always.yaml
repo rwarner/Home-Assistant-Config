@@ -356,7 +356,7 @@
           open 5 min, {{ states('sensor.outside_avg_temp') }}°F outside
 
 ########################################
-######## Discord + Mobile Video ########
+########## Mobile Video Alert ##########
 ########################################
 
 - alias: ALERT - When a motion detection video is created
@@ -368,33 +368,40 @@
       event_type: folder_watcher
       event_data:
         event_type: created
+  condition:
+    # Only process .mp4 files, ignore .tmp and other artifacts
+    - condition: template
+      value_template: "{{ trigger.event.data.file.endswith('.mp4') }}"
+    # Ignore converted files in subdirectories — only process originals
+    - condition: template
+      value_template: "{{ 'converted' not in trigger.event.data.path }}"
+  variables:
+    # Parse filename like "front_door_20260321-143330.mp4" into readable parts
+    # Camera name: everything before the timestamp (e.g. "front_door" → "Front Door")
+    camera_name: >
+      {{ trigger.event.data.file.split('_2')[0] | replace('_', ' ') | title }}
+    # Use current local time instead of parsing UTC filename
+    clip_time: >
+      {{ now().strftime('%-I:%M %p') }}
   action:
-    - delay: '00:00:10' # Wait until file is done being written
+    # Wait for camera.record to finish writing the full clip
+    - delay: '00:00:20'
     - action: shell_command.convert_camera_recording
-    - delay: '00:00:10' # Wait for ffmpeg conversion
-
-    # Send to Discord for playback history
-    - action: notify.home_assistant
-      data:
-        message: 'Motion: {{ trigger.event.data.file }}'
-        target: "658174234480082997"
-        title: Device Alert
-        data:
-          images:
-            - "/tmp/hass/converted/{{ trigger.event.data.file | replace('.mp4', '') }}.mp4"
+    # Wait for ffmpeg conversion to complete
+    - delay: '00:00:15'
 
     # Send video clip to mobile
     - action: notify.ryan_devices
       data:
-        title: "Motion Detected"
-        message: "{{ trigger.event.data.file | replace('.mp4', '') | replace('_', ' ') | title }}"
+        title: "Motion Detected — {{ camera_name }}"
+        message: "{{ clip_time }}"
         data:
           attachment:
-            url: "/local/clips/{{ trigger.event.data.file | replace('.mp4', '') }}.mp4"
+            url: "/local/clips/{{ trigger.event.data.file }}"
             content_type: "video/mp4"
           ttl: 0
           priority: high
           url: "/lovelace/camera_view"
 
-    - delay: '00:00:05'
+    - delay: '00:00:10'
     - action: shell_command.clear_video_directory
