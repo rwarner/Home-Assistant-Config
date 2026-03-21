@@ -383,13 +383,15 @@
           images:
             - "/tmp/hass/converted/{{ trigger.event.data.file | replace('.mp4', '') }}.mp4"
 
-    # Send snapshot to mobile for instant viewing
+    # Send video clip to mobile
     - action: notify.ryan_devices
       data:
         title: "Motion Detected"
         message: "{{ trigger.event.data.file | replace('.mp4', '') | replace('_', ' ') | title }}"
         data:
-          image: "/api/camera_proxy/camera.outside_doorbell"
+          attachment:
+            url: "/local/clips/{{ trigger.event.data.file | replace('.mp4', '') }}.mp4"
+            content_type: "video/mp4"
           ttl: 0
           priority: high
           url: "/lovelace/camera_view"
