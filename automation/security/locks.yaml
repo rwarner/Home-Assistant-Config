@@ -99,19 +99,54 @@
         message: >
           {% if is_state('sensor.ryan_status', 'Just Arrived') and
           is_state('sensor.kelly_status', 'Just Arrived') %} Welcome home, Ryan
-          and Kelly! {% elif is_state('sensor.ryan_status', 'Just Arrived') and
+          and Kelly!
+          {% elif is_state('sensor.ryan_status', 'Just Arrived') and
           (is_state('sensor.kelly_status', 'Away') or
-          is_state('sensor.kelly_status', 'Home')) %} Welcome home, Ryan! {% elif
-          (is_state('sensor.ryan_status', 'Away') or
+          is_state('sensor.kelly_status', 'Home')) %} Welcome home, Ryan!
+          {% elif (is_state('sensor.ryan_status', 'Away') or
           is_state('sensor.ryan_status', 'Home')) and
           is_state('sensor.kelly_status', 'Just Arrived') %} Welcome home, Kelly!
-          {% else %} Welcome home! {% endif %}
+          {% else %} Welcome home!
+          {% endif %}
 
-          {% if is_state('sensor.tautilli_data', " ") or
-          is_state('sensor.tautilli_data',"unknown") %} {% else %} {{
-          states.sensor.tautilli_data.state }} has been added to Plex while you
-          were away.  {% endif %}
-        where: kitchen
+          {% set inside = (
+            states('sensor.kitchen_avg_temp') | float(65) +
+            states('sensor.living_room_avg_temp') | float(65) +
+            states('sensor.family_room_avg_temp') | float(65)
+          ) / 3 %}
+          It's {{ inside | round(0) }} degrees inside
+          and {{ states('sensor.outside_avg_temp') | round(0) }} outside.
+
+          {% set open_windows = expand(state_attr('binary_sensor.house_windows', 'entity_id'))
+            | selectattr('state', 'eq', 'on')
+            | map(attribute='name')
+            | map('replace', ' Sensor', '')
+            | list %}
+          {% if open_windows | count > 0 %}
+          {{ open_windows | join(', ') }} {{ 'is' if open_windows | count == 1 else 'are' }} open.
+          {% endif %}
+
+          {% set washer_done = is_state('sensor.washer_washer_machine_state', 'stop') %}
+          {% set dryer_done = is_state('sensor.dryer_dryer_machine_state', 'stop') %}
+          {% if washer_done and dryer_done %}
+          The washer and dryer both finished while you were out.
+          {% elif washer_done %}
+          The washer finished while you were out.
+          {% elif dryer_done %}
+          The dryer finished while you were out.
+          {% endif %}
+
+          {% set plex = states('sensor.tautilli_data') %}
+          {% if plex not in [' ', 'unknown', 'unavailable'] %}
+            {% set items = plex.split(', ') %}
+            {% if items | count > 2 %}
+          {{ items | count }} things were added to Plex while you were away.
+            {% elif items | count == 2 %}
+          {{ items[0].split(' - ')[0] }} and {{ items[1].split(' - ')[0] }} were added to Plex.
+            {% else %}
+          {{ items[0].split(' - ')[0] }} was added to Plex while you were away.
+            {% endif %}
+          {% endif %}
     
     #Reset variable after using it for announcement
     - action: variable.update_sensor
