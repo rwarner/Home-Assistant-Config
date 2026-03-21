@@ -16,7 +16,7 @@ switch:
 
   - name: "Ryan's Office Switch 2"
     state_topic: "home/Ryans Office/wp/relay2/status"
-    command_topic: "home/Ryans Office/wp/relay2/cFteslamd"
+    command_topic: "home/Ryans Office/wp/relay2/cmd"
     payload_on: "on"
     payload_off: "off"
     state_on: "on"
