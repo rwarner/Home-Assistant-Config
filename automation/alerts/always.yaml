@@ -315,6 +315,46 @@
       data:
         message: "Home Assistant, online"
 
+- alias: ALERT - Exterior door open too long in extreme weather
+  id: 7b2e4d1f-5c8a-4f3b-a2d6-9e1c5f8b3a7d
+  mode: parallel
+  max: 5
+  max_exceeded: silent
+  trigger:
+    - trigger: state
+      entity_id:
+        - binary_sensor.front_door_sensor
+        - binary_sensor.porch_slider_sensor
+        - binary_sensor.family_room_slider
+        - binary_sensor.basement_door_sensor
+      from: "off"
+      to: "on"
+      for:
+        minutes: 5
+  condition:
+    # Only alert in extreme weather — skip comfortable temps (45-85°F)
+    - condition: or
+      conditions:
+        - condition: numeric_state
+          entity_id: sensor.outside_avg_temp
+          below: 45
+        - condition: numeric_state
+          entity_id: sensor.outside_avg_temp
+          above: 85
+  action:
+    - action: script.announce_local
+      data:
+        message: >
+          {{ trigger.to_state.attributes.friendly_name | replace(' Sensor', '') | replace(' Opening', '') }}
+          has been open for 5 minutes.
+          It is currently {{ states('sensor.outside_avg_temp') }} degrees outside.
+    - action: notify.ryan_devices
+      data:
+        title: "Door Open"
+        message: >
+          {{ trigger.to_state.attributes.friendly_name | replace(' Sensor', '') | replace(' Opening', '') }}
+          open 5 min, {{ states('sensor.outside_avg_temp') }}°F outside
+
 ########################################
 ############# Discord Below ############
 ########################################
