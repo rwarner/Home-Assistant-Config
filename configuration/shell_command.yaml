@@ -3,3 +3,4 @@
 ####################################
 clear_video_directory: bash /config/shell_scripts/clearVideoDir.sh
 convert_camera_recording: bash /config/shell_scripts/recordVideo.sh
+clear_old_tts_cache: find /config/tts -name "*.mp3" -mtime +7 -delete

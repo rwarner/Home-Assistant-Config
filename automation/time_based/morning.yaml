@@ -3,6 +3,14 @@
 ############################
 
 # 6:00 a.m.
+- alias: MORNING - Clear old TTS cache files
+  id: 4e2b8c1a-9d3f-4b7e-a5c2-8f1d6e3a9b4c
+  trigger:
+    - trigger: time
+      at: '06:00:00'
+  action:
+    - action: shell_command.clear_old_tts_cache
+
 - alias: MORNING - Reset first_movement_ryans_office to off
   id: caff6d18-7815-11ee-b962-0242ac120002
   trigger:
