@@ -1,4 +1,6 @@
-###### Announcements #######
+################################
+### SCRIPTS - Announcements  ###
+################################
 
 announce_local:
   alias: "Announce via local aux with volume"
@@ -47,6 +49,21 @@ announce_local:
           voice: "Olivia"
         cache: true
 
+
+announce_alexa:
+  alias: "Announce to a specific Alexa device"
+  mode: parallel
+  fields:
+    message:
+      description: "Message to speak"
+    target:
+      description: "Alexa notify service target (e.g. notify.alexa_media_kitchen_echo_show_15)"
+  sequence:
+    - action: "{{ target }}"
+      data:
+        message: "{{ message }}"
+        data:
+          type: tts
 
 announce_sound:
   alias: "Play local sound"

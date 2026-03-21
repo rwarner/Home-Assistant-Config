@@ -1,0 +1,69 @@
+##################################
+### TIME - Morning Briefing    ###
+##################################
+
+- alias: MORNING - Morning briefing on first kitchen motion
+  id: 1a4c7e3b-6d8f-4a2e-b9c5-2f3d8e7a1b6c
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id: binary_sensor.kitchen_motion_sensor
+      from: "off"
+      to: "on"
+  condition:
+    # Only between 6am and 9am
+    - condition: time
+      after: "06:00:00"
+      before: "09:00:00"
+    # Only once per day — check last triggered
+    - condition: template
+      value_template: >
+        {% set lt = this.attributes.last_triggered %}
+        {{ lt is none or lt < today_at('00:00:00') }}
+    # Someone is home
+    - condition: state
+      entity_id: sensor.family_status
+      state: 'Home'
+  action:
+    - delay: "00:00:03"
+    - action: script.announce_alexa
+      data:
+        target: "notify.alexa_media_kitchen_echo_show_15"
+        message: >
+          Good morning.
+
+          It's currently {{ states('sensor.outside_avg_temp') | round(0) }} degrees outside
+          and {{ states('weather.tomorrow_io_home_daily') }} skies.
+
+          {% if is_state('binary_sensor.house_windows', 'on') %}
+            {% set open_windows = expand(state_attr('binary_sensor.house_windows', 'entity_id'))
+              | selectattr('state', 'eq', 'on')
+              | map(attribute='name')
+              | map('replace', ' Sensor', '')
+              | list %}
+          {{ open_windows | join(' and ') }} {{ 'is' if open_windows | count == 1 else 'are' }} still open from last night.
+          {% endif %}
+
+          {% set closers = [
+            "Have a great day.",
+            "Make it a good one.",
+            "Go get 'em today.",
+            "Hope today is a good one.",
+            "Enjoy your day, everyone.",
+            "Make today count.",
+            "Here's to a productive day.",
+            "Wishing you all a wonderful day.",
+            "Time to seize the day.",
+            "Let's make today awesome.",
+            "Have a fantastic day ahead.",
+            "Today is going to be a good one.",
+            "Go out there and crush it.",
+            "Enjoy every minute today.",
+            "Hope the day treats you well.",
+            "Ready, set, go. Have a great day.",
+            "May the coffee be strong and the day be short.",
+            "Another beautiful day. Make the most of it.",
+            "Wishing you smooth sailing today.",
+            "You've got this. Have an amazing day."
+          ] %}
+          {{ closers | random }}
