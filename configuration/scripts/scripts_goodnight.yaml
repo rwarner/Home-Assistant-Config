@@ -1,0 +1,101 @@
+################################
+### SCRIPTS - Goodnight      ###
+################################
+
+goodnight_routine:
+  alias: "Goodnight Routine"
+  mode: single
+  sequence:
+    # 1. Announce a random goodnight phrase
+    - action: script.announce_local
+      data:
+        message: >
+          {% set phrases = [
+            "Alright everyone, time to hit the hay. Locking up and turning things off.",
+            "The house is winding down. Sweet dreams, everyone.",
+            "Closing up shop for the night. Rest well.",
+            "Another great day in the books. Time to recharge.",
+            "Lights out, doors locked. Tomorrow is going to be a good one.",
+            "The house is getting cozy for the night. Sleep tight.",
+            "That's a wrap on today. Goodnight, everyone.",
+            "Time to call it a night. Everything is taken care of.",
+            "Powering down for the evening. See you in the morning.",
+            "All tucked in and locked up. Have a wonderful night.",
+            "The day is done. Time to rest up for whatever tomorrow brings.",
+            "House is secure. Hope you all had a great day.",
+            "Switching to night mode. Don't let the bed bugs bite.",
+            "Everything is locked and lights are off. Sleep well.",
+            "Wrapping up the evening. Tomorrow's a brand new day.",
+            "The house says goodnight. Doors locked, lights dimmed.",
+            "And just like that, another day is in the books. Rest easy.",
+            "Settling in for the night. See everyone in the morning.",
+            "Everything's buttoned up. Have the best sleep.",
+            "Time to wind down. The house is all set for the night.",
+            "Putting the house to bed. You should probably do the same.",
+            "Doors are locked, lights are off, and all is well. Goodnight.",
+            "Hope today was a good one. Locking up now.",
+            "The house is officially in chill mode. Sleep tight.",
+            "Shutting things down for the night. Catch you in the morning.",
+            "That's the end of today's chapter. Sweet dreams.",
+            "House secured, lights out. Nothing left to do but sleep.",
+            "Rest up, recharge, and we'll do it all again tomorrow.",
+            "The evening shift is over. Goodnight to all.",
+            "Locking the doors and dimming the lights. All yours, sandman.",
+            "The house is taken care of. Now go take care of yourselves.",
+            "Calling it a night. Everything's locked and cozy.",
+            "Day complete. House locked. Time to dream big.",
+            "Goodnight crew. The house will keep watch from here.",
+            "Tucking the house in for the night. You should be next.",
+            "And that's a wrap. See everyone bright and early.",
+            "All systems powering down. Well, except the important ones.",
+            "The to-do list can wait until morning. Time for sleep.",
+            "Flipping the switch on today. Tomorrow will be even better.",
+            "Securing the castle for the night. Sweet dreams, everyone.",
+            "Lights off, locks on, worries gone. Goodnight.",
+            "The house is resting. Time for you to do the same.",
+            "Another successful day at home. Now let's get some rest.",
+            "Nighttime protocol activated. Just kidding, I just locked the doors.",
+            "Everything is taken care of. Go enjoy some well-earned sleep.",
+            "The stars are out and the doors are locked. Goodnight.",
+            "Winding down. Tomorrow is full of possibilities.",
+            "House is on autopilot for the night. Sleep well, everyone.",
+            "That's all for today, folks. Sweet dreams and see you tomorrow.",
+            "One last thing before bed. Just kidding, everything's already done."
+          ] %}
+          {{ phrases | random }}
+        override: true
+
+    - delay: "00:00:06"
+
+    # 2. Lock both deadbolts
+    - action: lock.lock
+      target:
+        entity_id:
+          - lock.basement_door_deadbolt
+          - lock.front_door_deadbolt
+
+    # 3. Turn off lights
+    - action: light.turn_off
+      continue_on_error: true
+      target:
+        entity_id:
+          - light.family_room_lights
+          - light.living_room_lights
+          - light.kitchen_lights
+          - light.kitchen_ceiling_lights
+          - light.kitchen_undercabinet_lights
+          - light.outside_lights
+
+    # 4. Close all covers
+    - action: cover.close_cover
+      continue_on_error: true
+      target:
+        entity_id: cover.house_covers
+
+    - delay: "00:00:02"
+
+    # 5. Say goodnight to Alfie
+    - action: script.announce_local
+      data:
+        message: "Goodnight, Alfie."
+        override: true
