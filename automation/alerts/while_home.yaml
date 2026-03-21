@@ -4,26 +4,51 @@
 
 - alias: ALERT - Notify when a window was opened
   id: cc8db9b0-7814-11ee-b962-0242ac120002
-  mode: single # Only run once at a time
-  max_exceeded: silent # Hide warnings when triggered while in delay.
+  mode: parallel
+  max: 10
+  max_exceeded: silent
   trigger:
     - trigger: state
-      entity_id: binary_sensor.house_windows
+      entity_id:
+        - binary_sensor.kellys_office_rear_window_sensor
+        - binary_sensor.kellys_office_side_window_sensor
+        - binary_sensor.ryans_office_rear_window_sensor
+        - binary_sensor.ryans_office_side_window_sensor
+        - binary_sensor.master_bedroom_front_window_sensor
+        - binary_sensor.master_bedroom_side_window_sensor
+        - binary_sensor.nursery_front_window_sensor
+        - binary_sensor.nursery_side_window_sensor
+        - binary_sensor.living_room_front_window_sensor
+        - binary_sensor.living_room_side_window_1_sensor
+        - binary_sensor.living_room_side_window_2_sensor
+        - binary_sensor.living_room_rear_window_sensor
+        - binary_sensor.kitchen_window_sensor
+        - binary_sensor.family_room_front_window_1_sensor
+        - binary_sensor.family_room_front_window_2_sensor
+        - binary_sensor.family_room_side_window_1_sensor
+        - binary_sensor.family_room_side_window_2_sensor
+        - binary_sensor.family_room_rear_window_1_sensor
+        - binary_sensor.family_room_rear_window_2_sensor
+        - binary_sensor.family_room_rear_window_3_sensor
+        - binary_sensor.laundry_room_window_sensor
+        - binary_sensor.movie_room_window_sensor
+        - binary_sensor.half_bath_window_sensor
+        - binary_sensor.upstairs_bathroom_window_sensor
+      from: "off"
       to: "on"
   condition:
     - condition: state
       entity_id: alarm_control_panel.alarm
       state: disarmed
   action:
-    - action: script.announce_sound
+    - action: script.announce_local
       data:
-        name: "window-opened"
-    - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
+        message: "{{ trigger.to_state.attributes.friendly_name | replace(' Sensor', '') }} opened"
 
 - alias: ALERT - Notify when all windows have been closed
   id: 99a24142-faa5-11ee-a951-0242ac120002
-  mode: single # Only run once at a time
-  max_exceeded: silent # Hide warnings when triggered while in delay.
+  mode: single
+  max_exceeded: silent
   trigger:
     - trigger: state
       entity_id: binary_sensor.house_windows
@@ -38,12 +63,71 @@
       data:
         name: "all-windows-closed"
         override: true
-    - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
+    - delay: "00:02:00"
+
+- alias: ALERT - Window open too long in extreme weather
+  id: 8a3f1c2e-4d5b-4e8a-9f1c-3b7d2e6a4c9f
+  mode: parallel
+  max: 10
+  max_exceeded: silent
+  trigger:
+    - trigger: state
+      entity_id:
+        - binary_sensor.kellys_office_rear_window_sensor
+        - binary_sensor.kellys_office_side_window_sensor
+        - binary_sensor.ryans_office_rear_window_sensor
+        - binary_sensor.ryans_office_side_window_sensor
+        - binary_sensor.master_bedroom_front_window_sensor
+        - binary_sensor.master_bedroom_side_window_sensor
+        - binary_sensor.nursery_front_window_sensor
+        - binary_sensor.nursery_side_window_sensor
+        - binary_sensor.living_room_front_window_sensor
+        - binary_sensor.living_room_side_window_1_sensor
+        - binary_sensor.living_room_side_window_2_sensor
+        - binary_sensor.living_room_rear_window_sensor
+        - binary_sensor.kitchen_window_sensor
+        - binary_sensor.family_room_front_window_1_sensor
+        - binary_sensor.family_room_front_window_2_sensor
+        - binary_sensor.family_room_side_window_1_sensor
+        - binary_sensor.family_room_side_window_2_sensor
+        - binary_sensor.family_room_rear_window_1_sensor
+        - binary_sensor.family_room_rear_window_2_sensor
+        - binary_sensor.family_room_rear_window_3_sensor
+        - binary_sensor.laundry_room_window_sensor
+        - binary_sensor.movie_room_window_sensor
+        - binary_sensor.half_bath_window_sensor
+        - binary_sensor.upstairs_bathroom_window_sensor
+      from: "off"
+      to: "on"
+      for:
+        minutes: 30
+  condition:
+    # Only alert in extreme weather — skip comfortable temps (45-85°F)
+    - condition: or
+      conditions:
+        - condition: numeric_state
+          entity_id: sensor.outside_avg_temp
+          below: 45
+        - condition: numeric_state
+          entity_id: sensor.outside_avg_temp
+          above: 85
+  action:
+    - action: script.announce_local
+      data:
+        message: >
+          {{ trigger.to_state.attributes.friendly_name | replace(' Sensor', '') }} has been open for 30 minutes.
+          It is currently {{ states('sensor.outside_avg_temp') }} degrees outside.
+    - action: notify.ryan_devices
+      data:
+        title: "Window Open"
+        message: >
+          {{ trigger.to_state.attributes.friendly_name | replace(' Sensor', '') }} open 30 min,
+          {{ states('sensor.outside_avg_temp') }}°F outside
 
 - alias: ALERT - Notify house when package has been dropped off
   id: 4cd4297d-bb36-42b8-ab99-15188e34e49d
-  mode: single # Only run once at a time
-  max_exceeded: silent # Hide warnings when triggered while in delay.
+  mode: single
+  max_exceeded: silent
   trigger:
     - trigger: state
       entity_id: binary_sensor.doorbell_package_detected
@@ -57,4 +141,4 @@
     - action: script.announce_local
       data:
         message: "Package at front door"
-    - delay: "00:02:00" # Prevent multiple runs of this within 2 minute intervals
+    - delay: "00:02:00"
