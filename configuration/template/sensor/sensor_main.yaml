@@ -1,20 +1,8 @@
-###############################
-####### TEMPLATE - MAIN  ######
-###############################
-
-##### UNIQUE_ID DOES NOT SET ENTITY_ID IN FRONT END, 
-##### BUT IS REQUIRED FOR UI CHANGES ON ENTITY
+################################
+### TEMPLATE - Main Sensors  ###
+################################
 
 - sensor:
-
-# Last Alexa that was called
-  - name: Last Alexa
-    state: |-
-      {{ expand(integration_entities('alexa_media') | select('search', 'media_player'))
-      | selectattr('attributes.last_called', 'eq', True) | map(attribute='entity_id') | first }}
-    availability: |-
-      {{ expand(integration_entities('alexa_media') | select('search', 'media_player'))
-      | selectattr('attributes.last_called','eq',True) | first is defined }}
 
 # Harmony Remote sensor for current activity
   - name: Media Room
