@@ -94,12 +94,15 @@
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
     - delay:
         seconds: 10
+    - variables:
+        ryan: "{{ states('sensor.ryan_status') }}"
+        kelly: "{{ states('sensor.kelly_status') }}"
+        both_here: "{{ ryan in ['Just Arrived', 'Home'] and kelly in ['Just Arrived', 'Home'] }}"
     - action: script.announce_local
       data:
+        # Allow announcement past 9pm if both people are arriving home together
+        override: "{{ both_here }}"
         message: >
-          {% set ryan = states('sensor.ryan_status') %}
-          {% set kelly = states('sensor.kelly_status') %}
-          {% set both_here = ryan in ['Just Arrived', 'Home'] and kelly in ['Just Arrived', 'Home'] %}
           {% if both_here %} Welcome home, Ryan and Kelly!
           {% elif ryan == 'Just Arrived' %} Welcome home, Ryan!
           {% elif kelly == 'Just Arrived' %} Welcome home, Kelly!
