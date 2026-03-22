@@ -6,9 +6,18 @@ goodnight_routine:
   alias: "Goodnight Routine"
   mode: single
   sequence:
-    # 1. Announce a random goodnight phrase
-    - action: script.announce_local
+    # 1. Announce goodnight phrase + Alfie in one TTS call (no ding)
+    - action: media_player.volume_set
+      target:
+        entity_id: media_player.local_audio
       data:
+        volume_level: 1.0
+
+    - action: tts.speak
+      target:
+        entity_id: tts.home_assistant_cloud
+      data:
+        media_player_entity_id: media_player.local_audio
         message: >
           {% set phrases = [
             "Alright everyone, time to hit the hay. Locking up and turning things off.",
@@ -62,8 +71,11 @@ goodnight_routine:
             "That's all for today, folks. Sweet dreams and see you tomorrow.",
             "One last thing before bed. Just kidding, everything's already done."
           ] %}
-          {{ phrases | random }}
-        override: true
+          {{ phrases | random }} Goodnight, Alfie.
+        language: "en-GB"
+        options:
+          voice: "Olivia"
+        cache: false
 
     - delay: "00:00:06"
 
@@ -91,11 +103,3 @@ goodnight_routine:
       continue_on_error: true
       target:
         entity_id: cover.house_covers
-
-    - delay: "00:00:02"
-
-    # 5. Say goodnight to Alfie
-    - action: script.announce_local
-      data:
-        message: "Goodnight, Alfie."
-        override: true
