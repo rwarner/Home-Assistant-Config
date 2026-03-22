@@ -1,0 +1,109 @@
+type: custom:mod-card
+card:
+  type: grid
+  square: false
+  columns: 1
+  style:
+    z-index: 10
+  cards:
+    - type: custom:mushroom-chips-card
+      card_mod:
+        class: top-nav-icons
+      chips:
+        # - type: template
+        #   icon: >
+        #     {% if
+        #     states('sensor.count_of_maintenance_equal_or_less_than_zero')
+        #     | int > 0 %}
+        #       fapro:circle-exclamation-solid
+        #     {% else %}
+        #       fapro:gear-solid
+        #     {% endif %}
+        #   icon_color: >
+        #     {% if
+        #     states('sensor.count_of_maintenance_equal_or_less_than_zero')
+        #     | int > 0 %}
+        #       red
+        #     {% else %}
+        #       white
+        #     {% endif %}
+        #   tap_action:
+        #     action: navigate
+        #     navigation_path: /lovelace/system
+        
+        # - type: spacer
+
+        - type: template
+          content: >
+            {{ states('sensor.outside_avg_temp') }}°F
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/climate
+          icon: mdi:thermometer
+          icon_color: >
+            {#  
+                  If the temperature is lower than 32, set to blue
+                  If it's between 32 and 75 set to gray
+                  If it's higher than 75, set to red
+            #}
+            {% if (states('sensor.outside_avg_temp') | float(nan)) < 32 %}
+              blue
+            {% elif (states('sensor.outside_avg_temp') | float(nan)) <= 75 %}
+              gray
+            {% else %}
+              red
+            {% endif %}
+          card_mod:
+            class: top-nav-chip
+        - type: template
+          content: >
+            {{ states.light
+            | rejectattr('attributes.entity_id', 'defined')
+            | selectattr('state', 'eq', 'on')
+            | list | count }} Lights
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/lights
+          icon_color: primary
+          icon: mdi:lightbulb
+          card_mod:
+            class: top-nav-chip
+        
+        - type: template
+          content: >
+            {% set unlocked = states.lock | selectattr('state', 'eq', 'unlocked') | list | count %}
+            {% if unlocked == 0 %}Locked{% elif unlocked == 1 %}1 Unlocked{% else %}{{ unlocked }} Unlocked{% endif %}
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/security
+          icon: mdi:lock
+          icon_color: >
+            {% if states.lock
+            | selectattr('state', 'eq', 'unlocked')
+            | list | count == 0 %}
+              green
+            {% else %}
+              red
+            {% endif %}
+          card_mod:
+            class: top-nav-chip
+        
+        - type: template
+          content: >
+            {% set eps = state_attr('sensor.sonarr_upcoming_shows', 'show_count') | int(0) %}
+            {{ eps }} {{ 'Ep' if eps == 1 else 'Eps' }}
+          icon_color: "#24a0f2"
+          icon: mdi:television
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/media
+          card_mod:
+            class: top-nav-chip
+        
+        # - type: spacer
+        
+        # - type: action
+        #   tap_action:
+        #     action: navigate
+        #     navigation_path: /new-dash/amplipi
+        #   icon: mdi:speaker-multiple

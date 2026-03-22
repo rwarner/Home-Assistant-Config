@@ -1,0 +1,29 @@
+
+type: conditional
+conditions:
+# Change in binary_sensor templates as well
+- condition: state
+  entity: binary_sensor.battery_warning
+  state: "on"
+card:
+  type: custom:auto-entities
+  card:
+    type: entities
+    title: Battery Warning
+  filter:
+    exclude:
+      - entity_id: sensor.*iphone*
+      - entity_id: sensor.*ipad*
+    include:
+      # Mimics the binary_sensor template search, which seemingly
+      # could not get done in here
+      - domain: sensor
+        entity_id: sensor.*_battery_level
+        state: "< 35"
+        options:
+          secondary_info: last-changed
+      - domain: sensor
+        entity_id: sensor.*_battery_level
+        state: "unavailable"
+        options:
+          secondary_info: last-changed
