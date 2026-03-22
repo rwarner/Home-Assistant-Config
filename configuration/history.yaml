@@ -4,44 +4,32 @@
 
 use_include_order: true
 include:
-  domains:
-    #- light
   entities:
-    - weather.dark_sky
     - sun.sun
-    - sensor.ecobee_preset
-    - alarm_control_panel.alexa_guard_de7c8
+    - weather.tomorrow_io_home_daily
     - alarm_control_panel.alarm
     - sensor.kelly_status
     - sensor.ryan_status
     - sensor.family_status
-    - binary_sensor.living_room_occupancy
-    - binary_sensor.thermostat_occupancy
-    - binary_sensor.basement_laundry_sensor_motion
-    #- sensor.bedroom_fan_button
-    #- sensor.bedroom_light_button
     - switch.master_bedroom_fan
-    - light.media_room_lights
     - light.kitchen_lights
     - light.family_room_lights
     - light.living_room_lights
     - light.master_bedroom_lights
-    - light.laundry_room_lights
     - light.ryans_office_lights
     - light.outside_lights
+    - light.movie_room_lights
+    - light.nursery_lights
 
-    - sensor.thermostat_humidity
-    - sensor.media_room_humidity
-    - sensor.media_room_avg_temp
-    - sensor.basement_avg_temp
+    - sensor.outside_avg_temp
     - sensor.living_room_avg_temp
-    - sensor.bedroom_avg_temp
     - sensor.kitchen_avg_temp
+    - sensor.master_bedroom_avg_temp
     - sensor.ryans_office_avg_temp
-     
-    - sensor.glances_disk_used_percent
-    - sensor.glances_disk_free
+    - sensor.family_room_avg_temp
+    - sensor.nursery_avg_temp
+    - sensor.movie_room_avg_temp
+    - sensor.laundry_room_avg_temp
 
     - sensor.server_closet_energy_cost
     - sensor.server_closet_energy
-
