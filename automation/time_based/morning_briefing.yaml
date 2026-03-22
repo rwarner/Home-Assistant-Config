@@ -26,14 +26,42 @@
       state: 'Home'
   action:
     - delay: "00:00:03"
-    - action: script.announce_alexa
+
+    # Get today's forecast
+    - action: weather.get_forecasts
+      target:
+        entity_id: weather.tomorrow_io_home_daily
       data:
-        target: "notify.alexa_media_kitchen_echo_show_15"
+        type: daily
+      response_variable: forecast
+
+    # Announce on kitchen Echo Show (Alexa announce plays built-in chime first)
+    - action: notify.alexa_media_kitchen_echo_show_15
+      data:
+        data:
+          type: announce
         message: >
+          {% set today = forecast['weather.tomorrow_io_home_daily']['forecast'][0] %}
+          {% set high = today.temperature | round(0) %}
+          {% set condition = today.condition %}
+          {% set precip = today.precipitation_probability | int(0) %}
           Good morning.
 
           It's currently {{ states('sensor.outside_avg_temp') | round(0) }} degrees outside
-          and {{ states('weather.tomorrow_io_home_daily') }} skies.
+          with a high of {{ high }} today.
+          {% if condition == 'rainy' %}
+          Rainy skies with a {{ precip }} percent chance of rain.
+          {% elif condition == 'snowy' %}
+          Snow expected with a {{ precip }} percent chance.
+          {% elif condition == 'sunny' %}
+          Sunny skies ahead.
+          {% elif condition == 'partlycloudy' %}
+          Partly cloudy skies today.
+          {% elif condition == 'cloudy' %}
+          Cloudy skies today.
+          {% else %}
+          {{ condition | replace('-', ' ') | title }} skies today.
+          {% endif %}
 
           {% if is_state('binary_sensor.house_windows', 'on') %}
             {% set open_windows = expand(state_attr('binary_sensor.house_windows', 'entity_id'))
