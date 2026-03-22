@@ -93,19 +93,16 @@
   action:
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
     - delay:
-        seconds: 2
+        seconds: 10
     - action: script.announce_local
       data:
         message: >
-          {% if is_state('sensor.ryan_status', 'Just Arrived') and
-          is_state('sensor.kelly_status', 'Just Arrived') %} Welcome home, Ryan
-          and Kelly!
-          {% elif is_state('sensor.ryan_status', 'Just Arrived') and
-          (is_state('sensor.kelly_status', 'Away') or
-          is_state('sensor.kelly_status', 'Home')) %} Welcome home, Ryan!
-          {% elif (is_state('sensor.ryan_status', 'Away') or
-          is_state('sensor.ryan_status', 'Home')) and
-          is_state('sensor.kelly_status', 'Just Arrived') %} Welcome home, Kelly!
+          {% set ryan = states('sensor.ryan_status') %}
+          {% set kelly = states('sensor.kelly_status') %}
+          {% set both_here = ryan in ['Just Arrived', 'Home'] and kelly in ['Just Arrived', 'Home'] %}
+          {% if both_here %} Welcome home, Ryan and Kelly!
+          {% elif ryan == 'Just Arrived' %} Welcome home, Ryan!
+          {% elif kelly == 'Just Arrived' %} Welcome home, Kelly!
           {% else %} Welcome home!
           {% endif %}
 
