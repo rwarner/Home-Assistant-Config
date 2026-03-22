@@ -315,6 +315,33 @@
       data:
         message: "Home Assistant, online"
 
+- alias: ALERT - Weekly HACS update digest
+  id: 9c1e4d3f-2a7b-4c5e-8d6f-3b9e1a7c5d2f
+  trigger:
+    - trigger: time
+      at: '10:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - sat
+    - condition: template
+      value_template: >
+        {{ states.update
+          | selectattr('state', 'eq', 'on')
+          | list | count > 0 }}
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "HACS Updates Available"
+        message: >
+          {% set updates = states.update
+            | selectattr('state', 'eq', 'on')
+            | map(attribute='name')
+            | list %}
+          {{ updates | count }} update{{ 's' if updates | count > 1 else '' }} available: {{ updates | join(', ') }}
+        data:
+          url: "/config/updates"
+
 - alias: ALERT - Exterior door open too long in extreme weather
   id: 7b2e4d1f-5c8a-4f3b-a2d6-9e1c5f8b3a7d
   mode: parallel
