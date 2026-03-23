@@ -34,42 +34,42 @@ views:
               cards:
                 - type: custom:button-card
                   show_name: true
-                  show_icon: true
+                  show_icon: false
                   show_state: false
-                  icon: mdi:clock-outline
                   name: "[[[ return new Date().toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'}); ]]]"
                   styles:
                     card:
-                      - padding: 6px
-                      - background: rgba(0, 0, 0, 0.05)
+                      - padding: 10px 6px
+                      - height: 68px
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - background: '#1B2A4A'
                       - border-radius: 28px
-                      - box-shadow: none
+                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
                     name:
-                      - font-size: 22px
-                      - font-weight: 600
-                      - color: '#333'
-                    icon:
-                      - width: 24px
-                      - color: '#0A6DD6'
+                      - font-size: 26px
+                      - font-weight: 700
+                      - color: white
                 - type: custom:button-card
                   show_name: true
-                  show_icon: true
+                  show_icon: false
                   show_state: false
-                  icon: mdi:calendar
                   name: "[[[ return new Date().toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'}); ]]]"
                   styles:
                     card:
-                      - padding: 6px
-                      - background: rgba(0, 0, 0, 0.05)
+                      - padding: 10px 6px
+                      - height: 68px
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - background: '#2D3748'
                       - border-radius: 28px
-                      - box-shadow: none
+                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
                     name:
-                      - font-size: 22px
-                      - font-weight: 600
-                      - color: '#333'
-                    icon:
-                      - width: 24px
-                      - color: '#666'
+                      - font-size: 26px
+                      - font-weight: 700
+                      - color: white
                 - type: custom:button-card
                   entity: weather.tomorrow_io_home_daily
                   show_name: true
@@ -92,16 +92,20 @@ views:
                   styles:
                     card:
                       - padding: 6px
-                      - background: rgba(0, 0, 0, 0.05)
+                      - height: 68px
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - background: '#C05621'
                       - border-radius: 28px
-                      - box-shadow: none
+                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
                     name:
                       - font-size: 22px
                       - font-weight: 600
-                      - color: '#333'
+                      - color: white
                     icon:
                       - width: 24px
-                      - color: '#E8890C'
+                      - color: rgba(255,255,255,0.85)
                 - type: custom:button-card
                   entity: sun.sun
                   show_name: true
@@ -116,16 +120,20 @@ views:
                   styles:
                     card:
                       - padding: 6px
-                      - background: rgba(0, 0, 0, 0.05)
+                      - height: 68px
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - background: '#7C3AED'
                       - border-radius: 28px
-                      - box-shadow: none
+                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
                     name:
                       - font-size: 22px
                       - font-weight: 600
-                      - color: '#333'
+                      - color: white
                     icon:
                       - width: 24px
-                      - color: '#E8890C'
+                      - color: rgba(255,255,255,0.85)
                 - type: custom:button-card
                   entity: sun.sun
                   show_name: true
@@ -140,16 +148,20 @@ views:
                   styles:
                     card:
                       - padding: 6px
-                      - background: rgba(0, 0, 0, 0.05)
+                      - height: 68px
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - background: '#D97706'
                       - border-radius: 28px
-                      - box-shadow: none
+                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
                     name:
                       - font-size: 22px
                       - font-weight: 600
-                      - color: '#333'
+                      - color: white
                     icon:
                       - width: 24px
-                      - color: '#0A6DD6'
+                      - color: rgba(255,255,255,0.85)
 
             # ═══════════════════════════════════════
             # ROW 2: Main Content — Camera | Big Info
@@ -204,17 +216,17 @@ views:
                               - display: flex
                               - align-items: center
                               - justify-content: center
-                              - background: rgba(48, 209, 88, 0.12)
+                              - background: 'linear-gradient(135deg, #059669 0%, #047857 100%)'
                               - border-radius: 16px
-                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - box-shadow: 0 3px 12px rgba(5,150,105,0.3)
                             name:
                               - font-size: 64px
                               - font-weight: bold
-                              - color: '#1B8C3A'
+                              - color: white
                               - justify-self: center
                             label:
                               - font-size: 20px
-                              - color: '#666'
+                              - color: rgba(255,255,255,0.8)
                               - justify-self: center
 
                         - type: custom:button-card
@@ -238,17 +250,17 @@ views:
                               - display: flex
                               - align-items: center
                               - justify-content: center
-                              - background: rgba(9, 132, 255, 0.12)
+                              - background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)'
                               - border-radius: 16px
-                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - box-shadow: 0 3px 12px rgba(37,99,235,0.3)
                             name:
                               - font-size: 64px
                               - font-weight: bold
-                              - color: '#0A6DD6'
+                              - color: white
                               - justify-self: center
                             label:
                               - font-size: 20px
-                              - color: '#666'
+                              - color: rgba(255,255,255,0.8)
                               - justify-self: center
 
                     # Locks — compact button-card style
@@ -269,25 +281,25 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - box-shadow: |
+                                  [[[
+                                    return entity.state === 'locked' ? '0 3px 12px rgba(5,150,105,0.25)' : '0 3px 12px rgba(220,38,38,0.25)';
+                                  ]]]
                               - background: |
                                   [[[
-                                    return entity.state === 'locked' ? 'rgba(48, 209, 88, 0.12)' : 'rgba(255, 69, 58, 0.12)';
+                                    return entity.state === 'locked' ? 'linear-gradient(135deg, #059669 0%, #047857 100%)' : 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)';
                                   ]]]
                             name:
                               - font-size: 22px
                               - font-weight: bold
-                              - color: '#333'
+                              - color: white
                             state:
                               - font-size: 16px
                               - text-transform: capitalize
-                              - color: '#666'
+                              - color: rgba(255,255,255,0.8)
                             icon:
                               - width: 32px
-                              - color: |
-                                  [[[
-                                    return entity.state === 'locked' ? '#1B8C3A' : '#D42020';
-                                  ]]]
+                              - color: rgba(255,255,255,0.9)
                         - type: custom:button-card
                           entity: lock.basement_door_deadbolt
                           name: Basement
@@ -303,25 +315,25 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - box-shadow: |
+                                  [[[
+                                    return entity.state === 'locked' ? '0 3px 12px rgba(5,150,105,0.25)' : '0 3px 12px rgba(220,38,38,0.25)';
+                                  ]]]
                               - background: |
                                   [[[
-                                    return entity.state === 'locked' ? 'rgba(48, 209, 88, 0.12)' : 'rgba(255, 69, 58, 0.12)';
+                                    return entity.state === 'locked' ? 'linear-gradient(135deg, #059669 0%, #047857 100%)' : 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)';
                                   ]]]
                             name:
                               - font-size: 22px
                               - font-weight: bold
-                              - color: '#333'
+                              - color: white
                             state:
                               - font-size: 16px
                               - text-transform: capitalize
-                              - color: '#666'
+                              - color: rgba(255,255,255,0.8)
                             icon:
                               - width: 32px
-                              - color: |
-                                  [[[
-                                    return entity.state === 'locked' ? '#1B8C3A' : '#D42020';
-                                  ]]]
+                              - color: rgba(255,255,255,0.9)
 
                     # Lights + Mail + Covers — 3 columns
                     - type: horizontal-stack
@@ -348,14 +360,15 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - box-shadow: 0 3px 10px rgba(217,119,6,0.2)
+                              - background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
                             name:
                               - font-size: 24px
                               - font-weight: bold
-                              - color: '#333'
+                              - color: white
                             icon:
                               - width: 28px
-                              - color: '#E8890C'
+                              - color: rgba(255,255,255,0.9)
                         - type: custom:button-card
                           entity: input_boolean.mail_arrived
                           show_name: true
@@ -375,16 +388,26 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - box-shadow: |
+                                  [[[
+                                    return entity.state === 'on' ? '0 3px 10px rgba(161,98,7,0.25)' : '0 2px 8px rgba(0,0,0,0.08)';
+                                  ]]]
+                              - background: |
+                                  [[[
+                                    return entity.state === 'on' ? 'linear-gradient(135deg, #A16207 0%, #854D0E 100%)' : 'rgba(0,0,0,0.04)';
+                                  ]]]
                             name:
                               - font-size: 24px
                               - font-weight: bold
-                              - color: '#333'
+                              - color: |
+                                  [[[
+                                    return entity.state === 'on' ? 'white' : '#555';
+                                  ]]]
                             icon:
                               - width: 28px
                               - color: |
                                   [[[
-                                    return entity.state === 'on' ? '#D4A017' : '#999';
+                                    return entity.state === 'on' ? 'rgba(255,255,255,0.9)' : '#999';
                                   ]]]
                         - type: custom:button-card
                           show_name: true
@@ -412,14 +435,15 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - box-shadow: 0 3px 10px rgba(37,99,235,0.2)
+                              - background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)'
                             name:
                               - font-size: 24px
                               - font-weight: bold
-                              - color: '#333'
+                              - color: white
                             icon:
                               - width: 28px
-                              - color: '#0A6DD6'
+                              - color: rgba(255,255,255,0.9)
 
                     # Energy graph
                     - type: horizontal-stack
@@ -427,7 +451,7 @@ views:
                         - type: custom:mini-graph-card
                           entities:
                             - entity: sensor.home_energy_meter_gen5_electric_consumption_w_3
-                              color: '#0A6DD6'
+                              color: '#60A5FA'
                           name: Power
                           hours_to_show: 6
                           points_per_hour: 4
@@ -444,23 +468,26 @@ views:
                             fill: fade
                           color_thresholds:
                             - value: 0
-                              color: '#1B8C3A'
+                              color: '#34D399'
                             - value: 2000
-                              color: '#0A6DD6'
+                              color: '#60A5FA'
                             - value: 5000
-                              color: '#E8890C'
+                              color: '#FBBF24'
                             - value: 8000
-                              color: '#D42020'
+                              color: '#F87171'
                           card_mod:
                             style: |
                               ha-card {
+                                background: #1E293B !important;
                                 border-radius: 16px;
-                                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                                box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+                                --primary-text-color: white;
+                                --secondary-text-color: rgba(255,255,255,0.6);
                               }
                         - type: custom:mini-graph-card
                           entities:
                             - entity: sensor.core_400s_series_pm2_5
-                              color: '#1B8C3A'
+                              color: '#34D399'
                           name: Air Quality
                           hours_to_show: 6
                           points_per_hour: 10
@@ -477,37 +504,40 @@ views:
                             fill: fade
                           color_thresholds:
                             - value: 0
-                              color: '#1B8C3A'
+                              color: '#34D399'
                             - value: 25
-                              color: '#E8890C'
+                              color: '#FBBF24'
                             - value: 50
-                              color: '#D42020'
+                              color: '#F87171'
                           card_mod:
                             style: |
                               ha-card {
+                                background: #1E293B !important;
                                 border-radius: 16px;
-                                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                                box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+                                --primary-text-color: white;
+                                --secondary-text-color: rgba(255,255,255,0.6);
                               }
 
             # ═══════════════════════════════════════
             # ROW 3: Context Cards (only when relevant)
             # ═══════════════════════════════════════
 
-            # Laundry Running
-            - type: conditional
-              conditions:
-                - condition: or
+            # Laundry — each machine visible when running/paused OR recently done (30 min linger)
+            - type: horizontal-stack
+              cards:
+                - type: conditional
                   conditions:
-                    - condition: state
-                      entity: sensor.washer_washer_machine_state
-                      state: 'run'
-                    - condition: state
-                      entity: sensor.dryer_dryer_machine_state
-                      state: 'run'
-              card:
-                type: horizontal-stack
-                cards:
-                  - type: custom:button-card
+                    - condition: or
+                      conditions:
+                        - condition: state
+                          entity: sensor.washer_washer_machine_state
+                          state_not: unavailable
+                        - condition: state
+                          entity: input_boolean.washer_recently_done
+                          state: 'on'
+                  card:
+                    type: custom:button-card
                     entity: sensor.washer_remaining_time
                     show_name: true
                     show_state: false
@@ -515,24 +545,56 @@ views:
                     icon: mdi:washing-machine
                     name: |
                       [[[
-                        if (states['sensor.washer_washer_machine_state'].state === 'run')
-                          return 'Washer: ' + entity.state;
+                        var machine = states['sensor.washer_washer_machine_state'];
+                        if (machine.state === 'run') return 'Washer: ' + entity.state;
+                        if (machine.state === 'pause') return 'Washer: Paused';
+                        var done = states['input_boolean.washer_recently_done'];
+                        if (done.state === 'on') {
+                          var changed = new Date(done.last_changed);
+                          var mins = Math.round((Date.now() - changed.getTime()) / 60000);
+                          if (mins < 1) return 'Washer: Just Done';
+                          if (mins < 60) return 'Washer: Done ' + mins + 'm ago';
+                          return 'Washer: Done ' + Math.floor(mins/60) + 'h ago';
+                        }
                         return 'Washer: Done';
                       ]]]
                     styles:
                       card:
                         - padding: 16px
-                        - background: rgba(9, 132, 255, 0.1)
+                        - background: |
+                            [[[
+                              var st = states['sensor.washer_washer_machine_state'].state;
+                              if (st === 'run') return 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)';
+                              if (st === 'pause') return 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)';
+                              return 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
+                            ]]]
                         - border-radius: 16px
-                        - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                        - box-shadow: |
+                            [[[
+                              var st = states['sensor.washer_washer_machine_state'].state;
+                              if (st === 'run') return '0 3px 12px rgba(37,99,235,0.3)';
+                              if (st === 'pause') return '0 3px 12px rgba(217,119,6,0.3)';
+                              return '0 3px 12px rgba(5,150,105,0.3)';
+                            ]]]
                       name:
                         - font-size: 28px
                         - font-weight: bold
-                        - color: '#0A6DD6'
+                        - color: white
                       icon:
                         - width: 36px
-                        - color: '#0A6DD6'
-                  - type: custom:button-card
+                        - color: rgba(255,255,255,0.9)
+                - type: conditional
+                  conditions:
+                    - condition: or
+                      conditions:
+                        - condition: state
+                          entity: sensor.dryer_dryer_machine_state
+                          state_not: unavailable
+                        - condition: state
+                          entity: input_boolean.dryer_recently_done
+                          state: 'on'
+                  card:
+                    type: custom:button-card
                     entity: sensor.dryer_remaining_time
                     show_name: true
                     show_state: false
@@ -540,23 +602,44 @@ views:
                     icon: mdi:tumble-dryer
                     name: |
                       [[[
-                        if (states['sensor.dryer_dryer_machine_state'].state === 'run')
-                          return 'Dryer: ' + entity.state;
+                        var machine = states['sensor.dryer_dryer_machine_state'];
+                        if (machine.state === 'run') return 'Dryer: ' + entity.state;
+                        if (machine.state === 'pause') return 'Dryer: Paused';
+                        var done = states['input_boolean.dryer_recently_done'];
+                        if (done.state === 'on') {
+                          var changed = new Date(done.last_changed);
+                          var mins = Math.round((Date.now() - changed.getTime()) / 60000);
+                          if (mins < 1) return 'Dryer: Just Done';
+                          if (mins < 60) return 'Dryer: Done ' + mins + 'm ago';
+                          return 'Dryer: Done ' + Math.floor(mins/60) + 'h ago';
+                        }
                         return 'Dryer: Done';
                       ]]]
                     styles:
                       card:
                         - padding: 16px
-                        - background: rgba(255, 69, 58, 0.08)
+                        - background: |
+                            [[[
+                              var st = states['sensor.dryer_dryer_machine_state'].state;
+                              if (st === 'run') return 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)';
+                              if (st === 'pause') return 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)';
+                              return 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
+                            ]]]
                         - border-radius: 16px
-                        - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                        - box-shadow: |
+                            [[[
+                              var st = states['sensor.dryer_dryer_machine_state'].state;
+                              if (st === 'run') return '0 3px 12px rgba(220,38,38,0.3)';
+                              if (st === 'pause') return '0 3px 12px rgba(217,119,6,0.3)';
+                              return '0 3px 12px rgba(5,150,105,0.3)';
+                            ]]]
                       name:
                         - font-size: 28px
                         - font-weight: bold
-                        - color: '#D42020'
+                        - color: white
                       icon:
                         - width: 36px
-                        - color: '#D42020'
+                        - color: rgba(255,255,255,0.9)
 
             # Alarm Armed
             - type: conditional
@@ -651,14 +734,14 @@ views:
                     card:
                       - padding: 12px
                       - font-size: 18px
-                      - color: '#333'
+                      - color: white
                       - border-radius: 16px
-                      - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
-                      - background: rgba(9, 132, 255, 0.06)
+                      - box-shadow: 0 3px 10px rgba(99,102,241,0.25)
+                      - background: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)'
                     icon:
                       - width: 36px
                       - height: 36px
-                      - color: '#0A6DD6'
+                      - color: rgba(255,255,255,0.9)
 
                 - type: custom:button-card
                   name: Lights Off
@@ -672,14 +755,14 @@ views:
                     card:
                       - padding: 12px
                       - font-size: 18px
-                      - color: '#333'
+                      - color: white
                       - border-radius: 16px
-                      - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
-                      - background: rgba(232, 137, 12, 0.06)
+                      - box-shadow: 0 3px 10px rgba(217,119,6,0.25)
+                      - background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
                     icon:
                       - width: 36px
                       - height: 36px
-                      - color: '#E8890C'
+                      - color: rgba(255,255,255,0.9)
 
                 - type: custom:button-card
                   name: Lock All
@@ -695,14 +778,14 @@ views:
                     card:
                       - padding: 12px
                       - font-size: 18px
-                      - color: '#333'
+                      - color: white
                       - border-radius: 16px
-                      - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
-                      - background: rgba(48, 209, 88, 0.06)
+                      - box-shadow: 0 3px 10px rgba(5,150,105,0.25)
+                      - background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)'
                     icon:
                       - width: 36px
                       - height: 36px
-                      - color: '#1B8C3A'
+                      - color: rgba(255,255,255,0.9)
 
                 - type: custom:button-card
                   name: Cameras
@@ -714,14 +797,14 @@ views:
                     card:
                       - padding: 12px
                       - font-size: 18px
-                      - color: '#333'
+                      - color: white
                       - border-radius: 16px
-                      - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
-                      - background: rgba(0, 0, 0, 0.03)
+                      - box-shadow: 0 3px 10px rgba(71,85,105,0.25)
+                      - background: 'linear-gradient(135deg, #64748B 0%, #475569 100%)'
                     icon:
                       - width: 36px
                       - height: 36px
-                      - color: '#666'
+                      - color: rgba(255,255,255,0.9)
 
   # ═══════════════════════════════════════
   # LIGHTS VIEW

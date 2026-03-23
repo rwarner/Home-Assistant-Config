@@ -125,6 +125,12 @@ input_boolean:
   nursery_daytime_initialized:
     name: Nursery daytime initialized
     icon: mdi:weather-sunny
+  washer_recently_done:
+    name: Washer recently finished
+    icon: mdi:washing-machine
+  dryer_recently_done:
+    name: Dryer recently finished
+    icon: mdi:tumble-dryer
 
 ifttt:
   key: !secret ifttt_api_key

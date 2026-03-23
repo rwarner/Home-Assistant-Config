@@ -2,7 +2,7 @@
 ### ROOM - Laundry Room    ###
 ##############################
 
-- alias: LAUNDRY - Notify house washer is done
+- alias: LAUNDRY - Announce washer done
   id: 98b90d3c-7815-11ee-b962-0242ac120002
   mode: restart
   trigger:
@@ -19,14 +19,18 @@
           to: 'stop'
       timeout: "04:00:00"
       continue_on_timeout: false
-    - action: script.announce_sound
+    - action: script.announce_local
       data:
-        name: "washer-done"
+        message: >
+          The washer is done.
+          {% if is_state('sensor.dryer_dryer_machine_state', 'run') %}
+            The dryer has {{ states('sensor.dryer_remaining_time') }} remaining.
+          {% endif %}
     - action: counter.increment
       target:
         entity_id: counter.weekly_washer_cycles
 
-- alias: LAUNDRY - Notify house dryer is done
+- alias: LAUNDRY - Announce dryer done
   id: 9c564aa4-7815-11ee-b962-0242ac120002
   mode: restart
   trigger:
@@ -43,56 +47,78 @@
           to: 'stop'
       timeout: "04:00:00"
       continue_on_timeout: false
-    - action: script.announce_sound
+    - action: script.announce_local
       data:
-        name: "dryer-done"
+        message: >
+          The dryer is done.
+          {% if is_state('sensor.washer_washer_machine_state', 'run') %}
+            The washer has {{ states('sensor.washer_remaining_time') }} remaining.
+          {% endif %}
     - action: counter.increment
       target:
         entity_id: counter.weekly_dryer_cycles
 
-- alias: LAUNDRY - Notify house dryer is in wrinklePrevent
-  id: 9feaba60-7815-11ee-b962-0242ac120002
-  mode: single
-  max_exceeded: silent
+- alias: LAUNDRY - Track washer recently done
+  id: a1b2c3d4-laun-wash-done-track0001
+  mode: restart
   trigger:
-    - trigger: state
-      entity_id: sensor.dryer_dryer_job_state
-      to: 'wrinklePrevent'
-  action:
-    - action: script.announce_sound
-      data:
-        name: "dryer-preventing-wrinkles"
-
-- alias: LAUNDRY - Remind to transfer clothes to dryer
-  id: 3d7a9e1b-8c4f-4a2d-b5e6-1f9c8d3a7b2e
-  mode: single
-  max_exceeded: silent
-  trigger:
-    # Samsung washer goes unavailable ~2 min after stopping, so we can't use for: 30 min
-    # Instead trigger on stop and delay inside the action
     - trigger: state
       entity_id: sensor.washer_washer_machine_state
       from: 'run'
       to: 'stop'
   action:
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.washer_recently_done
     - delay:
         minutes: 30
-    # After 30 min, check if dryer is still not running and someone is home
-    - condition: state
-      entity_id: sensor.family_status
-      state: 'Home'
-    - condition: or
-      conditions:
-        - condition: state
-          entity_id: sensor.dryer_dryer_machine_state
-          state: 'stop'
-        - condition: state
-          entity_id: sensor.dryer_dryer_machine_state
-          state: 'unavailable'
-    # Dryer hasn't started — remind
-    - action: script.announce_local
-      data:
-        message: "The washer finished 30 minutes ago and the dryer hasn't started. Don't forget to transfer your clothes."
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.washer_recently_done
+
+- alias: LAUNDRY - Clear washer done when running
+  id: a1b2c3d4-laun-wash-done-clear001
+  mode: single
+  max_exceeded: silent
+  trigger:
+    - trigger: state
+      entity_id: sensor.washer_washer_machine_state
+      to: 'run'
+  action:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.washer_recently_done
+
+- alias: LAUNDRY - Track dryer recently done
+  id: a1b2c3d4-laun-dryr-done-track001
+  mode: restart
+  trigger:
+    - trigger: state
+      entity_id: sensor.dryer_dryer_machine_state
+      from: 'run'
+      to: 'stop'
+  action:
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.dryer_recently_done
+    - delay:
+        minutes: 30
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.dryer_recently_done
+
+- alias: LAUNDRY - Clear dryer done when running
+  id: a1b2c3d4-laun-dryr-done-clear001
+  mode: single
+  max_exceeded: silent
+  trigger:
+    - trigger: state
+      entity_id: sensor.dryer_dryer_machine_state
+      to: 'run'
+  action:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.dryer_recently_done
 
 - alias: LAUNDRY - Weekly summary and reset counters
   id: 5c9d2e4f-7a3b-4c8d-b1e5-6f2a8d4c9b3e
