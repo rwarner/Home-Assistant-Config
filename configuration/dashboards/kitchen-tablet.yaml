@@ -168,21 +168,48 @@ views:
             # ═══════════════════════════════════════
             - type: horizontal-stack
               cards:
-                # Camera — left half, cropped to remove letterbox
-                - type: custom:webrtc-camera
-                  entity: camera.outside_doorbell
-                  muted: true
-                  background: true
-                  card_mod:
-                    style: |
-                      ha-card {
-                        overflow: hidden;
-                        border-radius: 16px;
-                        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                      }
-                      video {
-                        object-fit: cover !important;
-                      }
+                # Camera — swap to package cam when package detected
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.doorbell_package_detected
+                      state: "off"
+                  card:
+                    type: custom:webrtc-camera
+                    entity: camera.outside_doorbell
+                    muted: true
+                    background: true
+                    card_mod:
+                      style: |
+                        ha-card {
+                          overflow: hidden;
+                          border-radius: 16px;
+                          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                        }
+                        video {
+                          object-fit: cover !important;
+                        }
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.doorbell_package_detected
+                      state: "on"
+                  card:
+                    type: custom:webrtc-camera
+                    entity: camera.outside_doorbell_package
+                    muted: true
+                    background: true
+                    card_mod:
+                      style: |
+                        ha-card {
+                          overflow: hidden;
+                          border-radius: 16px;
+                          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                          border: 3px solid #D97706;
+                        }
+                        video {
+                          object-fit: cover !important;
+                        }
 
                 # Right half — big glanceable info
                 - type: vertical-stack
