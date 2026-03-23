@@ -52,6 +52,18 @@ lovelace:
       icon: mdi:home-assistant
       show_in_sidebar: true
       filename: configuration/dashboards/new-dash.yaml
+    kitchen-tablet:
+      mode: yaml
+      title: Kitchen
+      icon: mdi:tablet
+      show_in_sidebar: false
+      filename: configuration/dashboards/kitchen-tablet.yaml
+    kitchen-tablet-old:
+      mode: yaml
+      title: Kitchen (Old)
+      icon: mdi:tablet-dashboard
+      show_in_sidebar: true
+      filename: configuration/dashboards/kitchen-tablet-old.yaml
 
 # Enables configuration UI
 config:

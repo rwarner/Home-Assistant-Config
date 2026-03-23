@@ -1,0 +1,166 @@
+title: Home
+background: var(--background-image)
+kiosk_mode:
+  user_settings:
+    - users:
+        - tablet
+      hide_header: true
+views:
+  - path: default_view
+    title: Home
+    cards:
+      - type: vertical-stack
+        cards:
+          - graph: line
+            hours_to_show: 24
+            type: sensor
+            entity: sensor.outside_avg_temp
+            detail: 2
+            name: Outside Temperature
+          - type: custom:webrtc-camera
+            entity: camera.outside_doorbell
+            muted: true
+            background: true
+          - type: alarm-panel
+            states:
+              - arm_home
+              - arm_away
+            entity: alarm_control_panel.alarm
+      - type: vertical-stack
+        cards:
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.home_energy_meter_gen5_electric_consumption_w_3
+            name: Current Power Consumption
+            hours_to_show: 24
+            aggregate_func: max
+            show:
+              graph: line
+              average: true
+              extrema: true
+              labels: false
+          - type: custom:mushroom-light-card
+            entity: light.family_room_lights
+            icon: mdi:lamps
+            show_brightness_control: true
+          - type: custom:mushroom-light-card
+            entity: light.kitchen_pendants
+            icon: mdi:ceiling-light-multiple
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+          - type: custom:mushroom-light-card
+            entity: light.kitchen_ceiling_lights
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            use_light_color: false
+            icon: mdi:light-recessed
+            fill_container: false
+            primary_info: name
+            collapsible_controls: false
+          - square: true
+            columns: 2
+            type: grid
+            cards:
+              - type: light
+                entity: light.outside_front_door
+                icon: mdi:outdoor-lamp
+              - type: light
+                entity: light.outside_side_patio
+                icon: mdi:coach-lamp
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-cover-card
+            entity: cover.kitchen_window_shade_cover
+            fill_container: false
+            primary_info: name
+            show_tilt_position_control: false
+            show_buttons_control: true
+            secondary_info: state
+            icon_type: entity-picture
+          - type: custom:mushroom-cover-card
+            entity: cover.living_room_shades
+            fill_container: false
+            primary_info: name
+            show_tilt_position_control: false
+            show_buttons_control: true
+          - type: custom:mushroom-cover-card
+            entity: cover.family_room_shades
+            fill_container: false
+            primary_info: name
+            show_tilt_position_control: false
+            show_buttons_control: true
+          - type: gauge
+            entity: sensor.front_outdoor_motion_sensor_illuminance
+            needle: false
+          - type: markdown
+            content: >+
+              ## **Next Sunset:** {{ state_attr('sun.sun', 'next_setting') |
+              as_timestamp(default=none) | timestamp_custom('%I:%M %p',
+              default='N/A') }}
+
+
+              ## **Next Sunrise:** {{ state_attr('sun.sun', 'next_rising') |
+              as_timestamp(default=none) | timestamp_custom('%I:%M %p',
+              default='N/A') }}
+
+      - type: vertical-stack
+        cards:
+          - square: true
+            columns: 2
+            type: grid
+            cards:
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                entity: lock.front_door_deadbolt
+                show_state: true
+                icon: ''
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                entity: lock.basement_door_deadbolt
+                show_state: true
+          - type: custom:button-card
+            entity: input_boolean.mail_arrived
+            show_state: false
+            show_name: false
+            show_label: true
+            tap_action: none
+            title: test
+            icon: |
+              [[[
+                if (entity.state == 'on')
+                  return "mdi:mailbox-up-outline";
+                else
+                  return "mdi:mailbox-open-outline";
+              ]]]
+            label: |
+              [[[
+                if (entity.state == 'on')
+                  return "Mail has arrived";
+                else
+                  return "No Mail Yet";
+              ]]]
+            styles:
+              icon:
+                - color: |
+                    [[[
+                      if (entity.state == 'on') return 'gold';
+                      else return 'black';
+                    ]]]
+          - type: custom:bignumber-card
+            title: Washer
+            entity: sensor.washer_remaining_time
+          - type: custom:bignumber-card
+            title: Dryer
+            entity: sensor.dryer_remaining_time

@@ -1,0 +1,867 @@
+kiosk_mode:
+  hide_header: true
+  hide_sidebar: true
+
+views:
+  - path: home
+    title: Kitchen Tablet
+    icon: mdi:tablet
+    type: panel
+    background: "center / cover no-repeat fixed url('/local/images/kitchen-bg.png')"
+    cards:
+      - type: custom:mod-card
+        card_mod:
+          style: |
+            ha-card {
+              padding: 8px 16px;
+              background: linear-gradient(170deg, rgba(248, 247, 245, 0.95) 0%, rgba(240, 238, 235, 0.95) 100%);
+              box-shadow: none;
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+              border-radius: 0;
+            }
+        card:
+          type: vertical-stack
+          cards:
+
+            # ═══════════════════════════════════════
+            # ROW 1: Status Bar
+            # ═══════════════════════════════════════
+            - type: grid
+              columns: 5
+              square: false
+              cards:
+                - type: custom:button-card
+                  show_name: true
+                  show_icon: true
+                  show_state: false
+                  icon: mdi:clock-outline
+                  name: "[[[ return new Date().toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'}); ]]]"
+                  styles:
+                    card:
+                      - padding: 6px
+                      - background: rgba(0, 0, 0, 0.05)
+                      - border-radius: 28px
+                      - box-shadow: none
+                    name:
+                      - font-size: 22px
+                      - font-weight: 600
+                      - color: '#333'
+                    icon:
+                      - width: 24px
+                      - color: '#0A6DD6'
+                - type: custom:button-card
+                  show_name: true
+                  show_icon: true
+                  show_state: false
+                  icon: mdi:calendar
+                  name: "[[[ return new Date().toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'}); ]]]"
+                  styles:
+                    card:
+                      - padding: 6px
+                      - background: rgba(0, 0, 0, 0.05)
+                      - border-radius: 28px
+                      - box-shadow: none
+                    name:
+                      - font-size: 22px
+                      - font-weight: 600
+                      - color: '#333'
+                    icon:
+                      - width: 24px
+                      - color: '#666'
+                - type: custom:button-card
+                  entity: weather.tomorrow_io_home_daily
+                  show_name: true
+                  show_icon: true
+                  show_state: false
+                  icon: |
+                    [[[
+                      var c = entity.state;
+                      if (c === 'sunny') return 'mdi:weather-sunny';
+                      if (c === 'rainy') return 'mdi:weather-rainy';
+                      if (c === 'snowy') return 'mdi:weather-snowy';
+                      if (c === 'partlycloudy') return 'mdi:weather-partly-cloudy';
+                      return 'mdi:weather-cloudy';
+                    ]]]
+                  name: |
+                    [[[
+                      var c = entity.state.replace('partlycloudy','Ptly Cld').replace('cloudy','Cloudy').replace('sunny','Sunny').replace('rainy','Rainy').replace('snowy','Snowy');
+                      return c.charAt(0).toUpperCase() + c.slice(1) + ' · ' + entity.attributes.humidity + '%';
+                    ]]]
+                  styles:
+                    card:
+                      - padding: 6px
+                      - background: rgba(0, 0, 0, 0.05)
+                      - border-radius: 28px
+                      - box-shadow: none
+                    name:
+                      - font-size: 22px
+                      - font-weight: 600
+                      - color: '#333'
+                    icon:
+                      - width: 24px
+                      - color: '#E8890C'
+                - type: custom:button-card
+                  entity: sun.sun
+                  show_name: true
+                  show_icon: true
+                  show_state: false
+                  icon: mdi:weather-sunset-down
+                  name: |
+                    [[[
+                      var d = new Date(entity.attributes.next_setting);
+                      return '☀↓ ' + d.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+                    ]]]
+                  styles:
+                    card:
+                      - padding: 6px
+                      - background: rgba(0, 0, 0, 0.05)
+                      - border-radius: 28px
+                      - box-shadow: none
+                    name:
+                      - font-size: 22px
+                      - font-weight: 600
+                      - color: '#333'
+                    icon:
+                      - width: 24px
+                      - color: '#E8890C'
+                - type: custom:button-card
+                  entity: sun.sun
+                  show_name: true
+                  show_icon: true
+                  show_state: false
+                  icon: mdi:weather-sunset-up
+                  name: |
+                    [[[
+                      var d = new Date(entity.attributes.next_rising);
+                      return '☀↑ ' + d.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+                    ]]]
+                  styles:
+                    card:
+                      - padding: 6px
+                      - background: rgba(0, 0, 0, 0.05)
+                      - border-radius: 28px
+                      - box-shadow: none
+                    name:
+                      - font-size: 22px
+                      - font-weight: 600
+                      - color: '#333'
+                    icon:
+                      - width: 24px
+                      - color: '#0A6DD6'
+
+            # ═══════════════════════════════════════
+            # ROW 2: Main Content — Camera | Big Info
+            # ═══════════════════════════════════════
+            - type: horizontal-stack
+              cards:
+                # Camera — left half, cropped to remove letterbox
+                - type: custom:webrtc-camera
+                  entity: camera.outside_doorbell
+                  muted: true
+                  background: true
+                  card_mod:
+                    style: |
+                      ha-card {
+                        overflow: hidden;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                      }
+                      video {
+                        object-fit: cover !important;
+                      }
+
+                # Right half — big glanceable info
+                - type: vertical-stack
+                  cards:
+                    # Big temperatures — centered
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:button-card
+                          entity: sensor.kitchen_avg_temp
+                          show_name: true
+                          show_state: false
+                          show_icon: false
+                          name: |
+                            [[[
+                              var inside = (
+                                parseFloat(states['sensor.kitchen_avg_temp'].state) +
+                                parseFloat(states['sensor.living_room_avg_temp'].state) +
+                                parseFloat(states['sensor.family_room_avg_temp'].state)
+                              ) / 3;
+                              return Math.round(inside) + '°';
+                            ]]]
+                          label: Inside
+                          show_label: true
+                          layout: label|name
+                          styles:
+                            grid:
+                              - grid-template-areas: '"n" "l"'
+                              - grid-template-rows: 1fr auto
+                            card:
+                              - padding: 12px 0
+                              - display: flex
+                              - align-items: center
+                              - justify-content: center
+                              - background: rgba(48, 209, 88, 0.12)
+                              - border-radius: 16px
+                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                            name:
+                              - font-size: 64px
+                              - font-weight: bold
+                              - color: '#1B8C3A'
+                              - justify-self: center
+                            label:
+                              - font-size: 20px
+                              - color: '#666'
+                              - justify-self: center
+
+                        - type: custom:button-card
+                          entity: sensor.outside_avg_temp
+                          show_name: true
+                          show_state: false
+                          show_icon: false
+                          name: |
+                            [[[
+                              return Math.round(parseFloat(entity.state)) + '°';
+                            ]]]
+                          label: Outside
+                          show_label: true
+                          layout: label|name
+                          styles:
+                            grid:
+                              - grid-template-areas: '"n" "l"'
+                              - grid-template-rows: 1fr auto
+                            card:
+                              - padding: 12px 0
+                              - display: flex
+                              - align-items: center
+                              - justify-content: center
+                              - background: rgba(9, 132, 255, 0.12)
+                              - border-radius: 16px
+                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                            name:
+                              - font-size: 64px
+                              - font-weight: bold
+                              - color: '#0A6DD6'
+                              - justify-self: center
+                            label:
+                              - font-size: 20px
+                              - color: '#666'
+                              - justify-self: center
+
+                    # Locks — compact button-card style
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:button-card
+                          entity: lock.front_door_deadbolt
+                          name: Front Door
+                          show_state: true
+                          show_icon: true
+                          tap_action:
+                            action: toggle
+                          icon: |
+                            [[[
+                              return entity.state === 'locked' ? 'mdi:lock' : 'mdi:lock-open';
+                            ]]]
+                          styles:
+                            card:
+                              - padding: 12px
+                              - border-radius: 16px
+                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - background: |
+                                  [[[
+                                    return entity.state === 'locked' ? 'rgba(48, 209, 88, 0.12)' : 'rgba(255, 69, 58, 0.12)';
+                                  ]]]
+                            name:
+                              - font-size: 22px
+                              - font-weight: bold
+                              - color: '#333'
+                            state:
+                              - font-size: 16px
+                              - text-transform: capitalize
+                              - color: '#666'
+                            icon:
+                              - width: 32px
+                              - color: |
+                                  [[[
+                                    return entity.state === 'locked' ? '#1B8C3A' : '#D42020';
+                                  ]]]
+                        - type: custom:button-card
+                          entity: lock.basement_door_deadbolt
+                          name: Basement
+                          show_state: true
+                          show_icon: true
+                          tap_action:
+                            action: toggle
+                          icon: |
+                            [[[
+                              return entity.state === 'locked' ? 'mdi:lock' : 'mdi:lock-open';
+                            ]]]
+                          styles:
+                            card:
+                              - padding: 12px
+                              - border-radius: 16px
+                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                              - background: |
+                                  [[[
+                                    return entity.state === 'locked' ? 'rgba(48, 209, 88, 0.12)' : 'rgba(255, 69, 58, 0.12)';
+                                  ]]]
+                            name:
+                              - font-size: 22px
+                              - font-weight: bold
+                              - color: '#333'
+                            state:
+                              - font-size: 16px
+                              - text-transform: capitalize
+                              - color: '#666'
+                            icon:
+                              - width: 32px
+                              - color: |
+                                  [[[
+                                    return entity.state === 'locked' ? '#1B8C3A' : '#D42020';
+                                  ]]]
+
+                    # Lights + Mail + Covers — 3 columns
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:button-card
+                          entity: light.kitchen_lights
+                          show_name: true
+                          show_state: false
+                          show_icon: true
+                          icon: mdi:lightbulb-group
+                          name: |
+                            [[[
+                              var count = Object.values(states).filter(e =>
+                                e.entity_id.startsWith('light.') &&
+                                e.state === 'on' &&
+                                !e.attributes.entity_id
+                              ).length;
+                              return count + ' Lights';
+                            ]]]
+                          tap_action:
+                            action: navigate
+                            navigation_path: /kitchen-tablet/lights
+                          styles:
+                            card:
+                              - padding: 12px
+                              - border-radius: 16px
+                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                            name:
+                              - font-size: 24px
+                              - font-weight: bold
+                              - color: '#333'
+                            icon:
+                              - width: 28px
+                              - color: '#E8890C'
+                        - type: custom:button-card
+                          entity: input_boolean.mail_arrived
+                          show_name: true
+                          show_state: false
+                          show_icon: true
+                          icon: |
+                            [[[
+                              return entity.state === 'on' ? 'mdi:mailbox-up' : 'mdi:mailbox-outline';
+                            ]]]
+                          name: |
+                            [[[
+                              return entity.state === 'on' ? 'Mail!' : 'No Mail';
+                            ]]]
+                          tap_action:
+                            action: none
+                          styles:
+                            card:
+                              - padding: 12px
+                              - border-radius: 16px
+                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                            name:
+                              - font-size: 24px
+                              - font-weight: bold
+                              - color: '#333'
+                            icon:
+                              - width: 28px
+                              - color: |
+                                  [[[
+                                    return entity.state === 'on' ? '#D4A017' : '#999';
+                                  ]]]
+                        - type: custom:button-card
+                          show_name: true
+                          show_state: false
+                          show_icon: true
+                          icon: mdi:blinds-horizontal
+                          name: |
+                            [[[
+                              var open = Object.values(states).filter(e =>
+                                e.entity_id.startsWith('cover.') &&
+                                e.state === 'open' &&
+                                !e.attributes.entity_id
+                              ).length;
+                              var closed = Object.values(states).filter(e =>
+                                e.entity_id.startsWith('cover.') &&
+                                e.state === 'closed' &&
+                                !e.attributes.entity_id
+                              ).length;
+                              if (open === 0) return 'All Closed';
+                              return open + ' Shades Open';
+                            ]]]
+                          tap_action:
+                            action: none
+                          styles:
+                            card:
+                              - padding: 12px
+                              - border-radius: 16px
+                              - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                            name:
+                              - font-size: 24px
+                              - font-weight: bold
+                              - color: '#333'
+                            icon:
+                              - width: 28px
+                              - color: '#0A6DD6'
+
+                    # Energy graph
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:mini-graph-card
+                          entities:
+                            - entity: sensor.home_energy_meter_gen5_electric_consumption_w_3
+                              color: '#0A6DD6'
+                          name: Power
+                          hours_to_show: 6
+                          points_per_hour: 4
+                          aggregate_func: max
+                          line_width: 3
+                          height: 40
+                          font_size: 80
+                          show:
+                            graph: line
+                            labels: false
+                            name: true
+                            state: true
+                            icon: false
+                            fill: fade
+                          color_thresholds:
+                            - value: 0
+                              color: '#1B8C3A'
+                            - value: 2000
+                              color: '#0A6DD6'
+                            - value: 5000
+                              color: '#E8890C'
+                            - value: 8000
+                              color: '#D42020'
+                          card_mod:
+                            style: |
+                              ha-card {
+                                border-radius: 16px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                              }
+                        - type: custom:mini-graph-card
+                          entities:
+                            - entity: sensor.core_400s_series_pm2_5
+                              color: '#1B8C3A'
+                          name: Air Quality
+                          hours_to_show: 6
+                          points_per_hour: 10
+                          aggregate_func: max
+                          line_width: 3
+                          height: 40
+                          font_size: 80
+                          show:
+                            graph: line
+                            labels: false
+                            name: true
+                            state: true
+                            icon: false
+                            fill: fade
+                          color_thresholds:
+                            - value: 0
+                              color: '#1B8C3A'
+                            - value: 25
+                              color: '#E8890C'
+                            - value: 50
+                              color: '#D42020'
+                          card_mod:
+                            style: |
+                              ha-card {
+                                border-radius: 16px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                              }
+
+            # ═══════════════════════════════════════
+            # ROW 3: Context Cards (only when relevant)
+            # ═══════════════════════════════════════
+
+            # Laundry Running
+            - type: conditional
+              conditions:
+                - condition: or
+                  conditions:
+                    - condition: state
+                      entity: sensor.washer_washer_machine_state
+                      state: 'run'
+                    - condition: state
+                      entity: sensor.dryer_dryer_machine_state
+                      state: 'run'
+              card:
+                type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    entity: sensor.washer_remaining_time
+                    show_name: true
+                    show_state: false
+                    show_icon: true
+                    icon: mdi:washing-machine
+                    name: |
+                      [[[
+                        if (states['sensor.washer_washer_machine_state'].state === 'run')
+                          return 'Washer: ' + entity.state;
+                        return 'Washer: Done';
+                      ]]]
+                    styles:
+                      card:
+                        - padding: 16px
+                        - background: rgba(9, 132, 255, 0.1)
+                        - border-radius: 16px
+                        - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                      name:
+                        - font-size: 28px
+                        - font-weight: bold
+                        - color: '#0A6DD6'
+                      icon:
+                        - width: 36px
+                        - color: '#0A6DD6'
+                  - type: custom:button-card
+                    entity: sensor.dryer_remaining_time
+                    show_name: true
+                    show_state: false
+                    show_icon: true
+                    icon: mdi:tumble-dryer
+                    name: |
+                      [[[
+                        if (states['sensor.dryer_dryer_machine_state'].state === 'run')
+                          return 'Dryer: ' + entity.state;
+                        return 'Dryer: Done';
+                      ]]]
+                    styles:
+                      card:
+                        - padding: 16px
+                        - background: rgba(255, 69, 58, 0.08)
+                        - border-radius: 16px
+                        - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                      name:
+                        - font-size: 28px
+                        - font-weight: bold
+                        - color: '#D42020'
+                      icon:
+                        - width: 36px
+                        - color: '#D42020'
+
+            # Alarm Armed
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: alarm_control_panel.alarm
+                  state_not: disarmed
+              card:
+                type: alarm-panel
+                states:
+                  - arm_away
+                entity: alarm_control_panel.alarm
+
+            # Package
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: binary_sensor.doorbell_package_detected
+                  state: "on"
+              card:
+                type: custom:mushroom-template-card
+                primary: "Package at front door"
+                icon: mdi:package-variant
+                icon_color: amber
+                card_mod:
+                  style: |
+                    ha-card {
+                      --card-primary-font-size: 28px;
+                      background: rgba(232, 137, 12, 0.08);
+                      border-radius: 16px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                    }
+                    .primary { color: #B36B00 !important; }
+
+            # Windows Open
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: binary_sensor.house_windows
+                  state: "on"
+              card:
+                type: custom:mushroom-template-card
+                primary: >
+                  {{ expand(state_attr('binary_sensor.house_windows', 'entity_id')) | selectattr('state', 'eq', 'on') | list | count }} Window{{ 's' if expand(state_attr('binary_sensor.house_windows', 'entity_id')) | selectattr('state', 'eq', 'on') | list | count > 1 else '' }} Open
+                icon: mdi:window-open-variant
+                icon_color: cyan
+                card_mod:
+                  style: |
+                    ha-card {
+                      --card-primary-font-size: 28px;
+                      background: rgba(0, 150, 200, 0.08);
+                      border-radius: 16px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                    }
+                    .primary { color: #007A9E !important; }
+
+            # Doors Open
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: binary_sensor.exterior_doors
+                  state: "on"
+              card:
+                type: custom:mushroom-template-card
+                primary: "Exterior Door Open"
+                icon: mdi:door-open
+                icon_color: red
+                card_mod:
+                  style: |
+                    ha-card {
+                      --card-primary-font-size: 28px;
+                      background: rgba(255, 69, 58, 0.08);
+                      border-radius: 16px;
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                    }
+                    .primary { color: #D42020 !important; }
+
+            # ═══════════════════════════════════════
+            # ROW 4: Quick Actions (always at bottom)
+            # ═══════════════════════════════════════
+            - type: grid
+              columns: 4
+              square: false
+              cards:
+                - type: custom:button-card
+                  name: Goodnight
+                  icon: mdi:weather-night
+                  tap_action:
+                    action: call-service
+                    service: script.goodnight_routine
+                  styles:
+                    card:
+                      - padding: 12px
+                      - font-size: 18px
+                      - color: '#333'
+                      - border-radius: 16px
+                      - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                      - background: rgba(9, 132, 255, 0.06)
+                    icon:
+                      - width: 36px
+                      - height: 36px
+                      - color: '#0A6DD6'
+
+                - type: custom:button-card
+                  name: Lights Off
+                  icon: mdi:lightbulb-off
+                  tap_action:
+                    action: call-service
+                    service: light.turn_off
+                    service_data:
+                      entity_id: all
+                  styles:
+                    card:
+                      - padding: 12px
+                      - font-size: 18px
+                      - color: '#333'
+                      - border-radius: 16px
+                      - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                      - background: rgba(232, 137, 12, 0.06)
+                    icon:
+                      - width: 36px
+                      - height: 36px
+                      - color: '#E8890C'
+
+                - type: custom:button-card
+                  name: Lock All
+                  icon: mdi:lock
+                  tap_action:
+                    action: call-service
+                    service: lock.lock
+                    service_data:
+                      entity_id:
+                        - lock.front_door_deadbolt
+                        - lock.basement_door_deadbolt
+                  styles:
+                    card:
+                      - padding: 12px
+                      - font-size: 18px
+                      - color: '#333'
+                      - border-radius: 16px
+                      - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                      - background: rgba(48, 209, 88, 0.06)
+                    icon:
+                      - width: 36px
+                      - height: 36px
+                      - color: '#1B8C3A'
+
+                - type: custom:button-card
+                  name: Cameras
+                  icon: mdi:cctv
+                  tap_action:
+                    action: navigate
+                    navigation_path: /kitchen-tablet/cameras
+                  styles:
+                    card:
+                      - padding: 12px
+                      - font-size: 18px
+                      - color: '#333'
+                      - border-radius: 16px
+                      - box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+                      - background: rgba(0, 0, 0, 0.03)
+                    icon:
+                      - width: 36px
+                      - height: 36px
+                      - color: '#666'
+
+  # ═══════════════════════════════════════
+  # LIGHTS VIEW
+  # ═══════════════════════════════════════
+  - path: lights
+    title: Lights
+    icon: mdi:lightbulb
+    type: panel
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: "Back"
+            icon: mdi:arrow-left
+            tap_action:
+              action: navigate
+              navigation_path: /kitchen-tablet/home
+            card_mod:
+              style: |
+                ha-card { --card-primary-font-size: 24px; }
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-light-card
+                entity: light.kitchen_ceiling_lights
+                name: Kitchen Ceiling
+                icon: mdi:light-recessed
+                show_brightness_control: true
+                card_mod:
+                  style: |
+                    ha-card { --card-primary-font-size: 24px; }
+
+              - type: custom:mushroom-light-card
+                entity: light.kitchen_undercabinet_lights
+                name: Undercabinet
+                show_brightness_control: true
+                card_mod:
+                  style: |
+                    ha-card { --card-primary-font-size: 24px; }
+
+              - type: custom:mushroom-light-card
+                entity: light.kitchen_pendants
+                name: Pendants
+                icon: mdi:ceiling-light-multiple
+                show_brightness_control: true
+                card_mod:
+                  style: |
+                    ha-card { --card-primary-font-size: 24px; }
+
+              - type: custom:mushroom-light-card
+                entity: light.family_room_lights
+                name: Family Room
+                icon: mdi:lamps
+                show_brightness_control: true
+                card_mod:
+                  style: |
+                    ha-card { --card-primary-font-size: 24px; }
+
+              - type: custom:mushroom-light-card
+                entity: light.living_room_lights
+                name: Living Room
+                icon: mdi:lamps
+                show_brightness_control: true
+                card_mod:
+                  style: |
+                    ha-card { --card-primary-font-size: 24px; }
+
+              - type: custom:mushroom-light-card
+                entity: light.outside_lights
+                name: Outside
+                icon: mdi:post-lamp
+                show_brightness_control: true
+                card_mod:
+                  style: |
+                    ha-card { --card-primary-font-size: 24px; }
+
+              - type: custom:mushroom-light-card
+                entity: light.master_bedroom_lights
+                name: Bedroom
+                icon: mdi:lamp
+                show_brightness_control: true
+                card_mod:
+                  style: |
+                    ha-card { --card-primary-font-size: 24px; }
+
+              - type: custom:mushroom-light-card
+                entity: light.ryans_office_lights
+                name: Ryan's Office
+                show_brightness_control: true
+                card_mod:
+                  style: |
+                    ha-card { --card-primary-font-size: 24px; }
+
+  # ═══════════════════════════════════════
+  # CAMERAS VIEW
+  # ═══════════════════════════════════════
+  - path: cameras
+    title: Cameras
+    icon: mdi:cctv
+    type: panel
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: "Back"
+            icon: mdi:arrow-left
+            tap_action:
+              action: navigate
+              navigation_path: /kitchen-tablet/home
+            card_mod:
+              style: |
+                ha-card { --card-primary-font-size: 24px; }
+
+          - type: grid
+            columns: 3
+            square: false
+            cards:
+              - type: custom:webrtc-camera
+                entity: camera.outside_doorbell
+                muted: true
+                background: true
+              - type: custom:webrtc-camera
+                entity: camera.outside_doorbell_package
+                muted: true
+                background: true
+              - type: custom:webrtc-camera
+                entity: camera.outside_side_patio
+                muted: true
+                background: true
+              - type: custom:webrtc-camera
+                entity: camera.mid_yard_camera_high
+                muted: true
+                background: true
+              - type: custom:webrtc-camera
+                entity: camera.rear_patio_camera_high_resolution_channel
+                muted: true
+                background: true
+              - type: custom:webrtc-camera
+                entity: camera.under_porch_camera_high_resolution_channel
+                muted: true
+                background: true
