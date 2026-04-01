@@ -58,12 +58,6 @@ lovelace:
       icon: mdi:tablet
       show_in_sidebar: false
       filename: configuration/dashboards/kitchen-tablet.yaml
-    kitchen-tablet-old:
-      mode: yaml
-      title: Kitchen (Old)
-      icon: mdi:tablet-dashboard
-      show_in_sidebar: true
-      filename: configuration/dashboards/kitchen-tablet-old.yaml
 
 # Enables configuration UI
 config:
@@ -125,6 +119,12 @@ input_boolean:
   nursery_daytime_initialized:
     name: Nursery daytime initialized
     icon: mdi:weather-sunny
+  washer_running:
+    name: Washer is running
+    icon: mdi:washing-machine
+  dryer_running:
+    name: Dryer is running
+    icon: mdi:tumble-dryer
   washer_recently_done:
     name: Washer recently finished
     icon: mdi:washing-machine

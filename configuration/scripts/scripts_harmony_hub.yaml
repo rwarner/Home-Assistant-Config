@@ -1,29 +1,14 @@
-#### Harmony Hub ####
-harmony_shield_tv:
-  sequence:
-    - action: remote.turn_on
-      entity_id: remote.harmony_hub
-      data:
-        activity: "Watch Shield TV"
+################################
+### SCRIPTS - Harmony Hub    ###
+################################
 
-harmony_ps4:
+harmony_set_activity:
+  alias: "Harmony Set Activity"
+  fields:
+    activity:
+      description: "Harmony activity name (e.g. Watch Shield TV, Play PS4, Play Switch, PowerOff)"
   sequence:
     - action: remote.turn_on
       entity_id: remote.harmony_hub
       data:
-        activity: "Play PS4"
-
-harmony_switch:
-  sequence:
-    - action: remote.turn_on
-      entity_id: remote.harmony_hub
-      data:
-        activity: "Play Switch" 
-
-harmony_poweroff:
-  sequence:
-    - action: remote.turn_on
-      entity_id: remote.harmony_hub
-      data:
-        activity: "PowerOff" 
-############################################
+        activity: "{{ activity }}"

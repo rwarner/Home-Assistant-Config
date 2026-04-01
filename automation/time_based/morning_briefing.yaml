@@ -72,6 +72,18 @@
           {{ open_windows | join(' and ') }} {{ 'is' if open_windows | count == 1 else 'are' }} still open from last night.
           {% endif %}
 
+          {% set plex = states('sensor.tautilli_data') %}
+          {% if plex not in [' ', 'unknown', 'unavailable'] %}
+            {% set items = plex.split(', ') %}
+            {% if items | count > 2 %}
+          {{ items | count }} things were added to Plex while you were asleep.
+            {% elif items | count == 2 %}
+          {{ items[0].split(' - ')[0] }} and {{ items[1].split(' - ')[0] }} were added to Plex overnight.
+            {% else %}
+          {{ items[0].split(' - ')[0] }} was added to Plex while you were asleep.
+            {% endif %}
+          {% endif %}
+
           {% set closers = [
             "Have a great day.",
             "Make it a good one.",
@@ -95,3 +107,10 @@
             "You've got this. Have an amazing day."
           ] %}
           {{ closers | random }}
+
+    # Clear Plex additions after announcing
+    - action: variable.update_sensor
+      data:
+        value: " "
+      target:
+        entity_id: sensor.tautilli_data

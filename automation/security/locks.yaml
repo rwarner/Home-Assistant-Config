@@ -97,25 +97,20 @@
     - variables:
         ryan: "{{ states('sensor.ryan_status') }}"
         kelly: "{{ states('sensor.kelly_status') }}"
-        both_here: "{{ ryan in ['Just Arrived', 'Home'] and kelly in ['Just Arrived', 'Home'] }}"
+        both_arriving: "{{ ryan == 'Just Arrived' and kelly == 'Just Arrived' }}"
+        anyone_arriving: "{{ ryan == 'Just Arrived' or kelly == 'Just Arrived' }}"
     - action: script.announce_local
       data:
         # Allow announcement past 9pm if both people are arriving home together
-        override: "{{ both_here }}"
+        override: "{{ both_arriving }}"
         message: >
-          {% if both_here %} Welcome home, Ryan and Kelly!
+          {% if both_arriving %} Welcome home, Ryan and Kelly!
           {% elif ryan == 'Just Arrived' %} Welcome home, Ryan!
           {% elif kelly == 'Just Arrived' %} Welcome home, Kelly!
           {% else %} Welcome home!
           {% endif %}
 
-          {% set inside = (
-            states('sensor.kitchen_avg_temp') | float(65) +
-            states('sensor.living_room_avg_temp') | float(65) +
-            states('sensor.family_room_avg_temp') | float(65)
-          ) / 3 %}
-          It's {{ inside | round(0) }} degrees inside
-          and {{ states('sensor.outside_avg_temp') | round(0) }} outside.
+          It's {{ states('sensor.outside_avg_temp') | round(0) }} degrees outside.
 
           {% set open_windows = expand(state_attr('binary_sensor.house_windows', 'entity_id'))
             | selectattr('state', 'eq', 'on')

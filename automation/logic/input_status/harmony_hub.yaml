@@ -9,16 +9,13 @@
     entity_id: input_select.harmony_hub
     from: 'Select Input'
   action:
-    - action: >
-          {% if states.input_select.harmony_hub.state == "Watch Shield TV" %}
-            script.harmony_shield_tv
-          {% elif states.input_select.harmony_hub.state == "Play PS4" %}
-            script.harmony_ps4
-          {% elif states.input_select.harmony_hub.state == "Play Switch" %}
-            script.harmony_switch
-          {% elif states.input_select.harmony_hub.state == "Power Off" %}
-            script.harmony_poweroff
+    - action: script.harmony_set_activity
+      data:
+        activity: >
+          {% if states('input_select.harmony_hub') == 'Power Off' %}
+            PowerOff
           {% else %}
+            {{ states('input_select.harmony_hub') }}
           {% endif %}
     - action: input_select.select_option
       entity_id: input_select.harmony_hub

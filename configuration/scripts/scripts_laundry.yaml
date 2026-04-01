@@ -1,0 +1,44 @@
+################################
+### SCRIPTS - Laundry        ###
+################################
+
+announce_washer_done:
+  alias: "Announce Washer Done"
+  mode: single
+  sequence:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.washer_running
+    - action: script.announce_local
+      data:
+        message: >
+          The washer is done.
+          {% if is_state('sensor.dryer_dryer_machine_state', 'run') %}
+            The dryer has {{ states('sensor.dryer_remaining_time') }} remaining.
+          {% endif %}
+    - action: counter.increment
+      target:
+        entity_id: counter.weekly_washer_cycles
+
+announce_dryer_done:
+  alias: "Announce Dryer Done"
+  mode: single
+  sequence:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.dryer_running
+    - action: script.announce_local
+      data:
+        message: >
+          The dryer is done.
+          {% if is_state('sensor.washer_washer_machine_state', 'run') %}
+            {% set text = states('sensor.washer_remaining_time') %}
+            {% set hours = text | regex_findall('(\d+)\s*hour') %}
+            {% set mins = text | regex_findall('(\d+)\s*minute') %}
+            {% set total = (hours[0] | int(0) * 60 if hours else 0) + (mins[0] | int(0) if mins else 0) %}
+            {% set est = (total * 1.3) | round(0) | int %}
+            The washer has about {{ est }} minutes remaining.
+          {% endif %}
+    - action: counter.increment
+      target:
+        entity_id: counter.weekly_dryer_cycles

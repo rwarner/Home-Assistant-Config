@@ -3,6 +3,7 @@
 ##############################
 
 alexa_reset_all_volume:
+  alias: Reset All Alexa Volume
   sequence:
     - action: media_player.volume_set
       data:
@@ -18,3 +19,23 @@ alexa_reset_all_volume:
         entity_id:
           - media_player.kitchen_echo_show_15
         volume_level: '0.7'
+
+alexa_restart_home_assistant:
+  alias: Restart Home Assistant
+  sequence:
+    - action: script.announce_local
+      data:
+        message: "Restarting Home Assistant. I'll be back in a minute."
+    - delay:
+        seconds: 3
+    - action: homeassistant.restart
+
+alexa_reload_automations:
+  alias: Reload Automations
+  sequence:
+    - action: automation.reload
+    - delay:
+        seconds: 2
+    - action: script.announce_local
+      data:
+        message: "Automations have been reloaded."

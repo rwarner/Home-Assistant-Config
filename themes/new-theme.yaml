@@ -88,13 +88,14 @@ new-theme:
   label-badge-red: var(--ios-dark-orange-transparent-7)
   
   # --------- Cards ---------
-  card-background-color: var(--secondary-background-color)  # Unused entities table background
+  card-background-color: var(--secondary-background-color)
   paper-listbox-background-color: var(--primary-background-color)
-  ha-card-border-radius: 10px
-  ha-card-background: var(--black-transparent-5)
+  ha-card-border-radius: 16px
+  ha-card-background: rgba(15, 15, 20, 0.55)
+  ha-card-box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25)
   paper-card-background-color: var(--ha-card-background)
   rgb-card-background-color: var(--off-black) # see https://github.com/basnijholt/lovelace-ios-themes/issues/60
-  ha-card-border-width: 0  # https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/82#event-7732695357
+  ha-card-border-width: 0
   
   # --------- Toggles ---------
   paper-toggle-button-checked-button-color: var(--dark-dark-grey)
@@ -127,10 +128,18 @@ new-theme:
   mini-media-player-accent-color: var(--ios-dark-green)
   mini-media-player-name-font-weight: 600
 
+  # --------- Mushroom ---------
+  mush-card-primary-font-size: 14px
+  mush-card-secondary-font-size: 12px
+  mush-card-primary-font-weight: 600
+  mush-card-secondary-color: var(--light-grey)
+  mush-chip-border-radius: 20px
+  mush-chip-padding: 0 10px
+  mush-chip-height: 36px
+  mush-chip-background: rgba(255, 255, 255, 0.1)
+
   # --------- Custom ---------
-  mcg-title-letter-spacing: .15em
-  # Added for https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/72
-  # TODO: add description for lines below. Suggested in https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/72
+  mcg-title-letter-spacing: .05em
   input-ink-color: var(--primary-text-color)
   input-fill-color: transparent
   input-disabled-fill-color: transparent
@@ -142,25 +151,42 @@ new-theme:
   codemirror-property: var(--accent-color)
 
   # --------- Card Mod ---------
-  # Card Mod Theme Examples: 
+  # Card Mod Theme Examples:
   #   - https://github.com/thomasloven/lovelace-card-mod/blob/master/test/themes/airy.yaml
   card-mod-theme: new-theme # Must have same name as parent theme
 
-  # !! 
+  # !!
   # When updating the theme vales below and debugging you must hard reload
-  # the theme's "frontend.reload_themes" or reload specific integration with VS Code 
+  # the theme's "frontend.reload_themes" or reload specific integration with VS Code
   # !!
   card-mod-card-yaml: |
       .: |
-        :host(.top-nav-icons) ha-card { 
-          --chip-padding: 0px 10px;
+        /* Uniform card styling — glass morphism */
+        ha-card {
+          background: rgba(15, 15, 20, 0.55) !important;
+          backdrop-filter: blur(20px) saturate(140%);
+          -webkit-backdrop-filter: blur(20px) saturate(140%);
+          border: 1px solid rgba(255, 255, 255, 0.06) !important;
+          border-radius: 16px !important;
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25) !important;
         }
-        /* Center the chips inside a chips-card marked with class top-nav-icons */
+        /* Top nav chip centering */
+        :host(.top-nav-icons) ha-card {
+          --chip-padding: 0px 10px;
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+        }
         :host(.top-nav-icons) .chip-container {
           justify-content: center !important;
-        }
-        /* Optional: spacing between pills */
-        :host(.top-nav-icons) .chip-container {
           gap: 10px !important;
+        }
+  card-mod-view-yaml: |
+      .: |
+        hui-view {
+          padding-top: 4px !important;
+          --masonry-view-card-margin: 4px 8px;
         }
         

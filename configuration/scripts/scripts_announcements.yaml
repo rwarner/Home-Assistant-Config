@@ -47,7 +47,7 @@ announce_local:
         language: "en-GB"
         options:
           voice: "Olivia"
-        cache: true
+        cache: false
 
 
 announce_alexa:

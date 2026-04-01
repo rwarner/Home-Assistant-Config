@@ -10,10 +10,7 @@
       from: Home
       to: Away
   action:
-    - action: lock.lock
-      entity_id: lock.basement_door_deadbolt      # Lock Basement Deadbolt
-    - action: lock.lock
-      entity_id: lock.front_door_deadbolt         # Lock Front Door Deadbolt
+    - action: script.lock_all_doors
     - action: alarm_control_panel.alarm_arm_away
       entity_id: alarm_control_panel.alarm
     # - action: climate.set_preset_mode                  # Set thermostat for Away mode

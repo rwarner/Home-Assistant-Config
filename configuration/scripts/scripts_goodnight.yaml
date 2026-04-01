@@ -80,11 +80,7 @@ goodnight_routine:
     - delay: "00:00:06"
 
     # 2. Lock both deadbolts
-    - action: lock.lock
-      target:
-        entity_id:
-          - lock.basement_door_deadbolt
-          - lock.front_door_deadbolt
+    - action: script.lock_all_doors
 
     # 3. Turn off lights
     - action: light.turn_off
@@ -99,6 +95,31 @@ goodnight_routine:
           - light.outside_lights
 
     # 4. Close all covers
+    - action: cover.close_cover
+      continue_on_error: true
+      target:
+        entity_id: cover.house_covers
+
+goodnight_quiet:
+  alias: "Goodnight Quiet"
+  mode: single
+  sequence:
+    # 1. Lock both deadbolts
+    - action: script.lock_all_doors
+
+    # 2. Turn off lights
+    - action: light.turn_off
+      continue_on_error: true
+      target:
+        entity_id:
+          - light.family_room_lights
+          - light.living_room_lights
+          - light.kitchen_lights
+          - light.kitchen_ceiling_lights
+          - light.kitchen_undercabinet_lights
+          - light.outside_lights
+
+    # 3. Close all covers
     - action: cover.close_cover
       continue_on_error: true
       target:

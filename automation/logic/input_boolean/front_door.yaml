@@ -4,17 +4,36 @@
 
 - alias: FRONT DOOR - Whether or not someone is at the front door
   id: f304bee0-7814-11ee-b962-0242ac120002
-  #max_exceeded: silent # Hide warnings when triggered while in delay
+  mode: restart
   trigger:
     - trigger: state
       entity_id: binary_sensor.doorbell_person_detected
       to: 'on'
-  action: 
+    - trigger: state
+      entity_id: binary_sensor.doorbell_push
+      to: 'on'
+  action:
     # Most likely, someone is at the front door turn on input boolean
     - action: homeassistant.turn_on
       entity_id: input_boolean.someone_at_front_door
     # Wait 3 minutes before turning off the boolean
     - delay:
         minutes: 3
+    - action: homeassistant.turn_off
+      entity_id: input_boolean.someone_at_front_door
+
+- alias: FRONT DOOR - Reset someone at front door on HA start
+  id: f304bee0-7814-11ee-b962-0242ac120003
+  trigger:
+    - trigger: homeassistant
+      event: start
+  condition:
+    - condition: state
+      entity_id: input_boolean.someone_at_front_door
+      state: "on"
+  action:
+    # If still on after restart, the delay was lost — clear it
+    - delay:
+        seconds: 30
     - action: homeassistant.turn_off
       entity_id: input_boolean.someone_at_front_door

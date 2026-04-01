@@ -6,11 +6,21 @@
     - name: Front Door Deadbolt
       unique_id: front_door_deadbolt
       lock:
+        # Debounce: only lock if currently unlocked AND last change was >5s ago
+        - condition: template
+          value_template: >
+            {{ is_state('input_boolean.front_door_deadbolt', 'off') and
+               (now() - states.input_boolean.front_door_deadbolt.last_changed).total_seconds() > 5 }}
         - action: input_boolean.turn_on
           target:
             entity_id:
               - input_boolean.front_door_deadbolt
       unlock:
+        # Debounce: only unlock if currently locked AND last change was >5s ago
+        - condition: template
+          value_template: >
+            {{ is_state('input_boolean.front_door_deadbolt', 'on') and
+               (now() - states.input_boolean.front_door_deadbolt.last_changed).total_seconds() > 5 }}
         - action: input_boolean.turn_off
           target:
             entity_id:

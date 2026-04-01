@@ -1,0 +1,13 @@
+################################
+### SCRIPTS - Security       ###
+################################
+
+lock_all_doors:
+  alias: "Lock All Doors"
+  mode: single
+  sequence:
+    - action: lock.lock
+      target:
+        entity_id:
+          - lock.basement_door_deadbolt
+          - lock.front_door_deadbolt

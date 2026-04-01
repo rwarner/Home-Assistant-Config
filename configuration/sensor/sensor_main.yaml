@@ -8,9 +8,10 @@
 #     - /home/homeassistant/.homeassistant/home-assistant_v2.db
 #   scan_interval: 1800
 
-- platform: tautulli
-  api_key: !secret tautulli_api
-  host: !secret tautulli_ip
+# Tautulli - removed YAML config, use UI integration instead
+# - platform: tautulli
+#   api_key: !secret tautulli_api
+#   host: !secret tautulli_ip
 
 # Folder for mp4 videos
 - platform: folder
