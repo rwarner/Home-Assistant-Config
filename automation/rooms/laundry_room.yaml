@@ -152,7 +152,7 @@
       target:
         entity_id: input_boolean.dryer_recently_done
 
-- alias: LAUNDRY - Weekly summary and reset counters
+- alias: WEEKLY - Home summary and reset counters
   id: 5c9d2e4f-7a3b-4c8d-b1e5-6f2a8d4c9b3e
   trigger:
     - trigger: time
@@ -167,12 +167,17 @@
   action:
     - action: notify.ryan_devices
       data:
-        title: "Weekly Laundry Summary"
+        title: "Weekly Home Summary"
         message: >
-          This week: {{ states('counter.weekly_washer_cycles') }} wash
-          {{ 'cycle' if states('counter.weekly_washer_cycles') | int == 1 else 'cycles' }}
-          and {{ states('counter.weekly_dryer_cycles') }} dry
-          {{ 'cycle' if states('counter.weekly_dryer_cycles') | int == 1 else 'cycles' }}.
+          {% set kwh = states('sensor.weekly_energy_consumption') | float(0) | round(1) %}
+          {% set cost = states('sensor.weekly_energy_cost') | float(0) | round(2) %}
+          {% set daily_avg = (kwh / 7) | round(1) %}
+          {% set wash = states('counter.weekly_washer_cycles') | int(0) %}
+          {% set dry = states('counter.weekly_dryer_cycles') | int(0) %}
+          Energy: {{ kwh }} kWh (${{ '%.2f' | format(cost) }}), avg {{ daily_avg }} kWh/day.
+          Laundry: {{ wash }} wash {{ 'cycle' if wash == 1 else 'cycles' }} and {{ dry }} dry {{ 'cycle' if dry == 1 else 'cycles' }}.
+        data:
+          url: "/energy"
     - action: counter.reset
       target:
         entity_id:

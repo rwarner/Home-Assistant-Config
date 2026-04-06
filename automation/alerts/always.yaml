@@ -417,6 +417,13 @@
     # Wait for ffmpeg conversion to complete
     - delay: '00:00:15'
 
+    # Skip front door clip notification if mail just arrived (avoids triple notification)
+    - condition: template
+      value_template: >
+        {{ not ('front_door' in trigger.event.data.file and
+               is_state('input_boolean.mail_arrived', 'on') and
+               (now() - states.input_boolean.mail_arrived.last_changed).total_seconds() < 120) }}
+
     # Send video clip to mobile
     - action: notify.ryan_devices
       data:

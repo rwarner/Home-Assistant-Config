@@ -34,8 +34,13 @@ announce_local:
         media_content_id: "http://localhost:8123/local/sounds/attention.mp3"
         media_content_type: music
 
-    # Wait until attention.mp3 finishes (1–2 seconds depending on clip length)
-    - delay: "00:00:01"
+    # Wait for attention tone to finish
+    - wait_for_trigger:
+        - trigger: state
+          entity_id: media_player.local_audio
+          to: "off"
+      timeout: "00:00:03"
+      continue_on_timeout: true
 
     # 🗣️ Speak the message
     - action: tts.speak

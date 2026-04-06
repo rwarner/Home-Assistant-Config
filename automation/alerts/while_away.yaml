@@ -16,6 +16,10 @@
       entity_id: alarm_control_panel.alarm
       state: armed_away
   action:
+    # Brief delay to let mailbox sensor register if this is the mail carrier
+    - delay: '00:00:10'
+    - condition: template
+      value_template: "{{ not is_state('input_boolean.mail_arrived', 'on') }}"
     - action: notify.ryan_devices
       data:
         title: "Front Door Motion"
@@ -34,13 +38,12 @@
   trigger:
     trigger: state
     entity_id:
-     - binary_sensor.living_room_occupancy
-     - binary_sensor.thermostat_occupancy
-     - binary_sensor.laundry_motion_sensor
      - binary_sensor.kitchen_motion_sensor
+     - binary_sensor.laundry_motion_sensor
      - binary_sensor.ryans_office_motion_sensor
-     - binary_sensor.media_room_motion_sensor
      - binary_sensor.master_bedroom_motion_sensor
+     - binary_sensor.movie_room_motion_sensor
+     - binary_sensor.nursery_motion_sensor
     to: 'on'
   condition:
     - condition: state
@@ -135,7 +138,7 @@
         data:
           ttl: 0
           priority: high
-          entity_id: camera.outside_under_porch
+          image: "/api/camera_proxy/camera.under_porch_camera_high_resolution_channel"
           url: "/lovelace/camera_view"
           actions:
           - action: PROTECT
