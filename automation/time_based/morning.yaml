@@ -36,6 +36,22 @@
               target:
                 entity_id: automation.bedroom_turn_on_light_from_motion_off_after_5_min_between_10_am_and_9_30pm
 
+- alias: "MORNING - Re-enable nursery motion light automation if disabled"
+  id: a3c7e1f9-4b82-4d6a-9e15-7f2d8c5a1b3e
+  trigger:
+    - trigger: time
+      at: "06:00:00"
+  action:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: automation.nursery_light_control_from_motion_nursery_before_11pm_bookshelf_after
+              state: "off"
+          sequence:
+            - action: automation.turn_on
+              target:
+                entity_id: automation.nursery_light_control_from_motion_nursery_before_11pm_bookshelf_after
+
 # 8:00 a.m.
 - alias: MORNING - Set all Alexa volume to 60% everyday
   id: cf4face8-7815-11ee-b962-0242ac120002

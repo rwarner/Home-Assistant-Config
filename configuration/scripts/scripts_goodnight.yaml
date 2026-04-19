@@ -81,6 +81,7 @@ goodnight_routine:
 
     # 2. Lock both deadbolts
     - action: script.lock_all_doors
+      continue_on_error: true
 
     # 3. Turn off lights
     - action: light.turn_off
@@ -106,6 +107,7 @@ goodnight_quiet:
   sequence:
     # 1. Lock both deadbolts
     - action: script.lock_all_doors
+      continue_on_error: true
 
     # 2. Turn off lights
     - action: light.turn_off

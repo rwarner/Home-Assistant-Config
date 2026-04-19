@@ -27,6 +27,7 @@
         data:
           ttl: 0
           priority: high
+          tag: front_door_motion
           image: "/api/camera_proxy/camera.outside_doorbell" # Captures image immediately, sends via notification
           url: "/lovelace/camera_view"
     - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals

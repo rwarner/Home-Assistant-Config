@@ -435,6 +435,7 @@
             content_type: "video/mp4"
           ttl: 0
           priority: high
+          tag: front_door_motion
           url: "/lovelace/camera_view"
 
     - delay: '00:00:10'

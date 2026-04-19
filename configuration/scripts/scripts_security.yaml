@@ -7,6 +7,7 @@ lock_all_doors:
   mode: single
   sequence:
     - action: lock.lock
+      continue_on_error: true
       target:
         entity_id:
           - lock.basement_door_deadbolt
