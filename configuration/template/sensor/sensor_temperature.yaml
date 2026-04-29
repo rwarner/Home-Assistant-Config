@@ -100,3 +100,49 @@
       {% set t3 = state_attr('climate.living_room_mitsubishi', 'current_temperature') | float(default=65.0) %}
       {{ '%0.3g' | format((t1 + t2 + t3) / 3) }}
 
+# -- 2nd Floor Average (Master Bedroom + Nursery + Office) --
+  - name: "2nd Floor Average Temperature"
+    unique_id: second_floor_avg_temp
+    unit_of_measurement: '°F'
+    state_class: measurement
+    state: >-
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.master_bedroom_avg_temp'), 70.0) +
+        float(states('sensor.nursery_avg_temp'), 70.0) +
+        float(states('sensor.ryans_office_avg_temp'), 70.0)
+      ) / 3) }}
+
+# -- Attic vs Outside Delta (how much hotter attic is than outside) --
+  - name: "Attic vs Outside Delta"
+    unique_id: attic_outside_delta
+    unit_of_measurement: '°F'
+    state_class: measurement
+    state: >-
+      {{'%0.3g'|format(
+        float(states('sensor.attic_gable_fan_temperature'), 80.0) -
+        float(states('sensor.outside_avg_temp'), 70.0)
+      ) }}
+
+# -- Attic vs 2nd Floor Delta (attic heat pressure on bedrooms) --
+  - name: "Attic vs 2nd Floor Delta"
+    unique_id: attic_second_floor_delta
+    unit_of_measurement: '°F'
+    state_class: measurement
+    state: >-
+      {{'%0.3g'|format(
+        float(states('sensor.attic_gable_fan_temperature'), 80.0) -
+        float(states('sensor.second_floor_avg_temp'), 70.0)
+      ) }}
+
+# -- 2nd Floor vs Outside Delta (how much warmer indoors is than outside) --
+  - name: "2nd Floor vs Outside Delta"
+    unique_id: second_floor_outside_delta
+    unit_of_measurement: '°F'
+    state_class: measurement
+    state: >-
+      {{'%0.3g'|format(
+        float(states('sensor.second_floor_avg_temp'), 70.0) -
+        float(states('sensor.outside_avg_temp'), 70.0)
+      ) }}
+
