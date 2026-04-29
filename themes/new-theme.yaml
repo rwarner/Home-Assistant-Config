@@ -150,6 +150,30 @@ new-theme:
   input-hover-line-color: var(--secondary-text-color)
   codemirror-property: var(--accent-color)
 
+  # --------- Web Awesome Form Inputs (HA 2026.4+) ---------
+  # New ha-input component replaced ha-textfield; reads these instead of mdc-* vars
+  ha-color-form-background: "#2c2c2e"
+  ha-color-form-background-hover: "#3a3a3c"
+  ha-color-form-background-disabled: "#1c1c1e"
+
+  # --------- MDC Selects/Inputs (HA 2024+) ---------
+  mdc-select-fill-color: var(--primary-background-color)
+  mdc-text-field-fill-color: var(--primary-background-color)
+  mdc-select-ink-color: var(--primary-text-color)
+  mdc-select-label-ink-color: var(--secondary-text-color)
+  mdc-select-disabled-ink-color: var(--disabled-text-color)
+  mdc-select-dropdown-icon-color: var(--primary-text-color)
+  mdc-select-idle-line-color: var(--secondary-text-color)
+  mdc-select-hover-line-color: var(--primary-text-color)
+  mdc-select-outlined-idle-border-color: var(--divider-color)
+  mdc-select-outlined-hover-border-color: var(--secondary-text-color)
+  mdc-text-field-ink-color: var(--primary-text-color)
+  mdc-text-field-label-ink-color: var(--secondary-text-color)
+  mdc-text-field-idle-line-color: var(--secondary-text-color)
+  mdc-text-field-hover-line-color: var(--primary-text-color)
+  mdc-text-field-outlined-idle-border-color: var(--divider-color)
+  mdc-text-field-outlined-hover-border-color: var(--secondary-text-color)
+
   # --------- Card Mod ---------
   # Card Mod Theme Examples:
   #   - https://github.com/thomasloven/lovelace-card-mod/blob/master/test/themes/airy.yaml
