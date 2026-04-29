@@ -35,6 +35,13 @@
         type: daily
       response_variable: forecast
 
+    # Lower volume for morning briefing, restore after
+    - action: media_player.volume_set
+      target:
+        entity_id: media_player.kitchen_echo_show_15
+      data:
+        volume_level: 0.45
+
     # Announce on kitchen Echo Show (Alexa announce plays built-in chime first)
     - action: notify.alexa_media_kitchen_echo_show_15
       data:
@@ -114,3 +121,11 @@
         value: " "
       target:
         entity_id: sensor.tautilli_data
+
+    # Restore volume to default
+    - delay: "00:00:20"
+    - action: media_player.volume_set
+      target:
+        entity_id: media_player.kitchen_echo_show_15
+      data:
+        volume_level: 0.60
