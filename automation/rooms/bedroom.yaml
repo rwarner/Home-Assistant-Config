@@ -28,54 +28,64 @@
 - alias: BEDROOM - Control Light and Fan (Kelly's Light Button)
   id: 62088754-7815-11ee-b962-0242ac120002
   trigger:
-    - trigger: event
-      event_type: zha_event
-      event_data:
-        device_ieee: !secret bedroom_light_button_ieee
+    - trigger: mqtt
+      topic: zigbee2mqtt/bedroom_light_button/action
+      payload: "single"
+      id: single
+    - trigger: mqtt
+      topic: zigbee2mqtt/bedroom_light_button/action
+      payload: "double"
+      id: double
+    - trigger: mqtt
+      topic: zigbee2mqtt/bedroom_light_button/action
+      payload: "hold"
+      id: hold
   condition: []
   action:
     choose:
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.command == 'button_single' }}"
+          - condition: trigger
+            id: single
         sequence:
           - action: script.toggle_bedroom_lights
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.command == 'button_double' }}"
+          - condition: trigger
+            id: double
         sequence:
           - action: switch.toggle
             target:
               entity_id: switch.master_bedroom_fan
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.command == 'button_hold' }}"
+          - condition: trigger
+            id: hold
         sequence:
           - action: switch.toggle
             target:
               entity_id: switch.master_bedroom_fan
           - action: script.toggle_bedroom_lights
-
-
 
 - alias: BEDROOM - Control Light and Fan (Ryan Button)
   id: 72546ace-7815-11ee-b962-0242ac120002
   trigger:
-    - trigger: event
-      event_type: zha_event
-      event_data:
-        device_ieee: !secret bedroom_ryans_bedside_button_ieee
+    - trigger: mqtt
+      topic: zigbee2mqtt/ryans_bedside_button/action
+      payload: "single"
+      id: single
+    - trigger: mqtt
+      topic: zigbee2mqtt/ryans_bedside_button/action
+      payload: "double"
+      id: double
   condition: []
   action:
     choose:
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.command == 'button_single' }}"
+          - condition: trigger
+            id: single
         sequence:
           - action: script.toggle_bedroom_lights
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.command == 'button_double' }}"
+          - condition: trigger
+            id: double
         sequence:
           - action: switch.toggle
             target:

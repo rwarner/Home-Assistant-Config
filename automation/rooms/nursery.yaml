@@ -2,6 +2,52 @@
 ### ROOM - Nursery     ###
 ##########################
 
+############ Light Button #############
+- alias: NURSERY - Control Lights (Nursery Light Button)
+  id: a3f1c2d4-8920-11ee-b962-0242ac120002
+  trigger:
+    - trigger: mqtt
+      topic: zigbee2mqtt/nursery_light_button/action
+      payload: "single"
+      id: single
+    - trigger: mqtt
+      topic: zigbee2mqtt/nursery_light_button/action
+      payload: "double"
+      id: double
+    - trigger: mqtt
+      topic: zigbee2mqtt/nursery_light_button/action
+      payload: "hold"
+      id: hold
+  condition: []
+  action:
+    choose:
+      - conditions:
+          - condition: trigger
+            id: single
+        sequence:
+          - action: light.toggle
+            target:
+              entity_id: light.nursery_lights
+      - conditions:
+          - condition: trigger
+            id: double
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id: light.nursery_lights
+          - action: light.turn_on
+            target:
+              entity_id: light.nursery_bookshelf_lamp
+            data:
+              brightness_pct: 10
+      - conditions:
+          - condition: trigger
+            id: hold
+        sequence:
+          - action: scene.turn_on
+            target:
+              entity_id: scene.emilia_bedtime
+
 ############ Motion Sensor #############
 - alias: NURSERY - Light Control from Motion (nursery before 1030pm, bookshelf after)
   id: 9542bf88-292c-4af8-b6f0-c3fd3dfbb6b0
