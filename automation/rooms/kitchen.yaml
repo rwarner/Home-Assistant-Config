@@ -40,7 +40,7 @@
               state: 'on'
             - condition: time
               # After 8 am
-              after: '08:00:00'
+              after: '07:30:00'
           sequence:
             - action: light.turn_on
               data:

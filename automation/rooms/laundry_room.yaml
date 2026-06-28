@@ -18,12 +18,16 @@
 
 - alias: LAUNDRY - Announce washer done
   id: 98b90d3c-7815-11ee-b962-0242ac120002
-  mode: restart
+  mode: single
   trigger:
     - trigger: state
       entity_id: sensor.washer_washer_machine_state
       from: 'run'
       to: 'stop'
+  condition:
+    - condition: state
+      entity_id: input_boolean.washer_running
+      state: 'on'
   action:
     - action: script.announce_washer_done
 
@@ -43,12 +47,16 @@
 
 - alias: LAUNDRY - Announce dryer done
   id: 9c564aa4-7815-11ee-b962-0242ac120002
-  mode: restart
+  mode: single
   trigger:
     - trigger: state
       entity_id: sensor.dryer_dryer_machine_state
       from: 'run'
       to: 'stop'
+  condition:
+    - condition: state
+      entity_id: input_boolean.dryer_running
+      state: 'on'
   action:
     - action: script.announce_dryer_done
 

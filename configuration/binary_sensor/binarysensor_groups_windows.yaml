@@ -22,24 +22,28 @@
 ### Second Floor ###
 - platform: group
   name: Kellys Office Windows
+  unique_id: kellys_office_windows
   entities:
     - binary_sensor.kellys_office_rear_window_sensor
     - binary_sensor.kellys_office_side_window_sensor
 
 - platform: group
   name: Ryans Office Windows
+  unique_id: ryans_office_windows
   entities:
     - binary_sensor.ryans_office_rear_window_sensor
     - binary_sensor.ryans_office_side_window_sensor
 
 - platform: group
   name: Master Bedroom Windows
+  unique_id: master_bedroom_windows
   entities:
     - binary_sensor.master_bedroom_front_window_sensor
     - binary_sensor.master_bedroom_side_window_sensor
 
 - platform: group
   name: Nursery Windows
+  unique_id: nursery_windows
   entities:
     - binary_sensor.nursery_front_window_sensor
     - binary_sensor.nursery_side_window_sensor
@@ -77,10 +81,12 @@
 ### Basement ###
 - platform: group
   name: Laundry Room Windows
+  unique_id: laundry_room_windows
   entities:
     - binary_sensor.laundry_room_window_sensor
 
 - platform: group
   name: Movie Room Windows
+  unique_id: movie_room_windows
   entities:
     - binary_sensor.movie_room_window_sensor

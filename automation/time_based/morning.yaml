@@ -40,7 +40,7 @@
   id: a3c7e1f9-4b82-4d6a-9e15-7f2d8c5a1b3e
   trigger:
     - trigger: time
-      at: "06:00:00"
+      at: "08:00:00"
   action:
     - choose:
         - conditions:
