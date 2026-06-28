@@ -51,6 +51,7 @@ custom_icons/
 !www/images/**
 
 .ha_run.lock
+.cache/
 
 # Claude Code
 CLAUDE.md
