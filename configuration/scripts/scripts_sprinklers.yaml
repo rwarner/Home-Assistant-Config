@@ -36,19 +36,19 @@ run_all_sprinklers:
             1.0
           {% endif %}
 
-        # Rainfall in last 7 days from fresh forecast (inches)
-        rainfall_last_week: >-
+        # Upcoming rain in next 7 days from forecast (inches) — used to reduce run time if rain is coming
+        upcoming_rain_forecast: >-
           {% set total = namespace(sum=0) %}
           {% for day in fc[:7] %}
             {% set total.sum = total.sum + (day.precipitation | default(0) | float) %}
           {% endfor %}
           {{ total.sum }}
 
-        # Rainfall multiplier — reduce watering if rain > 0.25"
+        # Rain multiplier — reduce watering if significant rain is forecast this week
         rain_multiplier: >-
-          {% if rainfall_last_week >= 1.0 %} 0.0
-          {% elif rainfall_last_week >= 0.5 %} 0.5
-          {% elif rainfall_last_week >= 0.25 %} 0.75
+          {% if upcoming_rain_forecast >= 1.0 %} 0.0
+          {% elif upcoming_rain_forecast >= 0.5 %} 0.5
+          {% elif upcoming_rain_forecast >= 0.25 %} 0.75
           {% else %} 1.0
           {% endif %}
 
@@ -86,28 +86,40 @@ run_all_sprinklers:
              (temp_multiplier | float) *
              (humidity_multiplier | float) }}
 
-    # 3. Run sprinklers with adjusted times
-    - repeat:
-        count: 7
-        sequence:
-          - choose:
-              - conditions: >
-                  {{ sprinkler_times[repeat.index - 1] > 0 and final_multiplier > 0 }}
-                sequence:
-                  - variables:
-                      run_time: >
-                        {{ (sprinkler_times[repeat.index - 1] * final_multiplier)
-                          | round(0) | int }}
-                  - action: rainbird.start_irrigation
-                    data:
-                      entity_id: "switch.rain_bird_sprinkler_{{ repeat.index }}"
-                      duration: "{{ run_time }}"
-                  - delay:
-                      minutes: "{{ run_time }}"
+    # 3. Skip entirely if nothing would run — notify and exit
+    - if:
+        - condition: template
+          value_template: "{{ final_multiplier <= 0 }}"
+      then:
+        - action: notify.ryan_devices
+          data:
+            title: "Sprinklers Skipped"
+            message: >
+              No zones ran today — conditions blocked watering.
+              Seasonal: {{ seasonal_multiplier }}, Rain: {{ rain_multiplier }},
+              Temp: {{ temp_multiplier }}, Humidity: {{ humidity_multiplier }}.
+        - stop: "Final multiplier is 0, skipping all zones"
 
-    # 4. Record last run date
+    # 4. Record last run date before zones start — survives HA restart mid-run
     - action: input_datetime.set_datetime
       target:
         entity_id: input_datetime.last_sprinkler_run
       data:
         date: "{{ now().date() }}"
+
+    # 5. Run sprinklers with adjusted times
+    - repeat:
+        count: 7
+        sequence:
+          - condition: template
+            value_template: "{{ sprinkler_times[repeat.index - 1] > 0 }}"
+          - variables:
+              run_time: >
+                {{ (sprinkler_times[repeat.index - 1] * final_multiplier)
+                  | round(0) | int }}
+          - action: rainbird.start_irrigation
+            data:
+              entity_id: "switch.rain_bird_sprinkler_{{ repeat.index }}"
+              duration: "{{ run_time }}"
+          - delay:
+              minutes: "{{ run_time }}"

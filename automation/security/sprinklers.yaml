@@ -91,25 +91,27 @@
             1.0
           {% endif %}
         
-        # Total expected precipitation in the next 2 days
+        # Total expected precipitation in the next 2 days (tomorrow + day after)
+        # forecast[0] is today (nearly over at 9 PM check), so skip it
         next_2_days_precip: >-
           {% set total = namespace(sum=0) %}
-          {% for day in forecast[:2] %}
+          {% for day in forecast[1:3] %}
             {% set total.sum = total.sum + (day.precipitation | default(0) | float) %}
           {% endfor %}
           {{ total.sum }}
 
-        # True/False: Is meaningful rain expected in next 2 days
+        # True/False: Is meaningful rain expected in next 2 days (tomorrow + day after)
+        # Uses namespace to avoid Jinja2 loop scoping issue
         next_2_days_rain_expected: >-
-          {% set rain_expected = false %}
-          {% for day in forecast[:2] %}
+          {% set ns = namespace(rain_expected=false) %}
+          {% for day in forecast[1:3] %}
             {% set prob = day.precipitation_probability | default(0) | int %}
             {% set amt = day.precipitation | default(0) | float %}
             {% if prob >= threshold_prob and amt >= threshold_amount %}
-              {% set rain_expected = true %}
+              {% set ns.rain_expected = true %}
             {% endif %}
           {% endfor %}
-          {{ rain_expected }}
+          {{ ns.rain_expected }}
         
         days_since_last_watering: >-
           {% set last_run = states('input_datetime.last_sprinkler_run') %}
