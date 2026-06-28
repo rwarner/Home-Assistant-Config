@@ -10,21 +10,31 @@
     - trigger: time
       at: "15:00:00"
 
-    # Primary: sun below a reasonable "it's dark" threshold
+    # Clear sky: fires ~7:10-7:15 PM in late May, adjusts naturally with seasons
     - trigger: numeric_state
       entity_id: sun.sun
       attribute: elevation
-      below: -4
-      for: "00:02:00"
-
-    # Fallback: very dim outside (e.g., storms). Optional—remove if you don't want this.
-    - trigger: numeric_state
-      entity_id: sensor.front_outdoor_motion_sensor_illuminance
-      below: 500
+      below: 14
       for: "00:05:00"
 
+    # Cloudy/overcast: fires ~6:35-6:45 PM in late May (sun still up but dim)
+    - trigger: numeric_state
+      entity_id: sun.sun
+      attribute: elevation
+      below: 25
+      for: "00:05:00"
+
+    # --- OLD: hardware lux fallback (front outdoor motion sensor) ---
+    # Replaced because sensor dies repeatedly and was triggering too early
+    # on clear days (500 lux = mid-afternoon ambient, not actual darkness).
+    # Uncomment to re-enable if a reliable outdoor lux sensor is added.
+    # - trigger: numeric_state
+    #   entity_id: sensor.front_outdoor_motion_sensor_illuminance
+    #   below: 500
+    #   for: "00:05:00"
+
   condition:
-    # Inclusive: 3:00:00 PM or later
+    # Only after 3 PM
     - condition: template
       value_template: "{{ now() >= today_at('15:00:00') }}"
 
@@ -33,18 +43,27 @@
       entity_id: input_boolean.dark_outside
       state: "off"
 
-    # Is it dark enough? (guards the 3pm time trigger)
+    # Is it dark enough? Guards the 3pm time trigger.
+    # Clear days: elevation < 14°
+    # Cloudy/stormy days: elevation < 25° (earlier trigger when overcast)
     - condition: or
       conditions:
         - condition: numeric_state
           entity_id: sun.sun
           attribute: elevation
-          below: -4
-        - condition: numeric_state
-          entity_id: sensor.front_outdoor_motion_sensor_illuminance
-          below: 500
+          below: 14
+        - condition: template
+          value_template: >
+            {{ state_attr('sun.sun', 'elevation') | float < 25
+               and states('weather.tomorrow_io_home_daily') in
+               ['cloudy', 'fog', 'rainy', 'pouring', 'lightning',
+                'lightning-rainy', 'snowy', 'exceptional'] }}
+        # --- OLD: lux condition ---
+        # - condition: numeric_state
+        #   entity_id: sensor.front_outdoor_motion_sensor_illuminance
+        #   below: 500
 
-    # Only once per calendar day (use your automation entity_id)
+    # Only once per calendar day
     - condition: template
       value_template: >
         {% set lt = state_attr('automation.going_dark_set_dark_outside_input_boolean_to_on_dark_out', 'last_triggered') %}
@@ -63,7 +82,7 @@
     - trigger: numeric_state
       entity_id: sun.sun
       attribute: elevation
-      above: 6         # try 5°, tune to 6–8° if still dim
+      above: 6
       for: "00:10:00"
   condition:
     - condition: time

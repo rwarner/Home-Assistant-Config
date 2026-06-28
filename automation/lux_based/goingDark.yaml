@@ -15,11 +15,8 @@
     # Only proceed, if we haven't used this in the last 12 hours
     - condition: template
       value_template: >-
-        {{
-        (state_attr('states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes',
-        'last_triggered') == none) or
-        ((as_timestamp(now())-as_timestamp(states.automation.going_dark_turn_on_lights_when_outside_gets_dark.attributes.last_triggered))
-        > 43200) }}
+        {{ this.attributes.last_triggered is none
+           or (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) > 43200 }}
   action:
   # If we are away, turn on away scene
   - choose:
@@ -42,16 +39,24 @@
 - alias: GOING DARK - Close all curtains and shades when it's getting dark
   id: 5f9f9787-3108-4c69-997b-ba7fbdee9285
   trigger:
-    # Make sure that the light level is below 100 lx
-    # Don't rely on the "dark outside variable, since closing
-    # since closing the curtains can be done slightly later than the lights
-    - trigger: numeric_state
-      entity_id: sensor.front_outdoor_motion_sensor_illuminance
-      below: 20
-    # Make sure that it's dark outside
+    # Reliable: close curtains at actual sunset — sun.sun below_horizon
+    # corresponds exactly to when outdoor lux drops to ~20 (near-darkness).
+    # Adjusts with the season, requires no hardware.
+    - trigger: state
+      entity_id: sun.sun
+      to: "below_horizon"
+
+    # --- OLD: hardware lux trigger (front outdoor motion sensor) ---
+    # Was triggering at ~20 lux = essentially sunset anyway, but failed
+    # whenever the sensor battery died. Replaced by sun.sun above.
+    # - trigger: numeric_state
+    #   entity_id: sensor.front_outdoor_motion_sensor_illuminance
+    #   below: 20
+    # --- OLD: dark_outside boolean (commented out in original) ---
     # - trigger: state
     #   entity_id: input_boolean.dark_outside
     #   to: "on"
+
   action:
     - action: cover.close_cover
       entity_id: cover.house_covers
