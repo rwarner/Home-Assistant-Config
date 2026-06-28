@@ -1,0 +1,150 @@
+###################################
+### ALERTS - Shed Solar System  ###
+###################################
+
+- alias: SOLAR - BatteryProtect disconnected load
+  id: solar-batteryprotect-load-disconnected
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id: sensor.shed_batteryprotect_output_state
+      to: 'off'
+      not_from:
+        - 'unavailable'
+        - 'unknown'
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Shed BatteryProtect Cut Load"
+        message: >
+          BatteryProtect disconnected the shed load.
+          Battery at {{ states('sensor.shed_smartshunt_battery') | round(0) }}%
+          ({{ states('sensor.shed_smartshunt_voltage') }}V).
+          Reason: {{ states('sensor.shed_batteryprotect_off_reason') | replace('_', ' ') | title }}.
+        data:
+          ttl: 0
+          priority: high
+          url: "/new-dash/solar"
+
+- alias: SOLAR - BatteryProtect reconnected load
+  id: solar-batteryprotect-load-reconnected
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id: sensor.shed_batteryprotect_output_state
+      from: 'off'
+      to: 'on'
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Shed BatteryProtect Reconnected"
+        message: >
+          BatteryProtect restored power to shed load.
+          Battery now at {{ states('sensor.shed_smartshunt_battery') | round(0) }}%
+          ({{ states('sensor.shed_smartshunt_voltage') }}V).
+        data:
+          url: "/new-dash/solar"
+
+- alias: SOLAR - BatteryProtect alarm
+  id: solar-batteryprotect-alarm
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id: sensor.shed_batteryprotect_alarm_reason
+  condition:
+    - condition: template
+      value_template: >
+        {% set s = states('sensor.shed_batteryprotect_alarm_reason') %}
+        {{ s not in ['no_alarm', 'unavailable', 'unknown'] }}
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Shed BatteryProtect Alarm"
+        message: >
+          {{ states('sensor.shed_batteryprotect_alarm_reason') | replace('_', ' ') | title }}.
+          Battery at {{ states('sensor.shed_smartshunt_battery') | round(0) }}%.
+        data:
+          ttl: 0
+          priority: high
+          url: "/new-dash/solar"
+
+- alias: SOLAR - SmartSolar charger error
+  id: solar-smartsolar-charger-error
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id: sensor.shed_smartsolar_charger_error
+  condition:
+    - condition: template
+      value_template: >
+        {% set s = states('sensor.shed_smartsolar_charger_error') %}
+        {{ s not in ['no_error', 'unavailable', 'unknown'] }}
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Shed Solar Charger Error"
+        message: >
+          SmartSolar error: {{ states('sensor.shed_smartsolar_charger_error') | replace('_', ' ') | title }}.
+          Solar power was {{ states('sensor.shed_smartsolar_power') }}W before the fault.
+        data:
+          url: "/new-dash/solar"
+
+- alias: SOLAR - Battery low warning
+  id: solar-battery-low-warning
+  mode: single
+  trigger:
+    - trigger: numeric_state
+      entity_id: sensor.shed_smartshunt_battery
+      below: 25
+      for:
+        minutes: 5
+  condition:
+    # Not already at critical level (that has its own alert)
+    - condition: numeric_state
+      entity_id: sensor.shed_smartshunt_battery
+      above: 15
+    # Don't re-alert more than once every 2 hours
+    - condition: template
+      value_template: >
+        {% set lt = this.attributes.last_triggered %}
+        {{ lt is none or (now() - lt).total_seconds() > 7200 }}
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Shed Battery Low"
+        message: >
+          {% set m = states('sensor.shed_smartshunt_time_remaining') | int %}
+          {% set h = m // 60 %}
+          Shed battery at {{ states('sensor.shed_smartshunt_battery') | round(0) }}%.
+          {% if h >= 1 %}{{ h }}h {{ m % 60 }}m remaining at current draw.
+          {% else %}{{ m }}m remaining at current draw.
+          {% endif %}
+        data:
+          url: "/new-dash/solar"
+
+- alias: SOLAR - Battery critical
+  id: solar-battery-critical
+  mode: single
+  trigger:
+    - trigger: numeric_state
+      entity_id: sensor.shed_smartshunt_battery
+      below: 15
+      for:
+        minutes: 5
+  condition:
+    - condition: template
+      value_template: >
+        {% set lt = this.attributes.last_triggered %}
+        {{ lt is none or (now() - lt).total_seconds() > 7200 }}
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Shed Battery Critical"
+        message: >
+          Shed battery critically low at {{ states('sensor.shed_smartshunt_battery') | round(0) }}%
+          ({{ states('sensor.shed_smartshunt_voltage') }}V).
+          BatteryProtect will disconnect load soon.
+        data:
+          ttl: 0
+          priority: high
+          url: "/new-dash/solar"
