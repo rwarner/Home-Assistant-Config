@@ -167,6 +167,7 @@ homekit:
       - binary_sensor.*_motion_sensor
       - sensor.*_avg_temp
       - sensor.*_water_sensor_moisture
+      - binary_sensor.*_water_sensor_water_leak
     include_entities:
       - alarm_control_panel.alarm
       - light.living_room_fireplace
@@ -235,6 +236,15 @@ homekit:
       low_battery_threshold: 30
     binary_sensor.downstairs_bathroom_water_sensor_moisture:
       linked_battery_sensor: sensor.downstairs_bathroom_water_sensor_battery_level
+      low_battery_threshold: 30
+    binary_sensor.laundry_water_sensor_water_leak:
+      linked_battery_sensor: sensor.laundry_water_sensor_battery
+      low_battery_threshold: 30
+    binary_sensor.half_bath_water_sensor_water_leak:
+      linked_battery_sensor: sensor.half_bath_water_sensor_battery
+      low_battery_threshold: 30
+    binary_sensor.upstairs_bathroom_water_sensor_water_leak:
+      linked_battery_sensor: sensor.upstairs_bathroom_water_sensor_battery
       low_battery_threshold: 30
     camera.outside_doorbell:
       linked_motion_sensor: binary_sensor.doorbell_person_detected

@@ -135,21 +135,49 @@
       from: "On Battery"
       # any non-battery state, including "Online, Battery Charging" and "Online"
       for: "00:00:30"
+
+    # Battery low while on grid power — indicates loose connection or degraded battery
+    - trigger: numeric_state
+      id: low_battery
+      entity_id: sensor.ups_battery_charge
+      below: 80
+      for: "00:05:00"
   action:
     - choose:
         - conditions: "{{ trigger.id == 'battery' }}"
           sequence:
             - action: notify.ryan_devices
               data:
-                title: "Home Power Outage"
+                title: "⚡ Home Power Outage"
                 message: >
-                  UPS Battery Runtime: {{ states('sensor.ups_battery_runtime') }} minutes
+                  {% set load_pct = states('sensor.ups_load') | float(1) %}
+                  {% set charge_pct = states('sensor.ups_battery_charge') | float(0) %}
+                  {% set battery_wh = 188 %}
+                  {% set ups_rated_w = 1320 %}
+                  {% set actual_w = (load_pct / 100) * ups_rated_w %}
+                  {% set est_min = ((charge_pct / 100 * battery_wh) / actual_w * 60) | round(0) | int %}
+                  Battery: {{ charge_pct | round(0) }}% · Load: {{ actual_w | round(0) }}W ({{ load_pct | round(0) }}%)
+                  Est. runtime: ~{{ est_min }} min
         - conditions: "{{ trigger.id == 'online' }}"
           sequence:
             - action: notify.ryan_devices
               data:
                 title: "Home Power Online"
                 message: "Power has returned"
+
+        - conditions: "{{ trigger.id == 'low_battery' }}"
+          sequence:
+            - action: notify.ryan_devices
+              data:
+                title: "⚠️ UPS Battery Low"
+                message: >
+                  {% set charge_pct = states('sensor.ups_battery_charge') | float(0) %}
+                  {% set status = states('sensor.ups_status') %}
+                  Battery at {{ charge_pct | round(0) }}% while {{ status }}.
+                  May indicate a loose connection or degraded battery cell.
+                data:
+                  ttl: 0
+                  priority: high
 
 - alias: ALERT - Low battery on sensor, notify Mobile App
   id: 3c4cf9b0-7814-11ee-b962-0242ac120002
@@ -223,7 +251,7 @@
   id: 48cfaaa2-7814-11ee-b962-0242ac120002
   trigger:
     - trigger: state
-      entity_id: binary_sensor.mailbox_sensor
+      entity_id: binary_sensor.mailbox_sensor_vibration
       to: "on"
   condition:
     - condition: state
@@ -246,10 +274,12 @@
   id: 4db93146-7814-11ee-b962-0242ac120002
   trigger:
     - trigger: state
-      entity_id: 
-        - binary_sensor.downstairs_bathroom_water_sensor_moisture
+      entity_id:
+        - binary_sensor.downstairs_bathroom_water_sensor_water_leak
         - binary_sensor.kitchen_water_sensor_moisture
-        - binary_sensor.laundry_water_sensor_moisture
+        - binary_sensor.laundry_water_sensor_water_leak
+        - binary_sensor.half_bath_water_sensor_water_leak
+        - binary_sensor.upstairs_bathroom_water_sensor_water_leak
       from: "off"
       to: "on"
   action:
@@ -257,6 +287,13 @@
       data:
         message: "Water detected: {{ trigger.to_state.attributes.friendly_name }}"
     - action: notify.ryan_devices
+      data:
+        title: "Water detected"
+        message: "{{ trigger.to_state.attributes.friendly_name }}"
+        data:
+          ttl: 0
+          priority: high
+    - action: notify.kelly_devices
       data:
         title: "Water detected"
         message: "{{ trigger.to_state.attributes.friendly_name }}"
@@ -332,7 +369,7 @@
   action:
     - action: notify.ryan_devices
       data:
-        title: "HACS Updates Available"
+        title: "Updates Available"
         message: >
           {% set updates = states.update
             | selectattr('state', 'eq', 'on')
