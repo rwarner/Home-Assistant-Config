@@ -13,11 +13,7 @@
     unit_of_measurement: '°F'
     state_class: measurement
     state: >-
-      {{'%0.3g'|format(
-      (
-        float(states('sensor.family_room_mitsubishi_outside_air_temp'), 65.0) +
-        float(states('sensor.living_room_mitsubishi_outside_air_temp'), 65.0)
-      ) / 2) }}
+      {{ state_attr('weather.tomorrow_io_home_daily', 'temperature') | float(65.0) }}
 
 # -- Movie Room --
   - name: "Movie Room Temperature"
@@ -61,13 +57,17 @@
         float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0)  
       ) / 3) }}
 
-# -- Nursery -- only one sensor currently
+# -- Nursery --
   - name: "Nursery Temperature"
     unique_id: nursery_avg_temp
     unit_of_measurement: '°F'
     state_class: measurement
     state: >-
-      {{ '%0.3g'|format(float(states('sensor.nursery_motion_sensor_temperature'), 65.0)) }}
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.nursery_motion_sensor_temperature'), 65.0) +
+        float(states('sensor.nursery_light_button_temperature'), 65.0)
+      ) / 2) }}
 
 # -- Ryan's Office --
   - name: "Ryan's Office Temperature"
@@ -87,7 +87,7 @@
     unique_id: family_room_avg_temp
     unit_of_measurement: '°F'
     state_class: measurement
-    state: "{{ state_attr('climate.family_room_mitsubishi', 'current_temperature') }}"
+    state: "{{ state_attr('climate.family_room_mitsubishi', 'current_temperature') | float(65.0) }}"
 
 #  -- Living Room --
   - name: "Living Room Temperature"
@@ -95,10 +95,11 @@
     unit_of_measurement: '°F'
     state_class: measurement
     state: >-
-      {% set t1 = states('sensor.living_room_vinyl_record_button_temperature') | float(default=65.0) %}
-      {% set t2 = states('sensor.living_room_nspanel_temperature') | float(default=65.0) %}
-      {% set t3 = state_attr('climate.living_room_mitsubishi', 'current_temperature') | float(default=65.0) %}
-      {{ '%0.3g' | format((t1 + t2 + t3) / 3) }}
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.living_room_nspanel_temperature'), 65.0) +
+        float(state_attr('climate.living_room_mitsubishi', 'current_temperature'), 65.0)
+      ) / 2) }}
 
 # -- 2nd Floor Average (Master Bedroom + Nursery + Office) --
   - name: "2nd Floor Average Temperature"

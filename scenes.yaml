@@ -85,7 +85,7 @@
       off_with_transition: false
       off_brightness:
       friendly_name: Corner Lamp
-      supported_features: 40
+      supported_features: 44
       state: 'on'
       transition: 10
     light.family_room_center_lamp:
@@ -96,7 +96,7 @@
       off_with_transition: false
       off_brightness:
       friendly_name: Center Lamp
-      supported_features: 40
+      supported_features: 44
       state: 'on'
       transition: 10
     light.outside_lights:
@@ -230,7 +230,7 @@
       off_with_transition: false
       off_brightness:
       friendly_name: Corner Lamp
-      supported_features: 40
+      supported_features: 44
       state: 'on'
       transition: 10
     light.family_room_center_lamp:
@@ -241,7 +241,7 @@
       off_with_transition: false
       off_brightness:
       friendly_name: Center Lamp
-      supported_features: 40
+      supported_features: 44
       state: 'on'
       transition: 10
     light.outside_lights:
@@ -490,4 +490,61 @@
     light.bedroom_kellys_bedside:
       entity_only: true
     light.bedroom_ryans_bedside:
+      entity_only: true
+- id: '1779638140587'
+  name: Emilia Bedtime
+  entities:
+    light.nursery_floor_lamp:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      supported_color_modes:
+      - color_temp
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      off_with_transition: false
+      off_brightness: 204
+      friendly_name: Nursery Floor Lamp
+      supported_features: 40
+      state: 'off'
+    automation.nursery_light_control_from_motion_nursery_before_11pm_bookshelf_after:
+      id: 9542bf88-292c-4af8-b6f0-c3fd3dfbb6b0
+      last_triggered: '2026-05-24T16:13:18.624589+00:00'
+      mode: restart
+      current: 0
+      friendly_name: NURSERY - Light Control from Motion (nursery before 1030pm, bookshelf
+        after)
+      state: 'off'
+    light.nursery_bookshelf_lamp:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 51
+      color_temp_kelvin: 2732
+      hs_color:
+      - 28.327
+      - 64.71
+      rgb_color:
+      - 255
+      - 168
+      - 90
+      xy_color:
+      - 0.522
+      - 0.387
+      entity_id:
+      - light.nursery_bookshelf_lamp_1
+      - light.nursery_bookshelf_lamp_2
+      icon: mdi:lightbulb-group
+      friendly_name: Nursery Bookshelf Lamp
+      supported_features: 40
+      state: 'on'
+  metadata:
+    automation.nursery_light_control_from_motion_nursery_before_11pm_bookshelf_after:
+      entity_only: true
+    light.nursery_bookshelf_lamp:
       entity_only: true
