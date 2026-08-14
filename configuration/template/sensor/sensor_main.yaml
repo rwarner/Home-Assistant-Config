@@ -65,3 +65,13 @@
             | map(attribute='entity_id')
             | list }}
 
+  - name: "Pool Monitor Uptime"
+    unique_id: pool_monitor_uptime_friendly
+    state: >
+      {% set s = states('sensor.pool_monitor_uptime') | int(0) %}
+      {% set d = s // 86400 %}
+      {% set h = (s % 86400) // 3600 %}
+      {% set m = (s % 3600) // 60 %}
+      {% if d > 0 %}{{ d }}d {{ h }}h
+      {% else %}{{ h }}h {{ m }}m
+      {% endif %}

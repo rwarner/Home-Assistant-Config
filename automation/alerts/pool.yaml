@@ -1,0 +1,247 @@
+##########################
+### ALERTS - Pool      ###
+##########################
+
+# Season: April (month 4) through October (month 10) for New England
+
+- alias: POOL - pH Low Alert
+  id: pool_ph_low_alert
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.pool_monitor_ph
+      below: 7.2
+      for:
+        hours: 1
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+    - condition: template
+      value_template: >
+        {% set lt = state_attr('automation.pool_ph_low_alert', 'last_triggered') %}
+        {{ lt is none or (now() - lt).total_seconds() > 21600 }}
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool pH Low"
+        message: >
+          pH is {{ states('sensor.pool_monitor_ph') | round(2) }} (below 7.2).
+          Add pH Up to raise it toward 7.4–7.6.
+        data:
+          ttl: 0
+          priority: high
+
+- alias: POOL - pH High Alert
+  id: pool_ph_high_alert
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.pool_monitor_ph
+      above: 7.8
+      for:
+        hours: 1
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+    - condition: template
+      value_template: >
+        {% set lt = state_attr('automation.pool_ph_high_alert', 'last_triggered') %}
+        {{ lt is none or (now() - lt).total_seconds() > 21600 }}
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool pH High"
+        message: >
+          pH is {{ states('sensor.pool_monitor_ph') | round(2) }} (above 7.8).
+          Chlorine effectiveness is dropping — add pH Down.
+        data:
+          ttl: 0
+          priority: high
+
+- alias: POOL - pH Critical Alert
+  id: pool_ph_critical_alert
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.pool_monitor_ph
+      below: 7.0
+      for:
+        minutes: 20
+    - trigger: numeric_state
+      entity_id: sensor.pool_monitor_ph
+      above: 8.0
+      for:
+        minutes: 20
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool pH Critical"
+        message: >
+          pH is {{ states('sensor.pool_monitor_ph') | round(2) }} — outside the 7.0–8.0 safe band.
+          {% if states('sensor.pool_monitor_ph') | float < 7.0 %}Corrosion/irritation risk — add pH Up now.
+          {% else %}Chlorine is largely ineffective at this pH — add pH Down now.{% endif %}
+        data:
+          ttl: 0
+          priority: high
+          critical: 1
+
+# ORP follows a strong daily cycle: it peaks overnight (~740 mV) and troughs
+# mid-afternoon (~630-650 mV) as sunlight and swimmer load burn off chlorine.
+# The natural trough runs up to ~65 min below 650 mV and self-corrects, so the
+# low alert waits 3 hours to distinguish a real shortfall from the daily dip.
+
+- alias: POOL - ORP Low Alert
+  id: pool_orp_low_alert
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.pool_monitor_orp
+      below: 650
+      for:
+        hours: 3
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+    # Suppress repeats when ORP flaps back and forth across the threshold
+    - condition: template
+      value_template: >
+        {% set lt = state_attr('automation.pool_orp_low_alert', 'last_triggered') %}
+        {{ lt is none or (now() - lt).total_seconds() > 21600 }}
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool Chlorine Low"
+        message: >
+          ORP has been below 650 mV for 3+ hours (now {{ states('sensor.pool_monitor_orp') }} mV).
+          This is longer than the normal afternoon dip — check and add chlorine.
+        data:
+          ttl: 0
+          priority: high
+
+- alias: POOL - ORP Critical Alert
+  id: pool_orp_critical_alert
+  mode: single
+  max_exceeded: silent
+  triggers:
+    # 550 mV is the canonical critical tier — keep in sync with the dashboard
+    # (configuration/dashboards/views/pool.yaml) and ClaudeBot (bot/POOL.md).
+    - trigger: numeric_state
+      entity_id: sensor.pool_monitor_orp
+      below: 550
+      for:
+        minutes: 30
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool Chlorine Critical"
+        message: >
+          ORP is {{ states('sensor.pool_monitor_orp') }} mV — well below the 650 mV
+          sanitization floor. The pool is not being sanitized. Add chlorine now.
+        data:
+          ttl: 0
+          priority: high
+          critical: 1
+
+# The real early-warning signal: ORP should rebuild overnight once the sun is off
+# the water. If it hasn't recovered by 10pm, the chlorine feed is falling behind
+# even though the daytime numbers still look survivable.
+- alias: POOL - ORP Overnight Recovery Check
+  id: pool_orp_recovery_check
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: time
+      at: "22:00:00"
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+    - condition: numeric_state
+      entity_id: sensor.pool_monitor_orp
+      below: 690
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool Chlorine Falling Behind"
+        message: >
+          ORP only recovered to {{ states('sensor.pool_monitor_orp') }} mV tonight
+          (normally 730-740 mV overnight). Chlorine is not keeping up with daily demand —
+          consider raising the feed rate or checking stabilizer (CYA).
+        data:
+          ttl: 0
+          priority: high
+
+- alias: POOL - ORP Over-Treated Alert
+  id: pool_orp_high_alert
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.pool_monitor_orp
+      above: 850
+      for:
+        hours: 1
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool Chlorine Over-Treated"
+        message: >
+          ORP is {{ states('sensor.pool_monitor_orp') }} mV (above 850 mV).
+          Sanitizer is running high — hold off on chlorine tabs/shock; risk of liner/equipment wear and irritation.
+        data:
+          ttl: 0
+          priority: high
+
+- alias: POOL - Sensor Offline
+  id: pool_sensor_offline
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: state
+      entity_id: sensor.pool_monitor_temperature
+      to: unavailable
+      for:
+        minutes: 10
+    - trigger: state
+      entity_id: sensor.pool_monitor_temperature
+      to: unknown
+      for:
+        minutes: 10
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool Monitor Offline"
+        message: "Pool monitor hasn't reported in 10 minutes. Check WiFi or power at the pool."
+
+- alias: POOL - Weekly Chemistry Reminder
+  id: pool_weekly_chemistry_reminder
+  triggers:
+    - trigger: time
+      at: "10:00:00"
+  conditions:
+    - condition: time
+      weekday:
+        - sat
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool Chemistry Check"
+        message: >
+          Weekly reminder to test pool chemistry.
+          Current readings — pH: {{ states('sensor.pool_monitor_ph') | round(2) }},
+          ORP: {{ states('sensor.pool_monitor_orp') }} mV,
+          Temp: {{ states('sensor.pool_monitor_temperature') | round(1) }}°F
