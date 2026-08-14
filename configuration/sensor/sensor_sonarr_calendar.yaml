@@ -1,0 +1,24 @@
+- platform: rest
+  name: "Sonarr Calendar"
+  unique_id: sonarr_calendar_data
+  resource_template: >-
+    http://127.0.0.1:9897/api/v3/calendar?includeSeries=true&start={{ now().strftime('%Y-%m-%d') }}&end={{ (now() + timedelta(days=8)).strftime('%Y-%m-%d') }}
+  headers:
+    X-Api-Key: !secret sonarr_api
+  scan_interval: 3600
+  value_template: >-
+    {% set ns = namespace(items=[], seen=[]) %}
+    {% for ep in value_json %}
+      {% set title = ep.series.title | default('') if ep.series is defined else '' %}
+      {% set ad = ep.airDate | default('') %}
+      {% if title and ad and title not in ns.seen and ns.items | length < 5 %}
+        {% set ns.seen = ns.seen + [title] %}
+        {% set s = ep.seasonNumber | default(0) | int %}
+        {% set e = ep.episodeNumber | default(0) | int %}
+        {% set sp = ('0' + s|string) if s < 10 else s|string %}
+        {% set ep_num = ('0' + e|string) if e < 10 else e|string %}
+        {% set code = 'S' + sp + 'E' + ep_num %}
+        {% set ns.items = ns.items + [ad + '|' + title[:30] + '|' + code] %}
+      {% endif %}
+    {% endfor %}
+    {{ ns.items | join('||') }}

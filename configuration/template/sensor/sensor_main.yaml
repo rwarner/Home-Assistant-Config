@@ -9,33 +9,42 @@
     unique_id: harmony_hub_activity
     state: '{{ state_attr("remote.harmony_hub", "current_activity") }}'
 
-  - name: Sonarr Upcoming Shows
+  - name: "Sonarr Upcoming Shows"
     unique_id: sonarr_upcoming_shows
     state: >
-      {% set ignored_attributes = ['unit_of_measurement', 'friendly_name'] %}
-      {% set upcoming = namespace(value=[]) %}
-      {% set attributes = states.sensor.sonarr_upcoming.attributes %}
-
-      {% for show, episode in attributes.items() %}
-        {% if show not in ignored_attributes and episode is not none %}
-          {% set upcoming.value = upcoming.value + [show ~ ': ' ~ episode] %}
-        {% endif %}
-      {% endfor %}
-
-      {# Return the upcoming shows as a list #}
-      {{ upcoming.value | join('\n') if upcoming.value else 'No upcoming shows' }}
-    attributes:
-      show_count: >
-        {% set ignored_attributes = ['unit_of_measurement', 'friendly_name'] %}
-        {% set count = namespace(value=0) %}
-        {% set attributes = states.sensor.sonarr_upcoming.attributes %}
-
-        {% for show, episode in attributes.items() %}
-          {% if show not in ignored_attributes and episode is not none %}
-            {% set count.value = count.value + 1 %}
+      {% set cal = states('sensor.sonarr_calendar') %}
+      {% if cal not in ['unknown', 'unavailable', ''] and '|' in cal %}
+        {% set ns = namespace(lines=[]) %}
+        {% set today = now().strftime('%Y-%m-%d') %}
+        {% set tomorrow = (now() + timedelta(days=1)).strftime('%Y-%m-%d') %}
+        {% for entry in cal.split('||') %}
+          {% set parts = entry.strip().split('|') %}
+          {% if parts | length >= 3 %}
+            {% set ep_date = parts[0] %}
+            {% set title = parts[1] %}
+            {% set code = parts[2] %}
+            {% if ep_date == today %}
+              {% set day_label = 'Tonight' %}
+            {% elif ep_date == tomorrow %}
+              {% set day_label = 'Tomorrow' %}
+            {% else %}
+              {% set day_label = as_datetime(ep_date + 'T12:00:00').strftime('%A') %}
+            {% endif %}
+            {% set ns.lines = ns.lines + ['- ' + day_label + ' — ' + title + ' · ' + code] %}
           {% endif %}
         {% endfor %}
-        {{ count.value }}
+        {{ ns.lines | join('\n') if ns.lines else 'No upcoming shows' }}
+      {% else %}
+        No upcoming shows
+      {% endif %}
+    attributes:
+      show_count: >
+        {% set cal = states('sensor.sonarr_calendar') %}
+        {% if cal not in ['unknown', 'unavailable', ''] and '|' in cal %}
+          {{ cal.split('||') | length }}
+        {% else %}
+          0
+        {% endif %}
 
 
   - name: "Unavailable Battery Count"
