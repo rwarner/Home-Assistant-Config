@@ -14,7 +14,7 @@
 #  - Runs nightly at 9:00 PM to evaluate if watering is needed.
 #  - Gathers up-to-date daily forecast data from the configured weather provider.
 #  - Considers the following criteria:
-#      1. Rainfall in the last 3 days is less than 0.5 inches.
+#      1. Rainfall in the last 5 days is less than 0.75 inches.
 #      2. No meaningful rain (≥ 0.2 in, ≥ 50% probability) is expected in the next 2 days.
 #      3. Uses forecast high temperature (°F) and requires > 50°F.
 #      4. Seasonal multiplier > 0 (disables watering in winter, reduces in spring/fall).
@@ -74,11 +74,13 @@
         forecast: "{{ daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] }}"
         threshold_prob: 50
         threshold_amount: 0.2
-        forecast_high: "{{ forecast[0].temperature | float(0) }}"
-        rainfall_last_week: >-
+        forecast_high: "{{ forecast[1].temperature | float(0) }}"
+        rainfall_last_5_days: >-
           {{ states('input_number.precip_today') | float(0)
              + states('input_number.precip_yesterday') | float(0)
-             + states('input_number.precip_two_days_ago') | float(0) }}
+             + states('input_number.precip_two_days_ago') | float(0)
+             + states('input_number.precip_three_days_ago') | float(0)
+             + states('input_number.precip_four_days_ago') | float(0) }}
 
         # 0.0 in winter (Nov–Mar), 0.75 in spring/fall (Apr–May, Sep–Oct), 1.0 in summer (Jun–Aug)
         seasonal_multiplier: >-
@@ -136,7 +138,7 @@
           {% endif %}
 
         watering_suggested: >-
-          {{ (rainfall_last_week < 0.5)
+          {{ (rainfall_last_5_days < 0.75)
              and (not next_2_days_rain_expected)
              and (forecast_high > 50)
              and (seasonal_multiplier > 0)
@@ -154,7 +156,7 @@
               data:
                 title: "💧 Run Sprinkler 💧"
                 message: >
-                  Rain last 3 days: {{ rainfall_last_week | round(2) }} in
+                  Rain last 5 days: {{ rainfall_last_5_days | round(2) }} in
 
                   Next 2 days: {{ next_2_days_precip | round(2) }} in
 
@@ -186,10 +188,17 @@
                   {% set sunrise_attr = state_attr('sun.sun', 'next_rising') %}
                   {% if sunrise_attr is not none %}
                     {% set sunrise = as_timestamp(sunrise_attr) %}
-                    {% set optimal = sunrise - (45 * 60) %}
-                    {{ optimal | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+                    {{ (sunrise - (45 * 60)) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
                   {% else %}
                     {{ now() | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+                  {% endif %}
+                best_time_display: >-
+                  {% set sunrise_attr = state_attr('sun.sun', 'next_rising') %}
+                  {% if sunrise_attr is not none %}
+                    {% set sunrise = as_timestamp(sunrise_attr) %}
+                    {{ (sunrise - (45 * 60)) | timestamp_custom('%-I:%M %p', true) }}
+                  {% else %}
+                    {{ now() | timestamp_custom('%-I:%M %p', true) }}
                   {% endif %}
 
             - action: input_datetime.set_datetime
@@ -198,11 +207,13 @@
               data:
                 datetime: "{{ best_time }}"
 
-            - action: persistent_notification.create
+            - action: notify.ryan_devices
               data:
-                title: "Sprinkler Scheduled"
-                message: >
-                  Sprinklers scheduled for {{ best_time }} (~45 min before sunrise for optimal watering).
+                title: "💧 Sprinklers Scheduled"
+                message: "Sprinklers set for {{ best_time_display }} tomorrow morning."
+                data:
+                  push:
+                    sound: none
 
 
         # Scheduled run
@@ -243,7 +254,19 @@
             0
           {% endif %}
 
-    # 3. Shift stored precipitation values back by one day
+    # 3. Shift stored precipitation values back by one day (oldest first to avoid overwriting)
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.precip_four_days_ago
+      data:
+        value: "{{ states('input_number.precip_three_days_ago') | float(0) }}"
+
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.precip_three_days_ago
+      data:
+        value: "{{ states('input_number.precip_two_days_ago') | float(0) }}"
+
     - action: input_number.set_value
       target:
         entity_id: input_number.precip_two_days_ago

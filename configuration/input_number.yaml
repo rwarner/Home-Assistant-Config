@@ -22,3 +22,17 @@ precip_two_days_ago:
   max: 10
   step: 0.01
   unit_of_measurement: in
+
+precip_three_days_ago:
+  name: Precipitation Three Days Ago
+  min: 0
+  max: 10
+  step: 0.01
+  unit_of_measurement: in
+
+precip_four_days_ago:
+  name: Precipitation Four Days Ago
+  min: 0
+  max: 10
+  step: 0.01
+  unit_of_measurement: in
