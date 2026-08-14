@@ -1,0 +1,162 @@
+########################################
+### ALERTS - Smoke & CO Alarms       ###
+########################################
+
+- alias: ALERT - Smoke detected, notify mobile app
+  id: smoke_detected_notify
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id:
+        - binary_sensor.basement_smoke_co_alarm_smoke_detected
+        - binary_sensor.entryway_smoke_co_alarm_smoke_detected
+        - binary_sensor.second_floor_smoke_co_alarm_smoke_detected
+      from: "off"
+      to: "on"
+  action:
+    - action: script.announce_local
+      data:
+        message: >
+          Warning! Smoke detected in the
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}.
+    - action: notify.ryan_devices
+      data:
+        title: "🔥 Smoke Detected"
+        message: >
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}
+        data:
+          ttl: 0
+          priority: high
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+    - action: notify.kelly_devices
+      data:
+        title: "🔥 Smoke Detected"
+        message: >
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}
+        data:
+          ttl: 0
+          priority: high
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+
+- alias: ALERT - Carbon monoxide detected, notify mobile app
+  id: co_detected_notify
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id:
+        - binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected
+        - binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected
+        - binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected
+      from: "off"
+      to: "on"
+  action:
+    - action: script.announce_local
+      data:
+        message: >
+          Warning! Carbon monoxide detected in the
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}.
+          Evacuate immediately.
+    - action: notify.ryan_devices
+      data:
+        title: "☠️ CO Detected — Evacuate"
+        message: >
+          Carbon monoxide in the
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}.
+          Leave now and call 911.
+        data:
+          ttl: 0
+          priority: high
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+    - action: notify.kelly_devices
+      data:
+        title: "☠️ CO Detected — Evacuate"
+        message: >
+          Carbon monoxide in the
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}.
+          Leave now and call 911.
+        data:
+          ttl: 0
+          priority: high
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+
+- alias: ALERT - Smoke/CO alarm hardware failure, notify mobile app
+  id: smoke_co_hardware_failure_notify
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id:
+        - binary_sensor.basement_smoke_co_alarm_system_hardware_failure
+        - binary_sensor.entryway_smoke_co_alarm_system_hardware_failure
+        - binary_sensor.second_floor_smoke_co_alarm_system_hardware_failure
+      from: "off"
+      to: "on"
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "⚠️ Smoke/CO Alarm Hardware Failure"
+        message: >
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}
+          alarm has a hardware failure and may not detect smoke or CO.
+        data:
+          ttl: 0
+          priority: high
+
+- alias: ALERT - Smoke/CO alarm dust maintenance required, notify mobile app
+  id: smoke_co_maintenance_notify
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id:
+        - binary_sensor.basement_smoke_co_alarm_maintenance_required_dust_in_device
+        - binary_sensor.entryway_smoke_co_alarm_maintenance_required_dust_in_device
+        - binary_sensor.second_floor_smoke_co_alarm_maintenance_required_dust_in_device
+      from: "off"
+      to: "on"
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Smoke Alarm Needs Cleaning"
+        message: >
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}
+          alarm has dust buildup. Clean or vacuum the unit.
+        data:
+          push:
+            sound: none
+
+- alias: ALERT - Smoke/CO alarm end of life, notify mobile app
+  id: smoke_co_end_of_life_notify
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id:
+        - binary_sensor.basement_smoke_co_alarm_replacement_required_end_of_life
+        - binary_sensor.entryway_smoke_co_alarm_replacement_required_end_of_life
+        - binary_sensor.second_floor_smoke_co_alarm_replacement_required_end_of_life
+      from: "off"
+      to: "on"
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Smoke/CO Alarm End of Life"
+        message: >
+          {{ trigger.to_state.attributes.friendly_name.split(' Smoke & CO Alarm')[0] }}
+          alarm has reached end of life and must be replaced.
+        data:
+          push:
+            sound: none
