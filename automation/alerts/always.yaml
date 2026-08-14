@@ -313,6 +313,43 @@
 #       to: "on"
 #       for:
 #         hours: 4
+- alias: ALERT - Rain Bird integration unavailable, notify mobile app
+  id: rainbird_integration_unavailable
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id: binary_sensor.rain_bird_controller_rainsensor
+      to: "unavailable"
+      for:
+        hours: 1
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Rain Bird Offline"
+        message: "Rain Bird controller has been unavailable for over an hour. Sprinklers will not run until it recovers."
+        data:
+          ttl: 0
+          priority: high
+          url: /config/integrations/integration/rainbird
+
+- alias: ALERT - Rain Bird integration recovered, notify mobile app
+  id: rainbird_integration_recovered
+  mode: single
+  trigger:
+    - trigger: state
+      entity_id: binary_sensor.rain_bird_controller_rainsensor
+      from: "unavailable"
+      not_to: "unavailable"
+  condition:
+    - condition: template
+      value_template: >
+        {{ (now() - trigger.from_state.last_changed).total_seconds() > 3600 }}
+  action:
+    - action: notify.ryan_devices
+      data:
+        title: "Rain Bird Back Online"
+        message: "Rain Bird controller has reconnected."
+
 #   action:
 #     - action: script.announce_local
 #       data:
@@ -351,6 +388,7 @@
     - action: script.announce_local
       data:
         message: "Home Assistant, online"
+
 
 - alias: ALERT - Weekly HACS update digest
   id: 9c1e4d3f-2a7b-4c5e-8d6f-3b9e1a7c5d2f
