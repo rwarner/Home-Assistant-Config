@@ -130,9 +130,7 @@
   max_exceeded: silent
   trigger:
     - trigger: state
-      entity_id: binary_sensor.doorbell_package_detected
-      from: "off"
-      to: "on"
+      entity_id: event.outside_doorbell_package
   condition:
     - condition: state
       entity_id: alarm_control_panel.alarm
