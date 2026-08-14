@@ -40,6 +40,28 @@
   action:
     - action: alarm_control_panel.alarm_disarm
       entity_id: alarm_control_panel.alarm
+    - if:
+        - condition: state
+          entity_id: automation.device_track_nobody_home_lock_doors_arm_alexa_set_tstat_to_away_turn_off_lights_etc
+          state: 'off'
+      then:
+        - action: automation.turn_on
+          target:
+            entity_id: automation.device_track_nobody_home_lock_doors_arm_alexa_set_tstat_to_away_turn_off_lights_etc
+    # Clear away scene lights — swap to home scene if dark, otherwise turn off
+    - if:
+        - condition: state
+          entity_id: input_boolean.dark_outside
+          state: "on"
+      then:
+        - action: scene.turn_on
+          data:
+            entity_id: scene.evening_lights_home
+            transition: 5
+      else:
+        - action: light.turn_off
+          continue_on_error: true
+          entity_id: all
       # Only change thermostat when arriving home, if we aren't in "Sleep" mode on Ecobee
       # will probably be during the night if this is true
     # - condition: template

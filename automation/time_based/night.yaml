@@ -32,12 +32,18 @@
     entity_id: light.outside_lights
 
 
-# 11:30 p.m: Turn off outside lights regardless
+# 11:30 p.m: Turn off outside lights — skip if nobody is home (lights stay on as deterrent)
 - alias: NIGHT - Turn off outside lights at 11:30pm
   id: e5d00364-7815-11ee-b962-0242ac120002
   trigger:
     - trigger: time
       at: '23:30:00'
+  condition:
+    - condition: not
+      conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: armed_away
   action:
     action: light.turn_off
     continue_on_error: true

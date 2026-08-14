@@ -21,6 +21,15 @@
     - action: light.turn_off
       continue_on_error: true
       entity_id: light.outside_lights
+    # When nobody is home, also clear the indoor away scene lights at dawn
+    - if:
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: armed_away
+      then:
+        - action: light.turn_off
+          continue_on_error: true
+          entity_id: all
 
 - alias: GOING LIGHT - Open blinds when it's getting light outside
   id: 4998a9e4-f851-4ddc-8b08-be079f42ff11

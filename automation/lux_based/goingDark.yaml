@@ -18,13 +18,16 @@
         {{ this.attributes.last_triggered is none
            or (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) > 43200 }}
   action:
-  # If we are away, turn on away scene
+  # If we are away, add a random delay before turning on the away scene
+  # so the lights don't come on at the same time every evening
   - choose:
       - conditions:
           - condition: state
             entity_id: alarm_control_panel.alarm
             state: armed_away
         sequence:
+          - delay:
+              minutes: "{{ range(15, 46) | random }}"
           - action: scene.turn_on
             data:
               entity_id: scene.evening_lights_away
