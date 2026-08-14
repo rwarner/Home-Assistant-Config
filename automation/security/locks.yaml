@@ -125,12 +125,14 @@
             | map(attribute='name')
             | map('replace', ' Sensor', '')
             | list %}
-          {% if open_windows | count > 0 %}
-          {{ open_windows | join(', ') }} {{ 'is' if open_windows | count == 1 else 'are' }} open.
+          {% if open_windows | count == 1 %}
+          {{ open_windows[0] }} is open.
+          {% elif open_windows | count > 1 %}
+          {{ open_windows | count }} windows are open.
           {% endif %}
 
-          {% set washer_done = is_state('sensor.washer_washer_machine_state', 'stop') %}
-          {% set dryer_done = is_state('sensor.dryer_dryer_machine_state', 'stop') %}
+          {% set washer_done = is_state('input_boolean.washer_recently_done', 'on') %}
+          {% set dryer_done = is_state('input_boolean.dryer_recently_done', 'on') %}
           {% if washer_done and dryer_done %}
           The washer and dryer both finished while you were out.
           {% elif washer_done %}

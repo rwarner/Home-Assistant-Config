@@ -70,13 +70,27 @@
           {{ condition | replace('-', ' ') | title }} skies today.
           {% endif %}
 
-          {% if is_state('binary_sensor.house_windows', 'on') %}
-            {% set open_windows = expand(state_attr('binary_sensor.house_windows', 'entity_id'))
-              | selectattr('state', 'eq', 'on')
-              | map(attribute='name')
-              | map('replace', ' Sensor', '')
-              | list %}
-          {{ open_windows | join(' and ') }} {{ 'is' if open_windows | count == 1 else 'are' }} still open from last night.
+          {% set open_windows = expand(state_attr('binary_sensor.house_windows', 'entity_id'))
+            | selectattr('state', 'eq', 'on')
+            | map(attribute='name')
+            | map('replace', ' Sensor', '')
+            | list %}
+          {% if open_windows | count == 1 %}
+          {{ open_windows[0] }} is still open from last night.
+          {% elif open_windows | count > 1 %}
+          {{ open_windows | count }} windows are still open from last night.
+          {% endif %}
+
+          {% set washer_done = is_state('sensor.washer_washer_machine_state', 'stop')
+            and states.sensor.washer_washer_machine_state.last_changed >= today_at('00:00:00') %}
+          {% set dryer_done = is_state('sensor.dryer_dryer_machine_state', 'stop')
+            and states.sensor.dryer_dryer_machine_state.last_changed >= today_at('00:00:00') %}
+          {% if washer_done and dryer_done %}
+          The washer and dryer both finished overnight.
+          {% elif washer_done %}
+          The washer finished overnight.
+          {% elif dryer_done %}
+          The dryer finished overnight.
           {% endif %}
 
           {% set plex = states('sensor.tautilli_data') %}
