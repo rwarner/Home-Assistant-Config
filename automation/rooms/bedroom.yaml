@@ -29,15 +29,15 @@
   id: 62088754-7815-11ee-b962-0242ac120002
   trigger:
     - trigger: mqtt
-      topic: zigbee2mqtt/bedroom_light_button/action
+      topic: zigbee2mqtt/kellys_bedside_button/action
       payload: "single"
       id: single
     - trigger: mqtt
-      topic: zigbee2mqtt/bedroom_light_button/action
+      topic: zigbee2mqtt/kellys_bedside_button/action
       payload: "double"
       id: double
     - trigger: mqtt
-      topic: zigbee2mqtt/bedroom_light_button/action
+      topic: zigbee2mqtt/kellys_bedside_button/action
       payload: "hold"
       id: hold
   condition: []
