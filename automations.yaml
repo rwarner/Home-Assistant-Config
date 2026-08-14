@@ -121,6 +121,9 @@
       entity04: switch.master_bedroom_fan
       entity04_name: Fan
       entity04_icon: mdi:fan
+      entity05: light.ryans_office_lights
+      entity05_name: Office
+      entity05_icon: mdi:desk-lamp
       right_button_hold_select: Default
       right_button_state_entity: light.master_bedroom_lights
       custom_buttons_font_size: '8'

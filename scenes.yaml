@@ -524,7 +524,7 @@
       supported_color_modes:
       - color_temp
       color_mode: color_temp
-      brightness: 51
+      brightness: 26
       color_temp_kelvin: 2732
       hs_color:
       - 28.327
