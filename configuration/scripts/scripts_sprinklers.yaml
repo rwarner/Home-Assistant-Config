@@ -23,7 +23,7 @@ run_all_sprinklers:
     # 2. Set variables *after* fetching fresh forecast
     - variables:
         fc: "{{ daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] }}"
-        sprinkler_times: [20, 20, 15, 40, 40, 0, 5]
+        sprinkler_times: [25, 22, 10, 45, 45, 0, 5]
 
         # Seasonal multiplier: 0.0 in winter (Nov-Mar), 0.75 in spring/fall, 1.0 in summer
         seasonal_multiplier: >-
@@ -36,27 +36,28 @@ run_all_sprinklers:
             1.0
           {% endif %}
 
-        # Upcoming rain in next 7 days from forecast (inches) — used to reduce run time if rain is coming
+        # Upcoming rain in next 3 days from forecast (inches) — 7-day forecasts are too unreliable to act on
         upcoming_rain_forecast: >-
           {% set total = namespace(sum=0) %}
-          {% for day in fc[:7] %}
+          {% for day in fc[:3] %}
             {% set total.sum = total.sum + (day.precipitation | default(0) | float) %}
           {% endfor %}
           {{ total.sum }}
 
-        # Rain multiplier — reduce watering if significant rain is forecast this week
+        # Rain multiplier — reduce watering if significant rain is forecast in next 3 days
         rain_multiplier: >-
-          {% if upcoming_rain_forecast >= 1.0 %} 0.0
-          {% elif upcoming_rain_forecast >= 0.5 %} 0.5
-          {% elif upcoming_rain_forecast >= 0.25 %} 0.75
+          {% if upcoming_rain_forecast >= 0.75 %} 0.0
+          {% elif upcoming_rain_forecast >= 0.4 %} 0.5
+          {% elif upcoming_rain_forecast >= 0.2 %} 0.75
           {% else %} 1.0
           {% endif %}
 
         # Forecast high temperature for today
         forecast_high: "{{ fc[0].temperature | float(0) }}"
 
-        # Temperature multiplier — based on forecast high temp:
-        # no watering below 45°F, reduced watering between 45–65°F
+        # Temperature multiplier. Base zone times are calibrated for a normal
+        # summer day, so 1.0 covers everything up to 90°F; only a genuine heat
+        # wave adds water on top of that.
         temp_multiplier: >-
           {% if forecast_high < 45 %}
             0.0
@@ -64,62 +65,145 @@ run_all_sprinklers:
             0.5
           {% elif forecast_high < 65 %}
             0.75
-          {% else %}
+          {% elif forecast_high <= 90 %}
             1.0
+          {% elif forecast_high <= 97 %}
+            1.1
+          {% else %}
+            1.2
           {% endif %}
 
-        # Current humidity from fresh forecast's first day (default 50%)
-        current_humidity: "{{ fc[0].humidity | default(50) | float }}"
+        # Daytime relative humidity, derived from the forecast high and dew point
+        # via the Magnus formula.
+        #
+        # Do NOT use fc[0].humidity here: that is a 24-hour aggregate dominated by
+        # saturated pre-dawn air, so in a New England summer it reads 75-95% almost
+        # every day even when the afternoon is dry. On 2026-08-09 it reported 87%
+        # while the actual RH at the 90°F high was 50%, which silently cut watering
+        # by 40% on a hot, dry day.
+        dew_point: "{{ fc[0].dew_point | default(60) | float }}"
 
-        # Humidity multiplier — reduce watering if humidity is high (>80%)
+        daytime_humidity: >-
+          {% set tc = (forecast_high - 32) * 5 / 9 %}
+          {% set dc = (dew_point - 32) * 5 / 9 %}
+          {% set es = 6.112 * (2.718281828 ** (17.67 * tc / (tc + 243.5))) %}
+          {% set ed = 6.112 * (2.718281828 ** (17.67 * dc / (dc + 243.5))) %}
+          {{ [100 * ed / es, 100] | min | round(1) }}
+
+        # Humidity multiplier — genuinely humid daytime air slows evapotranspiration.
+        # Thresholds are tuned for real daytime RH, which is typically 40-60% here.
         humidity_multiplier: >-
-          {% if current_humidity > 80 %}
-            0.8
+          {% if daytime_humidity > 80 %}
+            0.85
+          {% elif daytime_humidity > 70 %}
+            0.95
           {% else %}
             1.0
           {% endif %}
 
-        # Final multiplier combining all
-        final_multiplier: >
-          {{ (seasonal_multiplier | float) *
-             (rain_multiplier | float) *
-             (temp_multiplier | float) *
-             (humidity_multiplier | float) }}
+        # Wind speed from forecast (mph) — high wind wastes water through drift.
+        # This is a daily figure, but zones run ~45 min before sunrise when wind is
+        # typically at its calmest, so the daily number overstates actual conditions.
+        # Thresholds are deliberately high to compensate; only skip on a real gale.
+        forecast_wind: "{{ fc[0].wind_speed | default(0) | float }}"
 
-    # 3. Skip entirely if nothing would run — notify and exit
+        wind_multiplier: >-
+          {% if forecast_wind > 25 %}
+            0.0
+          {% elif forecast_wind > 18 %}
+            0.85
+          {% else %}
+            1.0
+          {% endif %}
+
+        # Any single factor at 0 is a hard stop (winter, heavy rain, freezing, gale).
+        hard_stop: >-
+          {{ (seasonal_multiplier | float) == 0
+             or (rain_multiplier | float) == 0
+             or (temp_multiplier | float) == 0
+             or (wind_multiplier | float) == 0 }}
+
+        # Otherwise clamp the combined product. Five multiplicative factors compound
+        # aggressively — two mild trims (0.6 x 0.75) previously produced a 55% cut —
+        # so soft reductions bottom out at 0.5 and boosts cap at 1.25.
+        final_multiplier: >
+          {% if hard_stop %}
+            0.0
+          {% else %}
+            {% set raw = (seasonal_multiplier | float) *
+                         (rain_multiplier | float) *
+                         (temp_multiplier | float) *
+                         (humidity_multiplier | float) *
+                         (wind_multiplier | float) %}
+            {{ [[raw, 0.5] | max, 1.25] | min }}
+          {% endif %}
+
+    # 3. Pre-calculate zone run times for notifications and safety checks
+    - variables:
+        zone_plan: >
+          {% set names = ['Sidewalk Strip', 'Front Yard', 'Rear Corner', 'Main Yard A', 'Main Yard B', 'Drip (N/A)', 'Back Yard'] %}
+          {% set ns = namespace(lines='') %}
+          {% for i in range(7) %}
+            {% set base = sprinkler_times[i] %}
+            {% if base > 0 %}
+              {% set t = (base * final_multiplier) | round(0) | int %}
+              {% if t > 0 %}
+                {% set ns.lines = ns.lines + 'Zone ' + (i+1)|string + ' – ' + names[i] + ': ' + t|string + ' min\n' %}
+              {% else %}
+                {% set ns.lines = ns.lines + 'Zone ' + (i+1)|string + ' – ' + names[i] + ': skipped (multiplier too low)\n' %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {{ ns.lines | trim }}
+
+    # 4. Skip entirely if nothing would run — notify and exit
     - if:
         - condition: template
           value_template: "{{ final_multiplier <= 0 }}"
       then:
         - action: notify.ryan_devices
           data:
-            title: "Sprinklers Skipped"
+            title: "💧 Sprinklers Skipped"
             message: >
-              No zones ran today — conditions blocked watering.
-              Seasonal: {{ seasonal_multiplier }}, Rain: {{ rain_multiplier }},
-              Temp: {{ temp_multiplier }}, Humidity: {{ humidity_multiplier }}.
+              No zones ran — conditions blocked watering.
+
+              Seasonal: {{ seasonal_multiplier }}
+              Rain: {{ rain_multiplier }} ({{ upcoming_rain_forecast | round(2) }} in forecast)
+              Temp: {{ temp_multiplier }} ({{ forecast_high | round(0) }}°F)
+              Humidity: {{ humidity_multiplier }} ({{ daytime_humidity | round(0) }}% daytime RH)
+              Wind: {{ wind_multiplier }} ({{ forecast_wind | round(0) }} mph)
         - stop: "Final multiplier is 0, skipping all zones"
 
-    # 4. Record last run date before zones start — survives HA restart mid-run
+    # 5. Record last run date before zones start — survives HA restart mid-run
     - action: input_datetime.set_datetime
       target:
         entity_id: input_datetime.last_sprinkler_run
       data:
         date: "{{ now().date() }}"
 
-    # 5. Run sprinklers with adjusted times
+    # 7. Run zones — skip if base is 0 or adjusted time rounds to 0
     - repeat:
         count: 7
         sequence:
-          - condition: template
-            value_template: "{{ sprinkler_times[repeat.index - 1] > 0 }}"
           - variables:
-              run_time: >
-                {{ (sprinkler_times[repeat.index - 1] * final_multiplier)
-                  | round(0) | int }}
-          - action: rainbird.start_irrigation
-            data:
-              entity_id: "switch.rain_bird_sprinkler_{{ repeat.index }}"
-              duration: "{{ run_time }}"
-          - delay:
-              minutes: "{{ run_time }}"
+              zone_base: "{{ sprinkler_times[repeat.index - 1] }}"
+              run_time: "{{ (zone_base * final_multiplier) | round(0) | int }}"
+          - if:
+              - condition: template
+                value_template: "{{ zone_base > 0 and run_time > 0 }}"
+            then:
+              - action: rainbird.start_irrigation
+                data:
+                  entity_id: "switch.rain_bird_sprinkler_{{ repeat.index }}"
+                  duration: "{{ run_time }}"
+              - delay:
+                  minutes: "{{ run_time }}"
+
+    # 8. Done notification
+    - action: notify.ryan_devices
+      data:
+        title: "💧 Sprinklers Done"
+        message: >
+          All zones completed ({{ final_multiplier | round(2) }}× multiplier).
+
+          {{ zone_plan }}
