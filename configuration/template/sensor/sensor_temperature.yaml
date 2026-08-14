@@ -44,6 +44,31 @@
       ) / 3) }}
 
 
+# -- Kelly's Office --
+  - name: "Kellys Office Temperature"
+    unique_id: kellys_office_avg_temp
+    unit_of_measurement: '°F'
+    state_class: measurement
+    state: >-
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.kellys_office_door_sensor_temperature'), 65.0) +
+        float(states('sensor.kellys_office_side_window_sensor_temperature'), 65.0) +
+        float(states('sensor.kellys_office_rear_window_sensor_temperature'), 65.0)
+      ) / 3) }}
+
+# -- Upstairs Bathroom --
+  - name: "Upstairs Bathroom Temperature"
+    unique_id: upstairs_bathroom_avg_temp
+    unit_of_measurement: '°F'
+    state_class: measurement
+    state: >-
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.upstairs_bathroom_door_sensor_temperature'), 65.0) +
+        float(states('sensor.upstairs_bathroom_window_sensor_temperature'), 65.0)
+      ) / 2) }}
+
 #  -- Master Bedroom --
   - name: "Master Bedroom Temperature"
     unique_id: master_bedroom_avg_temp
@@ -53,9 +78,10 @@
       {{'%0.3g'|format(
       (
         float(states('sensor.ryans_bedside_button_temperature'), 65.0) +
-        float(states('sensor.bedroom_light_button_temperature'), 65.0) +
-        float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0)  
-      ) / 3) }}
+        float(states('sensor.kellys_bedside_button_temperature'), 65.0) +
+        float(states('sensor.master_bedroom_motion_sensor_temperature'), 65.0) +
+        float(states('sensor.master_bedroom_door_sensor_temperature'), 65.0)
+      ) / 4) }}
 
 # -- Nursery --
   - name: "Nursery Temperature"
@@ -63,11 +89,7 @@
     unit_of_measurement: '°F'
     state_class: measurement
     state: >-
-      {{'%0.3g'|format(
-      (
-        float(states('sensor.nursery_motion_sensor_temperature'), 65.0) +
-        float(states('sensor.nursery_light_button_temperature'), 65.0)
-      ) / 2) }}
+      {{ '%0.3g'|format(float(states('sensor.nursery_light_button_temperature'), 65.0)) }}
 
 # -- Ryan's Office --
   - name: "Ryan's Office Temperature"
@@ -101,7 +123,7 @@
         float(state_attr('climate.living_room_mitsubishi', 'current_temperature'), 65.0)
       ) / 2) }}
 
-# -- 2nd Floor Average (Master Bedroom + Nursery + Office) --
+# -- 2nd Floor Average (Master Bedroom + Nursery + Ryan's Office + Kelly's Office) --
   - name: "2nd Floor Average Temperature"
     unique_id: second_floor_avg_temp
     unit_of_measurement: '°F'
@@ -111,8 +133,9 @@
       (
         float(states('sensor.master_bedroom_avg_temp'), 70.0) +
         float(states('sensor.nursery_avg_temp'), 70.0) +
-        float(states('sensor.ryans_office_avg_temp'), 70.0)
-      ) / 3) }}
+        float(states('sensor.ryans_office_avg_temp'), 70.0) +
+        float(states('sensor.kellys_office_avg_temp'), 70.0)
+      ) / 4) }}
 
 # -- Attic vs Outside Delta (how much hotter attic is than outside) --
   - name: "Attic vs Outside Delta"

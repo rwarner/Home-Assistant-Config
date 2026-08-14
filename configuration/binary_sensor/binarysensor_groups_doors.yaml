@@ -12,6 +12,11 @@
     - binary_sensor.kitchen_doors
     - binary_sensor.family_room_doors
     - binary_sensor.laundry_room_doors
+    - binary_sensor.master_bedroom_door_sensor
+    - binary_sensor.kellys_office_door_sensor
+    - binary_sensor.upstairs_bathroom_door_sensor
+    - binary_sensor.nursery_door_sensor
+    - binary_sensor.server_room_door_sensor
 
 - platform: group
   name: Exterior Doors
@@ -23,27 +28,13 @@
     - binary_sensor.family_room_slider
     - binary_sensor.basement_door_sensor
 
-# - platform: group
-#   name: Kellys Office Doors
-#   entities:
-#     - binary_sensor.sample_window_sensor
-
+### First Floor ###
 - platform: group
   name: Ryans Office Doors
   unique_id: ryans_office_doors
   device_class: opening
   entities:
     - binary_sensor.ryans_office_door_sensor
-
-# - platform: group
-#   name: Master Bedroom Doors
-#   entities:
-#     - binary_sensor.sample_window_sensor
-
-# - platform: group
-#   name: Nursery Doors
-#   entities:
-#     - binary_sensor.sample_window_sensor
 
 - platform: group
   name: Living Room Doors
@@ -66,6 +57,7 @@
   entities:
     - binary_sensor.family_room_slider
 
+### Basement ###
 - platform: group
   name: Laundry Room Doors
   unique_id: laundry_room_doors
