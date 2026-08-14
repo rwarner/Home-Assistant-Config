@@ -288,31 +288,31 @@
         message: "Water detected: {{ trigger.to_state.attributes.friendly_name }}"
     - action: notify.ryan_devices
       data:
-        title: "Water detected"
+        title: "💧 Water Detected"
         message: "{{ trigger.to_state.attributes.friendly_name }}"
         data:
           ttl: 0
           priority: high
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
     - action: notify.kelly_devices
       data:
-        title: "Water detected"
+        title: "💧 Water Detected"
         message: "{{ trigger.to_state.attributes.friendly_name }}"
         data:
           ttl: 0
           priority: high
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
 
 
 
-# 09/16/25 - No reliable sensor on the mower for now, disabling
-# - alias: ALERT - Lawn Mower detected away for a long time, notify mobile app
-#   id: f4de014a-e2c2-4da6-a79c-2dde29603ac4
-#   trigger:
-#     - trigger: state
-#       entity_id: binary_sensor.lawn_mower
-#       from: "off"
-#       to: "on"
-#       for:
-#         hours: 4
 - alias: ALERT - Rain Bird integration unavailable, notify mobile app
   id: rainbird_integration_unavailable
   mode: single
@@ -350,6 +350,16 @@
         title: "Rain Bird Back Online"
         message: "Rain Bird controller has reconnected."
 
+# 09/16/25 - No reliable sensor on the mower for now, disabling
+# - alias: ALERT - Lawn Mower detected away for a long time, notify mobile app
+#   id: f4de014a-e2c2-4da6-a79c-2dde29603ac4
+#   trigger:
+#     - trigger: state
+#       entity_id: binary_sensor.lawn_mower
+#       from: "off"
+#       to: "on"
+#       for:
+#         hours: 4
 #   action:
 #     - action: script.announce_local
 #       data:
@@ -379,6 +389,7 @@
 #           ttl: 0
 #           priority: high
 
+
 - alias: "ALERT - Home Assistant Successfully Started"
   id: 50cedff8-4cd9-4d85-9ea9-dc1726324335
   trigger:
@@ -388,7 +399,6 @@
     - action: script.announce_local
       data:
         message: "Home Assistant, online"
-
 
 - alias: ALERT - Weekly HACS update digest
   id: 9c1e4d3f-2a7b-4c5e-8d6f-3b9e1a7c5d2f
@@ -486,6 +496,8 @@
     clip_time: >
       {{ now().strftime('%-I:%M %p') }}
   action:
+    # Prune clips older than 24h before adding a new one
+    - action: shell_command.clear_old_clips
     # Wait for camera.record to finish writing the full clip
     - delay: '00:00:20'
     - action: shell_command.convert_camera_recording
@@ -496,8 +508,6 @@
     - condition: template
       value_template: >
         {{ not ('front_door' in trigger.event.data.file and
-    # Prune clips older than 24h before adding a new one
-    - action: shell_command.clear_old_clips
                is_state('input_boolean.mail_arrived', 'on') and
                (now() - states.input_boolean.mail_arrived.last_changed).total_seconds() < 120) }}
 
@@ -507,11 +517,11 @@
       data:
         title: "Motion Detected — {{ camera_name }}"
         message: "{{ clip_time }}"
+        target: "658174234480082997"
         data:
           images:
             - "/config/www/clips/{{ trigger.event.data.file }}"
 
     - delay: '00:00:10'
-        target: "658174234480082997"
     - action: shell_command.clear_video_directory
     # www/clips intentionally NOT cleared here — clips persist 24h for notification access

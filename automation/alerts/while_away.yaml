@@ -158,6 +158,11 @@
           ttl: 0
           priority: high
           url: "/"
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
 
 - alias: "ALERT (AWAY) - Alarm Pending to Triggered, notify NoonLight IFTTT"
   id: 9eaec2fa-7814-11ee-b962-0242ac120002

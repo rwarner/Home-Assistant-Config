@@ -13,6 +13,9 @@
       data:
         title: "Home set to: Disarmed"
         message: ""
+        data:
+          push:
+            sound: none
 
 - alias: ALARM - Send Notification when home is armed
   id: f939fd06-7815-11ee-b962-0242ac120002
@@ -25,3 +28,6 @@
       data:
         title: "Home set to: Armed Away"
         message: ""
+        data:
+          push:
+            sound: none
