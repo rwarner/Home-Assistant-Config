@@ -51,6 +51,9 @@
             - action: automation.turn_on
               target:
                 entity_id: automation.nursery_light_control_from_motion_nursery_before_11pm_bookshelf_after
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.nursery_manual_override
 
 # 8:00 a.m.
 - alias: MORNING - Set all Alexa volume to 60% everyday
@@ -58,15 +61,15 @@
   trigger:
     - trigger: time
       at: '08:00:00'
-  action:
-    - action: script.alexa_reset_all_volume
-
   condition:
     - condition: not
       conditions:
         - condition: state
           entity_id: alarm_control_panel.alarm
           state: armed_away
+  action:
+    - action: script.alexa_reset_all_volume
+
 # 8:00 a.m.
 - alias: MORNING - Reset mailbox input_boolean to off
   id: d366c2b2-7815-11ee-b962-0242ac120002

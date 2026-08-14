@@ -25,9 +25,27 @@
           - condition: trigger
             id: single
         sequence:
-          - action: light.toggle
-            target:
-              entity_id: light.nursery_lights
+          - choose:
+              # Lights are on → turn off and engage nap protection
+              - conditions:
+                  - condition: state
+                    entity_id: light.nursery_lights
+                    state: 'on'
+                sequence:
+                  - action: light.turn_off
+                    target:
+                      entity_id: light.nursery_lights
+                  - action: input_boolean.turn_on
+                    target:
+                      entity_id: input_boolean.nursery_manual_override
+            # Lights are off → turn on and release nap protection
+            default:
+              - action: light.turn_on
+                target:
+                  entity_id: light.nursery_lights
+              - action: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.nursery_manual_override
       - conditions:
           - condition: trigger
             id: double
@@ -40,6 +58,9 @@
               entity_id: light.nursery_bookshelf_lamp
             data:
               brightness_pct: 10
+          - action: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.nursery_manual_override
       - conditions:
           - condition: trigger
             id: hold
@@ -47,6 +68,15 @@
           - action: scene.turn_on
             target:
               entity_id: scene.emilia_bedtime
+          - delay: "00:00:01"
+          - action: light.turn_on
+            target:
+              entity_id: light.nursery_bookshelf_lamp
+            data:
+              flash: short
+          - action: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.nursery_manual_override
 
 ############ Motion Sensor #############
 - alias: NURSERY - Light Control from Motion (nursery before 1030pm, bookshelf after)
@@ -80,6 +110,9 @@
             - condition: numeric_state
               entity_id: sensor.nursery_motion_sensor_illuminance
               below: 10
+            - condition: state
+              entity_id: input_boolean.nursery_manual_override
+              state: 'off'
           sequence:
             - choose:
                 # 8:00am -> 10:30pm
