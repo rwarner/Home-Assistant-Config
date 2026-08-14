@@ -14,7 +14,14 @@
     - action: notify.ryan_devices
       data:
         title: "Sonarr Stuck"
-        message: "Import needs manual intervention"
+        message: >
+          {% set reason = namespace(parts=[]) %}
+          {% for sm in trigger.json.downloadStatusMessages | default([]) %}
+            {% for m in sm.messages %}
+              {% set reason.parts = reason.parts + [m] %}
+            {% endfor %}
+          {% endfor %}
+          {{ trigger.json.series.title | default('Unknown') }}: {{ reason.parts | join(', ') if reason.parts else 'Import needs manual intervention' }}
 
 - alias: WEBHOOK - Radarr Download Stuck
   id: 4619be56-2d9b-420b-b71c-3490d5c74937
@@ -28,8 +35,32 @@
     - action: notify.ryan_devices
       data:
         title: "Radarr Stuck"
-        message: "Import needs manual intervention"
+        message: >
+          {% set reason = namespace(parts=[]) %}
+          {% for sm in trigger.json.downloadStatusMessages | default([]) %}
+            {% for m in sm.messages %}
+              {% set reason.parts = reason.parts + [m] %}
+            {% endfor %}
+          {% endfor %}
+          {{ trigger.json.movie.title | default('Unknown') }}: {{ reason.parts | join(', ') if reason.parts else 'Import needs manual intervention' }}
 
+
+- alias: WEBHOOK - Synology NAS Alert
+  id: synology_nas_alert
+  triggers:
+    - trigger: webhook
+      webhook_id: synology_nas_alert
+      allowed_methods:
+        - POST
+      local_only: true
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Synology NAS Alert"
+        message: "{{ trigger.json.text | default('Alert received from NAS') }}"
+        data:
+          ttl: 0
+          priority: high
 
 - alias: WEBHOOK - Prowlarr Health Issue
   id: c00305b5-3fe4-4dc7-a1fc-552a299d9609
@@ -43,4 +74,4 @@
     - action: notify.ryan_devices
       data:
         title: "Prowlarr Health"
-        message: "Problem with indexer"
+        message: "{{ trigger.json.message | default('Problem with indexer') }}"
