@@ -2,6 +2,10 @@
 ####### SENSOR CONFIGURATION  ######
 ####################################
 
+- platform: time_date
+  display_options:
+    - 'time'
+
 # - platform: filesize
 #   file_paths:
 #     - /home/homeassistant/.homeassistant/home-assistant.log

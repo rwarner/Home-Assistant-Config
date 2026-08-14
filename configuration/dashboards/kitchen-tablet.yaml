@@ -1,3 +1,70 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Kitchen tablet dashboard — Fire HD 10 (KFTRWI), Fully Kiosk, Chrome 138 /
+# Android 9 WebView, 1280x799, ~2 GB RAM.
+#
+# CAMERA CARDS: the option set below is load-bearing. Every `custom:webrtc-camera`
+# card in this file MUST keep it, or the tablet renders black boxes with no error.
+# Line refs are to custom_components/webrtc/www/ (AlexxIT WebRTC Camera v3.6.1).
+#
+#   mode:           `webrtc,mjpeg` — chosen for latency. WebRTC is real-time by
+#     webrtc,mjpeg  design (no jitter buffer to fill), and pinning it skips the
+#                   MSE pipeline entirely: no MediaSource, no SourceBuffer, and
+#                   no 2 MB JS ring buffer per card (video-rtc.js:469). Left
+#                   unset, video-rtc.js:353-367 opens MSE **and** WebRTC on every
+#                   card at once and only picks a winner in onpcvideo — double
+#                   the pipelines and double the network during page load, which
+#                   on 2 GB of RAM is exactly when it stutters.
+#
+#                   The comma form is required: video-rtc.js:351-381 is an
+#                   if/else-if chain gated on `this.mode.indexOf(...)`, so bare
+#                   `mode: webrtc` would also delete the mjpeg fallback
+#                   (video-rtc.js:369-376). Never `mode: hls` — that branch needs
+#                   canPlayType('application/vnd.apple.mpegurl'), which is
+#                   Safari-only, so on this WebView the modes array comes out
+#                   EMPTY and the card never requests anything at all. Never bare
+#                   `mode: mse` either: one transport, zero fallback.
+#
+#                   Verified reachable: go2rtc listens on UDP/TCP 8555 and the
+#                   tablet (192.168.2.x) registers `webrtc` host consumers
+#                   against 192.168.1.22 — cross-VLAN is not blocked.
+#
+#   intersection: 0 Stops the IntersectionObserver (video-rtc.js:276-285) from
+#                   tearing down cards that scroll out of the 100vh panel.
+#                   Use this rather than `background: true` — background also
+#                   makes disconnectedCallback a permanent no-op
+#                   (video-rtc.js:221, 264), so the conditional cards below would
+#                   leak a live WebSocket every time they flip. Unquoted 0:
+#                   webrtc-camera.js:15 compares with ===.
+#
+#   NO `poster:`    Do not add it. The card signs the poster URL with
+#                   auth/sign_path (webrtc-camera.js:154-155) and passes no
+#                   `expires`, so HA's 30-second default applies
+#                   (components/auth/__init__.py, `vol.Optional("expires",
+#                   default=30)`). validate_signed_request() then rejects the
+#                   expired JWT and the endpoint 401s. On a wall tablet that
+#                   idles for hours, any later poster fetch shows a
+#                   broken-image icon — strictly worse than plain black.
+#
+#   NOT `conditional`  Never wrap a webrtc-camera in a `conditional` card here.
+#                   Hide it with a card_mod `:host { display: none }` template
+#                   instead, so the card is always mounted. See the ROW 2
+#                   comment below for the cold-load deadlock this avoids.
+#
+#   media: video    Grid cards only. Drops audio negotiation and tips the
+#                   transport race toward WebRTC in onpcvideo
+#                   (video-rtc.js:576-611). Left off the doorbell cards so the
+#                   doorbell stays audible.
+#
+# To check playback without touching the tablet, run this on the HA host:
+#   curl -s http://127.0.0.1:1984/api/streams
+# A camera with no `consumers` entry never negotiated; a black card that DOES
+# have a consumer is a decode problem instead. Confirmed working over `webrtc`
+# from the tablet at 192.168.2.24 — cross-VLAN is not blocked.
+#
+# YAML dashboard edits do not reach the kiosk on a plain refresh; run
+# script.reload_yaml_dashboards (or browser_mod.navigate to remount a view).
+# ═══════════════════════════════════════════════════════════════════════════
+
 kiosk_mode:
   hide_header: true
   hide_sidebar: true
@@ -7,14 +74,14 @@ views:
     title: Kitchen Tablet
     icon: mdi:tablet
     type: panel
-    background: "center / cover no-repeat fixed url('/local/images/kitchen-bg.png')"
+    background: "#F2F4F8"
     cards:
       - type: custom:mod-card
         card_mod:
           style: |
             ha-card {
               padding: 8px 16px;
-              background: linear-gradient(170deg, rgba(248, 247, 245, 0.95) 0%, rgba(240, 238, 235, 0.95) 100%);
+              background: '#F2F4F8';
               box-shadow: none;
               height: 100vh;
               display: flex;
@@ -33,6 +100,7 @@ views:
               square: false
               cards:
                 - type: custom:button-card
+                  entity: sensor.time
                   show_name: true
                   show_icon: false
                   show_state: false
@@ -44,14 +112,16 @@ views:
                       - display: flex
                       - align-items: center
                       - justify-content: center
-                      - background: '#1B2A4A'
+                      - background: white
+                      - border: '1px solid #C8CBD4'
                       - border-radius: 28px
-                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                     name:
                       - font-size: 26px
                       - font-weight: 700
-                      - color: white
+                      - color: '#2D3142'
                 - type: custom:button-card
+                  entity: sensor.time
                   show_name: true
                   show_icon: false
                   show_state: false
@@ -63,13 +133,14 @@ views:
                       - display: flex
                       - align-items: center
                       - justify-content: center
-                      - background: '#2D3748'
+                      - background: white
+                      - border: '1px solid #C8CBD4'
                       - border-radius: 28px
-                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                     name:
                       - font-size: 26px
                       - font-weight: 700
-                      - color: white
+                      - color: '#2D3142'
                 - type: custom:button-card
                   entity: weather.tomorrow_io_home_daily
                   show_name: true
@@ -96,16 +167,17 @@ views:
                       - display: flex
                       - align-items: center
                       - justify-content: center
-                      - background: '#C05621'
+                      - background: '#F3E8F0'
+                      - border: '1px solid #CDA8C0'
                       - border-radius: 28px
-                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                     name:
                       - font-size: 22px
                       - font-weight: 600
-                      - color: white
+                      - color: '#5E4060'
                     icon:
                       - width: 24px
-                      - color: rgba(255,255,255,0.85)
+                      - color: '#A87898'
                 - type: custom:button-card
                   entity: sun.sun
                   show_name: true
@@ -115,7 +187,7 @@ views:
                   name: |
                     [[[
                       var d = new Date(entity.attributes.next_setting);
-                      return '☀↓ ' + d.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+                      return d.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
                     ]]]
                   styles:
                     card:
@@ -124,16 +196,17 @@ views:
                       - display: flex
                       - align-items: center
                       - justify-content: center
-                      - background: '#7C3AED'
+                      - background: '#E0F2F1'
+                      - border: '1px solid #A0D4CC'
                       - border-radius: 28px
-                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                     name:
                       - font-size: 22px
                       - font-weight: 600
-                      - color: white
+                      - color: '#2C6B65'
                     icon:
                       - width: 24px
-                      - color: rgba(255,255,255,0.85)
+                      - color: '#5BA89E'
                 - type: custom:button-card
                   entity: sun.sun
                   show_name: true
@@ -143,7 +216,7 @@ views:
                   name: |
                     [[[
                       var d = new Date(entity.attributes.next_rising);
-                      return '☀↑ ' + d.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+                      return d.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
                     ]]]
                   styles:
                     card:
@@ -152,69 +225,149 @@ views:
                       - display: flex
                       - align-items: center
                       - justify-content: center
-                      - background: '#D97706'
+                      - background: '#E8F5E9'
+                      - border: '1px solid #A0D0A4'
                       - border-radius: 28px
-                      - box-shadow: 0 2px 6px rgba(0,0,0,0.15)
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                     name:
                       - font-size: 22px
                       - font-weight: 600
-                      - color: white
+                      - color: '#2E6B4A'
                     icon:
                       - width: 24px
-                      - color: rgba(255,255,255,0.85)
+                      - color: '#5BA97A'
 
+            # NOTE: there is deliberately NO separate fullscreen doorbell card
+            # here any more. It used to be a `conditional` wrapping a second
+            # copy of the doorbell camera, and it was permanently broken: HA's
+            # conditional card creates its child eagerly and only toggles
+            # `display`, so that camera hit the cold-load deadlock described
+            # below at page load and never recovered. When the boolean flipped
+            # it just un-hid an already-dead card — stuck "Loading.." exactly
+            # when someone was at the door.
+            #
+            # Instead, ROW 2 below grows the single main doorbell tile to full
+            # width by hiding the info column. One camera element, one stream,
+            # no conditional, nothing that can deadlock.
             # ═══════════════════════════════════════
             # ROW 2: Main Content — Camera | Big Info
             # ═══════════════════════════════════════
+            # Camera — swaps to the package cam when one is detected.
+            #
+            # Both cameras are plain, always-mounted children of this stack, and
+            # the swap is done by hiding one from the STACK's card_mod, not by a
+            # `conditional` card and not by a `:host` rule on the camera itself.
+            #
+            #  - Not `conditional`: a webrtc-camera inside one never starts on a
+            #    cold page load. HA attaches the child before assigning `hass`,
+            #    onconnect() bails at `if (!this.config || !this.hass) return
+            #    false` (webrtc-camera.js:141), and the `hass` setter does NOT
+            #    retry — its `this.onconnect()` call is commented out
+            #    (webrtc-camera.js:76-81). Nothing re-arms it. Symptom: black on
+            #    first load, fine after visiting another view and back.
+            #  - Not `:host` on the camera card: card_mod's `ha-card` rules do
+            #    reach these cards, but `:host` does not resolve to the
+            #    <webrtc-camera> element, so the rule silently does nothing and
+            #    both cameras render side by side. Verified on the tablet.
+            #
+            # Styling the stack's own #root container works because
+            # hui-stack-card puts its children there. Use `nth-of-type`, NOT
+            # `nth-child`: card_mod injects its own <style> node into #root, so
+            # nth-child is shifted by one and hides the wrong camera (verified on
+            # the tablet — it hid the doorbell instead of the package cam).
+            # nth-of-type counts only <webrtc-camera> elements, so the injected
+            # style node and the info stack are both ignored.
+            #
+            # NOTE: hiding does NOT park the stream, so the package cam costs a
+            # second always-on WebRTC pipeline here. Tried and measured: leaving
+            # `intersection: 0` off it does not help, because when the observer
+            # fires its first callback on an already-hidden element the card has
+            # not connected yet, so disconnectedCallback() early-returns on
+            # `if (this.wsState === CLOSED && this.pcState === CLOSED)`
+            # (video-rtc.js:220-222). It never schedules teardown, then connects
+            # a moment later and the observer never fires again. `intersection: 0`
+            # is kept on both cards so the behaviour is at least predictable.
+            # To actually reclaim that stream, wrap ONLY the package camera in a
+            # `conditional` — it never needs to survive a cold load, since it is
+            # created at runtime when the sensor trips and `hass` is already set.
             - type: horizontal-stack
+              card_mod:
+                style: |
+                  #root > hui-card:nth-of-type(1),
+                  #root > webrtc-camera:nth-of-type(1) {
+                    {% if is_state('binary_sensor.doorbell_package_detected', 'on') %}
+                      display: none !important;
+                    {% endif %}
+                  }
+                  #root > hui-card:nth-of-type(2),
+                  #root > webrtc-camera:nth-of-type(2) {
+                    {% if not is_state('binary_sensor.doorbell_package_detected', 'on') %}
+                      display: none !important;
+                    {% endif %}
+                  }
+                  /* Doorbell takeover: when someone is at the front door, hide
+                     the info column (child 3) so the live camera grows to the
+                     full row width. Replaces the old conditional fullscreen
+                     card — same effect, but the camera element is never
+                     unmounted, so it cannot deadlock. */
+                  #root > hui-card:nth-of-type(3) {
+                    {% if is_state('input_boolean.someone_at_front_door', 'on') %}
+                      display: none !important;
+                    {% endif %}
+                  }
               cards:
-                # Camera — swap to package cam when package detected
-                - type: conditional
-                  conditions:
-                    - condition: state
-                      entity: binary_sensor.doorbell_package_detected
-                      state: "off"
-                  card:
-                    type: custom:webrtc-camera
-                    entity: camera.outside_doorbell
-                    muted: true
-                    background: true
-                    card_mod:
-                      style: |
-                        ha-card {
-                          overflow: hidden;
-                          border-radius: 16px;
-                          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                        }
-                        video {
-                          object-fit: cover !important;
-                        }
-                - type: conditional
-                  conditions:
-                    - condition: state
-                      entity: binary_sensor.doorbell_package_detected
-                      state: "on"
-                  card:
-                    type: custom:webrtc-camera
-                    entity: camera.outside_doorbell_package
-                    muted: true
-                    background: true
-                    card_mod:
-                      style: |
-                        ha-card {
-                          overflow: hidden;
-                          border-radius: 16px;
-                          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                          border: 3px solid #D97706;
-                        }
-                        video {
-                          object-fit: cover !important;
-                        }
+                # REVERTED from `url: doorbell_scrypted` back to the entity.
+                # The Scrypted rebroadcast measured 0.18s flat to first frame on
+                # 2026-08-09 morning, but re-measured that evening it was 2.6-5.0s
+                # — same as going direct. Scrypted's prebuffer is only warm while
+                # something else is actively streaming that camera; at idle it
+                # gives no advantage. The morning numbers were taken while it
+                # happened to be hot, so they were not a stable property.
+                #
+                # It also served the HIGH channel (1600x1200) rather than this
+                # entity's 960x720 — 2.8x the pixels on a 2 GB tablet — and with
+                # `mode: webrtc,mjpeg` there is NO working fallback (see header),
+                # so a slow WebRTC negotiation just hangs on "Loading...".
+                #
+                # Revisit only if Scrypted's Rebroadcast prebuffer is configured
+                # to stay resident for this camera; verify with repeated cold
+                # `curl /api/frame.jpeg?src=<name>` pulls spread over hours.
+                - type: custom:webrtc-camera
+                  entity: camera.doorbell_medium
+                  muted: true
+                  mode: webrtc,mse,mjpeg
+                  media: video
+                  intersection: 0
+                  card_mod:
+                    style: |
+                      ha-card {
+                        overflow: hidden;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+                      }
+                - type: custom:webrtc-camera
+                  entity: camera.outside_doorbell_package
+                  muted: true
+                  # Matches the doorbell tile above. `mjpeg` alone is not a
+                  # fallback — go2rtc's mjpeg consumer only accepts JPEG/RAW and
+                  # these sources are H.264, so it answers 200 with 0 bytes
+                  # ("codecs not matched"). `mse` is the one that actually works.
+                  mode: webrtc,mse,mjpeg
+                  media: video
+                  intersection: 0
+                  card_mod:
+                    style: |
+                      ha-card {
+                        overflow: hidden;
+                        border-radius: 16px;
+                        border: 2px solid #C0A0B5;
+                        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+                      }
 
                 # Right half — big glanceable info
                 - type: vertical-stack
                   cards:
-                    # Big temperatures — centered
+                    # Big temperatures
                     - type: horizontal-stack
                       cards:
                         - type: custom:button-card
@@ -224,16 +377,17 @@ views:
                           show_icon: false
                           name: |
                             [[[
-                              var inside = (
-                                parseFloat(states['sensor.kitchen_avg_temp'].state) +
-                                parseFloat(states['sensor.living_room_avg_temp'].state) +
-                                parseFloat(states['sensor.family_room_avg_temp'].state)
-                              ) / 3;
-                              return Math.round(inside) + '°';
+                              var k = parseFloat(states['sensor.kitchen_avg_temp'].state) || 65;
+                              var l = parseFloat(states['sensor.living_room_avg_temp'].state) || 65;
+                              var f = parseFloat(states['sensor.family_room_avg_temp'].state) || 65;
+                              return Math.round((k + l + f) / 3) + '°';
                             ]]]
                           label: Inside
                           show_label: true
                           layout: label|name
+                          tap_action:
+                            action: navigate
+                            navigation_path: /kitchen-tablet/climate
                           styles:
                             grid:
                               - grid-template-areas: '"n" "l"'
@@ -243,17 +397,18 @@ views:
                               - display: flex
                               - align-items: center
                               - justify-content: center
-                              - background: 'linear-gradient(135deg, #059669 0%, #047857 100%)'
+                              - background: '#E0F2F1'
+                              - border: '1px solid #A0D4CC'
                               - border-radius: 16px
-                              - box-shadow: 0 3px 12px rgba(5,150,105,0.3)
+                              - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                             name:
                               - font-size: 64px
                               - font-weight: bold
-                              - color: white
+                              - color: '#1B6B60'
                               - justify-self: center
                             label:
                               - font-size: 20px
-                              - color: rgba(255,255,255,0.8)
+                              - color: '#5BA89E'
                               - justify-self: center
 
                         - type: custom:button-card
@@ -268,6 +423,9 @@ views:
                           label: Outside
                           show_label: true
                           layout: label|name
+                          tap_action:
+                            action: navigate
+                            navigation_path: /kitchen-tablet/climate
                           styles:
                             grid:
                               - grid-template-areas: '"n" "l"'
@@ -277,20 +435,21 @@ views:
                               - display: flex
                               - align-items: center
                               - justify-content: center
-                              - background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)'
+                              - background: '#E3F2FD'
+                              - border: '1px solid #90C2F0'
                               - border-radius: 16px
-                              - box-shadow: 0 3px 12px rgba(37,99,235,0.3)
+                              - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                             name:
                               - font-size: 64px
                               - font-weight: bold
-                              - color: white
+                              - color: '#2C5F8A'
                               - justify-self: center
                             label:
                               - font-size: 20px
-                              - color: rgba(255,255,255,0.8)
+                              - color: '#5E9ACF'
                               - justify-self: center
 
-                    # Locks — compact button-card style
+                    # Locks
                     - type: horizontal-stack
                       cards:
                         - type: custom:button-card
@@ -308,25 +467,28 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: |
-                                  [[[
-                                    return entity.state === 'locked' ? '0 3px 12px rgba(5,150,105,0.25)' : '0 3px 12px rgba(220,38,38,0.25)';
-                                  ]]]
+                              - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                               - background: |
                                   [[[
-                                    return entity.state === 'locked' ? 'linear-gradient(135deg, #059669 0%, #047857 100%)' : 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)';
+                                    return entity.state === 'locked' ? '#E3F2FD' : '#F3E8F0';
                                   ]]]
                             name:
                               - font-size: 22px
                               - font-weight: bold
-                              - color: white
+                              - color: '#2D3142'
                             state:
                               - font-size: 16px
                               - text-transform: capitalize
-                              - color: rgba(255,255,255,0.8)
+                              - color: |
+                                  [[[
+                                    return entity.state === 'locked' ? '#5E9ACF' : '#A87898';
+                                  ]]]
                             icon:
                               - width: 32px
-                              - color: rgba(255,255,255,0.9)
+                              - color: |
+                                  [[[
+                                    return entity.state === 'locked' ? '#5E9ACF' : '#A87898';
+                                  ]]]
                         - type: custom:button-card
                           entity: lock.basement_door_deadbolt
                           name: Basement
@@ -342,27 +504,30 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: |
-                                  [[[
-                                    return entity.state === 'locked' ? '0 3px 12px rgba(5,150,105,0.25)' : '0 3px 12px rgba(220,38,38,0.25)';
-                                  ]]]
+                              - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                               - background: |
                                   [[[
-                                    return entity.state === 'locked' ? 'linear-gradient(135deg, #059669 0%, #047857 100%)' : 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)';
+                                    return entity.state === 'locked' ? '#E3F2FD' : '#F3E8F0';
                                   ]]]
                             name:
                               - font-size: 22px
                               - font-weight: bold
-                              - color: white
+                              - color: '#2D3142'
                             state:
                               - font-size: 16px
                               - text-transform: capitalize
-                              - color: rgba(255,255,255,0.8)
+                              - color: |
+                                  [[[
+                                    return entity.state === 'locked' ? '#5E9ACF' : '#A87898';
+                                  ]]]
                             icon:
                               - width: 32px
-                              - color: rgba(255,255,255,0.9)
+                              - color: |
+                                  [[[
+                                    return entity.state === 'locked' ? '#5E9ACF' : '#A87898';
+                                  ]]]
 
-                    # Lights + Mail + Covers — 3 columns
+                    # Lights + Mail + Covers
                     - type: horizontal-stack
                       cards:
                         - type: custom:button-card
@@ -387,15 +552,16 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: 0 3px 10px rgba(217,119,6,0.2)
-                              - background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
+                              - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                              - background: '#FFF8E1'
+                              - border: '1px solid #E0C050'
                             name:
                               - font-size: 24px
                               - font-weight: bold
-                              - color: white
+                              - color: '#7A6520'
                             icon:
                               - width: 28px
-                              - color: rgba(255,255,255,0.9)
+                              - color: '#C9A830'
                         - type: custom:button-card
                           entity: input_boolean.mail_arrived
                           show_name: true
@@ -415,26 +581,23 @@ views:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: |
-                                  [[[
-                                    return entity.state === 'on' ? '0 3px 10px rgba(161,98,7,0.25)' : '0 2px 8px rgba(0,0,0,0.08)';
-                                  ]]]
+                              - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
                               - background: |
                                   [[[
-                                    return entity.state === 'on' ? 'linear-gradient(135deg, #A16207 0%, #854D0E 100%)' : 'rgba(0,0,0,0.04)';
+                                    return entity.state === 'on' ? '#F3E8F0' : 'white';
                                   ]]]
                             name:
                               - font-size: 24px
                               - font-weight: bold
                               - color: |
                                   [[[
-                                    return entity.state === 'on' ? 'white' : '#555';
+                                    return entity.state === 'on' ? '#5E4060' : '#B0B0B0';
                                   ]]]
                             icon:
                               - width: 28px
                               - color: |
                                   [[[
-                                    return entity.state === 'on' ? 'rgba(255,255,255,0.9)' : '#999';
+                                    return entity.state === 'on' ? '#A87898' : '#C8C8C8';
                                   ]]]
                         - type: custom:button-card
                           show_name: true
@@ -448,29 +611,26 @@ views:
                                 e.state === 'open' &&
                                 !e.attributes.entity_id
                               ).length;
-                              var closed = Object.values(states).filter(e =>
-                                e.entity_id.startsWith('cover.') &&
-                                e.state === 'closed' &&
-                                !e.attributes.entity_id
-                              ).length;
                               if (open === 0) return 'All Closed';
                               return open + ' Shades Open';
                             ]]]
                           tap_action:
-                            action: none
+                            action: navigate
+                            navigation_path: /kitchen-tablet/covers
                           styles:
                             card:
                               - padding: 12px
                               - border-radius: 16px
-                              - box-shadow: 0 3px 10px rgba(37,99,235,0.2)
-                              - background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)'
+                              - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                              - background: '#E3F2FD'
+                              - border: '1px solid #90C2F0'
                             name:
                               - font-size: 24px
                               - font-weight: bold
-                              - color: white
+                              - color: '#2C5F8A'
                             icon:
                               - width: 28px
-                              - color: rgba(255,255,255,0.9)
+                              - color: '#5E9ACF'
 
                     # Energy graph
                     - type: horizontal-stack
@@ -478,7 +638,7 @@ views:
                         - type: custom:mini-graph-card
                           entities:
                             - entity: sensor.home_energy_meter_gen5_electric_consumption_w_3
-                              color: '#60A5FA'
+                              color: '#5BA89E'
                           name: Power
                           hours_to_show: 6
                           points_per_hour: 4
@@ -495,26 +655,27 @@ views:
                             fill: fade
                           color_thresholds:
                             - value: 0
-                              color: '#34D399'
+                              color: '#5E9ACF'
                             - value: 2000
-                              color: '#60A5FA'
+                              color: '#5BA89E'
                             - value: 5000
-                              color: '#FBBF24'
+                              color: '#C9A830'
                             - value: 8000
-                              color: '#F87171'
+                              color: '#A87898'
                           card_mod:
                             style: |
                               ha-card {
-                                background: #1E293B !important;
+                                background: white !important;
+                                border: 1px solid #C8CBD4;
                                 border-radius: 16px;
-                                box-shadow: 0 3px 12px rgba(0,0,0,0.2);
-                                --primary-text-color: white;
-                                --secondary-text-color: rgba(255,255,255,0.6);
+                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                                --primary-text-color: #2D3142;
+                                --secondary-text-color: #8A8FA0;
                               }
                         - type: custom:mini-graph-card
                           entities:
                             - entity: sensor.core_400s_series_pm2_5
-                              color: '#34D399'
+                              color: '#5E9ACF'
                           name: Air Quality
                           hours_to_show: 6
                           points_per_hour: 10
@@ -531,270 +692,48 @@ views:
                             fill: fade
                           color_thresholds:
                             - value: 0
-                              color: '#34D399'
+                              color: '#5E9ACF'
                             - value: 25
-                              color: '#FBBF24'
+                              color: '#C9A830'
                             - value: 50
-                              color: '#F87171'
+                              color: '#A87898'
                           card_mod:
                             style: |
                               ha-card {
-                                background: #1E293B !important;
+                                background: white !important;
+                                border: 1px solid #C8CBD4;
                                 border-radius: 16px;
-                                box-shadow: 0 3px 12px rgba(0,0,0,0.2);
-                                --primary-text-color: white;
-                                --secondary-text-color: rgba(255,255,255,0.6);
+                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                                --primary-text-color: #2D3142;
+                                --secondary-text-color: #8A8FA0;
                               }
 
             # ═══════════════════════════════════════
-            # ROW 3: Context Cards (only when relevant)
-            # ═══════════════════════════════════════
-
-            # Laundry — each machine visible when running/paused OR recently done (30 min linger)
-            - type: horizontal-stack
-              cards:
-                - type: conditional
-                  conditions:
-                    - condition: or
-                      conditions:
-                        - condition: state
-                          entity: sensor.washer_washer_machine_state
-                          state_not: unavailable
-                        - condition: state
-                          entity: input_boolean.washer_recently_done
-                          state: 'on'
-                  card:
-                    type: custom:button-card
-                    entity: sensor.washer_remaining_time
-                    show_name: true
-                    show_state: false
-                    show_icon: true
-                    icon: mdi:washing-machine
-                    layout: icon_name
-                    name: |
-                      [[[
-                        var machine = states['sensor.washer_washer_machine_state'];
-                        if (machine.state === 'run') {
-                          var text = entity.state;
-                          var mins = 0;
-                          var hm = text.match(/(\d+)\s*hour/);
-                          var mm = text.match(/(\d+)\s*minute/);
-                          if (hm) mins += parseInt(hm[1]) * 60;
-                          if (mm) mins += parseInt(mm[1]);
-                          if (mins > 0) {
-                            var est = Math.round(mins * 1.3);
-                            return 'Washer: ~' + est + 'm (' + mins + 'm est)';
-                          }
-                          return 'Washer: ' + text;
-                        }
-                        if (machine.state === 'pause') return 'Washer: Paused';
-                        var done = states['input_boolean.washer_recently_done'];
-                        if (done.state === 'on') {
-                          var changed = new Date(done.last_changed);
-                          var mins = Math.round((Date.now() - changed.getTime()) / 60000);
-                          if (mins < 1) return 'Washer: Just Done';
-                          if (mins < 60) return 'Washer: Done ' + mins + 'm ago';
-                          return 'Washer: Done ' + Math.floor(mins/60) + 'h ago';
-                        }
-                        return 'Washer: Done';
-                      ]]]
-                    styles:
-                      card:
-                        - padding: 10px 16px
-                        - background: |
-                            [[[
-                              var st = states['sensor.washer_washer_machine_state'].state;
-                              if (st === 'run') return 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)';
-                              if (st === 'pause') return 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)';
-                              return 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
-                            ]]]
-                        - border-radius: 16px
-                        - box-shadow: |
-                            [[[
-                              var st = states['sensor.washer_washer_machine_state'].state;
-                              if (st === 'run') return '0 3px 12px rgba(37,99,235,0.3)';
-                              if (st === 'pause') return '0 3px 12px rgba(217,119,6,0.3)';
-                              return '0 3px 12px rgba(5,150,105,0.3)';
-                            ]]]
-                      grid:
-                        - grid-template-areas: '"i n"'
-                        - grid-template-columns: min-content auto
-                        - justify-content: center
-                        - column-gap: 8px
-                      icon:
-                        - width: 36px
-                        - color: rgba(255,255,255,0.9)
-                      name:
-                        - font-size: 36px
-                        - font-weight: bold
-                        - color: white
-                        - justify-self: start
-                - type: conditional
-                  conditions:
-                    - condition: or
-                      conditions:
-                        - condition: state
-                          entity: sensor.dryer_dryer_machine_state
-                          state_not: unavailable
-                        - condition: state
-                          entity: input_boolean.dryer_recently_done
-                          state: 'on'
-                  card:
-                    type: custom:button-card
-                    entity: sensor.dryer_remaining_time
-                    show_name: true
-                    show_state: false
-                    show_icon: true
-                    icon: mdi:tumble-dryer
-                    layout: icon_name
-                    name: |
-                      [[[
-                        var machine = states['sensor.dryer_dryer_machine_state'];
-                        if (machine.state === 'run') return 'Dryer: ' + entity.state;
-                        if (machine.state === 'pause') return 'Dryer: Paused';
-                        var done = states['input_boolean.dryer_recently_done'];
-                        if (done.state === 'on') {
-                          var changed = new Date(done.last_changed);
-                          var mins = Math.round((Date.now() - changed.getTime()) / 60000);
-                          if (mins < 1) return 'Dryer: Just Done';
-                          if (mins < 60) return 'Dryer: Done ' + mins + 'm ago';
-                          return 'Dryer: Done ' + Math.floor(mins/60) + 'h ago';
-                        }
-                        return 'Dryer: Done';
-                      ]]]
-                    styles:
-                      card:
-                        - padding: 10px 16px
-                        - background: |
-                            [[[
-                              var st = states['sensor.dryer_dryer_machine_state'].state;
-                              if (st === 'run') return 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)';
-                              if (st === 'pause') return 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)';
-                              return 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
-                            ]]]
-                        - border-radius: 16px
-                        - box-shadow: |
-                            [[[
-                              var st = states['sensor.dryer_dryer_machine_state'].state;
-                              if (st === 'run') return '0 3px 12px rgba(220,38,38,0.3)';
-                              if (st === 'pause') return '0 3px 12px rgba(217,119,6,0.3)';
-                              return '0 3px 12px rgba(5,150,105,0.3)';
-                            ]]]
-                      grid:
-                        - grid-template-areas: '"i n"'
-                        - grid-template-columns: min-content auto
-                        - justify-content: center
-                        - column-gap: 8px
-                      icon:
-                        - width: 36px
-                        - color: rgba(255,255,255,0.9)
-                      name:
-                        - font-size: 36px
-                        - font-weight: bold
-                        - color: white
-                        - justify-self: start
-
-            # Alarm Armed
-            - type: conditional
-              conditions:
-                - condition: state
-                  entity: alarm_control_panel.alarm
-                  state_not: disarmed
-              card:
-                type: alarm-panel
-                states:
-                  - arm_away
-                entity: alarm_control_panel.alarm
-
-            # Package
-            - type: conditional
-              conditions:
-                - condition: state
-                  entity: binary_sensor.doorbell_package_detected
-                  state: "on"
-              card:
-                type: custom:mushroom-template-card
-                primary: "Package at front door"
-                icon: mdi:package-variant
-                icon_color: amber
-                card_mod:
-                  style: |
-                    ha-card {
-                      --card-primary-font-size: 28px;
-                      background: rgba(232, 137, 12, 0.08);
-                      border-radius: 16px;
-                      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-                    }
-                    .primary { color: #B36B00 !important; }
-
-            # Windows Open
-            - type: conditional
-              conditions:
-                - condition: state
-                  entity: binary_sensor.house_windows
-                  state: "on"
-              card:
-                type: custom:mushroom-template-card
-                primary: >
-                  {{ expand(state_attr('binary_sensor.house_windows', 'entity_id')) | selectattr('state', 'eq', 'on') | list | count }} Window{{ 's' if expand(state_attr('binary_sensor.house_windows', 'entity_id')) | selectattr('state', 'eq', 'on') | list | count > 1 else '' }} Open
-                icon: mdi:window-open-variant
-                icon_color: cyan
-                card_mod:
-                  style: |
-                    ha-card {
-                      --card-primary-font-size: 28px;
-                      background: rgba(0, 150, 200, 0.08);
-                      border-radius: 16px;
-                      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-                    }
-                    .primary { color: #007A9E !important; }
-
-            # Doors Open
-            - type: conditional
-              conditions:
-                - condition: state
-                  entity: binary_sensor.exterior_doors
-                  state: "on"
-              card:
-                type: custom:mushroom-template-card
-                primary: "Exterior Door Open"
-                icon: mdi:door-open
-                icon_color: red
-                card_mod:
-                  style: |
-                    ha-card {
-                      --card-primary-font-size: 28px;
-                      background: rgba(255, 69, 58, 0.08);
-                      border-radius: 16px;
-                      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-                    }
-                    .primary { color: #D42020 !important; }
-
-            # ═══════════════════════════════════════
-            # ROW 4: Quick Actions (always at bottom)
+            # ROW 4: Quick Actions (always visible)
             # ═══════════════════════════════════════
             - type: grid
-              columns: 4
+              columns: 5
               square: false
               cards:
                 - type: custom:button-card
-                  name: Goodnight
-                  icon: mdi:weather-night
+                  name: Music
+                  icon: mdi:music
                   tap_action:
-                    action: call-service
-                    service: script.goodnight_routine
+                    action: navigate
+                    navigation_path: /kitchen-tablet/music
                   styles:
                     card:
                       - padding: 12px
                       - font-size: 18px
-                      - color: white
+                      - color: '#7A6520'
                       - border-radius: 16px
-                      - box-shadow: 0 3px 10px rgba(99,102,241,0.25)
-                      - background: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)'
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: '#FFF8E1'
+                      - border: '1px solid #E0C050'
                     icon:
                       - width: 36px
                       - height: 36px
-                      - color: rgba(255,255,255,0.9)
+                      - color: '#C9A830'
 
                 - type: custom:button-card
                   name: Lights Off
@@ -808,14 +747,15 @@ views:
                     card:
                       - padding: 12px
                       - font-size: 18px
-                      - color: white
+                      - color: '#5E4060'
                       - border-radius: 16px
-                      - box-shadow: 0 3px 10px rgba(217,119,6,0.25)
-                      - background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: '#F3E8F0'
+                      - border: '1px solid #CDA8C0'
                     icon:
                       - width: 36px
                       - height: 36px
-                      - color: rgba(255,255,255,0.9)
+                      - color: '#A87898'
 
                 - type: custom:button-card
                   name: Lock All
@@ -831,14 +771,15 @@ views:
                     card:
                       - padding: 12px
                       - font-size: 18px
-                      - color: white
+                      - color: '#2C6B65'
                       - border-radius: 16px
-                      - box-shadow: 0 3px 10px rgba(5,150,105,0.25)
-                      - background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)'
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: '#E0F2F1'
+                      - border: '1px solid #A0D4CC'
                     icon:
                       - width: 36px
                       - height: 36px
-                      - color: rgba(255,255,255,0.9)
+                      - color: '#5BA89E'
 
                 - type: custom:button-card
                   name: Cameras
@@ -850,14 +791,480 @@ views:
                     card:
                       - padding: 12px
                       - font-size: 18px
-                      - color: white
+                      - color: '#7A6520'
                       - border-radius: 16px
-                      - box-shadow: 0 3px 10px rgba(71,85,105,0.25)
-                      - background: 'linear-gradient(135deg, #64748B 0%, #475569 100%)'
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: '#FFF8E1'
+                      - border: '1px solid #E0C050'
                     icon:
                       - width: 36px
                       - height: 36px
-                      - color: rgba(255,255,255,0.9)
+                      - color: '#C9A830'
+
+                - type: custom:button-card
+                  name: Safety
+                  icon: mdi:smoke-detector-variant
+                  tap_action:
+                    action: navigate
+                    navigation_path: /kitchen-tablet/safety
+                  styles:
+                    card:
+                      - padding: 12px
+                      - font-size: 18px
+                      - color: '#7A3020'
+                      - border-radius: 16px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: '#FDECEA'
+                      - border: '1px solid #E8B4A8'
+                    icon:
+                      - width: 36px
+                      - height: 36px
+                      - color: '#C0584A'
+
+            # ═══════════════════════════════════════
+            # ROW 5: Dynamic Bottom Row — Alerts > Laundry > Helper Buttons
+            # ═══════════════════════════════════════
+
+            # Alarm Armed — overrides bottom row
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: alarm_control_panel.alarmo
+                  state_not: disarmed
+              card:
+                type: alarm-panel
+                states:
+                  - arm_away
+                entity: alarm_control_panel.alarmo
+
+            # Doors Open — overrides bottom row
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: binary_sensor.exterior_doors
+                  state: "on"
+                - condition: state
+                  entity: alarm_control_panel.alarmo
+                  state: disarmed
+              card:
+                type: custom:mushroom-template-card
+                primary: "Exterior Door Open"
+                icon: mdi:door-open
+                icon_color: red
+                layout: horizontal
+                card_mod:
+                  style: |
+                    ha-card {
+                      --card-primary-font-size: 18px;
+                      padding: 4px 12px;
+                      background: #FFEBEE;
+                      border-radius: 16px;
+                      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                    }
+                    .primary { color: #B33A3A !important; }
+
+            # Windows Open — overrides bottom row
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: binary_sensor.house_windows
+                  state: "on"
+                - condition: state
+                  entity: alarm_control_panel.alarmo
+                  state: disarmed
+                - condition: state
+                  entity: binary_sensor.exterior_doors
+                  state: "off"
+              card:
+                type: custom:mushroom-template-card
+                primary: >
+                  {{ expand(state_attr('binary_sensor.house_windows', 'entity_id')) | selectattr('state', 'eq', 'on') | list | count }} Window{{ 's' if expand(state_attr('binary_sensor.house_windows', 'entity_id')) | selectattr('state', 'eq', 'on') | list | count > 1 else '' }} Open
+                icon: mdi:window-open-variant
+                icon_color: cyan
+                layout: horizontal
+                card_mod:
+                  style: |
+                    ha-card {
+                      --card-primary-font-size: 18px;
+                      padding: 4px 12px;
+                      background: #E3F2FD;
+                      border-radius: 16px;
+                      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                    }
+                    .primary { color: #2C5F8A !important; }
+
+            # Package — overrides bottom row
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: binary_sensor.doorbell_package_detected
+                  state: "on"
+                - condition: state
+                  entity: alarm_control_panel.alarmo
+                  state: disarmed
+                - condition: state
+                  entity: binary_sensor.exterior_doors
+                  state: "off"
+                - condition: state
+                  entity: binary_sensor.house_windows
+                  state: "off"
+              card:
+                type: custom:mushroom-template-card
+                primary: "Package at front door"
+                icon: mdi:package-variant
+                icon_color: pink
+                layout: horizontal
+                card_mod:
+                  style: |
+                    ha-card {
+                      --card-primary-font-size: 18px;
+                      padding: 4px 12px;
+                      background: #F3E8F0;
+                      border-radius: 16px;
+                      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                    }
+                    .primary { color: #5E4060 !important; }
+
+            # Laundry — shows when active and no alerts
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: alarm_control_panel.alarmo
+                  state: disarmed
+                - condition: state
+                  entity: binary_sensor.exterior_doors
+                  state: "off"
+                - condition: state
+                  entity: binary_sensor.house_windows
+                  state: "off"
+                - condition: state
+                  entity: binary_sensor.doorbell_package_detected
+                  state: "off"
+                - condition: or
+                  conditions:
+                    - condition: state
+                      entity: sensor.washer_washer_machine_state
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.washer_recently_done
+                      state: 'on'
+                    - condition: state
+                      entity: sensor.dryer_dryer_machine_state
+                      state_not: unavailable
+                    - condition: state
+                      entity: input_boolean.dryer_recently_done
+                      state: 'on'
+              card:
+                type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    entity: sensor.washer_remaining_time
+                    triggers_update:
+                      - sensor.time
+                    show_name: true
+                    show_state: false
+                    show_icon: true
+                    icon: mdi:washing-machine
+                    layout: icon_name
+                    name: |
+                      [[[
+                        var machine = states['sensor.washer_washer_machine_state'];
+                        if (machine && machine.state === 'run') {
+                          var text = entity.state;
+                          var mins = 0;
+                          var hm = text.match(/(\d+)\s*hour/);
+                          var mm = text.match(/(\d+)\s*minute/);
+                          if (hm) mins += parseInt(hm[1]) * 60;
+                          if (mm) mins += parseInt(mm[1]);
+                          if (mins > 0) {
+                            var est = Math.round(mins * 1.3);
+                            return 'Washer: ~' + est + ' min';
+                          }
+                          return 'Washer: ' + text;
+                        }
+                        if (machine && machine.state === 'pause') return 'Washer: Paused';
+                        var done = states['input_boolean.washer_recently_done'];
+                        if (done && done.state === 'on') {
+                          var changed = new Date(done.last_changed);
+                          var mins = Math.round((Date.now() - changed.getTime()) / 60000);
+                          if (mins < 1) return 'Washer: Just Done';
+                          if (mins < 60) return 'Washer: Done ' + mins + 'm ago';
+                          return 'Washer: Done';
+                        }
+                        return 'Washer: Done';
+                      ]]]
+                    styles:
+                      card:
+                        - padding: 20px 16px
+                        - background: |
+                            [[[
+                              var st = states['sensor.washer_washer_machine_state'];
+                              if (st && st.state === 'run') return '#E3F2FD';
+                              if (st && st.state === 'pause') return '#F3E8F0';
+                              return '#E0F2F1';
+                            ]]]
+                        - border-radius: 16px
+                        - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                        - border: |
+                            [[[
+                              var st = states['sensor.washer_washer_machine_state'];
+                              if (st && st.state === 'run') return '1px solid #90C2F0';
+                              if (st && st.state === 'pause') return '1px solid #CDA8C0';
+                              return '1px solid #A0D4CC';
+                            ]]]
+                      grid:
+                        - grid-template-areas: '"i n"'
+                        - grid-template-columns: min-content auto
+                        - justify-content: center
+                        - column-gap: 8px
+                      icon:
+                        - width: 36px
+                        - color: |
+                            [[[
+                              var st = states['sensor.washer_washer_machine_state'];
+                              if (st && st.state === 'run') return '#5E9ACF';
+                              if (st && st.state === 'pause') return '#A87898';
+                              return '#5BA89E';
+                            ]]]
+                      name:
+                        - font-size: 28px
+                        - font-weight: bold
+                        - color: '#2D3142'
+                        - justify-self: start
+                  - type: custom:button-card
+                    entity: sensor.dryer_remaining_time
+                    triggers_update:
+                      - sensor.time
+                    show_name: true
+                    show_state: false
+                    show_icon: true
+                    icon: mdi:tumble-dryer
+                    layout: icon_name
+                    name: |
+                      [[[
+                        var machine = states['sensor.dryer_dryer_machine_state'];
+                        if (machine && machine.state === 'run') {
+                          var text = entity.state;
+                          var mins = 0;
+                          var hm = text.match(/(\d+)\s*hour/);
+                          var mm = text.match(/(\d+)\s*minute/);
+                          if (hm) mins += parseInt(hm[1]) * 60;
+                          if (mm) mins += parseInt(mm[1]);
+                          if (mins > 0) return 'Dryer: ' + mins + ' min';
+                          return 'Dryer: ' + text;
+                        }
+                        if (machine && machine.state === 'pause') return 'Dryer: Paused';
+                        var done = states['input_boolean.dryer_recently_done'];
+                        if (done && done.state === 'on') {
+                          var changed = new Date(done.last_changed);
+                          var mins = Math.round((Date.now() - changed.getTime()) / 60000);
+                          if (mins < 1) return 'Dryer: Just Done';
+                          if (mins < 60) return 'Dryer: Done ' + mins + 'm ago';
+                          return 'Dryer: Done';
+                        }
+                        return 'Dryer: Done';
+                      ]]]
+                    styles:
+                      card:
+                        - padding: 20px 16px
+                        - background: |
+                            [[[
+                              var st = states['sensor.dryer_dryer_machine_state'];
+                              if (st && st.state === 'run') return '#F3E8F0';
+                              if (st && st.state === 'pause') return '#F3E8F0';
+                              return '#E0F2F1';
+                            ]]]
+                        - border-radius: 16px
+                        - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                        - border: |
+                            [[[
+                              var st = states['sensor.dryer_dryer_machine_state'];
+                              if (st && st.state === 'run') return '1px solid #CDA8C0';
+                              if (st && st.state === 'pause') return '1px solid #CDA8C0';
+                              return '1px solid #A0D4CC';
+                            ]]]
+                      grid:
+                        - grid-template-areas: '"i n"'
+                        - grid-template-columns: min-content auto
+                        - justify-content: center
+                        - column-gap: 8px
+                      icon:
+                        - width: 36px
+                        - color: |
+                            [[[
+                              var st = states['sensor.dryer_dryer_machine_state'];
+                              if (st && st.state === 'run') return '#A87898';
+                              if (st && st.state === 'pause') return '#A87898';
+                              return '#5BA89E';
+                            ]]]
+                      name:
+                        - font-size: 28px
+                        - font-weight: bold
+                        - color: '#2D3142'
+                        - justify-self: start
+
+            # Helper buttons — show when NO alerts and NO laundry active
+            - type: conditional
+              conditions:
+                - condition: state
+                  entity: alarm_control_panel.alarmo
+                  state: disarmed
+                - condition: state
+                  entity: binary_sensor.exterior_doors
+                  state: "off"
+                - condition: state
+                  entity: binary_sensor.house_windows
+                  state: "off"
+                - condition: state
+                  entity: binary_sensor.doorbell_package_detected
+                  state: "off"
+                - condition: state
+                  entity: sensor.washer_washer_machine_state
+                  state: unavailable
+                - condition: state
+                  entity: input_boolean.washer_recently_done
+                  state: 'off'
+                - condition: state
+                  entity: sensor.dryer_dryer_machine_state
+                  state: unavailable
+                - condition: state
+                  entity: input_boolean.dryer_recently_done
+                  state: 'off'
+              card:
+                type: horizontal-stack
+                cards:
+                  # Trash / Recycling week indicator
+                  # Even computed week = Trash only, Odd computed week = Trash & Recycling
+                  # (anchored: 2026-03-29 week 13 = Trash only)
+                  # Only visible on Sunday all day and Monday before 11am
+                  - type: custom:button-card
+                    name: |
+                      [[[
+                        var d = new Date();
+                        var jan4 = new Date(d.getFullYear(), 0, 4);
+                        var start = new Date(jan4);
+                        start.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7));
+                        var week = Math.ceil(((d - start) / 86400000 + 1) / 7);
+                        return (week % 2 !== 0) ? 'Trash & Recycling' : 'Trash Week';
+                      ]]]
+                    icon: |
+                      [[[
+                        var d = new Date();
+                        var jan4 = new Date(d.getFullYear(), 0, 4);
+                        var start = new Date(jan4);
+                        start.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7));
+                        var week = Math.ceil(((d - start) / 86400000 + 1) / 7);
+                        return (week % 2 !== 0) ? 'mdi:recycle' : 'mdi:trash-can-outline';
+                      ]]]
+                    card_mod:
+                      style: |
+                        :host {
+                          {% set day = now().weekday() %}
+                          {% if not (day == 6 or (day == 0 and now().hour < 11)) %}
+                            display: none !important;
+                          {% endif %}
+                        }
+                    styles:
+                      card:
+                        - padding: 12px
+                        - font-size: 18px
+                        - color: '#5E6B3A'
+                        - border-radius: 16px
+                        - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                        - background: '#F0F4E4'
+                        - border: '1px solid #C5D4A0'
+                      icon:
+                        - width: 36px
+                        - height: 36px
+                        - color: '#7A8B50'
+                  # Open Shades — only when covers are closed
+                  - type: custom:button-card
+                    name: Open Shades
+                    icon: mdi:blinds-horizontal
+                    entity: cover.house_covers
+                    tap_action:
+                      action: call-service
+                      service: cover.open_cover
+                      service_data:
+                        entity_id: cover.house_covers
+                    card_mod:
+                      style: |
+                        :host {
+                          {% if not is_state('cover.house_covers', 'closed') %}
+                            display: none !important;
+                          {% endif %}
+                        }
+                    styles:
+                      card:
+                        - padding: 12px
+                        - font-size: 18px
+                        - color: '#2C5F8A'
+                        - border-radius: 16px
+                        - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                        - background: '#E3F2FD'
+                        - border: '1px solid #90C2F0'
+                      icon:
+                        - width: 36px
+                        - height: 36px
+                        - color: '#5E9ACF'
+                  # Close Shades — only when covers are open
+                  - type: custom:button-card
+                    name: Close Shades
+                    icon: mdi:blinds-horizontal-closed
+                    entity: cover.house_covers
+                    tap_action:
+                      action: call-service
+                      service: cover.close_cover
+                      service_data:
+                        entity_id: cover.house_covers
+                    card_mod:
+                      style: |
+                        :host {
+                          {% if not is_state('cover.house_covers', 'open') %}
+                            display: none !important;
+                          {% endif %}
+                        }
+                    styles:
+                      card:
+                        - padding: 12px
+                        - font-size: 18px
+                        - color: '#2C6B65'
+                        - border-radius: 16px
+                        - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                        - background: '#E0F2F1'
+                        - border: '1px solid #A0D4CC'
+                      icon:
+                        - width: 36px
+                        - height: 36px
+                        - color: '#5BA89E'
+                  # Goodnight — only after dark
+                  - type: custom:button-card
+                    name: Goodnight
+                    icon: mdi:weather-night
+                    entity: input_boolean.dark_outside
+                    tap_action:
+                      action: call-service
+                      service: script.goodnight_routine
+                    card_mod:
+                      style: |
+                        :host {
+                          {% if not is_state('input_boolean.dark_outside', 'on') %}
+                            display: none !important;
+                          {% endif %}
+                        }
+                    styles:
+                      card:
+                        - padding: 12px
+                        - font-size: 18px
+                        - color: '#2C6B65'
+                        - border-radius: 16px
+                        - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                        - background: '#E0F2F1'
+                        - border: '1px solid #A0D4CC'
+                      icon:
+                        - width: 36px
+                        - height: 36px
+                        - color: '#5BA89E'
 
   # ═══════════════════════════════════════
   # LIGHTS VIEW
@@ -866,92 +1273,175 @@ views:
     title: Lights
     icon: mdi:lightbulb
     type: panel
+    background: "#F2F4F8"
     cards:
-      - type: vertical-stack
-        cards:
-          - type: custom:mushroom-template-card
-            primary: "Back"
-            icon: mdi:arrow-left
-            tap_action:
-              action: navigate
-              navigation_path: /kitchen-tablet/home
-            card_mod:
-              style: |
-                ha-card { --card-primary-font-size: 24px; }
+      - type: custom:mod-card
+        card_mod:
+          style: |
+            ha-card {
+              padding: 6px 12px;
+              background: '#F2F4F8';
+              box-shadow: none;
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+              border-radius: 0;
+            }
+        card:
+          type: vertical-stack
+          cards:
+            - type: custom:button-card
+              name: Back
+              icon: mdi:arrow-left
+              layout: icon_name
+              tap_action:
+                action: navigate
+                navigation_path: /kitchen-tablet/home
+              styles:
+                card:
+                  - padding: 6px 14px
+                  - background: white
+                  - border: '1px solid #C8CBD4'
+                  - border-radius: 14px
+                  - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                grid:
+                  - grid-template-areas: '"i n"'
+                  - grid-template-columns: min-content auto
+                  - justify-content: start
+                  - column-gap: 6px
+                name:
+                  - font-size: 20px
+                  - font-weight: 600
+                  - color: '#2D3142'
+                  - justify-self: start
+                icon:
+                  - width: 22px
+                  - color: '#8A8FA0'
 
-          - type: grid
-            columns: 2
-            square: false
-            cards:
-              - type: custom:mushroom-light-card
-                entity: light.kitchen_ceiling_lights
-                name: Kitchen Ceiling
-                icon: mdi:light-recessed
-                show_brightness_control: true
-                card_mod:
-                  style: |
-                    ha-card { --card-primary-font-size: 24px; }
+            - type: horizontal-stack
+              cards:
+                - type: vertical-stack
+                  cards:
+                    - type: entities
+                      title: Kitchen
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #FFF8E1;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #C9A830;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #7A6520; font-size: 22px; }
+                      entities:
+                        - light.kitchen_ceiling_lights
+                        - light.kitchen_undercabinet_lights
+                        - light.kitchen_pendants
 
-              - type: custom:mushroom-light-card
-                entity: light.kitchen_undercabinet_lights
-                name: Undercabinet
-                show_brightness_control: true
-                card_mod:
-                  style: |
-                    ha-card { --card-primary-font-size: 24px; }
+                    - type: entities
+                      title: Bedroom
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #F3E8F0;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #A87898;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #5E4060; font-size: 22px; }
+                      entities:
+                        - light.bedroom_ryans_bedside
+                        - light.bedroom_kellys_bedside
 
-              - type: custom:mushroom-light-card
-                entity: light.kitchen_pendants
-                name: Pendants
-                icon: mdi:ceiling-light-multiple
-                show_brightness_control: true
-                card_mod:
-                  style: |
-                    ha-card { --card-primary-font-size: 24px; }
+                    - type: entities
+                      title: Outside
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: white;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #8A8FA0;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #2D3142; font-size: 22px; }
+                      entities:
+                        - entity: light.outside_front_door
+                          name: Front Door
+                        - entity: light.outside_side_patio
+                          name: Side Patio
 
-              - type: custom:mushroom-light-card
-                entity: light.family_room_lights
-                name: Family Room
-                icon: mdi:lamps
-                show_brightness_control: true
-                card_mod:
-                  style: |
-                    ha-card { --card-primary-font-size: 24px; }
+                - type: vertical-stack
+                  cards:
+                    - type: entities
+                      title: Living Room
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #E3F2FD;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #5E9ACF;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #2C5F8A; font-size: 22px; }
+                      entities:
+                        - light.living_room_desk_lamp
+                        - light.living_room_fireplace
+                        - light.living_room_floor_lamp
 
-              - type: custom:mushroom-light-card
-                entity: light.living_room_lights
-                name: Living Room
-                icon: mdi:lamps
-                show_brightness_control: true
-                card_mod:
-                  style: |
-                    ha-card { --card-primary-font-size: 24px; }
+                    - type: entities
+                      title: Family Room
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #E8F5E9;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #5BA97A;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #2E6B4A; font-size: 22px; }
+                      entities:
+                        - light.family_room_center_lamp
+                        - light.family_room_corner_lamp
+                        - light.family_room_dining_table
 
-              - type: custom:mushroom-light-card
-                entity: light.outside_lights
-                name: Outside
-                icon: mdi:post-lamp
-                show_brightness_control: true
-                card_mod:
-                  style: |
-                    ha-card { --card-primary-font-size: 24px; }
-
-              - type: custom:mushroom-light-card
-                entity: light.master_bedroom_lights
-                name: Bedroom
-                icon: mdi:lamp
-                show_brightness_control: true
-                card_mod:
-                  style: |
-                    ha-card { --card-primary-font-size: 24px; }
-
-              - type: custom:mushroom-light-card
-                entity: light.ryans_office_lights
-                name: Ryan's Office
-                show_brightness_control: true
-                card_mod:
-                  style: |
-                    ha-card { --card-primary-font-size: 24px; }
+                    - type: entities
+                      title: Ryan's Office
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #E0F2F1;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #5BA89E;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #2C6B65; font-size: 22px; }
+                      entities:
+                        - light.ryans_office_desk_lamp
+                        - light.ryans_office_desk_uplighting
 
   # ═══════════════════════════════════════
   # CAMERAS VIEW
@@ -960,44 +1450,1660 @@ views:
     title: Cameras
     icon: mdi:cctv
     type: panel
+    background: "#F2F4F8"
+    cards:
+      - type: custom:mod-card
+        card_mod:
+          style: |
+            ha-card {
+              padding: 12px 16px;
+              background: '#F2F4F8';
+              box-shadow: none;
+              height: 100vh;
+              overflow-y: auto;
+              border-radius: 0;
+            }
+        card:
+          type: vertical-stack
+          cards:
+            - type: custom:button-card
+              name: Back
+              icon: mdi:arrow-left
+              layout: icon_name
+              tap_action:
+                action: navigate
+                navigation_path: /kitchen-tablet/home
+              styles:
+                card:
+                  - padding: 6px 14px
+                  - background: white
+                  - border: '1px solid #C8CBD4'
+                  - border-radius: 14px
+                  - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                grid:
+                  - grid-template-areas: '"i n"'
+                  - grid-template-columns: min-content auto
+                  - justify-content: start
+                  - column-gap: 6px
+                name:
+                  - font-size: 20px
+                  - font-weight: 600
+                  - color: '#2D3142'
+                  - justify-self: start
+                icon:
+                  - width: 22px
+                  - color: '#8A8FA0'
+
+            # These cards point at the UniFi **medium** resolution channels, not
+            # the high ones the home view uses. At 3 columns on a 1280 CSS-px
+            # screen each cell is ~400 CSS px (~600 device px at 1.5 DPR), so a
+            # 1920x1080 or 2688x1512 high stream is decoded and then thrown away
+            # scaling down — roughly 16 MP per frame set across the seven.
+            # camera.outside_doorbell_package is the exception: that device has
+            # no medium sibling, so it stays high.
+            #
+            # All 7 keep the same option set — mode: webrtc,mjpeg + intersection: 0
+            # + media: video. See the header of this file for why each is
+            # required before editing or adding a camera here.
+            - type: grid
+              columns: 3
+              square: false
+              cards:
+                - type: custom:webrtc-camera
+                  entity: camera.doorbell_medium
+                  muted: true
+                  mode: webrtc,mse,mjpeg
+                  intersection: 0
+                  media: video
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+                      }
+                - type: custom:webrtc-camera
+                  entity: camera.outside_doorbell_package
+                  muted: true
+                  mode: webrtc,mse,mjpeg
+                  intersection: 0
+                  media: video
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+                      }
+                - type: custom:webrtc-camera
+                  entity: camera.nursery_medium
+                  muted: true
+                  mode: webrtc,mse,mjpeg
+                  intersection: 0
+                  media: video
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+                      }
+                - type: custom:webrtc-camera
+                  entity: camera.side_patio_medium
+                  muted: true
+                  mode: webrtc,mse,mjpeg
+                  intersection: 0
+                  media: video
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+                      }
+                - type: custom:webrtc-camera
+                  entity: camera.mid_yard_medium
+                  muted: true
+                  mode: webrtc,mse,mjpeg
+                  intersection: 0
+                  media: video
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+                      }
+                - type: custom:webrtc-camera
+                  entity: camera.rear_patio_medium
+                  muted: true
+                  mode: webrtc,mse,mjpeg
+                  intersection: 0
+                  media: video
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+                      }
+                - type: custom:webrtc-camera
+                  entity: camera.under_porch_medium
+                  muted: true
+                  mode: webrtc,mse,mjpeg
+                  intersection: 0
+                  media: video
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+                      }
+
+  # ═══════════════════════════════════════
+  # CLIMATE VIEW
+  # ═══════════════════════════════════════
+  - path: climate
+    title: Climate
+    icon: mdi:thermometer
+    type: panel
+    background: "#F2F4F8"
+    cards:
+      - type: custom:mod-card
+        card_mod:
+          style: |
+            ha-card {
+              padding: 6px 12px;
+              background: '#F2F4F8';
+              box-shadow: none;
+              height: 100vh;
+              overflow-y: auto;
+              display: flex;
+              flex-direction: column;
+              border-radius: 0;
+            }
+        card:
+          type: vertical-stack
+          cards:
+
+            # Back button
+            - type: custom:button-card
+              name: Back
+              icon: mdi:arrow-left
+              layout: icon_name
+              tap_action:
+                action: navigate
+                navigation_path: /kitchen-tablet/home
+              styles:
+                card:
+                  - padding: 6px 14px
+                  - background: white
+                  - border: '1px solid #C8CBD4'
+                  - border-radius: 14px
+                  - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                grid:
+                  - grid-template-areas: '"i n"'
+                  - grid-template-columns: min-content auto
+                  - justify-content: start
+                  - column-gap: 6px
+                name:
+                  - font-size: 20px
+                  - font-weight: 600
+                  - color: '#2D3142'
+                  - justify-self: start
+                icon:
+                  - width: 22px
+                  - color: '#8A8FA0'
+
+            # ── Attic ──
+            - type: markdown
+              content: "#### 🏠 Attic"
+              card_mod:
+                style: |
+                  ha-card { background: none !important; border: none !important; box-shadow: none !important; padding: 4px 0 2px 0 !important; margin-bottom: -4px; }
+                  h4 { color: #2D3142; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin: 0; }
+
+            - type: grid
+              columns: 4
+              square: false
+              cards:
+                - type: custom:button-card
+                  entity: sensor.attic_gable_fan_temperature
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:home-roof
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Attic
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+            # ── 2nd Floor ──
+            - type: markdown
+              content: "#### 🛏️ 2nd Floor"
+              card_mod:
+                style: |
+                  ha-card { background: none !important; border: none !important; box-shadow: none !important; padding: 4px 0 2px 0 !important; margin-bottom: -4px; }
+                  h4 { color: #2D3142; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin: 0; }
+
+            - type: grid
+              columns: 4
+              square: false
+              cards:
+
+                - type: custom:button-card
+                  entity: sensor.master_bedroom_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:bed-king
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Master Bedroom
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: sensor.ryans_office_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:desktop-tower-monitor
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Ryan's Office
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: sensor.kellys_office_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:desk
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Kelly's Office
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: sensor.upstairs_bathroom_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:shower
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Upstairs Bath
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: sensor.nursery_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:baby-face-outline
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Nursery
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+            # ── 1st Floor ──
+            - type: markdown
+              content: "#### 🛋️ 1st Floor"
+              card_mod:
+                style: |
+                  ha-card { background: none !important; border: none !important; box-shadow: none !important; padding: 4px 0 2px 0 !important; margin-bottom: -4px; }
+                  h4 { color: #2D3142; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin: 0; }
+
+            - type: grid
+              columns: 4
+              square: false
+              cards:
+                - type: custom:button-card
+                  entity: sensor.living_room_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:sofa
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Living Room
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: sensor.kitchen_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:countertop
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Kitchen
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: sensor.family_room_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:sofa-outline
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Family Room
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+            # ── Basement ──
+            - type: markdown
+              content: "#### 🏚️ Basement"
+              card_mod:
+                style: |
+                  ha-card { background: none !important; border: none !important; box-shadow: none !important; padding: 4px 0 2px 0 !important; margin-bottom: -4px; }
+                  h4 { color: #2D3142; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin: 0; }
+
+            - type: grid
+              columns: 4
+              square: false
+              cards:
+                - type: custom:button-card
+                  entity: sensor.movie_room_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:projector
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Movie Room
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+                - type: custom:button-card
+                  entity: sensor.laundry_room_avg_temp
+                  show_icon: true
+                  show_name: true
+                  show_state: false
+                  show_label: true
+                  icon: mdi:washing-machine
+                  name: "[[[ return Math.round(parseFloat(entity.state)) + '°'; ]]]"
+                  label: Laundry Room
+                  styles:
+                    card:
+                      - padding: 14px 6px
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                      - background: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#DDEEFF';
+                            if (t < 68) return '#E3F2FD';
+                            if (t < 74) return '#E8F5E9';
+                            if (t < 79) return '#FFF8E1';
+                            return '#FFF3E0';
+                          ]]]
+                      - border: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '1px solid #7AB8E8';
+                            if (t < 68) return '1px solid #90C2F0';
+                            if (t < 74) return '1px solid #8CC8A0';
+                            if (t < 79) return '1px solid #FFD54F';
+                            return '1px solid #FFAB66';
+                          ]]]
+                    name:
+                      - font-size: 34px
+                      - font-weight: 700
+                      - justify-self: center
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+                    label:
+                      - font-size: 12px
+                      - font-weight: 500
+                      - justify-self: center
+                      - color: '#8A8FA0'
+                    icon:
+                      - width: 22px
+                      - color: |
+                          [[[
+                            var t = parseFloat(entity.state) || 70;
+                            if (t < 63) return '#1A5090';
+                            if (t < 68) return '#2C5F8A';
+                            if (t < 74) return '#1B6B40';
+                            if (t < 79) return '#B06000';
+                            return '#C13B00';
+                          ]]]
+
+            # ── Thermostats — side by side ──
+            - type: horizontal-stack
+              cards:
+                - type: custom:mushroom-climate-card
+                  entity: climate.family_room_mitsubishi
+                  name: Family Room
+                  icon: mdi:sofa-outline
+                  show_temperature_control: true
+                  hvac_modes:
+                    - "off"
+                    - cool
+                    - heat
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background: white;
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                      }
+                - type: custom:mushroom-climate-card
+                  entity: climate.living_room_mitsubishi
+                  name: Living Room
+                  icon: mdi:sofa
+                  show_temperature_control: true
+                  hvac_modes:
+                    - "off"
+                    - cool
+                    - heat
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background: white;
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                      }
+                - type: custom:mushroom-climate-card
+                  entity: climate.ecobee_laundry_room
+                  name: Ecobee
+                  icon: mdi:thermostat
+                  show_temperature_control: true
+                  hvac_modes:
+                    - "off"
+                    - heat
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background: white;
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                      }
+
+            # ── Outside temp graph + weather forecast ──
+            - type: horizontal-stack
+              cards:
+                - type: custom:mini-graph-card
+                  entities:
+                    - entity: sensor.outside_avg_temp
+                      color: "#0984ff"
+                  name: Outside Temp — 24h
+                  hours_to_show: 24
+                  points_per_hour: 2
+                  line_width: 2
+                  font_size: 75
+                  show:
+                    graph: line
+                    labels: false
+                    icon: false
+                    extrema: true
+                    average: true
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background: white;
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                      }
+
+                - type: custom:clock-weather-card
+                  entity: weather.tomorrow_io_home_daily
+                  hide_clock: true
+                  hide_today_section: false
+                  animated_icon: false
+                  forecast_rows: 5
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background: white;
+                        border: 1px solid #C8CBD4;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                      }
+
+  # ═══════════════════════════════════════
+  # COVERS VIEW
+  # ═══════════════════════════════════════
+  - path: covers
+    title: Covers
+    icon: mdi:blinds-horizontal
+    type: panel
+    background: "#F2F4F8"
+    cards:
+      - type: custom:mod-card
+        card_mod:
+          style: |
+            ha-card {
+              padding: 6px 12px;
+              background: '#F2F4F8';
+              box-shadow: none;
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+              border-radius: 0;
+            }
+        card:
+          type: vertical-stack
+          cards:
+            - type: horizontal-stack
+              cards:
+                - type: custom:button-card
+                  name: Back
+                  icon: mdi:arrow-left
+                  layout: icon_name
+                  tap_action:
+                    action: navigate
+                    navigation_path: /kitchen-tablet/home
+                  styles:
+                    card:
+                      - padding: 6px 14px
+                      - background: white
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    grid:
+                      - grid-template-areas: '"i n"'
+                      - grid-template-columns: min-content auto
+                      - justify-content: start
+                      - column-gap: 6px
+                    name:
+                      - font-size: 20px
+                      - font-weight: 600
+                      - color: '#2D3142'
+                      - justify-self: start
+                    icon:
+                      - width: 22px
+                      - color: '#8A8FA0'
+                - type: custom:button-card
+                  name: Close All
+                  icon: mdi:blinds-horizontal-closed
+                  tap_action:
+                    action: call-service
+                    service: cover.close_cover
+                    service_data:
+                      entity_id: cover.house_covers
+                  styles:
+                    card:
+                      - padding: 6px 14px
+                      - background: '#E3F2FD'
+                      - border: '1px solid #90C2F0'
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    name:
+                      - font-size: 20px
+                      - font-weight: 600
+                      - color: '#2C5F8A'
+                    icon:
+                      - width: 22px
+                      - color: '#5E9ACF'
+                - type: custom:button-card
+                  name: Open All
+                  icon: mdi:blinds-horizontal
+                  tap_action:
+                    action: call-service
+                    service: cover.open_cover
+                    service_data:
+                      entity_id: cover.house_covers
+                  styles:
+                    card:
+                      - padding: 6px 14px
+                      - background: '#E8F5E9'
+                      - border: '1px solid #A0D0A4'
+                      - border-radius: 14px
+                      - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    name:
+                      - font-size: 20px
+                      - font-weight: 600
+                      - color: '#2E6B4A'
+                    icon:
+                      - width: 22px
+                      - color: '#5BA97A'
+
+            - type: horizontal-stack
+              cards:
+                - type: vertical-stack
+                  cards:
+                    - type: entities
+                      title: Living Room
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #E3F2FD;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #5E9ACF;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #2C5F8A; font-size: 22px; }
+                      entities:
+                        - entity: cover.living_room_front_shade_cover
+                          name: Front Shade
+                        - entity: cover.living_room_side_1_window_shade_cover
+                          name: Side Shade
+
+                    - type: entities
+                      title: Family Room
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #E8F5E9;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #5BA97A;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #2E6B4A; font-size: 22px; }
+                      entities:
+                        - entity: cover.family_room_left_front_shade_cover
+                          name: Left Shade
+                        - entity: cover.family_room_right_front_shade_cover
+                          name: Right Shade
+
+                - type: vertical-stack
+                  cards:
+                    - type: entities
+                      title: Kitchen
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #FFF8E1;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #C9A830;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #7A6520; font-size: 22px; }
+                      entities:
+                        - entity: cover.kitchen_window_shade_cover
+                          name: Window Shade
+
+                    - type: entities
+                      title: Ryan's Office
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background: #E0F2F1;
+                            border-radius: 16px;
+                            border: 1px solid #C8CBD4;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                            --primary-text-color: #2D3142;
+                            --secondary-text-color: #8A8FA0;
+                            --paper-item-icon-color: #5BA89E;
+                            font-size: 20px;
+                          }
+                          .card-header { color: #2C6B65; font-size: 22px; }
+                      entities:
+                        - entity: cover.ryans_office_side_window_shade_cover
+                          name: Side Shade
+                        - entity: cover.ryans_office_rear_window_shade_cover
+                          name: Rear Shade
+
+  # ═══════════════════════════════════════
+  # MUSIC VIEW — placeholder for future expansion
+  # ═══════════════════════════════════════
+  - path: music
+    title: Music
+    icon: mdi:music
+    type: panel
+    background: "#F2F4F8"
+    cards:
+      - type: custom:mod-card
+        card_mod:
+          style: |
+            ha-card {
+              padding: 12px 16px;
+              background: '#F2F4F8';
+              box-shadow: none;
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+              border-radius: 0;
+            }
+        card:
+          type: vertical-stack
+          cards:
+            - type: custom:button-card
+              name: Back
+              icon: mdi:arrow-left
+              layout: icon_name
+              tap_action:
+                action: navigate
+                navigation_path: /kitchen-tablet/home
+              styles:
+                card:
+                  - padding: 6px 14px
+                  - background: white
+                  - border: '1px solid #C8CBD4'
+                  - border-radius: 14px
+                  - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                grid:
+                  - grid-template-areas: '"i n"'
+                  - grid-template-columns: min-content auto
+                  - justify-content: start
+                  - column-gap: 6px
+                name:
+                  - font-size: 20px
+                  - font-weight: 600
+                  - color: '#2D3142'
+                  - justify-self: start
+                icon:
+                  - width: 22px
+                  - color: '#8A8FA0'
+
+            # Media player controls
+            - type: horizontal-stack
+              cards:
+                - type: custom:mushroom-media-player-card
+                  entity: media_player.local_audio
+                  name: House Audio
+                  icon: mdi:speaker
+                  show_volume_level: true
+                  use_media_info: true
+                  media_controls:
+                    - on_off
+                    - play_pause_stop
+                    - previous
+                    - next
+                  volume_controls:
+                    - volume_set
+                    - volume_mute
+                  card_mod:
+                    style: |
+                      ha-card {
+                        --card-primary-font-size: 22px;
+                        background: #FFF8E1;
+                        border: 1px solid #E0C050;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                        --primary-text-color: #2D3142;
+                        --secondary-text-color: #8A8FA0;
+                      }
+
+            # Placeholder for future music sources
+            - type: custom:button-card
+              name: "More music controls coming soon"
+              show_icon: false
+              styles:
+                card:
+                  - padding: 20px
+                  - background: white
+                  - border: '1px solid #C8CBD4'
+                  - border-radius: 16px
+                  - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                name:
+                  - font-size: 18px
+                  - color: '#8A8FA0'
+                  - font-style: italic
+
+  - path: safety
+    title: Safety
+    panel: false
     cards:
       - type: vertical-stack
         cards:
-          - type: custom:mushroom-template-card
-            primary: "Back"
-            icon: mdi:arrow-left
+
+          # ── Back nav ──
+          - type: custom:button-card
+            name: ← Home
+            show_icon: false
             tap_action:
               action: navigate
               navigation_path: /kitchen-tablet/home
-            card_mod:
-              style: |
-                ha-card { --card-primary-font-size: 24px; }
+            styles:
+              card:
+                - padding: 10px 16px
+                - border-radius: 12px
+                - background: white
+                - border: '1px solid #C8CBD4'
+                - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+              name:
+                - font-size: 16px
+                - color: '#2D3142'
+                - justify-self: start
+
+          # ── Smoke & CO Alarms ──
+          - type: custom:button-card
+            name: Smoke & CO Alarms
+            show_icon: false
+            styles:
+              card:
+                - padding: 8px 16px
+                - background: none
+                - border: none
+                - box-shadow: none
+              name:
+                - font-size: 13px
+                - font-weight: 600
+                - color: '#2D3142'
+                - letter-spacing: 0.05em
+                - text-transform: uppercase
+                - justify-self: start
 
           - type: grid
             columns: 3
             square: false
             cards:
-              - type: custom:webrtc-camera
-                entity: camera.outside_doorbell
-                muted: true
-                background: true
-              - type: custom:webrtc-camera
-                entity: camera.outside_doorbell_package
-                muted: true
-                background: true
-              - type: custom:webrtc-camera
-                entity: camera.outside_side_patio
-                muted: true
-                background: true
-              - type: custom:webrtc-camera
-                entity: camera.mid_yard_camera_high
-                muted: true
-                background: true
-              - type: custom:webrtc-camera
-                entity: camera.rear_patio_camera_high_resolution_channel
-                muted: true
-                background: true
-              - type: custom:webrtc-camera
-                entity: camera.under_porch_camera_high_resolution_channel
-                muted: true
-                background: true
+              - type: custom:button-card
+                entity: binary_sensor.basement_smoke_co_alarm_smoke_detected
+                show_state: false
+                show_label: true
+                name: Basement
+                icon: mdi:smoke-detector-variant
+                label: >
+                  [[[
+                    var smoke = entity.state === 'on';
+                    var co = states['binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                    if (smoke) return '🔥 Smoke';
+                    if (co) return '☠️ CO';
+                    return 'Clear';
+                  ]]]
+                styles:
+                  card:
+                    - padding: 14px 6px
+                    - border-radius: 14px
+                    - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    - background: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '#FDECEA' : '#E8F5E9';
+                        ]]]
+                    - border: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '1px solid #E8B4A8' : '1px solid #8CC8A0';
+                        ]]]
+                  name:
+                    - font-size: 16px
+                    - font-weight: 700
+                    - color: '#2D3142'
+                  label:
+                    - font-size: 12px
+                    - color: '#8A8FA0'
+                  icon:
+                    - width: 28px
+                    - color: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '#C0584A' : '#1B6B40';
+                        ]]]
+
+              - type: custom:button-card
+                entity: binary_sensor.entryway_smoke_co_alarm_smoke_detected
+                show_state: false
+                show_label: true
+                name: Entryway
+                icon: mdi:smoke-detector-variant
+                label: >
+                  [[[
+                    var smoke = entity.state === 'on';
+                    var co = states['binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                    if (smoke) return '🔥 Smoke';
+                    if (co) return '☠️ CO';
+                    return 'Clear';
+                  ]]]
+                styles:
+                  card:
+                    - padding: 14px 6px
+                    - border-radius: 14px
+                    - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    - background: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '#FDECEA' : '#E8F5E9';
+                        ]]]
+                    - border: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '1px solid #E8B4A8' : '1px solid #8CC8A0';
+                        ]]]
+                  name:
+                    - font-size: 16px
+                    - font-weight: 700
+                    - color: '#2D3142'
+                  label:
+                    - font-size: 12px
+                    - color: '#8A8FA0'
+                  icon:
+                    - width: 28px
+                    - color: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '#C0584A' : '#1B6B40';
+                        ]]]
+
+              - type: custom:button-card
+                entity: binary_sensor.second_floor_smoke_co_alarm_smoke_detected
+                show_state: false
+                show_label: true
+                name: 2nd Floor
+                icon: mdi:smoke-detector-variant
+                label: >
+                  [[[
+                    var smoke = entity.state === 'on';
+                    var co = states['binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                    if (smoke) return '🔥 Smoke';
+                    if (co) return '☠️ CO';
+                    return 'Clear';
+                  ]]]
+                styles:
+                  card:
+                    - padding: 14px 6px
+                    - border-radius: 14px
+                    - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    - background: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '#FDECEA' : '#E8F5E9';
+                        ]]]
+                    - border: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '1px solid #E8B4A8' : '1px solid #8CC8A0';
+                        ]]]
+                  name:
+                    - font-size: 16px
+                    - font-weight: 700
+                    - color: '#2D3142'
+                  label:
+                    - font-size: 12px
+                    - color: '#8A8FA0'
+                  icon:
+                    - width: 28px
+                    - color: >
+                        [[[
+                          var smoke = entity.state === 'on';
+                          var co = states['binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'] && states['binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'].state === 'on';
+                          return (smoke || co) ? '#C0584A' : '#1B6B40';
+                        ]]]
+
+          # ── Water Sensors ──
+          - type: custom:button-card
+            name: Water Sensors
+            show_icon: false
+            styles:
+              card:
+                - padding: 8px 16px
+                - background: none
+                - border: none
+                - box-shadow: none
+              name:
+                - font-size: 13px
+                - font-weight: 600
+                - color: '#2D3142'
+                - letter-spacing: 0.05em
+                - text-transform: uppercase
+                - justify-self: start
+
+          - type: grid
+            columns: 3
+            square: false
+            cards:
+              - type: custom:button-card
+                entity: binary_sensor.kitchen_water_sensor_moisture
+                show_state: false
+                show_label: true
+                name: Kitchen
+                icon: mdi:water-pump
+                label: "[[[ return entity.state === 'on' ? '💧 Wet' : 'Dry'; ]]]"
+                styles:
+                  card:
+                    - padding: 14px 6px
+                    - border-radius: 14px
+                    - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    - background: "[[[ return entity.state === 'on' ? '#E3F2FD' : '#E8F5E9'; ]]]"
+                    - border: "[[[ return entity.state === 'on' ? '1px solid #90C2F0' : '1px solid #8CC8A0'; ]]]"
+                  name:
+                    - font-size: 16px
+                    - font-weight: 700
+                    - color: '#2D3142'
+                  label:
+                    - font-size: 12px
+                    - color: '#8A8FA0'
+                  icon:
+                    - width: 28px
+                    - color: "[[[ return entity.state === 'on' ? '#1A5090' : '#1B6B40'; ]]]"
+
+              - type: custom:button-card
+                entity: binary_sensor.downstairs_bathroom_water_sensor_water_leak
+                show_state: false
+                show_label: true
+                name: Downstairs Bath
+                icon: mdi:water-pump
+                label: "[[[ return entity.state === 'on' ? '💧 Wet' : 'Dry'; ]]]"
+                styles:
+                  card:
+                    - padding: 14px 6px
+                    - border-radius: 14px
+                    - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    - background: "[[[ return entity.state === 'on' ? '#E3F2FD' : '#E8F5E9'; ]]]"
+                    - border: "[[[ return entity.state === 'on' ? '1px solid #90C2F0' : '1px solid #8CC8A0'; ]]]"
+                  name:
+                    - font-size: 16px
+                    - font-weight: 700
+                    - color: '#2D3142'
+                  label:
+                    - font-size: 12px
+                    - color: '#8A8FA0'
+                  icon:
+                    - width: 28px
+                    - color: "[[[ return entity.state === 'on' ? '#1A5090' : '#1B6B40'; ]]]"
+
+              - type: custom:button-card
+                entity: binary_sensor.half_bath_water_sensor_water_leak
+                show_state: false
+                show_label: true
+                name: Half Bath
+                icon: mdi:water-pump
+                label: "[[[ return entity.state === 'on' ? '💧 Wet' : 'Dry'; ]]]"
+                styles:
+                  card:
+                    - padding: 14px 6px
+                    - border-radius: 14px
+                    - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    - background: "[[[ return entity.state === 'on' ? '#E3F2FD' : '#E8F5E9'; ]]]"
+                    - border: "[[[ return entity.state === 'on' ? '1px solid #90C2F0' : '1px solid #8CC8A0'; ]]]"
+                  name:
+                    - font-size: 16px
+                    - font-weight: 700
+                    - color: '#2D3142'
+                  label:
+                    - font-size: 12px
+                    - color: '#8A8FA0'
+                  icon:
+                    - width: 28px
+                    - color: "[[[ return entity.state === 'on' ? '#1A5090' : '#1B6B40'; ]]]"
+
+              - type: custom:button-card
+                entity: binary_sensor.upstairs_bathroom_water_sensor_water_leak
+                show_state: false
+                show_label: true
+                name: Upstairs Bath
+                icon: mdi:water-pump
+                label: "[[[ return entity.state === 'on' ? '💧 Wet' : 'Dry'; ]]]"
+                styles:
+                  card:
+                    - padding: 14px 6px
+                    - border-radius: 14px
+                    - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    - background: "[[[ return entity.state === 'on' ? '#E3F2FD' : '#E8F5E9'; ]]]"
+                    - border: "[[[ return entity.state === 'on' ? '1px solid #90C2F0' : '1px solid #8CC8A0'; ]]]"
+                  name:
+                    - font-size: 16px
+                    - font-weight: 700
+                    - color: '#2D3142'
+                  label:
+                    - font-size: 12px
+                    - color: '#8A8FA0'
+                  icon:
+                    - width: 28px
+                    - color: "[[[ return entity.state === 'on' ? '#1A5090' : '#1B6B40'; ]]]"
+
+              - type: custom:button-card
+                entity: binary_sensor.laundry_water_sensor_water_leak
+                show_state: false
+                show_label: true
+                name: Laundry
+                icon: mdi:water-pump
+                label: "[[[ return entity.state === 'on' ? '💧 Wet' : 'Dry'; ]]]"
+                styles:
+                  card:
+                    - padding: 14px 6px
+                    - border-radius: 14px
+                    - box-shadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                    - background: "[[[ return entity.state === 'on' ? '#E3F2FD' : '#E8F5E9'; ]]]"
+                    - border: "[[[ return entity.state === 'on' ? '1px solid #90C2F0' : '1px solid #8CC8A0'; ]]]"
+                  name:
+                    - font-size: 16px
+                    - font-weight: 700
+                    - color: '#2D3142'
+                  label:
+                    - font-size: 12px
+                    - color: '#8A8FA0'
+                  icon:
+                    - width: 28px
+                    - color: "[[[ return entity.state === 'on' ? '#1A5090' : '#1B6B40'; ]]]"
