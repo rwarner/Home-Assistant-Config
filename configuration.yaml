@@ -208,9 +208,6 @@ homekit:
       - cover.family_room_shades
 
   entity_config:
-    binary_sensor.front_outdoor_motion_sensor:
-      linked_battery_sensor: sensor.front_outdoor_motion_sensor_battery_level
-      low_battery_threshold: 30
     binary_sensor.kitchen_motion_sensor:
       linked_battery_sensor: sensor.kitchen_motion_sensor_battery_level
       low_battery_threshold: 30
