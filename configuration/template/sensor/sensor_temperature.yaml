@@ -137,6 +137,24 @@
         float(states('sensor.kellys_office_avg_temp'), 70.0)
       ) / 4) }}
 
+# -- 2nd Floor SVZ Remote Temp Reference (Nursery + Master Bedroom button sensors, 50/50) --
+# Used as the CN105 remote temperature forwarded to the SVZ air handler via ESPHome.
+# Deliberately uses only the two priority/occupied rooms at night, and only the
+# button sensors (occupant height, no ceiling-corner bias) rather than the avg_temp
+# helpers (which blend in the ceiling motion sensors). Nursery's higher reading pulls
+# the reference up vs bedroom-alone, without over-committing to a room with a known
+# duct underperformance issue. Falls back to 70.0°F if either sensor is unavailable.
+  - name: "2nd Floor SVZ Remote Temperature"
+    unique_id: second_floor_svz_remote_temp
+    unit_of_measurement: '°F'
+    state_class: measurement
+    state: >-
+      {{'%0.3g'|format(
+      (
+        float(states('sensor.ryans_bedside_button_temperature'), 70.0) +
+        float(states('sensor.nursery_light_button_temperature'), 70.0)
+      ) / 2) }}
+
 # -- Attic vs Outside Delta (how much hotter attic is than outside) --
   - name: "Attic vs Outside Delta"
     unique_id: attic_outside_delta
