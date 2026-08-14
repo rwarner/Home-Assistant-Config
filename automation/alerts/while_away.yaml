@@ -2,36 +2,6 @@
 ### ALERTS - While Away      ###
 ################################
 
-- alias: ALERT (AWAY) - Motion at Front Door, notify Mobile App
-  id: 604862be-7814-11ee-b962-0242ac120002
-  mode: single # Only run once at a time  
-  max_exceeded: silent # Hide warnings when triggered while in delay.
-  trigger:
-    trigger: state
-    entity_id:
-     - input_boolean.someone_at_front_door
-    to: 'on'
-  condition:
-    - condition: state
-      entity_id: alarm_control_panel.alarm
-      state: armed_away
-  action:
-    # Brief delay to let mailbox sensor register if this is the mail carrier
-    - delay: '00:00:10'
-    - condition: template
-      value_template: "{{ not is_state('input_boolean.mail_arrived', 'on') }}"
-    - action: notify.ryan_devices
-      data:
-        title: "Front Door Motion"
-        message: ""
-        data:
-          ttl: 0
-          priority: high
-          tag: front_door_motion
-          image: "/api/camera_proxy/camera.outside_doorbell" # Captures image immediately, sends via notification
-          url: "/lovelace/camera_view"
-    - delay: '00:05:00' # Prevent multiple runs of this within 5 minute intervals
-
 - alias: ALERT (AWAY) - Motion in house
   id: 71fe36c8-7814-11ee-b962-0242ac120002
   mode: single # Only run once at a time  

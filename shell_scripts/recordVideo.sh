@@ -10,10 +10,10 @@ do
     # Get just the filename without path
     filename=$(basename "$i" .mp4)
 
-    # Convert with ffmpeg, cap at 8MB for Discord free-tier limit
-    /usr/bin/ffmpeg -y -i "$i" -b:v 1250k -fs 8M /tmp/hass/converted/${filename}.mp4 2>/dev/null
+    # Cap size well under Discord's 10MB non-Nitro attachment limit
+    /usr/bin/ffmpeg -y -i "$i" -b:v 1250k -fs 3M /tmp/hass/converted/${filename}.mp4 2>/dev/null
 
-    # Also copy to www/clips for mobile notification access
+    # Also copy to www/clips for the Discord notification to attach
     cp /tmp/hass/converted/${filename}.mp4 /config/www/clips/${filename}.mp4 2>/dev/null
 done
 

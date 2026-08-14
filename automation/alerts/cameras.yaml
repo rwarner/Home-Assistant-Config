@@ -5,7 +5,8 @@
 # Set mode to queued so that there isn't conflicting runs when called while another is running
 - alias: CAMERAS - Capture on front door motion
   id: 044d29d4-7816-11ee-b962-0242ac120002
-  mode: queued
+  mode: single # Only run once at a time
+  max_exceeded: silent # Hide warnings when triggered while in the cooldown delay
   trigger:
     trigger: state
     entity_id:
@@ -17,3 +18,4 @@
       state: armed_away
   action:
     - action: script.capture_front_door_video
+    - delay: '00:05:00' # Prevent duplicate captures/Discord notifications within 5 minutes
