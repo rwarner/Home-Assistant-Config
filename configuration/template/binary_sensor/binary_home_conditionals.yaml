@@ -34,8 +34,8 @@
         {% set ns = namespace(low_battery_entities=[]) %}
         {% for entity in states.sensor
             | selectattr('entity_id', 'search', '_battery(_level)?$')
-            | rejectattr('entity_id', 'search', 'iphone|ipad|tesla|smartshunt') %}
-          {% if entity.state == 'unavailable' or (entity.state != 'unknown' and entity.state | int < 35) %}
+            | rejectattr('entity_id', 'search', 'iphone|ipad|tesla|smartshunt|simulator') %}
+          {% if entity.state != 'unknown' and entity.state != 'unavailable' and entity.state | int < 35 %}
             {% set ns.low_battery_entities = ns.low_battery_entities + [entity.entity_id] %}
           {% endif %}
         {% endfor %}
@@ -45,8 +45,8 @@
           {% set ns = namespace(low_battery_entities=[]) %}
           {% for entity in states.sensor
               | selectattr('entity_id', 'search', '_battery(_level)?$')
-              | rejectattr('entity_id', 'search', 'iphone|ipad|tesla|smartshunt') %}
-            {% if entity.state == 'unavailable' or (entity.state != 'unknown' and entity.state | int < 35) %}
+              | rejectattr('entity_id', 'search', 'iphone|ipad|tesla|smartshunt|simulator') %}
+            {% if entity.state != 'unknown' and entity.state != 'unavailable' and entity.state | int < 35 %}
               {% set ns.low_battery_entities = ns.low_battery_entities + [entity.entity_id] %}
             {% endif %}
           {% endfor %}
