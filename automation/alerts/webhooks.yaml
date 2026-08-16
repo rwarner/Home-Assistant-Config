@@ -57,7 +57,13 @@
     - action: notify.ryan_devices
       data:
         title: "Synology NAS Alert"
-        message: "{{ trigger.json.text | default('Alert received from NAS') }}"
+        # DSM concatenates its webhook subject into the text field, so the
+        # body arrives as "Synology NAS Alert <actual message>" and repeats
+        # the title. Strip that prefix here. If DSM is ever fixed to send
+        # only the message, or changes its subject, this no-ops harmlessly.
+        message: >-
+          {{ trigger.json.text | default('Alert received from NAS', true)
+             | regex_replace('^Synology NAS Alert\s*', '') | trim }}
         data:
           ttl: 0
           priority: high
@@ -75,3 +81,60 @@
       data:
         title: "Prowlarr Health"
         message: "{{ trigger.json.message | default('Problem with indexer') }}"
+
+- alias: WEBHOOK - Media Maintenance Jobs
+  id: 919d7a63-4121-40d6-a8e0-c5bed060c5a2
+  triggers:
+    - trigger: webhook
+      webhook_id: media_jobs
+      allowed_methods:
+        - POST
+      local_only: true
+  actions:
+    # Payload: {"job": str, "status": str, "message": str, "title": str (optional)}
+    #
+    # status drives WHETHER it pushes; title/message drive WHAT it says.
+    #   error  -> push, "⚠️ <job> failed"      (override with "title")
+    #   done   -> push, "✅ <job> complete"    (override with "title")
+    #   notify -> push, title used verbatim    (free-form)
+    #   other  -> logbook only, no push
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.json.status | default('') == 'error' }}"
+          sequence:
+            - action: notify.ryan_devices
+              data:
+                title: >
+                  {{ trigger.json.title
+                     | default('⚠️ ' ~ (trigger.json.job | default('Media job')) ~ ' failed', true) }}
+                message: "{{ trigger.json.message | default('No detail supplied') }}"
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.json.status | default('') == 'done' }}"
+          sequence:
+            - action: notify.ryan_devices
+              data:
+                title: >
+                  {{ trigger.json.title
+                     | default('✅ ' ~ (trigger.json.job | default('Media job')) ~ ' complete', true) }}
+                message: "{{ trigger.json.message | default('') }}"
+                data:
+                  push:
+                    sound: none
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.json.status | default('') == 'notify' }}"
+          sequence:
+            - action: notify.ryan_devices
+              data:
+                title: "{{ trigger.json.title | default(trigger.json.job | default('Media job'), true) }}"
+                message: "{{ trigger.json.message | default('') }}"
+                data:
+                  push:
+                    sound: none
+      default:
+        - action: logbook.log
+          data:
+            name: "Media jobs"
+            message: "{{ trigger.json.job | default('job') }}: {{ trigger.json.message | default('') }}"
