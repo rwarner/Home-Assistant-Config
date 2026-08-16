@@ -154,16 +154,31 @@
                   {% set charge_pct = states('sensor.ups_battery_charge') | float(0) %}
                   {% set battery_wh = 188 %}
                   {% set ups_rated_w = 1320 %}
-                  {% set actual_w = (load_pct / 100) * ups_rated_w %}
+                  {# floor at 1W so a zero/absent load reading cannot divide by zero #}
+                  {% set actual_w = [((load_pct / 100) * ups_rated_w), 1] | max %}
                   {% set est_min = ((charge_pct / 100 * battery_wh) / actual_w * 60) | round(0) | int %}
                   Battery: {{ charge_pct | round(0) }}% · Load: {{ actual_w | round(0) }}W ({{ load_pct | round(0) }}%)
-                  Est. runtime: ~{{ est_min }} min
+                  Est. runtime: ~{% if est_min >= 60 %}{{ est_min // 60 }}h {{ est_min % 60 }}m{% else %}{{ est_min }}m{% endif %}
         - conditions: "{{ trigger.id == 'online' }}"
           sequence:
             - action: notify.ryan_devices
               data:
-                title: "Home Power Online"
-                message: "Power has returned"
+                title: "✅ Home Power Restored"
+                # Outage length is measured from when the UPS entered "On Battery"
+                # to when it left it, so the trigger's 30s debounce is excluded.
+                # Note: if an outage outlasts the UPS, HA is down for the tail of
+                # it and this fires only if HA is back before the state clears.
+                message: >
+                  {% set secs = (trigger.to_state.last_changed
+                                 - trigger.from_state.last_changed).total_seconds() | int %}
+                  {% set h = secs // 3600 %}
+                  {% set m = (secs % 3600) // 60 %}
+                  Power was out for
+                  {%- if h > 0 %} {{ h }}h {{ m }}m
+                  {%- elif m > 0 %} {{ m }}m
+                  {%- else %} {{ secs }}s
+                  {%- endif %}.
+                  Battery now {{ states('sensor.ups_battery_charge') | float(0) | round(0) }}%.
 
         - conditions: "{{ trigger.id == 'low_battery' }}"
           sequence:
