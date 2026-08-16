@@ -149,26 +149,29 @@
             - action: notify.ryan_devices
               data:
                 title: "⚡ Home Power Outage"
+                # DELIBERATELY does not use sensor.ups_battery_runtime.
+                #
+                # The UPS's own estimate is optimistic and has already failed us:
+                # on 2026-06-07 sensor.ups_battery_charge hit 0% -- the battery
+                # ran flat -- after the UPS had been advertising roughly twice the
+                # runtime that actually remained. This derived figure is
+                # intentionally the more conservative of the two (it currently
+                # reads ~50m where the UPS claims ~110m).
+                #
+                # Running out of power early is the expensive failure; being told
+                # you have less time than you do is not. Prefer the low estimate.
+                # If you want to recalibrate, lower battery_wh -- do not swap in
+                # the UPS sensor.
                 message: >
-                  {% set load_pct = states('sensor.ups_load') | float(0) %}
+                  {% set load_pct = states('sensor.ups_load') | float(1) %}
                   {% set charge_pct = states('sensor.ups_battery_charge') | float(0) %}
+                  {% set battery_wh = 188 %}
                   {% set ups_rated_w = 1320 %}
-                  {% set actual_w = (load_pct / 100) * ups_rated_w %}
-                  {# Runtime comes straight from the UPS (sensor.ups_battery_runtime,
-                     device_class duration, unit min). It measures actual battery
-                     voltage under the real load and recalculates continuously, so it
-                     beats deriving it from a fixed capacity constant -- the old
-                     hand-rolled figure read ~50m where the UPS itself said ~110m. #}
-                  {% set rt = states('sensor.ups_battery_runtime') %}
+                  {# floor at 1W so a zero/absent load reading cannot divide by zero #}
+                  {% set actual_w = [((load_pct / 100) * ups_rated_w), 1] | max %}
+                  {% set est_min = ((charge_pct / 100 * battery_wh) / actual_w * 60) | round(0) | int %}
                   Battery: {{ charge_pct | round(0) }}% · Load: {{ actual_w | round(0) }}W ({{ load_pct | round(0) }}%)
-                  Est. runtime:
-                  {%- if rt in ['unknown', 'unavailable', 'none', ''] %} unknown
-                  {%- else %}
-                    {%- set est_min = rt | float(0) | round(0) | int %}
-                    {{- ' ~' }}
-                    {%- if est_min >= 60 %}{{ est_min // 60 }}h {{ est_min % 60 }}m
-                    {%- else %}{{ est_min }}m{% endif %}
-                  {%- endif %}
+                  Est. runtime: ~{% if est_min >= 60 %}{{ est_min // 60 }}h {{ est_min % 60 }}m{% else %}{{ est_min }}m{% endif %}
         - conditions: "{{ trigger.id == 'online' }}"
           sequence:
             - action: notify.ryan_devices
