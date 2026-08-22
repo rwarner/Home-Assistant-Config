@@ -123,9 +123,24 @@
             - condition: state
               entity_id: light.master_bedroom_lights
               state: 'off'
-            - condition: numeric_state
-              entity_id: sensor.master_bedroom_motion_sensor_illuminance
-              below: 10
+            # The Hue sensor only reports illuminance every ~5 min, so for a
+            # few minutes after the lights switch off it still reports the LIT
+            # value (43-45 lux) and wrongly blocks a re-entry. Natural light in
+            # this room never exceeds 15 lux, so anything >=40 is the lights,
+            # not daylight. Accept a genuinely dark reading, or bypass the check
+            # when the reading provably predates the lights going off.
+            - condition: or
+              conditions:
+                - condition: numeric_state
+                  entity_id: sensor.master_bedroom_motion_sensor_illuminance
+                  below: 10
+                - condition: template
+                  value_template: >
+                    {% set lux = states.sensor.master_bedroom_motion_sensor_illuminance %}
+                    {% set lt = states.light.master_bedroom_lights %}
+                    {{ lux is not none and lt is not none
+                       and lux.last_changed < lt.last_changed
+                       and (now() - lt.last_changed).total_seconds() < 600 }}
             - condition: state
               entity_id: switch.master_bedroom_fan
               state: 'off'
