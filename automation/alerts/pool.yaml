@@ -4,6 +4,39 @@
 
 # Season: April (month 4) through October (month 10) for New England
 
+# One-shot: Ryan set the pump/heater to run continuously (FP) on 2026-08-24 to
+# recover from a ~7-8°F deficit after a power outage killed the heater for
+# several days while away. Pings once temp climbs back to target so he knows to
+# dial the pump schedule back down. Safe to remove once no longer needed.
+- alias: POOL - Heater Recovery Complete
+  id: pool_heater_recovery_complete
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.pool_monitor_temperature
+      above: 82
+      for:
+        hours: 2
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+    - condition: template
+      value_template: >
+        {% set lt = state_attr('automation.pool_heater_recovery_complete', 'last_triggered') %}
+        {{ lt is none or (now() - lt).total_seconds() > 86400 }}
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool Back to Target Temp"
+        message: >
+          Water temp is {{ states('sensor.pool_monitor_temperature') | round(1) }}°F and has held
+          above 82°F for 2+ hours — back in the 82-83°F target range. Switch the pump back to
+          TIMER (12hr) and reassess whether the shorter schedule holds it here.
+        data:
+          ttl: 0
+          priority: normal
+
 - alias: POOL - pH Low Alert
   id: pool_ph_low_alert
   mode: single
@@ -120,7 +153,9 @@
         title: "Pool Chlorine Low"
         message: >
           ORP has been below 650 mV for 3+ hours (now {{ states('sensor.pool_monitor_orp') }} mV).
-          This is longer than the normal afternoon dip — check and add chlorine.
+          This is longer than the normal afternoon dip — check the floating tab dispenser first
+          (it's run down to empty twice recently and is the most common cause here), then add
+          chlorine/shock if the tab's fine.
         data:
           ttl: 0
           priority: high
@@ -224,6 +259,38 @@
       data:
         title: "Pool Monitor Offline"
         message: "Pool monitor hasn't reported in 10 minutes. Check WiFi or power at the pool."
+
+# Threshold alerts only fire after a sustained multi-hour dip, so a marginal-but-not-
+# alert-worthy trend can go unnoticed for days while no one's home to eyeball the water.
+# This gives a daily heads-up while away instead of waiting on a threshold crossing.
+- alias: POOL - Away Status Digest
+  id: pool_away_status_digest
+  triggers:
+    - trigger: time
+      at: "09:00:00"
+  conditions:
+    - condition: template
+      value_template: "{{ now().month in [4,5,6,7,8,9,10] }}"
+    - condition: state
+      entity_id: sensor.family_status
+      state: "Away"
+  actions:
+    - action: notify.ryan_devices
+      data:
+        title: "Pool Status (Away)"
+        message: >
+          pH: {{ states('sensor.pool_monitor_ph') | round(2) }},
+          ORP: {{ states('sensor.pool_monitor_orp') }} mV,
+          Temp: {{ states('sensor.pool_monitor_temperature') | round(1) }}°F.
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% if ph < 7.2 or ph > 7.8 or orp < 650 or orp > 850 %}Outside normal range — see alerts for details.
+          {% elif (ph < 7.4 or ph > 7.6) or orp < 700 or orp > 800 %}Borderline, nothing urgent.
+          {% else %}All normal.
+          {% endif %}
+        data:
+          ttl: 0
+          priority: normal
 
 - alias: POOL - Weekly Chemistry Reminder
   id: pool_weekly_chemistry_reminder
