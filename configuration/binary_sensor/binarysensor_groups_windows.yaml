@@ -2,8 +2,14 @@
 ####### BINARY_SENSOR WINDOWS ######
 ####################################
 
+# device_class matters here beyond the icon: the HomeKit bridge maps window,
+# door and opening all to a Contact Sensor, but falls back to OCCUPANCY for a
+# binary_sensor with no device class. Six of these groups were publishing to
+# HomeKit as occupancy sensors as a result.
+
 - platform: group
   unique_id: house_windows
+  device_class: window
   name: House Windows
   entities:
     - binary_sensor.kellys_office_windows
@@ -23,6 +29,7 @@
 - platform: group
   name: Kellys Office Windows
   unique_id: kellys_office_windows
+  device_class: window
   entities:
     - binary_sensor.kellys_office_rear_window_sensor
     - binary_sensor.kellys_office_side_window_sensor
@@ -30,6 +37,7 @@
 - platform: group
   name: Ryans Office Windows
   unique_id: ryans_office_windows
+  device_class: window
   entities:
     - binary_sensor.ryans_office_rear_window_sensor
     - binary_sensor.ryans_office_side_window_sensor
@@ -37,6 +45,7 @@
 - platform: group
   name: Master Bedroom Windows
   unique_id: master_bedroom_windows
+  device_class: window
   entities:
     - binary_sensor.master_bedroom_front_window_sensor
     - binary_sensor.master_bedroom_side_window_sensor
@@ -44,6 +53,7 @@
 - platform: group
   name: Nursery Windows
   unique_id: nursery_windows
+  device_class: window
   entities:
     - binary_sensor.nursery_front_window_sensor
     - binary_sensor.nursery_side_window_sensor
@@ -53,6 +63,7 @@
 - platform: group
   name: Living Room Windows
   unique_id: living_room_windows
+  device_class: window
   entities:
     - binary_sensor.living_room_front_window_sensor
     - binary_sensor.living_room_side_window_1_sensor
@@ -62,12 +73,14 @@
 - platform: group
   name: Kitchen Windows
   unique_id: kitchen_windows
+  device_class: window
   entities:
     - binary_sensor.kitchen_window_sensor
 
 - platform: group
   name: Family Room Windows
   unique_id: family_room_windows
+  device_class: window
   entities:
     - binary_sensor.family_room_front_window_1_sensor
     - binary_sensor.family_room_front_window_2_sensor
@@ -82,11 +95,13 @@
 - platform: group
   name: Laundry Room Windows
   unique_id: laundry_room_windows
+  device_class: window
   entities:
     - binary_sensor.laundry_room_window_sensor
 
 - platform: group
   name: Movie Room Windows
   unique_id: movie_room_windows
+  device_class: window
   entities:
     - binary_sensor.movie_room_window_sensor
