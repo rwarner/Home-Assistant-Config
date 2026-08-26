@@ -347,3 +347,52 @@ run_all_sprinklers:
           All zones completed ({{ final_multiplier | round(2) }}× multiplier).
 
           {{ zone_plan }}
+
+###### Manual zone testing #######
+#
+# Backs the Sprinklers dashboard view. Used for field work: checking spray
+# patterns, hunting a bad head, and running catch-can tests. The Rain Bird
+# controller stops the zone itself when the duration expires, so there is no
+# delay/turn-off step here -- fire and forget.
+
+test_sprinkler_zone:
+  alias: "Test Sprinkler Zone"
+  mode: single
+  sequence:
+    # Never stomp on a scheduled cycle already in progress.
+    - condition: state
+      entity_id: script.run_all_sprinklers
+      state: "off"
+
+    - variables:
+        # "Zone 4 Main Yard A" -> 4
+        zone: "{{ states('input_select.sprinkler_test_zone').split(' ')[1] | int(0) }}"
+        minutes: "{{ states('input_number.sprinkler_test_minutes') | int(0) }}"
+
+    - condition: template
+      value_template: "{{ zone >= 1 and zone <= 7 and minutes >= 1 }}"
+
+    - action: rainbird.start_irrigation
+      data:
+        entity_id: "switch.rain_bird_sprinkler_{{ zone }}"
+        duration: "{{ minutes }}"
+
+stop_all_sprinklers:
+  alias: "Stop All Sprinklers"
+  mode: single
+  sequence:
+    # Kill the full cycle first, or it would just advance to the next zone.
+    - action: script.turn_off
+      target:
+        entity_id: script.run_all_sprinklers
+
+    - action: switch.turn_off
+      target:
+        entity_id:
+          - switch.rain_bird_sprinkler_1
+          - switch.rain_bird_sprinkler_2
+          - switch.rain_bird_sprinkler_3
+          - switch.rain_bird_sprinkler_4
+          - switch.rain_bird_sprinkler_5
+          - switch.rain_bird_sprinkler_6
+          - switch.rain_bird_sprinkler_7
