@@ -34,7 +34,14 @@
         - binary_sensor.movie_room_window_sensor
         - binary_sensor.half_bath_window_sensor
         - binary_sensor.upstairs_bathroom_window_sensor
-      from: "off"
+      # "off" alone misses the first open after a sensor has sat at unknown --
+      # a Z2M contact sensor has no state until it first reports, and that
+      # transition is unknown -> on, which from: "off" silently swallows.
+      # Deliberately NOT matching unavailable -> on: that is MQTT restoring an
+      # already-open window on restart, not someone opening it.
+      from:
+        - "off"
+        - unknown
       to: "on"
   condition:
     - condition: state
@@ -97,7 +104,14 @@
         - binary_sensor.movie_room_window_sensor
         - binary_sensor.half_bath_window_sensor
         - binary_sensor.upstairs_bathroom_window_sensor
-      from: "off"
+      # "off" alone misses the first open after a sensor has sat at unknown --
+      # a Z2M contact sensor has no state until it first reports, and that
+      # transition is unknown -> on, which from: "off" silently swallows.
+      # Deliberately NOT matching unavailable -> on: that is MQTT restoring an
+      # already-open window on restart, not someone opening it.
+      from:
+        - "off"
+        - unknown
       to: "on"
       for:
         minutes: 30
