@@ -56,7 +56,6 @@ custom_icons/
 # Claude Code
 CLAUDE.md
 .claude/
-docs/plans/
 
-# Second-floor cooling investigation (working notes/PDFs, not for git)
-cooling-investigation/
+# Working notes, plans, research, vendored trees -- private, not for git
+docs/
