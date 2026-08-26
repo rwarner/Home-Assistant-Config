@@ -21,7 +21,7 @@
       entity03: cover.living_room_shades
       entity03_name: Shades
       entity03_icon: ''
-      nspanel_name: 60046d2d2b9b35eefda356d2ee3a600d
+      nspanel_name: 2f3c6c2b09a5bde13981c8488ac5a011
       entity09_icon: ''
       entity10_icon: ''
       entity11_icon: ''
@@ -48,7 +48,7 @@
   use_blueprint:
     path: Blackymas/nspanel_blueprint.yaml
     input:
-      nspanel_name: 87a46becfd7e8c5d4b9b844827693f5b
+      nspanel_name: dd38fbb2a5302ad407cdf304ea798ab9
       time_format: '%-I:%M %p'
       date_format: '%A, %-m/%-d'
       timezone: America/New_York (EST5EDT,M3.2.0,M11.1.0)
@@ -91,7 +91,7 @@
   use_blueprint:
     path: Blackymas/nspanel_blueprint.yaml
     input:
-      nspanel_name: d9a071105d0ac19e8ef06e9a3ad96e2e
+      nspanel_name: a64d7e59c59bbef771b85c20a421b41e
       date_format: '%A, %-m/%-d'
       time_format: '%-I:%M %p'
       timezone: America/New_York (EST5EDT,M3.2.0,M11.1.0)
