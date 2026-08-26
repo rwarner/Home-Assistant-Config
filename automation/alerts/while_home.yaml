@@ -129,8 +129,17 @@
   mode: single
   max_exceeded: silent
   trigger:
-    - trigger: state
-      entity_id: event.outside_doorbell_package
+    # event.received rather than a state trigger: event entities go
+    # unavailable -> timestamp on every restart and Protect reconnect, and a
+    # bare state trigger treats that as a real event, announcing a package to
+    # the house every time. Purpose-specific triggers do not fire on recovery
+    # from unknown/unavailable. "detected" is this entity's only event type.
+    - trigger: event.received
+      target:
+        entity_id: event.outside_doorbell_package
+      options:
+        event_type:
+          - detected
   condition:
     - condition: state
       entity_id: alarm_control_panel.alarm
