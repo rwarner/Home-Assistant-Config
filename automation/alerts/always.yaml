@@ -509,58 +509,10 @@
 ########## Discord Video Alert #########
 ########################################
 
-- alias: ALERT - When a motion detection video is created
-  id: 54e81d38-7814-11ee-b962-0242ac120002
-  mode: queued
-  max: 3
-  trigger:
-    - trigger: event
-      event_type: folder_watcher
-      event_data:
-        event_type: created
-  condition:
-    # Only process .mp4 files, ignore .tmp and other artifacts
-    - condition: template
-      value_template: "{{ trigger.event.data.file.endswith('.mp4') }}"
-    # Ignore converted files in subdirectories — only process originals
-    - condition: template
-      value_template: "{{ 'converted' not in trigger.event.data.path }}"
-  variables:
-    # Parse filename like "front_door_20260321-143330.mp4" into readable parts
-    # Camera name: everything before the timestamp (e.g. "front_door" → "Front Door")
-    camera_name: >
-      {{ trigger.event.data.file.split('_2')[0] | replace('_', ' ') | title }}
-    # Use current local time instead of parsing UTC filename
-    clip_time: >
-      {{ now().strftime('%-I:%M %p') }}
-  action:
-    # Prune clips older than 24h before adding a new one
-    - action: shell_command.clear_old_clips
-    # Wait for camera.record to finish writing the full clip
-    - delay: '00:00:20'
-    # No delay after this: shell_command awaits the process (it ends in
-    # `await process.communicate()`), so ffmpeg has already exited by the time
-    # the next step runs. The 15s that used to sit here was dead weight.
-    - action: shell_command.convert_camera_recording
-
-    # Skip front door clip notification if mail just arrived
-    - condition: template
-      value_template: >
-        {{ not ('front_door' in trigger.event.data.file and
-               is_state('input_boolean.mail_arrived', 'on') and
-               (now() - states.input_boolean.mail_arrived.last_changed).total_seconds() < 120) }}
-
-    # Single Discord message with the clip attached — Discord auto-thumbnails/plays
-    # MP4 inline, and stores it for reliable replay (no mobile/Nabu Casa dependency)
-    - action: notify.home_assistant
-      data:
-        title: "Motion Detected — {{ camera_name }}"
-        message: "{{ clip_time }}"
-        target: "658174234480082997"
-        data:
-          images:
-            - "/config/www/clips/{{ trigger.event.data.file }}"
-
-    - delay: '00:00:10'
-    - action: shell_command.clear_video_directory
-    # www/clips intentionally NOT cleared here — clips persist 24h for notification access
+# The folder_watcher-driven automation that used to live here is gone. The
+# whole pipeline now runs inline in script.capture_front_door_video, which is
+# already the thing that records the clip and therefore already knows when
+# each step finished -- see configuration/scripts/scripts_video_recording.yaml.
+#
+# The folder_watcher integration itself is left configured but unused; nothing
+# listens to its events any more.

@@ -2,13 +2,61 @@
 ### SCRIPTS - Video Recording    ###
 ####################################
 
+# The whole motion-clip pipeline lives here now, in order, with no delays.
+#
+# It used to be split: this script recorded, folder_watcher noticed the new
+# file from the outside, and an automation guessed 20s for the recording and
+# 15s for ffmpeg before posting. Both guesses were unnecessary --
+# camera.record blocks until the file is fully written (it ends in
+# `await recorder.async_record()`), and shell_command blocks until the process
+# exits (`await process.communicate()`). So each step already knows the
+# previous one finished.
+#
+# Net effect: ~45s of waiting removed, and the clip is provably complete
+# rather than probably complete.
+
 capture_front_door_video:
   alias: "Capture Front Door Video"
   mode: queued
+  max: 3
   sequence:
+    # Two blocks so clip_path derives from clip_name rather than calling now()
+    # twice and risking a second boundary between them.
+    - variables:
+        clip_name: 'front_door_{{ now().strftime("%Y%m%d-%H%M%S") }}'
+    - variables:
+        clip_path: '/tmp/hass/{{ clip_name }}.mp4'
+
+    # Prune clips older than 24h before adding a new one
+    - action: shell_command.clear_old_clips
+
+    # Blocks for the full duration; the file is complete when this returns
     - action: camera.record
       data:
         entity_id: camera.outside_doorbell
-        filename: '/tmp/hass/front_door_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        filename: '{{ clip_path }}'
         duration: 15
         lookback: 2
+
+    # Blocks until ffmpeg exits. Converts and cleans up only this clip.
+    - action: shell_command.convert_camera_recording
+      data:
+        clip: '{{ clip_path }}'
+
+    # Skip the Discord post if the mail just arrived -- that is the mailman,
+    # not something worth a motion alert.
+    - condition: template
+      value_template: >
+        {{ not (is_state('input_boolean.mail_arrived', 'on')
+                and (now() - states.input_boolean.mail_arrived.last_changed).total_seconds() < 120) }}
+
+    # Discord auto-thumbnails/plays MP4 inline and stores it for reliable
+    # replay, with no mobile or Nabu Casa dependency.
+    - action: notify.home_assistant
+      data:
+        title: "Motion Detected — Front Door"
+        message: "{{ now().strftime('%-I:%M %p') }}"
+        target: "658174234480082997"
+        data:
+          images:
+            - "/config/www/clips/{{ clip_name }}.mp4"
