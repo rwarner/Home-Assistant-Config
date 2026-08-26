@@ -45,8 +45,13 @@
     - action: light.turn_on
       continue_on_error: true
       entity_id: light.living_room_lights
-    # Wait until someone walks into the Kitchen
+    # Wait until someone walks into the Kitchen.
+    # Bounded: an unlock where nobody reaches the kitchen (in via the basement,
+    # straight upstairs) would otherwise park this run forever, and mode single
+    # means a parked run silently swallows every later unlock until a restart.
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
+      timeout: "00:15:00"
+      continue_on_timeout: false
     # Only set the scene if nobody was already settled at home — if someone has
     # been home 10+ min (status 'Home' not 'Just Arrived'), they've set their
     # own lights and we shouldn't override them.
@@ -99,7 +104,11 @@
               entity_id: sensor.family_status
               state: Away
   action:
+    # Bounded for the same reason as the automation above -- an unbounded wait
+    # here parks the run and silently drops every later unlock.
     - wait_template: "{{ is_state('binary_sensor.kitchen_motion_sensor', 'on') }}"
+      timeout: "00:15:00"
+      continue_on_timeout: false
     - delay:
         seconds: 10
     - variables:
