@@ -11,32 +11,63 @@
       entity_id: binary_sensor.movie_room_motion_sensor
       from: "off"
       to: "on"
-  condition:
-    # Make sure that the projector is off, could be watching something
-    - condition: state
-      entity_id: sensor.harmony_hub_activity
-      state: PowerOff
-  # Check if the light is dark OR if the automation has recently been triggered
-  # this allows us to skip luminance checks on restart
-    - condition: or
-      conditions:
-        # Automation has recently been trigger by a restart within 8 min window
-        # (3 min till turn off, 5 min till lux/illuminance sensor updates)
-        - condition: template
-          value_template: >-
-            {{ this.attributes.last_triggered is not none
-               and (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) < 480 }}
-        # Make sure that the light level is below 10 lx
-        - condition: numeric_state
-          entity_id: sensor.movie_room_motion_sensor_illuminance
-          below: 10
-  action:
-    - action: light.turn_on
-      data:
-        entity_id: light.movie_room_lights
-    # Wait until motion goes off
-    - wait_template: "{{ is_state('binary_sensor.movie_room_motion_sensor', 'off') }}"
-    - delay:
+      id: motion_on
+
+    # No motion for 3 minutes. This used to be a wait_template plus a delay
+    # inside the run, which meant the automation held an instance open for as
+    # long as anyone was in the room: a restart mid-window left the lights on
+    # for good, and a motion sensor stuck "on" parked the run forever. Every
+    # other room already uses this two-trigger shape.
+    - trigger: state
+      entity_id: binary_sensor.movie_room_motion_sensor
+      from: "on"
+      to: "off"
+      for:
         minutes: 3
-    - action: light.turn_off
-      entity_id: light.movie_room_lights
+      id: motion_off
+
+  action:
+    - choose:
+        # TURN ON: only when the projector is off -- during a film the lights
+        # must never come on by themselves. Verified against history: motion
+        # fired 8 times during the 2026-08-25 movie and this correctly did
+        # nothing each time.
+        - conditions:
+            - condition: trigger
+              id: motion_on
+            - condition: state
+              entity_id: sensor.harmony_hub_activity
+              state: PowerOff
+            # Check if the light is dark OR if the automation has recently been
+            # triggered; this allows us to skip luminance checks on re-entry.
+            - condition: or
+              conditions:
+                # Triggered within the last 8 min (3 min till turn off, 5 min
+                # till the lux sensor catches up with the lights going out).
+                - condition: template
+                  value_template: >-
+                    {{ this.attributes.last_triggered is not none
+                       and (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) < 480 }}
+                # Make sure that the light level is below 10 lx
+                - condition: numeric_state
+                  entity_id: sensor.movie_room_motion_sensor_illuminance
+                  below: 10
+          sequence:
+            - action: light.turn_on
+              target:
+                entity_id: light.movie_room_lights
+
+        # TURN OFF: deliberately NOT gated on the projector. Turning lights off
+        # is never the wrong move in a dark room, and gating it would mean that
+        # starting a film after the lights came on would strand them on for the
+        # whole thing.
+        - conditions:
+            - condition: trigger
+              id: motion_off
+            - condition: state
+              entity_id: light.movie_room_lights
+              state: "on"
+          sequence:
+            - action: light.turn_off
+              target:
+                entity_id: light.movie_room_lights
