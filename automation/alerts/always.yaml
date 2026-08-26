@@ -538,9 +538,10 @@
     - action: shell_command.clear_old_clips
     # Wait for camera.record to finish writing the full clip
     - delay: '00:00:20'
+    # No delay after this: shell_command awaits the process (it ends in
+    # `await process.communicate()`), so ffmpeg has already exited by the time
+    # the next step runs. The 15s that used to sit here was dead weight.
     - action: shell_command.convert_camera_recording
-    # Wait for ffmpeg conversion to complete
-    - delay: '00:00:15'
 
     # Skip front door clip notification if mail just arrived
     - condition: template
