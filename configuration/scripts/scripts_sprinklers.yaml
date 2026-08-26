@@ -1,12 +1,108 @@
 ###### Sprinklers #######
 
-# Zone 1: Sidewalk Strip
-# Zone 2: Front Yard + Chimney
-# Zone 3: Rear Corner
-# Zone 4: Main Yard 1/2 + 1 Rear Head
-# Zone 5: Main Yard 1/2 + 2 Mid Heads
-# Zone 6: Back Drip Irrigation (N/A)
-# Zone 7: Back Yard
+# ZONE MAP AND HEAD TYPES
+#
+# Precipitation rate (PR) is how fast a head lays water down, and it differs by
+# roughly 3x between the two head families on this property:
+#
+#     Fixed sprays (Rain Bird 1800, strip nozzles)  ~1.5 in/hr
+#     Gear rotors  (Hunter PGP Ultra)               ~0.3-0.6 in/hr
+#
+# SO RUN TIMES ARE NOT COMPARABLE BETWEEN ZONES. Zone 1 at 25 min delivers
+# ~0.63 in -- nearly double what zone 3's rotors manage in 40 min (~0.33 in).
+# Never copy a run time from one zone to another, and never judge which zone
+# "gets more" from the minutes.
+#
+#   Zone 1  Sidewalk Strip
+#           Fixed strip-spray nozzles. Non-rotating, throw left and right at
+#           once. High PR. Already the wettest zone on the property -- do not
+#           raise; extra time here mostly lands on concrete.
+#
+#   Zone 2  Front Yard + Chimney        *** MIXED HEADS - SEE WARNING BELOW ***
+#           Chimney:    Rain Bird 1800 fixed sprays  (~1.5 in/hr)
+#           Front yard: Hunter PGP Ultra rotors      (~0.45 in/hr)
+#
+#   Zone 3  Rear Corner                    Hunter PGP Ultra rotors
+#           PARTIALLY SHADED (confirmed) -- that is why it sits at 40 min and
+#           not the 70 the full-sun main yard gets. Its ET is meaningfully
+#           lower, so 40 min (~0.57 in/week) suits it; do not level it up to
+#           match zones 4/5.
+#           CONFIRMED rotors 2026-08-24. That settled it: 18 min was only
+#           ~0.14 in/run, near-nothing, which is why clover took hold and the
+#           grass began to yellow. Raised to 40 min (~0.30 in/run). Clover is a
+#           low-nitrogen signal as much as a dry one -- it fixes its own N and
+#           outcompetes grass on poor soil -- so soil-test this corner too.
+#
+#   Zone 4  Main Yard half + 1 rear head    Hunter PGP Ultra rotors
+#           4 heads total: 3 in the main yard, 1 over in the REAR CORNER.
+#   Zone 5  Main Yard half + 2 mid heads    Hunter PGP Ultra rotors
+#
+#   *** ZONES 3 AND 4 BOTH WATER THE REAR CORNER ***
+#   Zone 4's fourth head lands in the rear corner, so that grass receives
+#   zone 3 (40 min) PLUS zone 4 (88 min) on every cycle -- roughly 128 min of
+#   combined application, not the 40 that zone 3's own runtime suggests.
+#   Zone 3's 40 min was set on 2026-08-24 BEFORE this was known, sized as if
+#   zone 3 were the corner's only water source. It is not.
+#   Do not re-tune zone 3 in isolation: raising it also stacks on top of
+#   zone 4. The corner was genuinely dry before (clover + yellowing at the old
+#   10 + 45 min combined), so the increase is directionally right, but WATCH IT
+#   for sogginess or moss over the next few weeks and trim zone 3 first if so.
+#   Zone 3's runtime is the safe lever here -- zone 4's is set by the main yard.
+#
+#   Zone 6  Back Drip Irrigation -- disabled (0 min), skipped entirely.
+#
+#   Zone 7  Back Yard                      Hunter PGP Ultra rotors
+#           CONFIRMED rotors 2026-08-24. Left at 5 min DELIBERATELY -- that is
+#           ~0.04 in/run, effectively unirrigated, and the area is healthy on
+#           rainfall alone. It is moss-prone, and moss colonizes ground that
+#           stays damp in shade, so a longer run makes it worse. The near-zero
+#           runtime here is correct, not an oversight. Fix moss with aeration,
+#           shade reduction and a soil pH test, never with more water.
+#
+# *** ZONE 2 CANNOT BE WATERED CORRECTLY AS BUILT ***
+# It runs Rain Bird 1800 fixed sprays (chimney) and PGP Ultra rotors (front
+# yard) off one valve. The sprays lay down about 3x what the rotors do, so at
+# 26 min the chimney area receives ~0.65 in while the front-yard rotors receive
+# only ~0.20 in. No run time resolves this -- any value that suits one group is
+# wrong for the other, and raising the zone drives still more water against the
+# chimney and foundation.
+#
+# Note the direction of the error. The chimney strip is narrow, hemmed in by
+# the fence and the house and shaded by mature trees, so its ET is LOW -- and
+# it is the half receiving 3x the water. It is very likely over-watered, and
+# the moss showing in that turf fits. So zone 2's problem is not simply "needs
+# more"; the front-yard rotors are dry while the chimney is wet.
+#
+# GEOMETRY (measured 2026-08-25): the chimney area is a ~13 x 23 ft RECTANGLE,
+# not a strip. Two 1800s sit at diagonal corners, each covering roughly half.
+# Ryan confirms COVERAGE IS FINE -- do not re-open that; the only defect here
+# is the precipitation-rate mismatch.
+#
+# Do NOT fit MP strip nozzles (MPSS530 / MPLCS515 / MPRCS515) -- those cover a
+# 5 ft width and this area is 13 ft wide. That was an early wrong call made
+# before the area was measured.
+#
+# The fix is a RADIAL MP Rotator sized to the throw the 1800s already achieve:
+#     MP1000-90  --  8-15 ft radius   (likely, an 1800 tops out near 15 ft)
+#     MP2000-90  -- 13-21 ft radius   (if they throw further than that)
+# Both run ~0.4 in/hr against the PGPs' measured 0.50, so the zone goes from a
+# 3x mismatch to 1.25x -- and the residual falls the right way, since the
+# chimney is shaded and lower-demand than the front yard.
+#
+# AFTER THE SWAP, set this zone to ~45 min (not 88). The front yard is healthy
+# today on just 0.41 in/week, so it does not need main-yard volume; 45 min puts
+# the PGP half at ~0.71 in/week and the chimney at ~0.57, which also pulls the
+# chimney DOWN from the ~1.24 in/week it gets now. That drop is intended: that
+# strip is shaded, mossy, and over-watered.
+#
+# Until that happens 26 min is a CEILING, not a target. Do not raise zone 2 to
+# help the front yard: every extra minute also drives water at a shaded strip
+# that is already too wet, right against the chimney and foundation.
+#
+# Zones 4 and 5 are the two halves of the big south/southwest full-sun area by
+# the solar array -- the grass that dries out and yellows first. They run FIRST
+# (see zone_order) so they always get the calmest, darkest part of the window
+# no matter how long the rest of the cycle turns out to be.
 
 run_all_sprinklers:
   alias: "Run All Sprinklers"
@@ -23,7 +119,45 @@ run_all_sprinklers:
     # 2. Set variables *after* fetching fresh forecast
     - variables:
         fc: "{{ daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] }}"
-        sprinkler_times: [25, 22, 10, 45, 45, 0, 5]
+        # Indexed by zone number (zone N -> sprinkler_times[N-1]).
+        #
+        # Zones 4/5 raised 45 -> 70 on 2026-08-24. The main lawn runs Hunter PGP
+        # Ultra gear-drive rotors, which deliver roughly 0.3-0.6 in/hr -- a third
+        # of what a fixed spray puts down. At 45 min x ~1.9 runs/week that was
+        # 0.43-0.86 in/week against the ~1.4-1.75 in/week a full-sun zone needs
+        # in August: short under EVERY point in the rotor range, which is why
+        # this was raised before the catch-can measurement rather than after.
+        # 70 min tops out at ~1.33 in/week even if the rotors are at the high end
+        # of their range, so this cannot overshoot into waste.
+        #
+        # 2026-08-24, from Ryan's read of each area:
+        #   Z1 sidewalk  25 -- unchanged; strip sprays, already the wettest zone
+        #   Z2 front     22 -> 26 -- healthy; capped by the mixed-head problem
+        #   Z3 rear cnr  10 -> 40 -- confirmed PGP rotors; 18 was still far too short
+        #   Z7 back       5 -- unchanged; moss-prone, MORE water would worsen it
+        # 2026-08-25: zones 4/5 raised 70 -> 88 after the catch test measured
+        # the PGPs at 0.50 in/hr (35-min test, 3.25 in glasses, 263 g empty).
+        # 70 min delivered 0.58 in/run = 1.11 in/week; 88 min gives 1.40, the
+        # bottom of the 1.4-1.75 in/week a full-sun zone needs in August. The
+        # automation only waters during dry spells (5-day rain < 0.75 in), so
+        # irrigation has to carry the whole demand -- rain does not top it up.
+        #
+        # This was held back until the chinch float test came back NEGATIVE on
+        # 2026-08-25. The cups had already shown yellow grass receiving 95% of
+        # what green grass gets (7.6% spread), ruling out a bad head. With both
+        # distribution and insects excluded, higher ET in the sunniest zone is
+        # the remaining explanation and more water is the correct response.
+        #
+        # THIS IS THE LAST WATER LEVER. If the main yard has not visibly
+        # recovered in 2-3 weeks at 88 min, the cause is not water -- look at
+        # soil compaction, root depth, thatch, or disease. Do NOT raise further.
+        sprinkler_times: [25, 26, 40, 88, 88, 0, 5]
+
+        # Order zones actually run in, NOT 1-7. The main-yard sun zones lead so
+        # that any cycle overrun past sunrise lands on the small, shaded zones
+        # at the tail instead of on the grass that can least afford it. Zone 6
+        # (drip) is omitted entirely; it is disabled at 0 min.
+        zone_order: [4, 5, 1, 2, 3, 7]
 
         # Seasonal multiplier: 0.0 in winter (Nov-Mar), 0.75 in spring/fall, 1.0 in summer
         seasonal_multiplier: >-
@@ -81,7 +215,10 @@ run_all_sprinklers:
         # every day even when the afternoon is dry. On 2026-08-09 it reported 87%
         # while the actual RH at the 90°F high was 50%, which silently cut watering
         # by 40% on a hot, dry day.
-        dew_point: "{{ fc[0].dew_point | default(60) | float }}"
+        # default(60, true) not default(60): the integration reports dew_point as
+        # None (not missing) often enough that plain default() lets it through and
+        # the float filter then aborts the whole run mid-cycle.
+        dew_point: "{{ fc[0].dew_point | default(60, true) | float(60) }}"
 
         daytime_humidity: >-
           {% set tc = (forecast_high - 32) * 5 / 9 %}
@@ -102,10 +239,11 @@ run_all_sprinklers:
           {% endif %}
 
         # Wind speed from forecast (mph) — high wind wastes water through drift.
-        # This is a daily figure, but zones run ~45 min before sunrise when wind is
-        # typically at its calmest, so the daily number overstates actual conditions.
+        # This is a daily figure, but the cycle is scheduled to finish by sunrise
+        # (see cycle_lead_minutes in automation/rooms/outside/sprinklers.yaml), so zones
+        # run in the pre-dawn calm and the daily number overstates real conditions.
         # Thresholds are deliberately high to compensate; only skip on a real gale.
-        forecast_wind: "{{ fc[0].wind_speed | default(0) | float }}"
+        forecast_wind: "{{ fc[0].wind_speed | default(0, true) | float(0) }}"
 
         wind_multiplier: >-
           {% if forecast_wind > 25 %}
@@ -140,17 +278,18 @@ run_all_sprinklers:
 
     # 3. Pre-calculate zone run times for notifications and safety checks
     - variables:
+        # Listed in run order so the notification matches what actually happens.
         zone_plan: >
           {% set names = ['Sidewalk Strip', 'Front Yard', 'Rear Corner', 'Main Yard A', 'Main Yard B', 'Drip (N/A)', 'Back Yard'] %}
           {% set ns = namespace(lines='') %}
-          {% for i in range(7) %}
-            {% set base = sprinkler_times[i] %}
+          {% for z in zone_order %}
+            {% set base = sprinkler_times[z - 1] %}
             {% if base > 0 %}
               {% set t = (base * final_multiplier) | round(0) | int %}
               {% if t > 0 %}
-                {% set ns.lines = ns.lines + 'Zone ' + (i+1)|string + ' – ' + names[i] + ': ' + t|string + ' min\n' %}
+                {% set ns.lines = ns.lines + 'Zone ' + z|string + ' – ' + names[z - 1] + ': ' + t|string + ' min\n' %}
               {% else %}
-                {% set ns.lines = ns.lines + 'Zone ' + (i+1)|string + ' – ' + names[i] + ': skipped (multiplier too low)\n' %}
+                {% set ns.lines = ns.lines + 'Zone ' + z|string + ' – ' + names[z - 1] + ': skipped (multiplier too low)\n' %}
               {% endif %}
             {% endif %}
           {% endfor %}
@@ -183,10 +322,11 @@ run_all_sprinklers:
 
     # 7. Run zones — skip if base is 0 or adjusted time rounds to 0
     - repeat:
-        count: 7
+        for_each: "{{ zone_order }}"
         sequence:
           - variables:
-              zone_base: "{{ sprinkler_times[repeat.index - 1] }}"
+              zone: "{{ repeat.item | int }}"
+              zone_base: "{{ sprinkler_times[zone - 1] }}"
               run_time: "{{ (zone_base * final_multiplier) | round(0) | int }}"
           - if:
               - condition: template
@@ -194,7 +334,7 @@ run_all_sprinklers:
             then:
               - action: rainbird.start_irrigation
                 data:
-                  entity_id: "switch.rain_bird_sprinkler_{{ repeat.index }}"
+                  entity_id: "switch.rain_bird_sprinkler_{{ zone }}"
                   duration: "{{ run_time }}"
               - delay:
                   minutes: "{{ run_time }}"

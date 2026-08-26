@@ -27,7 +27,7 @@
 #  - If all criteria are met, sends a push notification showing precipitation history,
 #    forecasted rain, temperature, days since last watering, and checkmarks for each condition.
 #  - Notification includes quick-action buttons:
-#      - "Yes, Run" → Schedules watering for ~45 minutes before tomorrow’s sunrise.
+#      - "Yes, Run" → Schedules watering to finish by tomorrow’s sunrise.
 #      - "No" → Ignores recommendation until next evaluation.
 # 
 # Watering Execution:
@@ -183,12 +183,31 @@
               value_template: "{{ trigger.event.data.action == 'RUN_SPRINKLERS' }}"
           sequence:
             - variables:
-                # Get tomorrow's sunrise and subtract 45 minutes
+                # Start early enough that the whole cycle FINISHES by sunrise.
+                # The full run is the sum of sprinkler_times in
+                # configuration/scripts/scripts_sprinklers.yaml (272 min at a
+                # 1.0x multiplier) plus margin for per-zone start latency.
+                # Raise this whenever those base times change.
+                #
+                # This used to be sunrise-45min, which was only ever enough for
+                # the first zone. Measured from switch history, zone 4 started at
+                # 6:01-6:05 AM on every run from Aug 16-23 2026 against sunrises
+                # of 5:52-5:58 -- so the main-yard sun zones were watering wholly
+                # in daylight while the shaded zones got the pre-dawn window.
+                #
+                # Two changes fix this together: this longer lead, and running
+                # zones 4/5 first (zone_order in scripts_sprinklers.yaml). The
+                # lead is deliberately fixed rather than derived from the day's
+                # multiplier -- that would mean duplicating ~60 lines of forecast
+                # logic here. Zones 4/5 leading is what makes a fixed lead safe:
+                # even a 1.25x heat-wave cycle (190 min) only pushes the small
+                # tail zones past sunrise, never the grass that needs it most.
+                cycle_lead_minutes: 285
                 best_time: >-
                   {% set sunrise_attr = state_attr('sun.sun', 'next_rising') %}
                   {% if sunrise_attr is not none %}
                     {% set sunrise = as_timestamp(sunrise_attr) %}
-                    {{ (sunrise - (45 * 60)) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+                    {{ (sunrise - (cycle_lead_minutes * 60)) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
                   {% else %}
                     {{ now() | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
                   {% endif %}
@@ -196,7 +215,7 @@
                   {% set sunrise_attr = state_attr('sun.sun', 'next_rising') %}
                   {% if sunrise_attr is not none %}
                     {% set sunrise = as_timestamp(sunrise_attr) %}
-                    {{ (sunrise - (45 * 60)) | timestamp_custom('%-I:%M %p', true) }}
+                    {{ (sunrise - (cycle_lead_minutes * 60)) | timestamp_custom('%-I:%M %p', true) }}
                   {% else %}
                     {{ now() | timestamp_custom('%-I:%M %p', true) }}
                   {% endif %}
