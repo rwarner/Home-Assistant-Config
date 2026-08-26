@@ -11,7 +11,10 @@
         - binary_sensor.basement_smoke_co_alarm_smoke_detected
         - binary_sensor.entryway_smoke_co_alarm_smoke_detected
         - binary_sensor.second_floor_smoke_co_alarm_smoke_detected
-      from: "off"
+      # No from: filter. A safety sensor reaching "on" is an alert on every
+      # path, including unavailable -> on and unknown -> on. Restricting to
+      # from: "off" would swallow the alarm if the device dropped off and
+      # came back already triggered.
       to: "on"
   action:
     - action: script.announce_local
@@ -55,7 +58,10 @@
         - binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected
         - binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected
         - binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected
-      from: "off"
+      # No from: filter. A safety sensor reaching "on" is an alert on every
+      # path, including unavailable -> on and unknown -> on. Restricting to
+      # from: "off" would swallow the alarm if the device dropped off and
+      # came back already triggered.
       to: "on"
   action:
     - action: script.announce_local
@@ -104,7 +110,10 @@
         - binary_sensor.basement_smoke_co_alarm_system_hardware_failure
         - binary_sensor.entryway_smoke_co_alarm_system_hardware_failure
         - binary_sensor.second_floor_smoke_co_alarm_system_hardware_failure
-      from: "off"
+      # No from: filter. A safety sensor reaching "on" is an alert on every
+      # path, including unavailable -> on and unknown -> on. Restricting to
+      # from: "off" would swallow the alarm if the device dropped off and
+      # came back already triggered.
       to: "on"
   action:
     - action: notify.ryan_devices
@@ -126,7 +135,10 @@
         - binary_sensor.basement_smoke_co_alarm_maintenance_required_dust_in_device
         - binary_sensor.entryway_smoke_co_alarm_maintenance_required_dust_in_device
         - binary_sensor.second_floor_smoke_co_alarm_maintenance_required_dust_in_device
-      from: "off"
+      # No from: filter. A safety sensor reaching "on" is an alert on every
+      # path, including unavailable -> on and unknown -> on. Restricting to
+      # from: "off" would swallow the alarm if the device dropped off and
+      # came back already triggered.
       to: "on"
   action:
     - action: notify.ryan_devices
@@ -148,7 +160,10 @@
         - binary_sensor.basement_smoke_co_alarm_replacement_required_end_of_life
         - binary_sensor.entryway_smoke_co_alarm_replacement_required_end_of_life
         - binary_sensor.second_floor_smoke_co_alarm_replacement_required_end_of_life
-      from: "off"
+      # No from: filter. A safety sensor reaching "on" is an alert on every
+      # path, including unavailable -> on and unknown -> on. Restricting to
+      # from: "off" would swallow the alarm if the device dropped off and
+      # came back already triggered.
       to: "on"
   action:
     - action: notify.ryan_devices

@@ -308,7 +308,10 @@
         - binary_sensor.laundry_water_sensor_water_leak
         - binary_sensor.half_bath_water_sensor_water_leak
         - binary_sensor.upstairs_bathroom_water_sensor_water_leak
-      from: "off"
+      # No from: filter. A safety sensor reaching "on" is an alert on every
+      # path, including unavailable -> on and unknown -> on. Restricting to
+      # from: "off" would swallow the alarm if the device dropped off and
+      # came back already triggered.
       to: "on"
   action:
     - action: script.announce_local
@@ -467,7 +470,14 @@
         - binary_sensor.porch_slider_sensor
         - binary_sensor.family_room_slider
         - binary_sensor.basement_door_sensor
-      from: "off"
+      # "off" alone misses the first open after a sensor has sat at unknown --
+      # a Z2M contact sensor has no state until it first reports, and that
+      # transition is unknown -> on, which from: "off" silently swallows.
+      # Deliberately NOT matching unavailable -> on: that is MQTT restoring an
+      # already-open window on restart, not someone opening it.
+      from:
+        - "off"
+        - unknown
       to: "on"
       for:
         minutes: 5
