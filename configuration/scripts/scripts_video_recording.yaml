@@ -59,4 +59,4 @@ capture_front_door_video:
         target: "658174234480082997"
         data:
           images:
-            - "/config/www/clips/{{ clip_name }}.mp4"
+            - "/tmp/hass/clips/{{ clip_name }}.mp4"

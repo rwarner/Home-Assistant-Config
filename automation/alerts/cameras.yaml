@@ -16,6 +16,14 @@
     - condition: state
       entity_id: alarm_control_panel.alarm
       state: armed_away
+    # Cooldown as a condition rather than a trailing delay. The delay parked a
+    # run for five minutes, and mode single meant that parked run silently
+    # swallowed anything else in the window -- including a genuinely separate
+    # visitor. Checking last_triggered leaves the automation free.
+    - condition: template
+      value_template: >
+        {{ this.attributes.last_triggered is none
+           or (now() - this.attributes.last_triggered).total_seconds() > 300 }}
   action:
+    # Waits for the script, which records, converts and posts to Discord.
     - action: script.capture_front_door_video
-    - delay: '00:05:00' # Prevent duplicate captures/Discord notifications within 5 minutes
