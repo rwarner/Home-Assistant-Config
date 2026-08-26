@@ -1,4 +1,12 @@
 type: custom:mod-card
+card_mod:
+  style: |
+    ha-card {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+    }
 card:
   type: grid
   square: false
@@ -9,6 +17,23 @@ card:
     - type: custom:mushroom-chips-card
       card_mod:
         class: top-nav-icons
+        style: |
+          ha-card {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+          }
+          mushroom-chip {
+            --chip-background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(12px) !important;
+            border-radius: 20px !important;
+          }
+          .chip-container {
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+          }
       chips:
         # - type: template
         #   icon: >
@@ -41,17 +66,15 @@ card:
             navigation_path: /new-dash/climate
           icon: mdi:thermometer
           icon_color: >
-            {#  
-                  If the temperature is lower than 32, set to blue
-                  If it's between 32 and 75 set to gray
-                  If it's higher than 75, set to red
-            #}
-            {% if (states('sensor.outside_avg_temp') | float(nan)) < 32 %}
-              blue
-            {% elif (states('sensor.outside_avg_temp') | float(nan)) <= 75 %}
-              gray
-            {% else %}
-              red
+            {% set t = states('sensor.outside_avg_temp') | float(70) %}
+            {% if t < 20 %}#1e88e5
+            {% elif t < 32 %}#42a5f5
+            {% elif t < 50 %}#26c6da
+            {% elif t < 65 %}#66bb6a
+            {% elif t < 75 %}#ffca28
+            {% elif t < 85 %}#ffa726
+            {% elif t < 95 %}#ef5350
+            {% else %}#d32f2f
             {% endif %}
           card_mod:
             class: top-nav-chip
@@ -59,6 +82,7 @@ card:
           content: >
             {{ states.light
             | rejectattr('attributes.entity_id', 'defined')
+            | rejectattr('entity_id', 'search', '_browser_screen')
             | selectattr('state', 'eq', 'on')
             | list | count }} Lights
           tap_action:
@@ -72,7 +96,7 @@ card:
         - type: template
           content: >
             {% set unlocked = states.lock | selectattr('state', 'eq', 'unlocked') | list | count %}
-            {% if unlocked == 0 %}Locked{% elif unlocked == 1 %}1 Unlocked{% else %}{{ unlocked }} Unlocked{% endif %}
+            {% if unlocked == 0 %}Locked{% else %}{{ unlocked }} Open{% endif %}
           tap_action:
             action: navigate
             navigation_path: /new-dash/security
@@ -100,10 +124,65 @@ card:
           card_mod:
             class: top-nav-chip
         
-        # - type: spacer
-        
-        # - type: action
-        #   tap_action:
-        #     action: navigate
-        #     navigation_path: /new-dash/amplipi
-        #   icon: mdi:speaker-multiple
+    # ----------- Second row: Power, Air Quality, Updates -----------
+    - type: custom:mushroom-chips-card
+      card_mod:
+        class: top-nav-icons
+        style: |
+          ha-card {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+          }
+          .chip-container {
+            flex-wrap: nowrap !important;
+          }
+      alignment: center
+      chips:
+        - type: template
+          content: >
+            {{ states('sensor.shed_smartsolar_power') | int(0) }}W ☀️
+          icon: mdi:solar-power-variant
+          icon_color: >
+            {% set p = states('sensor.shed_smartsolar_power') | int(0) %}
+            {% if p > 50 %}#FF9F09{% elif p > 0 %}#ffca28{% else %}#B6B6C1{% endif %}
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/solar
+        - type: template
+          content: >
+            {{ states('sensor.home_energy_meter_gen5_electric_consumption_w_3') | round(0) }}W
+          icon: mdi:flash
+          icon_color: >
+            {% set w = states('sensor.home_energy_meter_gen5_electric_consumption_w_3') | float(0) %}
+            {% if w > 5000 %}red{% elif w > 3000 %}amber{% else %}green{% endif %}
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/stats
+        - type: template
+          content: >
+            {{ states('sensor.core_400s_series_pm2_5') }} PM2.5
+          icon: mdi:air-filter
+          icon_color: >
+            {% set pm = states('sensor.core_400s_series_pm2_5') | float(0) %}
+            {% if pm > 35 %}red{% elif pm > 12 %}amber{% else %}green{% endif %}
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/stats
+        - type: template
+          content: >
+            {{ states.update | selectattr('state', 'eq', 'on') | list | count }} Updates
+          icon: mdi:package-up
+          icon_color: amber
+          tap_action:
+            action: navigate
+            navigation_path: /config/updates
+          card_mod:
+            style: |
+              :host {
+                {% if states.update | selectattr('state', 'eq', 'on') | list | count == 0 %}
+                  display: none !important;
+                {% endif %}
+              }
