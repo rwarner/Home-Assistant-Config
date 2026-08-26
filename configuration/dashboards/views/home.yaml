@@ -1,0 +1,658 @@
+title: Home
+path: home
+icon: mdi:home
+show_in_sidebar: true
+require_admin: false
+
+cards:
+  - type: vertical-stack
+    cards:
+      - !include ../cards/top-nav-bar.yaml
+
+      # ----------- Someone at Front Door (live camera) -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: input_boolean.someone_at_front_door
+            state: "on"
+        card:
+          type: custom:vertical-stack-in-card
+          cards:
+            - type: custom:mushroom-chips-card
+              alignment: center
+              chips:
+                - type: template
+                  icon: mdi:doorbell-video
+                  icon_color: red
+                  content: "Someone at Front Door"
+            - type: custom:webrtc-camera
+              entity: camera.outside_doorbell
+              muted: true
+              background: true
+              card_mod:
+                style: |
+                  ha-card { border: none !important; box-shadow: none !important; }
+
+      # ----------- Package Detected -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: binary_sensor.doorbell_package_detected
+            state: "on"
+          - condition: state
+            entity: input_boolean.someone_at_front_door
+            state: "off"
+        card:
+          type: custom:mushroom-template-card
+          primary: "Package Detected"
+          secondary: "Front door camera"
+          icon: mdi:package-variant
+          icon_color: amber
+          tap_action:
+            action: more-info
+            entity: camera.outside_doorbell_package
+          card_mod:
+            style: |
+              ha-card {
+                background: rgba(255, 159, 9, 0.15) !important;
+                border: 1px solid rgba(255, 159, 9, 0.3) !important;
+              }
+
+      # -------------- Alarm ------------------
+      - type: conditional
+        conditions:
+        - condition: state
+          entity: alarm_control_panel.alarmo
+          state: armed_away
+        card:
+          type: custom:mushroom-alarm-control-panel-card
+          entity: alarm_control_panel.alarmo
+          states:
+            - armed_away
+          card_mod:
+            style: |
+              ha-card {
+                background: rgba(255, 59, 48, 0.15) !important;
+                border: 1px solid rgba(255, 59, 48, 0.3) !important;
+              }
+
+      # ----------- Nobody Home + Door Unlocked (security concern) -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: sensor.ryan_status
+            state_not: Home
+          - condition: state
+            entity: sensor.kelly_status
+            state_not: Home
+          - condition: or
+            conditions:
+              - condition: state
+                entity: lock.front_door_deadbolt
+                state: unlocked
+              - condition: state
+                entity: lock.basement_door_deadbolt
+                state: unlocked
+        card:
+          type: custom:mushroom-template-card
+          primary: "Door Unlocked While Away"
+          secondary: >
+            {% set locks = [] %}
+            {% if is_state('lock.front_door_deadbolt', 'unlocked') %}{% set locks = locks + ['Front Door'] %}{% endif %}
+            {% if is_state('lock.basement_door_deadbolt', 'unlocked') %}{% set locks = locks + ['Basement'] %}{% endif %}
+            {{ locks | join(', ') }} unlocked
+          icon: mdi:lock-alert
+          icon_color: red
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/security
+          card_mod:
+            style: |
+              ha-card {
+                background: rgba(255, 59, 48, 0.15) !important;
+                border: 1px solid rgba(255, 59, 48, 0.3) !important;
+              }
+
+      # ----------- UPS on Battery -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: sensor.ups_status
+            state_not: Online
+        card:
+          type: custom:mushroom-template-card
+          primary: "UPS on Battery"
+          secondary: "Status: {{ states('sensor.ups_status') }}"
+          icon: mdi:battery-alert
+          icon_color: red
+          tap_action:
+            action: more-info
+            entity: sensor.ups_status
+          card_mod:
+            style: |
+              ha-card {
+                background: rgba(255, 59, 48, 0.15) !important;
+                border: 1px solid rgba(255, 59, 48, 0.3) !important;
+              }
+
+      # ----------- Laundry Machine (top priority) ------------
+      - type: conditional
+        conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity: sensor.washer_washer_machine_state
+                state: 'run'
+              - condition: state
+                entity: sensor.dryer_dryer_machine_state
+                state: 'run'
+        card:
+          type: custom:vertical-stack-in-card
+          cards:
+            - type: custom:mushroom-chips-card
+              alignment: center
+              card_mod:
+                style: |
+                  ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              chips:
+                - type: template
+                  icon: mdi:washing-machine
+                  icon_color: blue
+                  content: "Laundry Running"
+            - type: grid
+              columns: 2
+              square: false
+              cards:
+                - type: custom:mushroom-template-card
+                  primary: "Washer"
+                  secondary: "{{ states('sensor.washer_remaining_time') }}"
+                  icon: mdi:washing-machine
+                  icon_color: blue
+                  card_mod:
+                    style: |
+                      ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                - type: custom:mushroom-template-card
+                  primary: "Dryer"
+                  secondary: "{{ states('sensor.dryer_remaining_time') }}"
+                  icon: mdi:tumble-dryer
+                  icon_color: orange
+                  card_mod:
+                    style: |
+                      ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # ----------- Pool (Season: Apr–Oct) ------------
+      - type: custom:mushroom-template-card
+        primary: >
+          Pool · {{ states('sensor.pool_monitor_temperature') | round(1) }}°F
+        secondary: >
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% set ns = namespace(issues=[]) %}
+          {% if ph < 7.2 %}{% set ns.issues = ns.issues + ['pH low — add pH Up'] %}{% endif %}
+          {% if ph > 7.8 %}{% set ns.issues = ns.issues + ['pH high — add pH Down'] %}{% endif %}
+          {% if orp < 650 %}{% set ns.issues = ns.issues + ['chlorine low'] %}{% endif %}
+          {% if orp > 850 %}{% set ns.issues = ns.issues + ['chlorine over-treated'] %}{% endif %}
+          {% if ns.issues %}{{ ns.issues | join(' · ') | capitalize }}
+          {% else %}All good · pH {{ ph | round(2) }} · ORP {{ orp }} mV
+          {% endif %}
+        icon: mdi:pool
+        icon_color: >
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% if ph < 7.2 or ph > 7.8 or orp < 650 or orp > 850 %}#ef5350
+          {% elif (ph < 7.4 or ph > 7.6) or orp < 700 or orp > 800 %}#FF9F09
+          {% else %}#30d158
+          {% endif %}
+        tap_action:
+          action: navigate
+          navigation_path: /new-dash/pool
+        card_mod:
+          style: |
+            ha-card {
+              {% if now().month not in [4,5,6,7,8,9,10] %}
+                display: none !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                border: none !important;
+              {% endif %}
+            }
+
+      # ----------- Sprinklers (Season: Apr-Oct) ------------
+      # Season matches seasonal_multiplier in scripts_sprinklers.yaml, which is
+      # 0.0 Nov-Mar -- so the card hides exactly when nothing can water.
+      - type: custom:mushroom-template-card
+        primary: >
+          {% set ns = namespace(on=0) %}
+          {% for z in range(1, 8) %}
+            {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.on = z %}{% endif %}
+          {% endfor %}
+          {% set last = states('input_datetime.last_sprinkler_run') %}
+          {% if ns.on > 0 %}Sprinklers - Running
+          {% elif last not in ['unknown', 'unavailable', ''] %}
+            Sprinklers - {{ ((now() | as_timestamp - as_timestamp(last)) / 86400) | round(0) | int }}d since run
+          {% else %}Sprinklers{% endif %}
+        secondary: >
+          {% set ns = namespace(on=0) %}
+          {% for z in range(1, 8) %}
+            {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.on = z %}{% endif %}
+          {% endfor %}
+          {% set sched = states('input_datetime.sprinkler_run_time') %}
+          {% if ns.on > 0 %}
+            {{ state_attr('switch.rain_bird_sprinkler_' ~ ns.on, 'friendly_name') }}
+          {% elif sched not in ['unknown', 'unavailable', ''] and not sched.startswith('1970') %}
+            Scheduled for {{ as_timestamp(sched) | timestamp_custom('%-I:%M %p', true) }}
+          {% else %}
+            Tap to test zones or check status
+          {% endif %}
+        icon: mdi:sprinkler-variant
+        icon_color: >
+          {% set ns = namespace(on=0) %}
+          {% for z in range(1, 8) %}
+            {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.on = z %}{% endif %}
+          {% endfor %}
+          {% set sched = states('input_datetime.sprinkler_run_time') %}
+          {% if ns.on > 0 %}#0a84ff
+          {% elif sched not in ['unknown', 'unavailable', ''] and not sched.startswith('1970') %}#30d158
+          {% else %}#8e8e93
+          {% endif %}
+        tap_action:
+          action: navigate
+          navigation_path: /new-dash/sprinklers
+        card_mod:
+          style: |
+            ha-card {
+              {% if now().month not in [4,5,6,7,8,9,10] %}
+                display: none !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                border: none !important;
+              {% endif %}
+            }
+
+      # ----------- Goodnight Button (shows after dark) -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: input_boolean.dark_outside
+            state: "on"
+        card:
+          type: custom:mushroom-template-card
+          primary: "Goodnight"
+          secondary: "Lock doors, close shades, lights off"
+          icon: mdi:weather-night
+          icon_color: deep-purple
+          tap_action:
+            action: perform-action
+            perform_action: script.goodnight_routine
+          card_mod:
+            style: |
+              @keyframes glow-pulse {
+                0%, 100% { box-shadow: 0 2px 12px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(150, 100, 220, 0.2) !important; }
+                50% { box-shadow: 0 2px 20px rgba(150, 100, 220, 0.3), inset 0 0 0 1px rgba(150, 100, 220, 0.5) !important; }
+              }
+              ha-card {
+                border-left: 3px solid rgba(150, 100, 220, 0.7) !important;
+                cursor: pointer;
+                animation: glow-pulse 3s ease-in-out infinite;
+              }
+
+      # ----------- Mail Arrived -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: input_boolean.mail_arrived
+            state: "on"
+        card:
+          type: custom:mushroom-template-card
+          primary: "Mail Has Arrived"
+          secondary: "Check the mailbox"
+          icon: mdi:mailbox-up
+          icon_color: blue
+
+      # ----------- Plex Currently Streaming -----------
+      - type: conditional
+        conditions:
+          - condition: numeric_state
+            entity: sensor.plex_server_current_watching
+            above: 0
+        card:
+          type: custom:mushroom-template-card
+          primary: >
+            {% set count = states('sensor.plex_server_current_watching') | int(0) %}
+            {{ count }} {{ 'Stream' if count == 1 else 'Streams' }} Active
+          secondary: >
+            {% set ns = namespace(streams=[]) %}
+            {% for key, val in states['sensor.plex_server_current_watching'].attributes.items() %}
+              {% if key not in ['unit_of_measurement', 'friendly_name'] %}
+                {% set user = key.split(' - ')[0] | title %}
+                {% set ns.streams = ns.streams + [val + ' · ' + user] %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.streams | join(' / ') }}
+          icon: mdi:plex
+          icon_color: amber
+          tap_action:
+            action: more-info
+            entity: sensor.plex_server_current_watching
+
+      # ----------- Everyone Away -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: sensor.ryan_status
+            state_not: Home
+          - condition: state
+            entity: sensor.kelly_status
+            state_not: Home
+        card:
+          type: custom:mushroom-template-card
+          primary: "Everyone Away"
+          secondary: >
+            Ryan: {{ states('sensor.ryan_status') }} · Kelly: {{ states('sensor.kelly_status') }}
+          icon: mdi:home-export-outline
+          icon_color: >
+            {% if is_state('alarm_control_panel.alarmo', 'armed_away') %}green{% else %}red{% endif %}
+
+      # ----------- Trash / Recycling (Sunday all day, Monday before 11am) -----------
+      - type: custom:button-card
+        layout: icon_name
+        name: |
+          [[[
+            var d = new Date();
+            var jan4 = new Date(d.getFullYear(), 0, 4);
+            var start = new Date(jan4);
+            start.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7));
+            var week = Math.ceil(((d - start) / 86400000 + 1) / 7);
+            return (week % 2 !== 0) ? 'Trash & Recycling' : 'Trash Week';
+          ]]]
+        icon: |
+          [[[
+            var d = new Date();
+            var jan4 = new Date(d.getFullYear(), 0, 4);
+            var start = new Date(jan4);
+            start.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7));
+            var week = Math.ceil(((d - start) / 86400000 + 1) / 7);
+            return (week % 2 !== 0) ? 'mdi:recycle' : 'mdi:trash-can-outline';
+          ]]]
+        card_mod:
+          style: |
+            ha-card {
+              {% set day = now().weekday() %}
+              {% if not (day == 6 or (day == 0 and now().hour < 11)) %}
+                display: none !important;
+              {% endif %}
+            }
+        styles:
+          grid:
+            - grid-template-areas: '"i n"'
+            - grid-template-columns: min-content auto
+            - justify-content: center
+          card:
+            - padding: 12px 16px
+          icon:
+            - width: 24px
+            - height: 24px
+            - color: var(--ios-dark-green)
+          name:
+            - font-size: 14px
+            - font-weight: 600
+            - padding-left: 8px
+
+      # ----------- Doors Currently Open ------------
+      - type: conditional
+        conditions:
+        - condition: state
+          entity: binary_sensor.doors_opened
+          state: "on"
+        card:
+          type: custom:auto-entities
+          show_empty: false
+          card:
+            type: custom:vertical-stack-in-card
+          card_param: cards
+          filter:
+            include:
+              - domain: binary_sensor
+                entity_id: binary_sensor.*_door_sensor
+                state: "on"
+                options:
+                  type: custom:mushroom-template-card
+                  primary: "{{ state_attr(entity, 'friendly_name') | replace(' Sensor', '') }}"
+                  secondary: "Open"
+                  icon: mdi:door-open
+                  icon_color: red
+                  card_mod:
+                    style: |
+                      ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # ----------- Windows Currently Open ------------
+      - type: conditional
+        conditions:
+        - condition: state
+          entity: binary_sensor.windows_opened
+          state: "on"
+        card:
+          type: custom:auto-entities
+          show_empty: false
+          card:
+            type: custom:vertical-stack-in-card
+          card_param: cards
+          filter:
+            include:
+              - domain: binary_sensor
+                entity_id: binary_sensor.*_window*sensor
+                state: "on"
+                options:
+                  type: custom:mushroom-template-card
+                  primary: "{{ state_attr(entity, 'friendly_name') | replace(' Sensor', '') }}"
+                  secondary: "Open"
+                  icon: mdi:window-open-variant
+                  icon_color: amber
+                  card_mod:
+                    style: |
+                      ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # ----------- Current Motion ------------
+      - !include ../cards/current-motion.yaml
+
+      # ----------- Battery Warnings ------------
+      - !include ../cards/battery-warnings.yaml
+
+      # ----------- Water Leak Detected -----------
+      - type: conditional
+        conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity: binary_sensor.kitchen_water_sensor_moisture
+                state: "on"
+              - condition: state
+                entity: binary_sensor.downstairs_bathroom_water_sensor_water_leak
+                state: "on"
+              - condition: state
+                entity: binary_sensor.laundry_water_sensor_water_leak
+                state: "on"
+              - condition: state
+                entity: binary_sensor.half_bath_water_sensor_water_leak
+                state: "on"
+              - condition: state
+                entity: binary_sensor.upstairs_bathroom_water_sensor_water_leak
+                state: "on"
+        card:
+          type: custom:mushroom-template-card
+          primary: "Water Leak Detected!"
+          secondary: >
+            {% set leaks = [] %}
+            {% if is_state('binary_sensor.kitchen_water_sensor_moisture', 'on') %}{% set leaks = leaks + ['Kitchen'] %}{% endif %}
+            {% if is_state('binary_sensor.downstairs_bathroom_water_sensor_water_leak', 'on') %}{% set leaks = leaks + ['Bathroom'] %}{% endif %}
+            {% if is_state('binary_sensor.laundry_water_sensor_water_leak', 'on') %}{% set leaks = leaks + ['Laundry'] %}{% endif %}
+            {% if is_state('binary_sensor.half_bath_water_sensor_water_leak', 'on') %}{% set leaks = leaks + ['Half Bath'] %}{% endif %}
+            {% if is_state('binary_sensor.upstairs_bathroom_water_sensor_water_leak', 'on') %}{% set leaks = leaks + ['Upstairs Bathroom'] %}{% endif %}
+            {{ leaks | join(', ') if leaks else 'Check sensors' }}
+          icon: mdi:water-alert
+          icon_color: red
+          card_mod:
+            style: |
+              ha-card {
+                background: rgba(255, 59, 48, 0.2) !important;
+                border: 1px solid rgba(255, 59, 48, 0.4) !important;
+              }
+
+      # ----------- Rain Today -----------
+      - type: conditional
+        conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity: weather.tomorrow_io_home_daily
+                state: rainy
+              - condition: state
+                entity: weather.tomorrow_io_home_daily
+                state: pouring
+              - condition: state
+                entity: weather.tomorrow_io_home_daily
+                state: lightning-rainy
+              - condition: state
+                entity: weather.tomorrow_io_home_daily
+                state: snowy
+              - condition: state
+                entity: weather.tomorrow_io_home_daily
+                state: snowy-rainy
+        card:
+          type: custom:mushroom-template-card
+          primary: "Rain Expected Today"
+          secondary: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}% humidity"
+          icon: mdi:weather-rainy
+          icon_color: blue
+          tap_action:
+            action: navigate
+            navigation_path: /new-dash/climate
+
+      # ----------- Critical Devices Offline -----------
+      - type: custom:mushroom-template-card
+        primary: >
+          {% set offline = label_entities('critical_device') | select('has_value') | map('states') | select('in', ['unavailable', 'unknown']) | list | count %}
+          {% set total_offline = label_entities('critical_device') | reject('has_value') | list | count + offline %}
+          {{ total_offline }} Critical Device{{ 's' if total_offline != 1 }} Offline
+        secondary: >
+          {% set entities = label_entities('critical_device') | reject('has_value') | list %}
+          {{ entities | map('state_attr', 'friendly_name') | join(', ') }}
+        icon: mdi:devices
+        icon_color: red
+        tap_action:
+          action: more-info
+          entity: binary_sensor.device_critical
+        card_mod:
+          style: |
+            ha-card {
+              {% set offline = label_entities('critical_device') | reject('has_value') | list | count %}
+              {% if offline == 0 %}
+                display: none !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                border: none !important;
+              {% else %}
+                background: rgba(255, 159, 9, 0.15) !important;
+                border: 1px solid rgba(255, 159, 9, 0.3) !important;
+              {% endif %}
+            }
+
+      # ----------- Recently Added Movie (within 7 days) -----------
+      - type: custom:mushroom-template-card
+        primary: >
+          {{ state_attr('sensor.plex_server_library_movies', 'last_added_item') }}
+        secondary: >
+          {% set ts = state_attr('sensor.plex_server_library_movies', 'last_added_timestamp') %}
+          {{ 'Added ' + (ts | as_datetime | as_local).strftime('%B %d') if ts else '' }}
+        icon: mdi:filmstrip
+        icon_color: red
+        tap_action:
+          action: navigate
+          navigation_path: /new-dash/media
+        card_mod:
+          style: |
+            ha-card {
+              {% set ts = state_attr('sensor.plex_server_library_movies', 'last_added_timestamp') %}
+              {% if ts and (now() - (as_datetime(ts) | as_local)).days > 7 %}
+                display: none !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                border: none !important;
+              {% endif %}
+            }
+
+      # ----------- Illuminance ------------
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-chips-card
+            alignment: center
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            chips:
+              - type: template
+                icon: mdi:brightness-6
+                icon_color: amber
+                content: "Illuminance"
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-template-card
+                primary: "Bedroom"
+                secondary: "{{ states('sensor.master_bedroom_motion_sensor_illuminance') }} lx"
+                icon: mdi:brightness-5
+                icon_color: deep-purple
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Nursery"
+                secondary: "{{ states('sensor.nursery_motion_sensor_illuminance') }} lx"
+                icon: mdi:brightness-5
+                icon_color: pink
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Office"
+                secondary: "{{ states('sensor.ryans_office_motion_sensor_illuminance') }} lx"
+                icon: mdi:brightness-5
+                icon_color: blue
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Movie Room"
+                secondary: "{{ states('sensor.movie_room_motion_sensor_illuminance') }} lx"
+                icon: mdi:brightness-5
+                icon_color: red
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Laundry"
+                secondary: "{{ states('sensor.laundry_motion_sensor_illuminance') }} lx"
+                icon: mdi:brightness-5
+                icon_color: teal
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

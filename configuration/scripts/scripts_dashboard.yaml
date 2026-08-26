@@ -1,0 +1,29 @@
+###### Dashboard Utilities #######
+
+toggle_auto_arm:
+  alias: "Toggle Auto-Arm (disarms alarm if already armed)"
+  sequence:
+    - action: automation.toggle
+      target:
+        entity_id: automation.device_track_nobody_home_lock_doors_arm_alexa_set_tstat_to_away_turn_off_lights_etc
+    - if:
+        - condition: not
+          conditions:
+            - condition: state
+              entity_id: alarm_control_panel.alarm
+              state: disarmed
+      then:
+        - action: alarm_control_panel.alarm_disarm
+          target:
+            entity_id: alarm_control_panel.alarm
+
+reload_yaml_dashboards:
+  alias: "Reload YAML Dashboards on All Browsers"
+  sequence:
+    - action: browser_mod.javascript
+      data:
+        code: >
+          Promise.all([
+            document.querySelector('home-assistant').hass.connection.sendMessagePromise({type: 'lovelace/config', url_path: 'new-dash', force: true}),
+            document.querySelector('home-assistant').hass.connection.sendMessagePromise({type: 'lovelace/config', url_path: 'kitchen-tablet', force: true})
+          ]).then(() => location.reload(true))

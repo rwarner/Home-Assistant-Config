@@ -1,0 +1,45 @@
+# Credit: 
+# https://www.reddit.com/r/homeassistant/comments/1k7w330/my_custom_weather_card/mp1s8pj/
+
+type: vertical-stack
+cards:
+  - type: custom:simple-weather-card
+    entity: weather.tomorrow_io_home_daily
+    custom:
+      - temp: sensor.outside_avg_temp
+    name: " "
+    primary_info:
+      - precipitation
+      - humidity
+    secondary_info:
+      - wind_speed
+      - wind_bearing
+
+  - type: custom:hourly-weather
+    entity: weather.tomorrow_io_home_daily
+    num_segments: "12"
+    name: " "
+    icons: true
+    show_wind: "false"
+    show_date: "false"
+    show_precipitation_amounts: false
+    show_precipitation_probability: false
+    round_temperatures: true
+    colors:
+      clear-night: "#2e3440"
+      cloudy: "#4c566a"
+      partlycloudy: "#b2b7bf"
+      rainy: "#5e81ac"
+      sunny: "#ebcb8b"
+    card_mod:
+      style: |
+        ha-card {
+          border: none;
+        }
+        
+  - type: custom:clock-weather-card
+    entity: weather.tomorrow_io_home_daily
+    hide_clock: true
+    date_pattern: ccc, MMM d
+    animated_icon: false
+    hide_today_section: true

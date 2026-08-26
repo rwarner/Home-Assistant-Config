@@ -1,0 +1,119 @@
+title: More
+path: more
+icon: mdi:dots-horizontal
+
+# Launcher for every view that does NOT have a bottom-nav slot. When a new view
+# is added to new-dash.yaml, add a tile here too -- this is the only place these
+# views are reachable from, so an omission orphans them (which is exactly how
+# pool and sprinklers ended up unreachable).
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      - type: custom:mushroom-title-card
+        title: More
+        subtitle: Not on the bottom bar
+
+      - type: grid
+        columns: 3
+        square: true
+        cards:
+
+          - type: custom:mushroom-template-card
+            primary: Climate
+            secondary: Heat & AC
+            icon: mdi:thermometer
+            icon_color: '#FF9F09'
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: /new-dash/climate
+
+          - type: custom:mushroom-template-card
+            primary: Security
+            secondary: Locks
+            icon: mdi:lock
+            icon_color: '#ef5350'
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: /new-dash/security
+
+          - type: custom:mushroom-template-card
+            primary: Media
+            secondary: Audio
+            icon: mdi:television
+            icon_color: '#ab47bc'
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: /new-dash/media
+
+          - type: custom:mushroom-template-card
+            primary: Solar
+            secondary: Panels
+            icon: mdi:solar-power-variant
+            icon_color: '#ffca28'
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: /new-dash/solar
+
+          - type: custom:mushroom-template-card
+            primary: Stats
+            secondary: Energy
+            icon: mdi:flash
+            icon_color: '#64B5F6'
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: /new-dash/stats
+
+          - type: custom:mushroom-template-card
+            primary: Pool
+            secondary: >
+              {% set ph = states('sensor.pool_monitor_ph') %}
+              {% if ph not in ['unknown', 'unavailable', 'none'] %}
+                pH {{ ph | float(0) | round(1) }}
+              {% else %}
+                Chem
+              {% endif %}
+            icon: mdi:pool
+            icon_color: '#26c6da'
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: /new-dash/pool
+
+          - type: custom:mushroom-template-card
+            primary: Sprinklers
+            secondary: >
+              {% set ns = namespace(on=0) %}
+              {% for z in range(1, 8) %}
+                {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}
+                  {% set ns.on = z %}
+                {% endif %}
+              {% endfor %}
+              {% if ns.on > 0 %}Zone {{ ns.on }} on
+              {% else %}Idle{% endif %}
+            icon: mdi:sprinkler-variant
+            icon_color: >
+              {% set ns = namespace(any=false) %}
+              {% for z in range(1, 8) %}
+                {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.any = true %}{% endif %}
+              {% endfor %}
+              {{ '#0a84ff' if ns.any else '#26a69a' }}
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: /new-dash/sprinklers
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

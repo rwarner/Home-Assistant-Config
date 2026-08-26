@@ -1,0 +1,56 @@
+title: Media
+path: media
+icon: mdi:movie
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      # ----------- Library Stats -----------
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: template
+            content: >
+              {{ states('sensor.plex_server_library_movies') }} Movies
+            icon_color: red
+            icon: mdi:filmstrip
+            tap_action:
+              action: more-info
+              entity: sensor.plex_server_library_movies
+
+          - type: template
+            content: >
+              {{ states('sensor.plex_server_library_tv_shows') }} Episodes
+            icon_color: blue
+            icon: mdi:television
+            tap_action:
+              action: more-info
+              entity: sensor.plex_server_library_tv_shows
+
+          - type: template
+            content: >
+              {{ states('sensor.plex_server_current_watching') }} Streaming
+            icon: mdi:play-circle
+            icon_color: >
+              {% if states('sensor.plex_server_current_watching') | int(0) > 0 %}
+                green
+              {% else %}
+                disabled
+              {% endif %}
+            tap_action:
+              action: more-info
+              entity: sensor.plex_server_current_watching
+
+        alignment: center
+
+      # ----------- Upcoming Shows ------------
+      - !include ../cards/upcoming-shows.yaml
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

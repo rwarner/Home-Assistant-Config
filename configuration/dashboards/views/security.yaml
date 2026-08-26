@@ -1,0 +1,241 @@
+title: Security
+path: security
+icon: mdi:security
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      # ----------- Alarm Panel -----------
+      - type: alarm-panel
+        entity: alarm_control_panel.alarm
+        states:
+          - arm_away
+
+      # ----------- Auto-Arm Toggle -----------
+      - type: custom:mushroom-entity-card
+        entity: automation.device_track_nobody_home_lock_doors_arm_alexa_set_tstat_to_away_turn_off_lights_etc
+        name: Auto-Arm When Away
+        icon: mdi:shield-lock
+        tap_action:
+          action: perform-action
+          perform_action: script.toggle_auto_arm
+
+      # ----------- Locks -----------
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-chips-card
+            alignment: center
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            chips:
+              - type: template
+                icon: mdi:lock
+                icon_color: >
+                  {% if states.lock | selectattr('state', 'eq', 'unlocked') | list | count == 0 %}
+                    green
+                  {% else %}
+                    red
+                  {% endif %}
+                content: >
+                  {% set unlocked = states.lock | selectattr('state', 'eq', 'unlocked') | list | count %}
+                  {% if unlocked == 0 %}All Locked{% else %}{{ unlocked }} Unlocked{% endif %}
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-lock-card
+                entity: lock.front_door_deadbolt
+                name: Front Door
+                icon: mdi:door
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-lock-card
+                entity: lock.basement_door_deadbolt
+                name: Basement Door
+                icon: mdi:door
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # ----------- Doors Status -----------
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-chips-card
+            alignment: center
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            chips:
+              - type: template
+                icon: mdi:door
+                icon_color: >
+                  {% if is_state('binary_sensor.doors_opened', 'on') %}red{% else %}green{% endif %}
+                content: >
+                  {% if is_state('binary_sensor.doors_opened', 'on') %}Doors Open{% else %}All Doors Closed{% endif %}
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: grid
+              columns: 2
+              square: false
+            card_param: cards
+            filter:
+              include:
+                - domain: binary_sensor
+                  entity_id: binary_sensor.*_door_sensor
+                  state: "on"
+                  options:
+                    type: custom:mushroom-template-card
+                    primary: "{{ state_attr(entity, 'friendly_name') | replace(' Sensor', '') }}"
+                    secondary: "Open"
+                    icon: mdi:door-open
+                    icon_color: red
+                    card_mod:
+                      style: |
+                        ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # ----------- Windows Status -----------
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-chips-card
+            alignment: center
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            chips:
+              - type: template
+                icon: mdi:window-closed-variant
+                icon_color: >
+                  {% if is_state('binary_sensor.windows_opened', 'on') %}amber{% else %}green{% endif %}
+                content: >
+                  {% if is_state('binary_sensor.windows_opened', 'on') %}Windows Open{% else %}All Windows Closed{% endif %}
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              type: grid
+              columns: 2
+              square: false
+            card_param: cards
+            filter:
+              include:
+                - domain: binary_sensor
+                  entity_id: binary_sensor.*_window*sensor
+                  state: "on"
+                  options:
+                    type: custom:mushroom-template-card
+                    primary: "{{ state_attr(entity, 'friendly_name') | replace(' Sensor', '') }}"
+                    secondary: "Open"
+                    icon: mdi:window-open-variant
+                    icon_color: amber
+                    card_mod:
+                      style: |
+                        ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # ----------- Smoke & CO Alarms -----------
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-chips-card
+            alignment: center
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            chips:
+              - type: template
+                icon: mdi:smoke-detector-variant
+                icon_color: >
+                  {% set smoke = [
+                    'binary_sensor.basement_smoke_co_alarm_smoke_detected',
+                    'binary_sensor.entryway_smoke_co_alarm_smoke_detected',
+                    'binary_sensor.second_floor_smoke_co_alarm_smoke_detected'] %}
+                  {% set co = [
+                    'binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected',
+                    'binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected',
+                    'binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'] %}
+                  {% if smoke | select('is_state', 'on') | list | count > 0 %}red
+                  {% elif co | select('is_state', 'on') | list | count > 0 %}red
+                  {% else %}green{% endif %}
+                content: >
+                  {% set smoke = [
+                    'binary_sensor.basement_smoke_co_alarm_smoke_detected',
+                    'binary_sensor.entryway_smoke_co_alarm_smoke_detected',
+                    'binary_sensor.second_floor_smoke_co_alarm_smoke_detected'] %}
+                  {% set co = [
+                    'binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected',
+                    'binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected',
+                    'binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected'] %}
+                  {% if smoke | select('is_state', 'on') | list | count > 0 %}Smoke Detected
+                  {% elif co | select('is_state', 'on') | list | count > 0 %}CO Detected
+                  {% else %}Smoke & CO Clear{% endif %}
+          - type: grid
+            columns: 3
+            square: false
+            cards:
+              - type: custom:mushroom-template-card
+                primary: Basement
+                secondary: >
+                  {% if is_state('binary_sensor.basement_smoke_co_alarm_smoke_detected', 'on') %}🔥 Smoke
+                  {% elif is_state('binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected', 'on') %}☠️ CO
+                  {% elif is_state('binary_sensor.basement_smoke_co_alarm_system_hardware_failure', 'on') %}⚠️ Fault
+                  {% else %}Clear{% endif %}
+                icon: mdi:smoke-detector-variant
+                icon_color: >
+                  {% if is_state('binary_sensor.basement_smoke_co_alarm_smoke_detected', 'on')
+                     or is_state('binary_sensor.basement_smoke_co_alarm_carbon_monoxide_detected', 'on') %}red
+                  {% elif is_state('binary_sensor.basement_smoke_co_alarm_system_hardware_failure', 'on') %}orange
+                  {% else %}green{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: binary_sensor.basement_smoke_co_alarm_smoke_detected
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: Entryway
+                secondary: >
+                  {% if is_state('binary_sensor.entryway_smoke_co_alarm_smoke_detected', 'on') %}🔥 Smoke
+                  {% elif is_state('binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected', 'on') %}☠️ CO
+                  {% elif is_state('binary_sensor.entryway_smoke_co_alarm_system_hardware_failure', 'on') %}⚠️ Fault
+                  {% else %}Clear{% endif %}
+                icon: mdi:smoke-detector-variant
+                icon_color: >
+                  {% if is_state('binary_sensor.entryway_smoke_co_alarm_smoke_detected', 'on')
+                     or is_state('binary_sensor.entryway_smoke_co_alarm_carbon_monoxide_detected', 'on') %}red
+                  {% elif is_state('binary_sensor.entryway_smoke_co_alarm_system_hardware_failure', 'on') %}orange
+                  {% else %}green{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: binary_sensor.entryway_smoke_co_alarm_smoke_detected
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: 2nd Floor
+                secondary: >
+                  {% if is_state('binary_sensor.second_floor_smoke_co_alarm_smoke_detected', 'on') %}🔥 Smoke
+                  {% elif is_state('binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected', 'on') %}☠️ CO
+                  {% elif is_state('binary_sensor.second_floor_smoke_co_alarm_system_hardware_failure', 'on') %}⚠️ Fault
+                  {% else %}Clear{% endif %}
+                icon: mdi:smoke-detector-variant
+                icon_color: >
+                  {% if is_state('binary_sensor.second_floor_smoke_co_alarm_smoke_detected', 'on')
+                     or is_state('binary_sensor.second_floor_smoke_co_alarm_carbon_monoxide_detected', 'on') %}red
+                  {% elif is_state('binary_sensor.second_floor_smoke_co_alarm_system_hardware_failure', 'on') %}orange
+                  {% else %}green{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: binary_sensor.second_floor_smoke_co_alarm_smoke_detected
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

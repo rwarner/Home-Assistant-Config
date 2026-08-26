@@ -1,0 +1,243 @@
+title: Sprinklers
+path: sprinklers
+icon: mdi:sprinkler-variant
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      # ── Hero status ───────────────────────────────────────────────────────
+      - type: custom:mushroom-template-card
+        primary: >
+          {% set ns = namespace(on=[]) %}
+          {% for z in range(1, 8) %}
+            {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}
+              {% set ns.on = ns.on + [state_attr('switch.rain_bird_sprinkler_' ~ z, 'friendly_name')] %}
+            {% endif %}
+          {% endfor %}
+          {% if ns.on %}{{ ns.on | join(', ') }}
+          {% else %}All Zones Off{% endif %}
+        secondary: >
+          {% if is_state('script.run_all_sprinklers', 'on') %}
+            Full cycle running — tests are blocked
+          {% else %}
+            Last full run {{ states('input_datetime.last_sprinkler_run') }}
+          {% endif %}
+        icon: mdi:sprinkler-variant
+        icon_color: >
+          {% set ns = namespace(any=false) %}
+          {% for z in range(1, 8) %}
+            {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.any = true %}{% endif %}
+          {% endfor %}
+          {{ '#0a84ff' if ns.any else '#B6B6C1' }}
+        card_mod:
+          style: |
+            ha-card { padding: 16px 0 4px; }
+
+      # ── Manual test — ONE card, top to bottom: pick zone, pick duration,
+      #    then go. Presets are the primary control; the slider is only for
+      #    odd values, because a 1-60 slider cannot be thumbed accurately.
+      - type: custom:vertical-stack-in-card
+        title: Manual Zone Test
+        cards:
+
+          - type: custom:mushroom-select-card
+            entity: input_select.sprinkler_test_zone
+            name: Zone
+            icon: mdi:map-marker-radius
+            secondary_info: none
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-template-card
+                primary: 3 min
+                secondary: pattern
+                icon: mdi:eye-outline
+                icon_color: >
+                  {{ '#30d158' if (states('input_number.sprinkler_test_minutes') | float(0) | round(0) | int) == 3 else '#B6B6C1' }}
+                tap_action:
+                  action: perform-action
+                  perform_action: input_number.set_value
+                  target:
+                    entity_id: input_number.sprinkler_test_minutes
+                  data:
+                    value: 3
+              - type: custom:mushroom-template-card
+                primary: 15 min
+                secondary: soak
+                icon: mdi:water-outline
+                icon_color: >
+                  {{ '#30d158' if (states('input_number.sprinkler_test_minutes') | float(0) | round(0) | int) == 15 else '#B6B6C1' }}
+                tap_action:
+                  action: perform-action
+                  perform_action: input_number.set_value
+                  target:
+                    entity_id: input_number.sprinkler_test_minutes
+                  data:
+                    value: 15
+              - type: custom:mushroom-template-card
+                primary: 35 min
+                secondary: catch test
+                icon: mdi:cup-outline
+                icon_color: >
+                  {{ '#30d158' if (states('input_number.sprinkler_test_minutes') | float(0) | round(0) | int) == 35 else '#B6B6C1' }}
+                tap_action:
+                  action: perform-action
+                  perform_action: input_number.set_value
+                  target:
+                    entity_id: input_number.sprinkler_test_minutes
+                  data:
+                    value: 35
+              - type: custom:mushroom-template-card
+                primary: 60 min
+                secondary: full
+                icon: mdi:water
+                icon_color: >
+                  {{ '#30d158' if (states('input_number.sprinkler_test_minutes') | float(0) | round(0) | int) == 60 else '#B6B6C1' }}
+                tap_action:
+                  action: perform-action
+                  perform_action: input_number.set_value
+                  target:
+                    entity_id: input_number.sprinkler_test_minutes
+                  data:
+                    value: 60
+
+          - type: custom:mushroom-number-card
+            entity: input_number.sprinkler_test_minutes
+            name: Fine tune
+            icon: mdi:timer-outline
+            display_mode: slider
+
+          - type: horizontal-stack
+            cards:
+              # State-aware: the script deliberately no-ops during a full cycle,
+              # so the button must say so rather than looking tappable.
+              - type: custom:mushroom-template-card
+                primary: >
+                  {% set ns = namespace(on=0) %}
+                  {% for z in range(1, 8) %}
+                    {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.on = z %}{% endif %}
+                  {% endfor %}
+                  {% if is_state('script.run_all_sprinklers', 'on') %}Blocked
+                  {% elif ns.on > 0 %}Zone {{ ns.on }} Running
+                  {% else %}Start Zone{% endif %}
+                secondary: >
+                  {% if is_state('script.run_all_sprinklers', 'on') %}
+                    Full cycle in progress
+                  {% else %}
+                    Zone {{ states('input_select.sprinkler_test_zone').split(' ')[1] }} ·
+                    {{ states('input_number.sprinkler_test_minutes') | float(0) | round(0) | int }} min
+                  {% endif %}
+                icon: mdi:play-circle
+                icon_color: >
+                  {% set ns = namespace(on=0) %}
+                  {% for z in range(1, 8) %}
+                    {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.on = z %}{% endif %}
+                  {% endfor %}
+                  {% if is_state('script.run_all_sprinklers', 'on') %}#B6B6C1
+                  {% elif ns.on > 0 %}#0a84ff
+                  {% else %}#30d158{% endif %}
+                tap_action:
+                  action: perform-action
+                  perform_action: script.test_sprinkler_zone
+
+              - type: custom:mushroom-template-card
+                primary: Stop All
+                secondary: >
+                  {% set ns = namespace(any=false) %}
+                  {% for z in range(1, 8) %}
+                    {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.any = true %}{% endif %}
+                  {% endfor %}
+                  {% if ns.any or is_state('script.run_all_sprinklers', 'on') %}
+                    Tap to shut off
+                  {% else %}
+                    Nothing running
+                  {% endif %}
+                icon: mdi:stop-circle
+                icon_color: >
+                  {% set ns = namespace(any=false) %}
+                  {% for z in range(1, 8) %}
+                    {% if is_state('switch.rain_bird_sprinkler_' ~ z, 'on') %}{% set ns.any = true %}{% endif %}
+                  {% endfor %}
+                  {{ '#ef5350' if (ns.any or is_state('script.run_all_sprinklers', 'on')) else '#B6B6C1' }}
+                tap_action:
+                  action: perform-action
+                  perform_action: script.stop_all_sprinklers
+
+      # ── Zone status — one card. Tap opens more-info (history), NOT a toggle:
+      #    toggling a Rain Bird switch directly starts a zone with no duration,
+      #    so starting anything is routed through the duration control above.
+      #    History matters here — it is how catch-test timings get verified.
+      - type: custom:vertical-stack-in-card
+        title: Zone Status
+        cards:
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-entity-card
+                entity: switch.rain_bird_sprinkler_4
+                name: Main Yard A
+                icon: mdi:sprinkler
+                tap_action:
+                  action: more-info
+              - type: custom:mushroom-entity-card
+                entity: switch.rain_bird_sprinkler_5
+                name: Main Yard B
+                icon: mdi:sprinkler
+                tap_action:
+                  action: more-info
+              - type: custom:mushroom-entity-card
+                entity: switch.rain_bird_sprinkler_1
+                name: Sidewalk
+                icon: mdi:sprinkler
+                tap_action:
+                  action: more-info
+              - type: custom:mushroom-entity-card
+                entity: switch.rain_bird_sprinkler_2
+                name: Front + Chimney
+                icon: mdi:sprinkler
+                tap_action:
+                  action: more-info
+              - type: custom:mushroom-entity-card
+                entity: switch.rain_bird_sprinkler_3
+                name: Rear Corner
+                icon: mdi:sprinkler
+                tap_action:
+                  action: more-info
+              - type: custom:mushroom-entity-card
+                entity: switch.rain_bird_sprinkler_7
+                name: Back Yard
+                icon: mdi:sprinkler
+                tap_action:
+                  action: more-info
+
+      # ── Head reference ────────────────────────────────────────────────────
+      # Mirrors the zone map in configuration/scripts/scripts_sprinklers.yaml.
+      # Head types only — deliberately no run times here, so there is nothing
+      # to drift out of sync when the schedule is retuned.
+      - type: markdown
+        content: |
+          #### Heads by zone
+          | Zone | Area | Heads |
+          |---|---|---|
+          | 1 | Sidewalk Strip | Strip sprays |
+          | 2 | Front + Chimney | **Mixed** — PGP + 1800s |
+          | 3 | Rear Corner | PGP Ultra |
+          | 4 | Main Yard A | PGP Ultra |
+          | 5 | Main Yard B | PGP Ultra |
+          | 7 | Back Yard | PGP Ultra |
+
+          Rotors ≈ 0.45 in/hr · sprays ≈ 1.5 in/hr, so run times are
+          **not** comparable between zones.
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

@@ -1,0 +1,243 @@
+title: Shed Solar
+path: solar
+icon: mdi:solar-power-variant
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      # ── Hero: Charging Status ─────────────────────────────────────────────
+      - type: custom:mushroom-template-card
+        primary: >
+          {{ states('sensor.shed_smartshunt_battery') | round(1) }}% Charged
+        secondary: >
+          {% set mode = states('sensor.shed_smartsolar_operation_mode') %}
+          {% if mode == 'float' %}Solar Float — Battery Full
+          {% elif mode == 'absorption' %}Absorption — Topping Off
+          {% elif mode == 'bulk' %}Bulk Charging
+          {% elif mode == 'off' %}Solar Offline
+          {% else %}{{ mode | replace('_', ' ') | title }}
+          {% endif %}
+        icon: >
+          {% set b = states('sensor.shed_smartshunt_battery') | float %}
+          {% set mode = states('sensor.shed_smartsolar_operation_mode') %}
+          {% if mode in ['bulk', 'absorption', 'float'] %}
+            {% if b >= 95 %}mdi:battery-charging-100
+            {% elif b >= 80 %}mdi:battery-charging-80
+            {% elif b >= 60 %}mdi:battery-charging-60
+            {% elif b >= 40 %}mdi:battery-charging-40
+            {% else %}mdi:battery-charging-20
+            {% endif %}
+          {% else %}
+            {% if b >= 80 %}mdi:battery
+            {% elif b >= 20 %}mdi:battery-medium
+            {% else %}mdi:battery-alert
+            {% endif %}
+          {% endif %}
+        icon_color: >
+          {% set mode = states('sensor.shed_smartsolar_operation_mode') %}
+          {% set b = states('sensor.shed_smartshunt_battery') | float %}
+          {% if mode == 'float' %}#30d158
+          {% elif mode in ['bulk', 'absorption'] %}#FF9F09
+          {% elif b < 20 %}#ef5350
+          {% else %}#B6B6C1
+          {% endif %}
+        badge_icon: >
+          {% if states('sensor.shed_smartsolar_charger_error') != 'no_error' %}mdi:alert
+          {% elif states('sensor.shed_batteryprotect_alarm_reason') != 'no_alarm' %}mdi:alert
+          {% elif states('sensor.shed_batteryprotect_warning_reason') != 'no_alarm' %}mdi:alert-outline
+          {% elif not is_state('sensor.shed_batteryprotect_output_state', 'on') %}mdi:power-plug-off
+          {% endif %}
+        badge_color: red
+        fill_container: false
+        card_mod:
+          style: |
+            ha-card { padding: 16px 0 8px; }
+
+      # ── Live Power Flow: Solar → Battery → BatteryProtect → Load ─────────
+      - type: grid
+        square: false
+        columns: 3
+        cards:
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.shed_smartsolar_power') | int(0) }}W
+            secondary: Solar In
+            icon: mdi:solar-power
+            icon_color: >
+              {% set p = states('sensor.shed_smartsolar_power') | int(0) %}
+              {% if p > 100 %}#FF9F09
+              {% elif p > 10 %}#ffca28
+              {% else %}#555555
+              {% endif %}
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; }
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.shed_smartshunt_battery') | round(0) }}%
+            secondary: >
+              {{ states('sensor.shed_smartshunt_voltage') }}V
+            icon: mdi:battery-high
+            icon_color: >
+              {% set b = states('sensor.shed_smartshunt_battery') | float %}
+              {% if b >= 80 %}#30d158
+              {% elif b >= 40 %}#FF9F09
+              {% else %}#ef5350
+              {% endif %}
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; }
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ (states('sensor.shed_smartshunt_power') | float | abs) | round(0) }}W
+            secondary: >
+              {% if is_state('sensor.shed_batteryprotect_output_state', 'on') %}Load · Protected
+              {% else %}Load · BP OFF
+              {% endif %}
+            icon: mdi:home-lightning-bolt
+            icon_color: >
+              {% if not is_state('sensor.shed_batteryprotect_output_state', 'on') %}#ef5350
+              {% else %}#B6B6C1
+              {% endif %}
+            badge_icon: >
+              {% if not is_state('sensor.shed_batteryprotect_output_state', 'on') %}mdi:alert{% endif %}
+            badge_color: "#ef5350"
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; }
+
+      # ── Vitals Grid ───────────────────────────────────────────────────────
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+          - type: custom:mushroom-template-card
+            primary: >
+              {% set m = states('sensor.shed_smartshunt_time_remaining') | int %}
+              {% set h = m // 60 %}
+              {% if h >= 24 %}{{ (h / 24) | round(1) }}d remaining
+              {% elif h > 0 %}{{ h }}h {{ m % 60 }}m remaining
+              {% else %}{{ m }}m remaining
+              {% endif %}
+            secondary: At current draw
+            icon: mdi:clock-outline
+            icon_color: "#B6B6C1"
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.shed_smartshunt_temperature') | round(1) }}°F
+            secondary: Battery Temp
+            icon: mdi:thermometer
+            icon_color: >
+              {% set t = states('sensor.shed_smartshunt_temperature') | float %}
+              {% if t > 100 %}#ef5350
+              {% elif t > 85 %}#FF9F09
+              {% else %}#30d158
+              {% endif %}
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.shed_smartsolar_yield_today') }} Wh
+            secondary: Yield Today
+            icon: mdi:white-balance-sunny
+            icon_color: "#FF9F09"
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.shed_smartshunt_current') | float | abs | round(2) }}A
+            secondary: >
+              {% set c = states('sensor.shed_smartshunt_current') | float %}
+              {% if c < 0 %}Drawing from battery
+              {% elif c > 0 %}Charging battery
+              {% else %}Idle
+              {% endif %}
+            icon: >
+              {% set c = states('sensor.shed_smartshunt_current') | float %}
+              {% if c < 0 %}mdi:current-dc
+              {% else %}mdi:lightning-bolt
+              {% endif %}
+            icon_color: >
+              {% set c = states('sensor.shed_smartshunt_current') | float %}
+              {% if c < 0 %}#B6B6C1{% else %}#FF9F09{% endif %}
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {% set state = states('sensor.shed_batteryprotect_device_state') %}
+              {{ state | replace('_', ' ') | title }}
+            secondary: >
+              {% set off = states('sensor.shed_batteryprotect_off_reason') %}
+              {% if off != 'no_reason' %}{{ off | replace('_', ' ') | title }}
+              {% elif states('sensor.shed_batteryprotect_alarm_reason') != 'no_alarm' %}{{ states('sensor.shed_batteryprotect_alarm_reason') | replace('_', ' ') | title }}
+              {% elif states('sensor.shed_batteryprotect_warning_reason') != 'no_alarm' %}{{ states('sensor.shed_batteryprotect_warning_reason') | replace('_', ' ') | title }}
+              {% else %}No Alerts
+              {% endif %}
+            icon: mdi:shield-battery
+            icon_color: >
+              {% if not is_state('sensor.shed_batteryprotect_output_state', 'on') %}#ef5350
+              {% elif states('sensor.shed_batteryprotect_alarm_reason') != 'no_alarm' %}#ef5350
+              {% elif states('sensor.shed_batteryprotect_warning_reason') != 'no_alarm' %}#FF9F09
+              {% else %}#30d158
+              {% endif %}
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.shed_batteryprotect_input_voltage') | float | round(2) }}V in
+              · {{ states('sensor.shed_batteryprotect_output_voltage') | float | round(2) }}V out
+            secondary: BatteryProtect Voltage
+            icon: mdi:transmission-tower
+            icon_color: >
+              {% set delta = (states('sensor.shed_batteryprotect_input_voltage') | float -
+                              states('sensor.shed_batteryprotect_output_voltage') | float) | abs %}
+              {% if delta > 0.5 %}#FF9F09
+              {% else %}#B6B6C1
+              {% endif %}
+
+      # ── Power Graph (Solar vs Load, 12h) ─────────────────────────────────
+      - type: custom:mini-graph-card
+        name: Power — Last 12h
+        hours_to_show: 12
+        points_per_hour: 4
+        aggregate_func: max
+        entities:
+          - entity: sensor.shed_smartsolar_power
+            name: Solar
+            color: "#FF9F09"
+          - entity: sensor.shed_smartshunt_power
+            name: Load
+            color: "#B6B6C1"
+            show_state: true
+        show:
+          graph: line
+          extrema: true
+          labels: false
+          legend: true
+
+      # ── Battery % Graph (24h) ─────────────────────────────────────────────
+      - type: custom:mini-graph-card
+        name: Battery — Last 24h
+        hours_to_show: 24
+        points_per_hour: 2
+        aggregate_func: max
+        lower_bound: 0
+        upper_bound: 100
+        entities:
+          - entity: sensor.shed_smartshunt_battery
+            name: State of Charge
+            color: "#30d158"
+        show:
+          graph: line
+          average: true
+          extrema: true
+          labels: false
+
+      # ── Spacer + Bottom Nav ───────────────────────────────────────────────
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

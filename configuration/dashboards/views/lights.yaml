@@ -1,0 +1,152 @@
+title: Lights
+path: lights
+icon: mdi:lamps
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      # ----------- Lights On Count -----------
+      - type: custom:mushroom-chips-card
+        alignment: center
+        card_mod:
+          style: |
+            ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        chips:
+          - type: template
+            icon: mdi:lightbulb-group
+            icon_color: amber
+            content: >
+              {{ states.light
+              | rejectattr('attributes.entity_id', 'defined')
+              | rejectattr('entity_id', 'search', '_browser_screen')
+              | selectattr('state', 'eq', 'on')
+              | list | count }} Lights On
+
+      - type: entities
+        entities:
+        - type: custom:fold-entity-row
+          head:
+            entity: light.master_bedroom_lights
+            name: Master Bedroom
+            icon: mdi:bed-king
+          open: false
+          entities:
+              - light.bedroom_ryans_bedside
+              - light.bedroom_kellys_bedside
+        - entity: >-
+            automation.bedroom_turn_on_light_from_motion_off_after_5_min_between_10_am_and_9_30pm
+          name: Bedroom Motion
+          icon: mdi:motion-sensor
+        - entity: >-
+            scene.ryan_sleep_kelly_up
+          icon: mdi:palette
+          name: "Scene: Ryan Off, Kelly On"
+
+      - type: entities
+        entities:
+        - type: custom:fold-entity-row
+          head:
+            entity: light.nursery_lights
+            name: Nursery
+            icon: mdi:baby-face-outline
+          open: false
+          entities:
+              - light.nursery_floor_lamp
+              - light.nursery_bookshelf_lamp
+        - entity: >-
+            automation.nursery_light_control_from_motion_nursery_before_11pm_bookshelf_after
+          name: Nursery Motion
+          icon: mdi:motion-sensor
+        - entity: >-
+            scene.emilia_bedtime
+          icon: mdi:weather-night
+          name: "Scene: Emilia Bedtime"
+
+      - type: entities
+        entities:
+        - type: custom:fold-entity-row
+          head:
+            entity: light.family_room_lights
+            name: Family Room
+            icon: mdi:sofa-outline
+          open: false
+          entities:
+              - light.family_room_center_lamp
+              - light.family_room_corner_lamp
+              - light.family_room_dining_table
+
+      - type: entities
+        entities:
+        - type: custom:fold-entity-row
+          head:
+            entity: light.living_room_lights
+            name: Living Room
+            icon: mdi:sofa
+          open: false
+          entities:
+              - light.living_room_desk_lamp
+              - light.living_room_fireplace
+              - light.living_room_floor_lamp
+
+      - type: entities
+        entities:
+          - type: custom:fold-entity-row
+            head:
+              entity: light.kitchen_lights
+              name: Kitchen
+              icon: mdi:countertop
+            open: false
+            entities:
+                - light.kitchen_ceiling_lights
+                - light.kitchen_undercabinet_lights
+                - light.kitchen_dining_area_lamp
+                - light.kitchen_lamp
+                - light.kitchen_pendants
+
+      - type: entities
+        entities:
+          - type: custom:fold-entity-row
+            head:
+              entity: light.outside_lights
+              name: Outside
+              icon: mdi:outdoor-lamp
+            open: false
+            entities:
+                - light.outside_front_door
+                - light.outside_side_patio
+
+      - type: entities
+        entities:
+          - type: custom:fold-entity-row
+            head:
+              entity: light.ryans_office_lights
+              name: Ryan's Office
+              icon: mdi:desktop-tower-monitor
+            open: false
+            entities:
+                - light.ryans_office_desk_lamp
+                - light.ryans_office_desk_uplighting
+          - entity: >-
+              automation.ryans_office_control_lights_with_motion
+            name: Office Motion
+            icon: mdi:motion-sensor
+
+      - type: entities
+        entities:
+        - entity: light.movie_room_lights
+          name: Movie Room
+          icon: mdi:projector
+        - entity: >-
+            automation.movie_room_turn_on_light_from_motion_only_when_projector_is_off_light_is_low
+          name: Movie Room Motion
+          icon: mdi:motion-sensor
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

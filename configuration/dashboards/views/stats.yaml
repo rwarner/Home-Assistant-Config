@@ -1,0 +1,408 @@
+# View tab title
+title: Stats
+# Unique path for direct access /lovelace/${path}
+path: stats
+# Icon for in menu
+icon: mdi:chart-box
+# The cards to show on this view
+cards:
+  - type: vertical-stack
+    cards:
+
+      # ── Power Section ──
+      - type: markdown
+        content: "## ⚡ Power & Energy"
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent !important;
+              border: none !important;
+              box-shadow: none !important;
+              font-size: 14px;
+              padding: 4px 0 0 0 !important;
+              margin-bottom: -12px;
+            }
+            h2 { margin: 0; color: rgba(255,255,255,0.9); font-weight: 600; }
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.home_energy_meter_gen5_electric_consumption_w_3
+            name: Total Home
+            color: "#ffa726"
+          - entity: sensor.home_energy_meter_gen5_electric_consumption_w_4
+            name: Circuit 1
+            color: "#42a5f5"
+          - entity: sensor.home_energy_meter_gen5_electric_consumption_w_2_3
+            name: Circuit 2
+            color: "#66bb6a"
+        name: Home Power Usage
+        hours_to_show: 24
+        points_per_hour: 4
+        line_width: 2
+        aggregate_func: max
+        show:
+          graph: line
+          average: true
+          extrema: true
+          labels: false
+          legend: true
+
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.home_energy_meter_gen5_electric_consumption_w_3') | round(0) }}W
+            secondary: Current Draw
+            icon: mdi:lightning-bolt
+            icon_color: >
+              {% set w = states('sensor.home_energy_meter_gen5_electric_consumption_w_3') | float(0) %}
+              {% if w > 5000 %}red{% elif w > 3000 %}amber{% else %}green{% endif %}
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.home_energy_meter_gen5_electric_consumption_v_3') }}V
+            secondary: Voltage
+            icon: mdi:sine-wave
+            icon_color: blue
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.server_closet_power
+            color: "#7e57c2"
+        name: Server Closet Power
+        hours_to_show: 24
+        points_per_hour: 4
+        line_width: 2
+        show:
+          graph: line
+          average: true
+          extrema: true
+          labels: false
+
+      # ── Air Quality Section ──
+      - type: markdown
+        content: "## 🌿 Air Quality"
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent !important;
+              border: none !important;
+              box-shadow: none !important;
+              font-size: 14px;
+              padding: 4px 0 0 0 !important;
+              margin-bottom: -12px;
+            }
+            h2 { margin: 0; color: rgba(255,255,255,0.9); font-weight: 600; }
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.core_400s_series_pm2_5
+            color: "#26a69a"
+        name: First Floor Air Quality
+        hours_to_show: 24
+        points_per_hour: 4
+        line_width: 2
+        color_thresholds:
+          - value: 0
+            color: "#66bb6a"
+          - value: 12
+            color: "#ffa726"
+          - value: 35
+            color: "#ef5350"
+        show:
+          graph: line
+          average: true
+          extrema: true
+          labels: false
+
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.core_400s_series_pm2_5') }} µg/m³
+            secondary: PM2.5
+            icon: mdi:molecule
+            icon_color: >
+              {% set pm = states('sensor.core_400s_series_pm2_5') | float(0) %}
+              {% if pm > 35 %}red{% elif pm > 12 %}amber{% else %}green{% endif %}
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.core_400s_series_air_quality') | title }}
+            secondary: Air Quality
+            icon: mdi:leaf
+            icon_color: >
+              {% set q = states('sensor.core_400s_series_air_quality') %}
+              {% if q == 'excellent' %}green{% elif q == 'good' %}light-green{% else %}amber{% endif %}
+
+      # ── Climate Overview ──
+      - type: markdown
+        content: "## 🌡️ Climate"
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent !important;
+              border: none !important;
+              box-shadow: none !important;
+              font-size: 14px;
+              padding: 4px 0 0 0 !important;
+              margin-bottom: -12px;
+            }
+            h2 { margin: 0; color: rgba(255,255,255,0.9); font-weight: 600; }
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.outside_avg_temp
+            name: Outside
+            color: "#ef5350"
+          - entity: sensor.living_room_avg_temp
+            name: Living Room
+            color: "#42a5f5"
+          - entity: sensor.master_bedroom_avg_temp
+            name: Bedroom
+            color: "#ab47bc"
+          - entity: sensor.kitchen_avg_temp
+            name: Kitchen
+            color: "#66bb6a"
+          - entity: sensor.ryans_office_avg_temp
+            name: Office
+            color: "#ffa726"
+          - entity: sensor.nursery_avg_temp
+            name: Nursery
+            color: "#26c6da"
+          - entity: sensor.family_room_avg_temp
+            name: Family Room
+            color: "#78909c"
+          - entity: sensor.movie_room_avg_temp
+            name: Movie Room
+            color: "#8d6e63"
+          - entity: sensor.laundry_room_avg_temp
+            name: Laundry
+            color: "#7e57c2"
+          - entity: sensor.kellys_office_avg_temp
+            name: Kelly's Office
+            color: "#ec407a"
+          - entity: sensor.upstairs_bathroom_avg_temp
+            name: Upstairs Bath
+            color: "#26a69a"
+        name: Temperature Trends
+        hours_to_show: 24
+        points_per_hour: 2
+        line_width: 2
+        aggregate_func: avg
+        show:
+          graph: line
+          average: false
+          extrema: false
+          labels: false
+          legend: true
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.laundry_room_current_humidity
+            color: "#42a5f5"
+        name: Laundry Room Humidity
+        hours_to_show: 24
+        points_per_hour: 2
+        line_width: 2
+        show:
+          graph: line
+          average: true
+          extrema: true
+          labels: false
+
+      # ── Light Levels ──
+      - type: markdown
+        content: "## 💡 Light Levels"
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent !important;
+              border: none !important;
+              box-shadow: none !important;
+              font-size: 14px;
+              padding: 4px 0 0 0 !important;
+              margin-bottom: -12px;
+            }
+            h2 { margin: 0; color: rgba(255,255,255,0.9); font-weight: 600; }
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.ryans_office_motion_sensor_illuminance
+            name: Office
+            color: "#42a5f5"
+          - entity: sensor.master_bedroom_motion_sensor_illuminance
+            name: Bedroom
+            color: "#ab47bc"
+          - entity: sensor.nursery_motion_sensor_illuminance
+            name: Nursery
+            color: "#66bb6a"
+        name: Illuminance (lux)
+        hours_to_show: 24
+        points_per_hour: 2
+        line_width: 2
+        show:
+          graph: line
+          labels: false
+          legend: true
+
+      # ── Network & Pi-Hole ──
+      - type: markdown
+        content: "## 🛡️ Network"
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent !important;
+              border: none !important;
+              box-shadow: none !important;
+              font-size: 14px;
+              padding: 4px 0 0 0 !important;
+              margin-bottom: -12px;
+            }
+            h2 { margin: 0; color: rgba(255,255,255,0.9); font-weight: 600; }
+
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.pi_hole_ads_blocked
+            color: "#ef5350"
+        name: Ads Blocked (Pi-Hole)
+        hours_to_show: 24
+        points_per_hour: 2
+        line_width: 2
+        show:
+          graph: line
+          average: true
+          extrema: true
+          labels: false
+
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ "{:,}".format(states('sensor.pi_hole_dns_queries') | int(0)) }}
+            secondary: DNS Queries
+            icon: mdi:dns
+            icon_color: blue
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.pi_hole_ads_percentage_blocked') | round(1) }}%
+            secondary: Ads Blocked
+            icon: mdi:shield-alert
+            icon_color: red
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ "{:,}".format(states('sensor.pi_hole_domains_blocked') | int(0)) }}
+            secondary: Blocklist
+            icon: mdi:block-helper
+            icon_color: orange
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.pi_hole_dns_unique_clients') }}
+            secondary: Network Clients
+            icon: mdi:devices
+            icon_color: teal
+
+      # ── UPS & Infrastructure ──
+      - type: markdown
+        content: "## 🖥️ Infrastructure"
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent !important;
+              border: none !important;
+              box-shadow: none !important;
+              font-size: 14px;
+              padding: 4px 0 0 0 !important;
+              margin-bottom: -12px;
+            }
+            h2 { margin: 0; color: rgba(255,255,255,0.9); font-weight: 600; }
+
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.ups_battery_charge') }}%
+            secondary: UPS Battery
+            icon: mdi:battery-charging
+            icon_color: >
+              {% set b = states('sensor.ups_battery_charge') | int(0) %}
+              {% if b > 80 %}green{% elif b > 50 %}amber{% else %}red{% endif %}
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.ups_battery_runtime') | round(0) }} min
+            secondary: UPS Runtime
+            icon: mdi:clock-outline
+            icon_color: blue
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.ups_status') }}
+            secondary: UPS Status
+            icon: mdi:power-plug
+            icon_color: >
+              {% if states('sensor.ups_status') == 'Online' %}green{% else %}red{% endif %}
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.server_closet_power') }} kW
+            secondary: Server Power
+            icon: mdi:server-network
+            icon_color: purple
+
+      # ── Media Library ──
+      - type: markdown
+        content: "## 🎬 Media Library"
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent !important;
+              border: none !important;
+              box-shadow: none !important;
+              font-size: 14px;
+              padding: 4px 0 0 0 !important;
+              margin-bottom: -12px;
+            }
+            h2 { margin: 0; color: rgba(255,255,255,0.9); font-weight: 600; }
+
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ "{:,}".format(states('sensor.plex_server_library_movies') | int(0)) }}
+            secondary: Movies
+            icon: mdi:movie
+            icon_color: orange
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ "{:,}".format(states('sensor.plex_server_library_tv_shows') | int(0)) }}
+            secondary: TV Episodes
+            icon: mdi:television-classic
+            icon_color: blue
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.plex_server_current_watching') }}
+            secondary: Now Streaming
+            icon: mdi:play-circle
+            icon_color: >
+              {% if states('sensor.plex_server_current_watching') | int(0) > 0 %}green{% else %}grey{% endif %}
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ "{:,}".format(states('sensor.server_closet_energy') | round(0) | int(0)) }} kWh
+            secondary: Total Server Energy
+            icon: mdi:lightning-bolt-circle
+            icon_color: amber
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

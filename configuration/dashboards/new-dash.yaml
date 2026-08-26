@@ -1,0 +1,69 @@
+kiosk_mode:
+  hide_header: true
+
+# Custom template for button cards
+# https://github.com/custom-cards/button-card
+button_card_templates:
+  nav_bar_icons:
+    card_mod:
+      style: |
+        ha-card {
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+        }
+    styles:
+        icon:
+          - width: 26px
+          - height: 26px
+          - color: >
+              [[[
+                return window.location.pathname.includes(variables.path)
+                  ? "#30d158"
+                  : "rgba(255,255,255,0.65)";
+              ]]]
+          - filter: >
+              [[[
+                return window.location.pathname.includes(variables.path)
+                  ? "drop-shadow(0 0 6px rgba(48, 209, 88, 0.5))"
+                  : "none";
+              ]]]
+        img_cell:
+          - display: flex
+          - align-items: center
+          - justify-content: center
+        card:
+          - background: >
+              [[[
+                return window.location.pathname.includes(variables.path)
+                  ? "rgba(255,255,255,0.08)"
+                  : "transparent";
+              ]]]
+          - border-radius: 14px
+          - padding: 6px
+          - width: 60px
+          - border: none
+          - box-shadow: none
+        name:
+          - color: rgba(255,255,255,0.75)
+          - font-size: 11px
+          - font-weight: 500
+          - padding-top: 4px
+
+views:
+  - !include views/home.yaml
+
+  - !include views/cameras.yaml
+  - !include views/climate.yaml
+  - !include views/covers.yaml
+  - !include views/lights.yaml
+  - !include views/fans.yaml
+  - !include views/media.yaml
+  - !include views/security.yaml
+  - !include views/stats.yaml
+  - !include views/solar.yaml
+  - !include views/pool.yaml
+  - !include views/sprinklers.yaml
+  - !include views/more.yaml

@@ -1,0 +1,79 @@
+title: Camera
+path: camera
+icon: mdi:cctv
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      # ----------- Priority: Someone at front door — full-width doorbell -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: input_boolean.someone_at_front_door
+            state: "on"
+        card:
+          type: custom:webrtc-camera
+          entity: camera.outside_doorbell
+          muted: true
+          background: true
+
+      # ----------- Priority: Package detected — full-width package cam -----------
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: binary_sensor.doorbell_package_detected
+            state: "on"
+          - condition: state
+            entity: input_boolean.someone_at_front_door
+            state: "off"
+        card:
+          type: custom:webrtc-camera
+          entity: camera.outside_doorbell_package
+          muted: true
+          background: true
+
+      # ----------- All Cameras -----------
+      - type: custom:webrtc-camera
+        entity: camera.outside_doorbell
+        muted: true
+        background: true
+
+      - type: custom:webrtc-camera
+        entity: camera.outside_side_patio
+        muted: true
+        background: true
+
+      - type: custom:webrtc-camera
+        entity: camera.mid_yard_camera_high
+        muted: true
+        background: true
+
+      - type: custom:webrtc-camera
+        entity: camera.rear_patio_camera_high_resolution_channel
+        muted: true
+        background: true
+
+      - type: custom:webrtc-camera
+        entity: camera.under_porch_camera_high_resolution_channel
+        muted: true
+        background: true
+
+      - type: custom:webrtc-camera
+        entity: camera.outside_doorbell_package
+        muted: true
+        background: true
+
+      - type: custom:webrtc-camera
+        entity: camera.nursery_camera_high_resolution_channel
+        muted: true
+        background: true
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

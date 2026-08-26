@@ -1,0 +1,342 @@
+title: Pool
+path: pool
+icon: mdi:pool
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      # ── Pool Health Summary ───────────────────────────────────────────────
+      - type: custom:mushroom-template-card
+        primary: >
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% if ph < 7.2 or ph > 7.8 or orp < 650 or orp > 850 %}Pool Needs Attention
+          {% elif (ph < 7.4 or ph > 7.6) or orp < 700 or orp > 800 %}Chemistry Borderline
+          {% else %}Pool Looks Good
+          {% endif %}
+        secondary: >
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% set ns = namespace(issues=[]) %}
+          {% if ph < 7.2 %}{% set ns.issues = ns.issues + ['pH low — add pH Up'] %}{% endif %}
+          {% if ph > 7.8 %}{% set ns.issues = ns.issues + ['pH high — add pH Down'] %}{% endif %}
+          {% if orp < 650 %}{% set ns.issues = ns.issues + ['chlorine low — add shock'] %}{% endif %}
+          {% if orp > 850 %}{% set ns.issues = ns.issues + ['chlorine over-treated — hold off dosing'] %}{% endif %}
+          {% if ns.issues %}{{ ns.issues | join(' · ') | capitalize }}
+          {% else %}pH, ORP, and temp all in range
+          {% endif %}
+        icon: mdi:pool-thermometer
+        icon_color: >
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% if ph < 7.2 or ph > 7.8 or orp < 650 or orp > 850 %}#ef5350
+          {% elif (ph < 7.4 or ph > 7.6) or orp < 700 or orp > 800 %}#FF9F09
+          {% else %}#30d158
+          {% endif %}
+        card_mod:
+          style: |
+            ha-card { padding: 16px 0 4px; }
+
+      # ── Hero: Water Temperature ───────────────────────────────────────────
+      - type: custom:mushroom-template-card
+        primary: >
+          {{ states('sensor.pool_monitor_temperature') | round(1) }}°F
+        secondary: >
+          {% set t = states('sensor.pool_monitor_temperature') | float %}
+          {% if t < 70 %}Too cold — do not swim
+          {% elif t < 78 %}Cool — brace yourself
+          {% elif t <= 82 %}Ideal swimming temperature
+          {% elif t <= 86 %}Warm — comfortable
+          {% else %}Too warm — bacteria risk
+          {% endif %}
+        icon: mdi:thermometer-water
+        icon_color: >
+          {% set t = states('sensor.pool_monitor_temperature') | float %}
+          {% if t < 70 %}#ef5350
+          {% elif t < 78 %}#64B5F6
+          {% elif t <= 82 %}#30d158
+          {% elif t <= 86 %}#FF9F09
+          {% else %}#ef5350
+          {% endif %}
+        fill_container: false
+        tap_action:
+          action: more-info
+          entity: sensor.pool_monitor_temperature
+        card_mod:
+          style: |
+            ha-card { padding: 16px 0 8px; }
+
+      # ── Chemistry: pH and ORP ─────────────────────────────────────────────
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.pool_monitor_ph') | round(2) }}
+            secondary: >
+              {% set ph = states('sensor.pool_monitor_ph') | float %}
+              {% if ph < 7.0 %}Dangerous — too acidic
+              {% elif ph < 7.2 %}Low — add pH Up
+              {% elif ph < 7.4 %}Acceptable — slightly low
+              {% elif ph <= 7.6 %}Ideal range
+              {% elif ph <= 7.8 %}Acceptable — slightly high
+              {% elif ph <= 8.0 %}High — add pH Down
+              {% else %}Dangerously high — chlorine ineffective
+              {% endif %}
+            icon: mdi:ph
+            icon_color: >
+              {% set ph = states('sensor.pool_monitor_ph') | float %}
+              {% if ph < 7.0 %}#ef5350
+              {% elif ph < 7.2 %}#FF9F09
+              {% elif ph < 7.4 %}#64B5F6
+              {% elif ph <= 7.6 %}#30d158
+              {% elif ph <= 7.8 %}#64B5F6
+              {% elif ph <= 8.0 %}#FF9F09
+              {% else %}#ef5350
+              {% endif %}
+            tap_action:
+              action: more-info
+              entity: sensor.pool_monitor_ph
+
+          - type: custom:mushroom-template-card
+            primary: >
+              {{ states('sensor.pool_monitor_orp') }} mV
+            secondary: >
+              {% set orp = states('sensor.pool_monitor_orp') | int %}
+              {% if orp < 550 %}Critical — sanitizer insufficient
+              {% elif orp < 650 %}Marginal — below CDC minimum
+              {% elif orp < 700 %}Acceptable — meets minimum
+              {% elif orp <= 800 %}Ideal sanitizer level
+              {% elif orp <= 850 %}Slightly high — easing off
+              {% else %}Over-treated — hold off dosing
+              {% endif %}
+            icon: mdi:water-check
+            icon_color: >
+              {% set orp = states('sensor.pool_monitor_orp') | int %}
+              {% if orp < 550 %}#ef5350
+              {% elif orp < 650 %}#FF9F09
+              {% elif orp < 700 %}#64B5F6
+              {% elif orp <= 800 %}#30d158
+              {% elif orp <= 850 %}#64B5F6
+              {% else %}#ef5350
+              {% endif %}
+            tap_action:
+              action: more-info
+              entity: sensor.pool_monitor_orp
+
+      # ── Action Guide ──────────────────────────────────────────────────────
+      - type: custom:mushroom-template-card
+        primary: >
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% if orp < 550 %}Shock Pool Now
+          {% elif ph < 7.0 or ph > 8.0 %}pH Dangerously Out of Range
+          {% elif orp > 850 %}Chlorine Over-Treated
+          {% elif orp < 650 %}Chlorine Running Low
+          {% elif ph < 7.2 %}pH Low — pH Up Needed
+          {% elif ph > 7.8 %}pH High — pH Down Needed
+          {% else %}Chemistry Looks Good
+          {% endif %}
+        icon: >
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% if orp < 550 or ph < 7.0 or ph > 8.0 %}mdi:alert-circle-outline
+          {% elif orp < 650 or orp > 850 or ph < 7.2 or ph > 7.8 %}mdi:flask-outline
+          {% else %}mdi:check-circle-outline
+          {% endif %}
+        icon_color: >
+          {% set ph = states('sensor.pool_monitor_ph') | float %}
+          {% set orp = states('sensor.pool_monitor_orp') | int %}
+          {% if orp < 550 or ph < 7.0 or ph > 8.0 %}#ef5350
+          {% elif orp < 650 or orp > 850 or ph < 7.2 or ph > 7.8 %}#FF9F09
+          {% else %}#30d158
+          {% endif %}
+        tap_action:
+          action: perform-action
+          perform_action: browser_mod.popup
+          data:
+            title: Pool Chemistry Guide
+            content:
+              type: markdown
+              content: |
+                {%- set ph = states('sensor.pool_monitor_ph') | float -%}
+                {%- set orp = states('sensor.pool_monitor_orp') | int -%}
+                {%- set t = states('sensor.pool_monitor_temperature') | float -%}
+                **pH:** {{ ph | round(2) }} &nbsp;·&nbsp; **ORP:** {{ orp }} mV &nbsp;·&nbsp; **Temp:** {{ t | round(1) }}°F
+
+                ---
+
+                {%- if orp < 550 %}
+                🔴 **Shock pool now** — Chlorine critically low. Add 1 lb Di-Zap shock per 10,000 gal. Run pump 8 hours, wait 24h before swimming.
+                {%- elif ph < 7.0 %}
+                🔴 **pH critically low ({{ ph | round(2) }})** — Add pH Up (soda ash) immediately. Pre-dissolve in a bucket of water first. Avoid swimming.
+                {%- elif ph > 8.0 %}
+                🔴 **pH critically high ({{ ph | round(2) }})** — Chlorine nearly ineffective. Add pH Down (sodium bisulfate) near the return jets now.
+                {%- elif orp > 850 %}
+                🟡 **Chlorine over-treated ({{ orp }} mV)** — Sanitizer running high. Hold off on tabs/shock; risk of liner/equipment wear and swimmer irritation. Let it drift down before adding more.
+                {%- elif orp < 650 %}
+                🟡 **Chlorine borderline** — Check floating dispenser, refill 3" chlorine tabs. Or add a half-dose of Di-Zap shock.
+                {%- elif ph < 7.2 %}
+                🟡 **pH low ({{ ph | round(2) }})** — Add pH Up (soda ash). Pre-dissolve in a bucket, pour near return jets. Retest in a few hours.
+                {%- elif ph > 7.8 %}
+                🟡 **pH high ({{ ph | round(2) }})** — Add pH Down (sodium bisulfate) near the return jets. Retest in a few hours.
+                {%- else %}
+                ✅ **Chemistry looks good** — No action needed. Run weekly 7-way strips to check CYA (30–50 ppm), alkalinity (80–120 ppm), and hardness.
+                {%- endif %}
+
+                ---
+
+                **Chemicals on Hand**
+                - pH Up (soda ash) — raises pH below 7.4
+                - pH Down (sodium bisulfate) — lowers pH above 7.6
+                - Di-Zap shock (cal-hypo) — fast chlorine boost
+                - 3" chlorine tabs — continuous sanitation (1–3 ppm FC)
+                - Alkalinity increaser (sodium bicarb) — target 80–120 ppm TA
+                - CYA stabilizer — protects chlorine from UV, target 30–50 ppm
+                - Algaecide · Clarifier — as needed
+
+                *Test strips weekly for CYA, alkalinity, and hardness — sensors don't cover these.*
+        card_mod:
+          style: |
+            ha-card {
+              {% set ph = states('sensor.pool_monitor_ph') | float %}
+              {% set orp = states('sensor.pool_monitor_orp') | int %}
+              {% if orp < 600 or ph < 7.0 or ph > 8.2 %}
+                background: rgba(255, 59, 48, 0.12) !important;
+                border: 1px solid rgba(255, 59, 48, 0.25) !important;
+              {% elif orp < 650 or ph < 7.2 or ph > 7.8 %}
+                background: rgba(255, 159, 9, 0.12) !important;
+                border: 1px solid rgba(255, 159, 9, 0.25) !important;
+              {% else %}
+                display: none !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                border: none !important;
+              {% endif %}
+            }
+
+      # ── Trend Graphs ──────────────────────────────────────────────────────
+      - type: custom:mini-graph-card
+        name: Water Temperature (48h)
+        icon: mdi:thermometer-water
+        entities:
+          - entity: sensor.pool_monitor_temperature
+            name: Temperature
+        hours_to_show: 48
+        points_per_hour: 2
+        line_width: 2
+        smoothing: false
+        tap_action:
+          action: more-info
+          entity: sensor.pool_monitor_temperature
+        color_thresholds:
+          - value: 0
+            color: "#ef5350"
+          - value: 70
+            color: "#64B5F6"
+          - value: 78
+            color: "#30d158"
+          - value: 82
+            color: "#FF9F09"
+          - value: 86
+            color: "#ef5350"
+        show:
+          legend: false
+          state: true
+          points: hover
+
+      - type: custom:mini-graph-card
+        name: pH (48h)
+        icon: mdi:ph
+        entities:
+          - entity: sensor.pool_monitor_ph
+            name: pH
+        hours_to_show: 48
+        points_per_hour: 2
+        line_width: 2
+        smoothing: false
+        lower_bound: 6.8
+        upper_bound: 8.2
+        tap_action:
+          action: more-info
+          entity: sensor.pool_monitor_ph
+        color_thresholds:
+          - value: 6.8
+            color: "#ef5350"
+          - value: 7.0
+            color: "#FF9F09"
+          - value: 7.4
+            color: "#30d158"
+          - value: 7.6
+            color: "#FF9F09"
+          - value: 8.0
+            color: "#ef5350"
+        show:
+          legend: false
+          state: true
+          points: hover
+
+      - type: custom:mini-graph-card
+        name: ORP / Sanitizer (48h)
+        icon: mdi:water-check
+        entities:
+          - entity: sensor.pool_monitor_orp
+            name: ORP
+        hours_to_show: 48
+        points_per_hour: 2
+        line_width: 2
+        smoothing: false
+        lower_bound: 500
+        upper_bound: 900
+        tap_action:
+          action: more-info
+          entity: sensor.pool_monitor_orp
+        color_thresholds:
+          - value: 500
+            color: "#ef5350"
+          - value: 550
+            color: "#FF9F09"
+          - value: 650
+            color: "#30d158"
+          - value: 800
+            color: "#FF9F09"
+          - value: 850
+            color: "#ef5350"
+        show:
+          legend: false
+          state: true
+          points: hover
+
+      # ── Device Status ─────────────────────────────────────────────────────
+      - type: entities
+        title: Monitor Status
+        card_mod:
+          style: |
+            ha-card { margin-top: 8px; }
+        entities:
+          - entity: sensor.pool_monitor_rssi
+            name: Signal Strength
+            icon: mdi:wifi
+          - entity: sensor.pool_monitor_uptime_friendly
+            name: Uptime
+            icon: mdi:clock-outline
+          - entity: sensor.pool_monitor_ip
+            name: IP Address
+            icon: mdi:ip-network
+            tap_action:
+              action: url
+              url_path: http://192.168.2.147/index
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml

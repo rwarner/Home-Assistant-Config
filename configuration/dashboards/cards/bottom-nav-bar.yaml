@@ -1,0 +1,132 @@
+type: custom:mod-card
+card_mod:
+  style: |
+    ha-card {
+      position: fixed;
+      z-index: 999;
+      height: 60px;
+      padding: 0;
+      border-radius: 20px;
+
+      background: rgba(20, 20, 25, 0.55);
+      backdrop-filter: blur(24px) saturate(140%);
+      -webkit-backdrop-filter: blur(24px) saturate(140%);
+
+      box-shadow:
+        0 -2px 8px rgba(0, 0, 0, 0.25),
+        0 -12px 24px rgba(0, 0, 0, 0.35);
+
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+      overflow: hidden;
+    }
+
+    /* Mobile: simple left/right */
+    @media (max-width: 767px) {
+      ha-card {
+        left: 8px;
+        right: 8px;
+        width: auto;
+        transform: none;
+        bottom: calc(env(safe-area-inset-bottom));
+      }
+    }
+
+    /* Desktop: content-area centered */
+    @media (min-width: 768px) {
+      ha-card {
+        left: calc(50% + (var(--mdc-drawer-width, 0px) / 2));
+        transform: translateX(-50%);
+        width: min(720px, calc(100vw - var(--mdc-drawer-width, 0px) - 16px));
+        bottom: calc(env(safe-area-inset-bottom) + 16px);
+      }
+    }
+
+card:
+  type: grid
+  square: false
+  columns: 6
+  card_mod:
+    style: |
+      ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  style:
+    z-index: 10
+  cards:
+    - type: custom:button-card
+      template: nav_bar_icons
+      icon: mdi:home
+      name: Home
+      variables:
+        path: /new-dash/home
+      tap_action:
+        action: navigate
+        navigation_path: /new-dash/home
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+    - type: custom:button-card
+      template: nav_bar_icons
+      icon: mdi:lamps
+      name: Lights
+      variables:
+        path: /new-dash/lights
+      tap_action:
+        action: navigate
+        navigation_path: /new-dash/lights
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+    - type: custom:button-card
+      template: nav_bar_icons
+      icon: mdi:fan
+      name: Fans
+      variables:
+        path: /new-dash/fans
+      tap_action:
+        action: navigate
+        navigation_path: /new-dash/fans
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+    - type: custom:button-card
+      template: nav_bar_icons
+      icon: mdi:blinds-horizontal
+      name: Shades
+      variables:
+        path: /new-dash/covers
+      tap_action:
+        action: navigate
+        navigation_path: /new-dash/covers
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+    - type: custom:button-card
+      template: nav_bar_icons
+      icon: mdi:cctv
+      name: Cameras
+      variables:
+        path: /new-dash/camera
+      tap_action:
+        action: navigate
+        navigation_path: /new-dash/camera
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+    - type: custom:button-card
+      template: nav_bar_icons
+      icon: mdi:dots-horizontal
+      name: More
+      variables:
+        path: /new-dash/more
+      tap_action:
+        action: navigate
+        navigation_path: /new-dash/more
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }

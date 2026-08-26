@@ -1,0 +1,297 @@
+title: Climate
+path: climate
+icon: mdi:thermometer
+
+cards:
+  - type: vertical-stack
+    cards:
+
+      - !include ../cards/weather-forecast.yaml
+
+      # ----------- Room Temperatures -----------
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: custom:mushroom-chips-card
+            alignment: center
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            chips:
+              - type: template
+                icon: mdi:thermometer
+                icon_color: >
+                  {% set t = states('sensor.outside_avg_temp') | float(60) %}
+                  {% if t < 32 %}blue{% elif t <= 75 %}teal{% else %}red{% endif %}
+                content: >
+                  Outside {{ states('sensor.outside_avg_temp') }}°F
+
+          # -- Attic --
+          - type: markdown
+            content: "#### 🏠 Attic"
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; padding: 4px 0 0 8px !important; margin-bottom: -8px; }
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-template-card
+                primary: "Attic"
+                secondary: "{{ states('sensor.attic_gable_fan_temperature') }}°F"
+                icon: mdi:home-roof
+                icon_color: >
+                  {% set t = states('sensor.attic_gable_fan_temperature') | float(80) %}
+                  {% if t < 75 %}blue{% elif t <= 95 %}teal{% elif t <= 120 %}orange{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.attic_gable_fan_temperature
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+          # -- 2nd Floor --
+          - type: markdown
+            content: "#### 🛏️ 2nd Floor"
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; padding: 4px 0 0 8px !important; margin-bottom: -8px; }
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-template-card
+                primary: "Master Bedroom"
+                secondary: "{{ states('sensor.master_bedroom_avg_temp') }}°F"
+                icon: mdi:bed-king
+                icon_color: >
+                  {% set t = states('sensor.master_bedroom_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.master_bedroom_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Ryan's Office"
+                secondary: "{{ states('sensor.ryans_office_avg_temp') }}°F"
+                icon: mdi:desktop-tower-monitor
+                icon_color: >
+                  {% set t = states('sensor.ryans_office_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.ryans_office_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Kelly's Office"
+                secondary: "{{ states('sensor.kellys_office_avg_temp') }}°F"
+                icon: mdi:desk
+                icon_color: >
+                  {% set t = states('sensor.kellys_office_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.kellys_office_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Nursery"
+                secondary: "{{ states('sensor.nursery_avg_temp') }}°F"
+                icon: mdi:baby-face-outline
+                icon_color: >
+                  {% set t = states('sensor.nursery_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.nursery_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Upstairs Bath"
+                secondary: "{{ states('sensor.upstairs_bathroom_avg_temp') }}°F"
+                icon: mdi:shower
+                icon_color: >
+                  {% set t = states('sensor.upstairs_bathroom_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.upstairs_bathroom_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+          # -- 1st Floor --
+          - type: markdown
+            content: "#### 🛋️ 1st Floor"
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; padding: 4px 0 0 8px !important; margin-bottom: -8px; }
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-template-card
+                primary: "Living Room"
+                secondary: "{{ states('sensor.living_room_avg_temp') }}°F"
+                icon: mdi:sofa
+                icon_color: >
+                  {% set t = states('sensor.living_room_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.living_room_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Kitchen"
+                secondary: "{{ states('sensor.kitchen_avg_temp') }}°F"
+                icon: mdi:countertop
+                icon_color: >
+                  {% set t = states('sensor.kitchen_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.kitchen_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Family Room"
+                secondary: "{{ states('sensor.family_room_avg_temp') }}°F"
+                icon: mdi:sofa-outline
+                icon_color: >
+                  {% set t = states('sensor.family_room_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.family_room_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+          # -- Basement --
+          - type: markdown
+            content: "#### 🏚️ Basement"
+            card_mod:
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; padding: 4px 0 0 8px !important; margin-bottom: -8px; }
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:mushroom-template-card
+                primary: "Movie Room"
+                secondary: "{{ states('sensor.movie_room_avg_temp') }}°F"
+                icon: mdi:projector
+                icon_color: >
+                  {% set t = states('sensor.movie_room_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.movie_room_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              - type: custom:mushroom-template-card
+                primary: "Laundry Room"
+                secondary: "{{ states('sensor.laundry_room_avg_temp') }}°F"
+                icon: mdi:washing-machine
+                icon_color: >
+                  {% set t = states('sensor.laundry_room_avg_temp') | float(70) %}
+                  {% if t < 65 %}blue{% elif t <= 76 %}teal{% else %}red{% endif %}
+                tap_action:
+                  action: more-info
+                  entity: sensor.laundry_room_avg_temp
+                card_mod:
+                  style: |
+                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      # ----------- Outside Temp Graph -----------
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.outside_avg_temp
+            color: "#0984ff"
+        name: Outside Temperature
+        hours_to_show: 12
+        points_per_hour: 4
+        line_width: 2
+        font_size: 70
+        show:
+          graph: line
+          labels: false
+          icon: false
+          extrema: true
+          average: true
+
+      # ----------- 2nd Floor Heat Analysis -----------
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.attic_gable_fan_temperature
+            name: Attic
+            color: "#ff453a"
+          - entity: sensor.second_floor_avg_temp
+            name: 2nd Floor
+            color: "#0a84ff"
+          - entity: sensor.outside_avg_temp
+            name: Outside
+            color: "#32d74b"
+        name: Attic · 2nd Floor · Outside
+        hours_to_show: 24
+        points_per_hour: 2
+        line_width: 2
+        font_size: 70
+        show:
+          graph: line
+          labels: false
+          icon: false
+          extrema: true
+          legend: true
+
+      # ----------- Thermostats -----------
+
+      - type: custom:mushroom-climate-card
+        entity: climate.family_room_mitsubishi
+        name: Family Room
+        icon: mdi:sofa-outline
+        show_temperature_control: true
+        hvac_modes:
+          - "off"
+          - cool
+          - heat
+
+      - type: custom:mushroom-climate-card
+        entity: climate.living_room_mitsubishi
+        name: Living Room
+        icon: mdi:sofa
+        show_temperature_control: true
+        hvac_modes:
+          - "off"
+          - cool
+          - heat
+
+      - type: custom:mushroom-climate-card
+        entity: climate.ecobee_laundry_room
+        name: Ecobee
+        icon: mdi:thermostat
+        show_temperature_control: true
+        hvac_modes:
+          - "off"
+          - heat
+
+      # Spacer for bottom nav clearance
+      - type: custom:button-card
+        color_type: blank-card
+        card_mod:
+          style: |
+            ha-card { height: 80px; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+      - !include ../cards/bottom-nav-bar.yaml
