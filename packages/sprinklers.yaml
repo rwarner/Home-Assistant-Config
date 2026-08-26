@@ -1,0 +1,800 @@
+###############################################################################
+### PACKAGE - Sprinklers                                                    ###
+###############################################################################
+#
+# Everything the irrigation system needs in one file: helpers, scripts and
+# automations. These were previously split across input_number.yaml,
+# input_datetime.yaml, input_select.yaml, scripts/scripts_sprinklers.yaml and
+# automation/rooms/outside/sprinklers.yaml -- filed by what kind of thing each
+# was rather than by what it was for. Two of those files held nothing but
+# sprinkler helpers and are gone entirely.
+#
+# Helper entity IDs come from the key names, not the filename, so nothing
+# downstream changed when this moved.
+#
+###############################################################################
+
+input_number:
+  ####################################
+  ####### INPUT NUMBER OPTIONS  ######
+  ####################################
+
+  precip_today:
+    name: Today's Precipitation
+    min: 0
+    max: 10
+    step: 0.01
+    unit_of_measurement: in
+
+  precip_yesterday:
+    name: Yesterday's Precipitation
+    min: 0
+    max: 10
+    step: 0.01
+    unit_of_measurement: in
+
+  precip_two_days_ago:
+    name: Precipitation Two Days Ago
+    min: 0
+    max: 10
+    step: 0.01
+    unit_of_measurement: in
+
+  precip_three_days_ago:
+    name: Precipitation Three Days Ago
+    min: 0
+    max: 10
+    step: 0.01
+    unit_of_measurement: in
+
+  precip_four_days_ago:
+    name: Precipitation Four Days Ago
+    min: 0
+    max: 10
+    step: 0.01
+    unit_of_measurement: in
+
+  # Duration for the manual sprinkler test panel. 35 is the default because it is
+  # the duration the 2026-08-25 catch test used to measure the PGPs at 0.50 in/hr,
+  # so any later reading stays directly comparable to that baseline.
+  sprinkler_test_minutes:
+    name: Sprinkler Test Minutes
+    min: 1
+    max: 60
+    step: 1
+    unit_of_measurement: min
+    icon: mdi:timer-outline
+    mode: box
+
+input_datetime:
+  ######################################
+  ####### INPUT DATETIME OPTIONS  ######
+  ######################################
+
+  sprinkler_run_time:
+    name: Sprinkler Run Time
+    has_date: true
+    has_time: true
+
+  last_sprinkler_run:
+    name: Last Sprinkler Run
+    has_date: true
+    has_time: false
+
+input_select:
+  # Zone picker for the manual sprinkler test panel (dashboards/views/sprinklers.yaml).
+  # IMPORTANT: each option must begin with "Zone <n>" -- script.test_sprinkler_zone
+  # parses the number out of position 1 to build switch.rain_bird_sprinkler_<n>.
+  sprinkler_test_zone:
+    name: Sprinkler Test Zone
+    options:
+      - Zone 1 Sidewalk Strip
+      - Zone 2 Front Yard & Chimney
+      - Zone 3 Rear Corner
+      - Zone 4 Main Yard A
+      - Zone 5 Main Yard B
+      - Zone 6 Back Drip (unused)
+      - Zone 7 Back Yard
+    icon: mdi:map-marker-radius
+
+script:
+  # ZONE MAP AND HEAD TYPES
+  #
+  # Precipitation rate (PR) is how fast a head lays water down, and it differs by
+  # roughly 3x between the two head families on this property:
+  #
+  #     Fixed sprays (Rain Bird 1800, strip nozzles)  ~1.5 in/hr
+  #     Gear rotors  (Hunter PGP Ultra)               ~0.3-0.6 in/hr
+  #
+  # SO RUN TIMES ARE NOT COMPARABLE BETWEEN ZONES. Zone 1 at 25 min delivers
+  # ~0.63 in -- nearly double what zone 3's rotors manage in 40 min (~0.33 in).
+  # Never copy a run time from one zone to another, and never judge which zone
+  # "gets more" from the minutes.
+  #
+  #   Zone 1  Sidewalk Strip
+  #           Fixed strip-spray nozzles. Non-rotating, throw left and right at
+  #           once. High PR. Already the wettest zone on the property -- do not
+  #           raise; extra time here mostly lands on concrete.
+  #
+  #   Zone 2  Front Yard + Chimney        *** MIXED HEADS - SEE WARNING BELOW ***
+  #           Chimney:    Rain Bird 1800 fixed sprays  (~1.5 in/hr)
+  #           Front yard: Hunter PGP Ultra rotors      (~0.45 in/hr)
+  #
+  #   Zone 3  Rear Corner                    Hunter PGP Ultra rotors
+  #           PARTIALLY SHADED (confirmed) -- that is why it sits at 40 min and
+  #           not the 70 the full-sun main yard gets. Its ET is meaningfully
+  #           lower, so 40 min (~0.57 in/week) suits it; do not level it up to
+  #           match zones 4/5.
+  #           CONFIRMED rotors 2026-08-24. That settled it: 18 min was only
+  #           ~0.14 in/run, near-nothing, which is why clover took hold and the
+  #           grass began to yellow. Raised to 40 min (~0.30 in/run). Clover is a
+  #           low-nitrogen signal as much as a dry one -- it fixes its own N and
+  #           outcompetes grass on poor soil -- so soil-test this corner too.
+  #
+  #   Zone 4  Main Yard half + 1 rear head    Hunter PGP Ultra rotors
+  #           4 heads total: 3 in the main yard, 1 over in the REAR CORNER.
+  #   Zone 5  Main Yard half + 2 mid heads    Hunter PGP Ultra rotors
+  #
+  #   *** ZONES 3 AND 4 BOTH WATER THE REAR CORNER ***
+  #   Zone 4's fourth head lands in the rear corner, so that grass receives
+  #   zone 3 (40 min) PLUS zone 4 (88 min) on every cycle -- roughly 128 min of
+  #   combined application, not the 40 that zone 3's own runtime suggests.
+  #   Zone 3's 40 min was set on 2026-08-24 BEFORE this was known, sized as if
+  #   zone 3 were the corner's only water source. It is not.
+  #   Do not re-tune zone 3 in isolation: raising it also stacks on top of
+  #   zone 4. The corner was genuinely dry before (clover + yellowing at the old
+  #   10 + 45 min combined), so the increase is directionally right, but WATCH IT
+  #   for sogginess or moss over the next few weeks and trim zone 3 first if so.
+  #   Zone 3's runtime is the safe lever here -- zone 4's is set by the main yard.
+  #
+  #   Zone 6  Back Drip Irrigation -- disabled (0 min), skipped entirely.
+  #
+  #   Zone 7  Back Yard                      Hunter PGP Ultra rotors
+  #           CONFIRMED rotors 2026-08-24. Left at 5 min DELIBERATELY -- that is
+  #           ~0.04 in/run, effectively unirrigated, and the area is healthy on
+  #           rainfall alone. It is moss-prone, and moss colonizes ground that
+  #           stays damp in shade, so a longer run makes it worse. The near-zero
+  #           runtime here is correct, not an oversight. Fix moss with aeration,
+  #           shade reduction and a soil pH test, never with more water.
+  #
+  # *** ZONE 2 CANNOT BE WATERED CORRECTLY AS BUILT ***
+  # It runs Rain Bird 1800 fixed sprays (chimney) and PGP Ultra rotors (front
+  # yard) off one valve. The sprays lay down about 3x what the rotors do, so at
+  # 26 min the chimney area receives ~0.65 in while the front-yard rotors receive
+  # only ~0.20 in. No run time resolves this -- any value that suits one group is
+  # wrong for the other, and raising the zone drives still more water against the
+  # chimney and foundation.
+  #
+  # Note the direction of the error. The chimney strip is narrow, hemmed in by
+  # the fence and the house and shaded by mature trees, so its ET is LOW -- and
+  # it is the half receiving 3x the water. It is very likely over-watered, and
+  # the moss showing in that turf fits. So zone 2's problem is not simply "needs
+  # more"; the front-yard rotors are dry while the chimney is wet.
+  #
+  # GEOMETRY (measured 2026-08-25): the chimney area is a ~13 x 23 ft RECTANGLE,
+  # not a strip. Two 1800s sit at diagonal corners, each covering roughly half.
+  # Ryan confirms COVERAGE IS FINE -- do not re-open that; the only defect here
+  # is the precipitation-rate mismatch.
+  #
+  # Do NOT fit MP strip nozzles (MPSS530 / MPLCS515 / MPRCS515) -- those cover a
+  # 5 ft width and this area is 13 ft wide. That was an early wrong call made
+  # before the area was measured.
+  #
+  # The fix is a RADIAL MP Rotator sized to the throw the 1800s already achieve:
+  #     MP1000-90  --  8-15 ft radius   (likely, an 1800 tops out near 15 ft)
+  #     MP2000-90  -- 13-21 ft radius   (if they throw further than that)
+  # Both run ~0.4 in/hr against the PGPs' measured 0.50, so the zone goes from a
+  # 3x mismatch to 1.25x -- and the residual falls the right way, since the
+  # chimney is shaded and lower-demand than the front yard.
+  #
+  # AFTER THE SWAP, set this zone to ~45 min (not 88). The front yard is healthy
+  # today on just 0.41 in/week, so it does not need main-yard volume; 45 min puts
+  # the PGP half at ~0.71 in/week and the chimney at ~0.57, which also pulls the
+  # chimney DOWN from the ~1.24 in/week it gets now. That drop is intended: that
+  # strip is shaded, mossy, and over-watered.
+  #
+  # Until that happens 26 min is a CEILING, not a target. Do not raise zone 2 to
+  # help the front yard: every extra minute also drives water at a shaded strip
+  # that is already too wet, right against the chimney and foundation.
+  #
+  # Zones 4 and 5 are the two halves of the big south/southwest full-sun area by
+  # the solar array -- the grass that dries out and yellows first. They run FIRST
+  # (see zone_order) so they always get the calmest, darkest part of the window
+  # no matter how long the rest of the cycle turns out to be.
+
+  run_all_sprinklers:
+    alias: "Run All Sprinklers"
+    mode: single
+    sequence:
+      # 1. Get fresh daily forecast
+      - action: weather.get_forecasts
+        data:
+          type: daily
+        target:
+          entity_id: weather.tomorrow_io_home_daily
+        response_variable: daily_forecasts
+
+      # 2. Set variables *after* fetching fresh forecast
+      - variables:
+          fc: "{{ daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] }}"
+          # Indexed by zone number (zone N -> sprinkler_times[N-1]).
+          #
+          # Zones 4/5 raised 45 -> 70 on 2026-08-24. The main lawn runs Hunter PGP
+          # Ultra gear-drive rotors, which deliver roughly 0.3-0.6 in/hr -- a third
+          # of what a fixed spray puts down. At 45 min x ~1.9 runs/week that was
+          # 0.43-0.86 in/week against the ~1.4-1.75 in/week a full-sun zone needs
+          # in August: short under EVERY point in the rotor range, which is why
+          # this was raised before the catch-can measurement rather than after.
+          # 70 min tops out at ~1.33 in/week even if the rotors are at the high end
+          # of their range, so this cannot overshoot into waste.
+          #
+          # 2026-08-24, from Ryan's read of each area:
+          #   Z1 sidewalk  25 -- unchanged; strip sprays, already the wettest zone
+          #   Z2 front     22 -> 26 -- healthy; capped by the mixed-head problem
+          #   Z3 rear cnr  10 -> 40 -- confirmed PGP rotors; 18 was still far too short
+          #   Z7 back       5 -- unchanged; moss-prone, MORE water would worsen it
+          # 2026-08-25: zones 4/5 raised 70 -> 88 after the catch test measured
+          # the PGPs at 0.50 in/hr (35-min test, 3.25 in glasses, 263 g empty).
+          # 70 min delivered 0.58 in/run = 1.11 in/week; 88 min gives 1.40, the
+          # bottom of the 1.4-1.75 in/week a full-sun zone needs in August. The
+          # automation only waters during dry spells (5-day rain < 0.75 in), so
+          # irrigation has to carry the whole demand -- rain does not top it up.
+          #
+          # This was held back until the chinch float test came back NEGATIVE on
+          # 2026-08-25. The cups had already shown yellow grass receiving 95% of
+          # what green grass gets (7.6% spread), ruling out a bad head. With both
+          # distribution and insects excluded, higher ET in the sunniest zone is
+          # the remaining explanation and more water is the correct response.
+          #
+          # THIS IS THE LAST WATER LEVER. If the main yard has not visibly
+          # recovered in 2-3 weeks at 88 min, the cause is not water -- look at
+          # soil compaction, root depth, thatch, or disease. Do NOT raise further.
+          sprinkler_times: [25, 26, 40, 88, 88, 0, 5]
+
+          # Order zones actually run in, NOT 1-7. The main-yard sun zones lead so
+          # that any cycle overrun past sunrise lands on the small, shaded zones
+          # at the tail instead of on the grass that can least afford it. Zone 6
+          # (drip) is omitted entirely; it is disabled at 0 min.
+          zone_order: [4, 5, 1, 2, 3, 7]
+
+          # Seasonal multiplier: 0.0 in winter (Nov-Mar), 0.75 in spring/fall, 1.0 in summer
+          seasonal_multiplier: >-
+            {% set m = now().month %}
+            {% if m in [11, 12, 1, 2, 3] %}
+              0.0
+            {% elif m in [4, 5, 9, 10] %}
+              0.75
+            {% else %}
+              1.0
+            {% endif %}
+
+          # Upcoming rain in next 3 days from forecast (inches) — 7-day forecasts are too unreliable to act on
+          upcoming_rain_forecast: >-
+            {% set total = namespace(sum=0) %}
+            {% for day in fc[:3] %}
+              {% set total.sum = total.sum + (day.precipitation | default(0) | float) %}
+            {% endfor %}
+            {{ total.sum }}
+
+          # Rain multiplier — reduce watering if significant rain is forecast in next 3 days
+          rain_multiplier: >-
+            {% if upcoming_rain_forecast >= 0.75 %} 0.0
+            {% elif upcoming_rain_forecast >= 0.4 %} 0.5
+            {% elif upcoming_rain_forecast >= 0.2 %} 0.75
+            {% else %} 1.0
+            {% endif %}
+
+          # Forecast high temperature for today
+          forecast_high: "{{ fc[0].temperature | float(0) }}"
+
+          # Temperature multiplier. Base zone times are calibrated for a normal
+          # summer day, so 1.0 covers everything up to 90°F; only a genuine heat
+          # wave adds water on top of that.
+          temp_multiplier: >-
+            {% if forecast_high < 45 %}
+              0.0
+            {% elif forecast_high < 55 %}
+              0.5
+            {% elif forecast_high < 65 %}
+              0.75
+            {% elif forecast_high <= 90 %}
+              1.0
+            {% elif forecast_high <= 97 %}
+              1.1
+            {% else %}
+              1.2
+            {% endif %}
+
+          # Daytime relative humidity, derived from the forecast high and dew point
+          # via the Magnus formula.
+          #
+          # Do NOT use fc[0].humidity here: that is a 24-hour aggregate dominated by
+          # saturated pre-dawn air, so in a New England summer it reads 75-95% almost
+          # every day even when the afternoon is dry. On 2026-08-09 it reported 87%
+          # while the actual RH at the 90°F high was 50%, which silently cut watering
+          # by 40% on a hot, dry day.
+          # default(60, true) not default(60): the integration reports dew_point as
+          # None (not missing) often enough that plain default() lets it through and
+          # the float filter then aborts the whole run mid-cycle.
+          dew_point: "{{ fc[0].dew_point | default(60, true) | float(60) }}"
+
+          daytime_humidity: >-
+            {% set tc = (forecast_high - 32) * 5 / 9 %}
+            {% set dc = (dew_point - 32) * 5 / 9 %}
+            {% set es = 6.112 * (2.718281828 ** (17.67 * tc / (tc + 243.5))) %}
+            {% set ed = 6.112 * (2.718281828 ** (17.67 * dc / (dc + 243.5))) %}
+            {{ [100 * ed / es, 100] | min | round(1) }}
+
+          # Humidity multiplier — genuinely humid daytime air slows evapotranspiration.
+          # Thresholds are tuned for real daytime RH, which is typically 40-60% here.
+          humidity_multiplier: >-
+            {% if daytime_humidity > 80 %}
+              0.85
+            {% elif daytime_humidity > 70 %}
+              0.95
+            {% else %}
+              1.0
+            {% endif %}
+
+          # Wind speed from forecast (mph) — high wind wastes water through drift.
+          # This is a daily figure, but the cycle is scheduled to finish by sunrise
+          # (see cycle_lead_minutes in automation/rooms/outside/sprinklers.yaml), so zones
+          # run in the pre-dawn calm and the daily number overstates real conditions.
+          # Thresholds are deliberately high to compensate; only skip on a real gale.
+          forecast_wind: "{{ fc[0].wind_speed | default(0, true) | float(0) }}"
+
+          wind_multiplier: >-
+            {% if forecast_wind > 25 %}
+              0.0
+            {% elif forecast_wind > 18 %}
+              0.85
+            {% else %}
+              1.0
+            {% endif %}
+
+          # Any single factor at 0 is a hard stop (winter, heavy rain, freezing, gale).
+          hard_stop: >-
+            {{ (seasonal_multiplier | float) == 0
+               or (rain_multiplier | float) == 0
+               or (temp_multiplier | float) == 0
+               or (wind_multiplier | float) == 0 }}
+
+          # Otherwise clamp the combined product. Five multiplicative factors compound
+          # aggressively — two mild trims (0.6 x 0.75) previously produced a 55% cut —
+          # so soft reductions bottom out at 0.5 and boosts cap at 1.25.
+          final_multiplier: >
+            {% if hard_stop %}
+              0.0
+            {% else %}
+              {% set raw = (seasonal_multiplier | float) *
+                           (rain_multiplier | float) *
+                           (temp_multiplier | float) *
+                           (humidity_multiplier | float) *
+                           (wind_multiplier | float) %}
+              {{ [[raw, 0.5] | max, 1.25] | min }}
+            {% endif %}
+
+      # 3. Pre-calculate zone run times for notifications and safety checks
+      - variables:
+          # Listed in run order so the notification matches what actually happens.
+          zone_plan: >
+            {% set names = ['Sidewalk Strip', 'Front Yard', 'Rear Corner', 'Main Yard A', 'Main Yard B', 'Drip (N/A)', 'Back Yard'] %}
+            {% set ns = namespace(lines='') %}
+            {% for z in zone_order %}
+              {% set base = sprinkler_times[z - 1] %}
+              {% if base > 0 %}
+                {% set t = (base * final_multiplier) | round(0) | int %}
+                {% if t > 0 %}
+                  {% set ns.lines = ns.lines + 'Zone ' + z|string + ' – ' + names[z - 1] + ': ' + t|string + ' min\n' %}
+                {% else %}
+                  {% set ns.lines = ns.lines + 'Zone ' + z|string + ' – ' + names[z - 1] + ': skipped (multiplier too low)\n' %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.lines | trim }}
+
+      # 4. Skip entirely if nothing would run — notify and exit
+      - if:
+          - condition: template
+            value_template: "{{ final_multiplier <= 0 }}"
+        then:
+          - action: notify.ryan_devices
+            data:
+              title: "💧 Sprinklers Skipped"
+              message: >
+                No zones ran — conditions blocked watering.
+
+                Seasonal: {{ seasonal_multiplier }}
+                Rain: {{ rain_multiplier }} ({{ upcoming_rain_forecast | round(2) }} in forecast)
+                Temp: {{ temp_multiplier }} ({{ forecast_high | round(0) }}°F)
+                Humidity: {{ humidity_multiplier }} ({{ daytime_humidity | round(0) }}% daytime RH)
+                Wind: {{ wind_multiplier }} ({{ forecast_wind | round(0) }} mph)
+          - stop: "Final multiplier is 0, skipping all zones"
+
+      # 5. Record last run date before zones start — survives HA restart mid-run
+      - action: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.last_sprinkler_run
+        data:
+          date: "{{ now().date() }}"
+
+      # 7. Run zones — skip if base is 0 or adjusted time rounds to 0
+      - repeat:
+          for_each: "{{ zone_order }}"
+          sequence:
+            - variables:
+                zone: "{{ repeat.item | int }}"
+                zone_base: "{{ sprinkler_times[zone - 1] }}"
+                run_time: "{{ (zone_base * final_multiplier) | round(0) | int }}"
+            - if:
+                - condition: template
+                  value_template: "{{ zone_base > 0 and run_time > 0 }}"
+              then:
+                - action: rainbird.start_irrigation
+                  data:
+                    entity_id: "switch.rain_bird_sprinkler_{{ zone }}"
+                    duration: "{{ run_time }}"
+                - delay:
+                    minutes: "{{ run_time }}"
+
+      # 8. Done notification
+      - action: notify.ryan_devices
+        data:
+          title: "💧 Sprinklers Done"
+          message: >
+            All zones completed ({{ final_multiplier | round(2) }}× multiplier).
+
+            {{ zone_plan }}
+
+  ###### Manual zone testing #######
+  #
+  # Backs the Sprinklers dashboard view. Used for field work: checking spray
+  # patterns, hunting a bad head, and running catch-can tests. The Rain Bird
+  # controller stops the zone itself when the duration expires, so there is no
+  # delay/turn-off step here -- fire and forget.
+
+  test_sprinkler_zone:
+    alias: "Test Sprinkler Zone"
+    mode: single
+    sequence:
+      # Never stomp on a scheduled cycle already in progress.
+      - condition: state
+        entity_id: script.run_all_sprinklers
+        state: "off"
+
+      - variables:
+          # "Zone 4 Main Yard A" -> 4
+          zone: "{{ states('input_select.sprinkler_test_zone').split(' ')[1] | int(0) }}"
+          minutes: "{{ states('input_number.sprinkler_test_minutes') | int(0) }}"
+
+      - condition: template
+        value_template: "{{ zone >= 1 and zone <= 7 and minutes >= 1 }}"
+
+      - action: rainbird.start_irrigation
+        data:
+          entity_id: "switch.rain_bird_sprinkler_{{ zone }}"
+          duration: "{{ minutes }}"
+
+  stop_all_sprinklers:
+    alias: "Stop All Sprinklers"
+    mode: single
+    sequence:
+      # Kill the full cycle first, or it would just advance to the next zone.
+      - action: script.turn_off
+        target:
+          entity_id: script.run_all_sprinklers
+
+      - action: switch.turn_off
+        target:
+          entity_id:
+            - switch.rain_bird_sprinkler_1
+            - switch.rain_bird_sprinkler_2
+            - switch.rain_bird_sprinkler_3
+            - switch.rain_bird_sprinkler_4
+            - switch.rain_bird_sprinkler_5
+            - switch.rain_bird_sprinkler_6
+            - switch.rain_bird_sprinkler_7
+
+automation:
+  ###
+  # 
+  # SPRINKLER - Check forecast, make suggestion to run
+  # 
+  # This automation intelligently recommends and schedules lawn watering based on
+  # recent precipitation, forecasted rainfall, outdoor temperature, and the time
+  # since the last irrigation event.
+  # 
+  # Features:
+  #  - Runs nightly at 9:00 PM to evaluate if watering is needed.
+  #  - Gathers up-to-date daily forecast data from the configured weather provider.
+  #  - Considers the following criteria:
+  #      1. Rainfall in the last 5 days is less than 0.75 inches.
+  #      2. No meaningful rain (≥ 0.2 in, ≥ 50% probability) is expected in the next 2 days.
+  #      3. Uses forecast high temperature (°F) and requires > 50°F.
+  #      4. Seasonal multiplier > 0 (disables watering in winter, reduces in spring/fall).
+  #      5. Sufficient days have passed since last watering:
+  #         - < 75°F (forecast high) → ≥ 5 days
+  #         - 75–85°F (forecast high) → ≥ 3.5 days
+  #         - > 85°F (forecast high) → ≥ 2.5 days
+  # 
+  # User Interaction:
+  #  - If all criteria are met, sends a push notification showing precipitation history,
+  #    forecasted rain, temperature, days since last watering, and checkmarks for each condition.
+  #  - Notification includes quick-action buttons:
+  #      - "Yes, Run" → Schedules watering to finish by tomorrow’s sunrise.
+  #      - "No" → Ignores recommendation until next evaluation.
+  # 
+  # Watering Execution:
+  #  - At the scheduled time, triggers `script.run_all_sprinklers`, which:
+  #      - Adjusts run times for each zone based on seasonal, rainfall, temperature, and humidity multipliers.
+  #      - Runs zones sequentially with appropriate delays between them.
+  #  - Updates `input_datetime.last_sprinkler_run` so future runs respect the minimum-day
+  # 
+  ###
+  - alias: "SPRINKLER - Check forecast, make suggestion to run"
+    id: bd632bd6-8d11-4510-8fa0-99d23f73d215
+    mode: single
+    trigger:
+      # Check forecast at 9 PM daily
+      - trigger: time
+        id: evening_check
+        at: "21:00:00"
+
+      # Run at scheduled sprinkler time from input_datetime
+      - trigger: template
+        id: scheduled_run
+        value_template: >
+          {% set t = states('input_datetime.sprinkler_run_time') %}
+          {{ t != "" and now().strftime("%Y-%m-%d %H:%M") == t[:16] }}
+
+      # Triggered by mobile app notification action "Yes"
+      - trigger: event
+        id: mobile_yes
+        event_type: mobile_app_notification_action
+        event_data:
+          action: RUN_SPRINKLERS
+
+    action:
+      # 1. Get fresh daily forecast
+      - action: weather.get_forecasts
+        data:
+          type: daily
+        target:
+          entity_id: weather.tomorrow_io_home_daily
+        response_variable: daily_forecasts
+
+      # 2. Calculate all needed variables *after* forecast is fetched
+      - variables:
+          forecast: "{{ daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] }}"
+          threshold_prob: 50
+          threshold_amount: 0.2
+          forecast_high: "{{ forecast[1].temperature | float(0) }}"
+          rainfall_last_5_days: >-
+            {{ states('input_number.precip_today') | float(0)
+               + states('input_number.precip_yesterday') | float(0)
+               + states('input_number.precip_two_days_ago') | float(0)
+               + states('input_number.precip_three_days_ago') | float(0)
+               + states('input_number.precip_four_days_ago') | float(0) }}
+
+          # 0.0 in winter (Nov–Mar), 0.75 in spring/fall (Apr–May, Sep–Oct), 1.0 in summer (Jun–Aug)
+          seasonal_multiplier: >-
+            {% set m = now().month %}
+            {% if m in [11, 12, 1, 2, 3] %}
+              0.0
+            {% elif m in [4, 5, 9, 10] %}
+              0.75
+            {% else %}
+              1.0
+            {% endif %}
+
+          # Total expected precipitation in the next 2 days (tomorrow + day after)
+          # forecast[0] is today (nearly over at 9 PM check), so skip it
+          next_2_days_precip: >-
+            {% set total = namespace(sum=0) %}
+            {% for day in forecast[1:3] %}
+              {% set total.sum = total.sum + (day.precipitation | default(0) | float) %}
+            {% endfor %}
+            {{ total.sum }}
+
+          # True/False: Is meaningful rain expected in next 2 days (tomorrow + day after)
+          # Uses namespace to avoid Jinja2 loop scoping issue
+          next_2_days_rain_expected: >-
+            {% set ns = namespace(rain_expected=false) %}
+            {% for day in forecast[1:3] %}
+              {% set prob = day.precipitation_probability | default(0) | int %}
+              {% set amt = day.precipitation | default(0) | float %}
+              {% if prob >= threshold_prob and amt >= threshold_amount %}
+                {% set ns.rain_expected = true %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.rain_expected }}
+
+          days_since_last_watering: >-
+            {% set last_run = states('input_datetime.last_sprinkler_run') %}
+            {% if last_run not in ['unknown', 'unavailable', ''] %}
+              {% set last_ts = as_timestamp(last_run) %}
+              {% if last_ts is not none %}
+                {{ ((now() | as_timestamp - last_ts) / 86400) | round(1) }}
+              {% else %}
+                999
+              {% endif %}
+            {% else %}
+              999
+            {% endif %}
+
+          min_days_required: >-
+            {% if forecast_high < 75 %}
+              5
+            {% elif forecast_high < 85 %}
+              3.5
+            {% else %}
+              2.5
+            {% endif %}
+
+          watering_suggested: >-
+            {{ (rainfall_last_5_days < 0.75)
+               and (not next_2_days_rain_expected)
+               and (forecast_high > 50)
+               and (seasonal_multiplier > 0)
+               and (days_since_last_watering >= min_days_required) }}
+
+      # 3. Branch based on trigger and conditions
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: evening_check
+              - condition: template
+                value_template: "{{ watering_suggested }}"
+            sequence:
+              - action: notify.ryan_devices
+                data:
+                  title: "💧 Run Sprinkler 💧"
+                  message: >
+                    Rain last 5 days: {{ rainfall_last_5_days | round(2) }} in
+
+                    Next 2 days: {{ next_2_days_precip | round(2) }} in
+
+                    Forecast high: {{ forecast_high | round(1) }}°F
+
+                    Seasonal multiplier: {{ seasonal_multiplier }}
+
+                    Days since last watering: {{ days_since_last_watering }} (min: {{ min_days_required }})
+
+                    Run sprinklers tomorrow?
+                  data:
+                    actions:
+                      - action: "RUN_SPRINKLERS"
+                        title: "Yes, Run"
+                      - action: "IGNORE"
+                        title: "No"
+
+
+          # User tapped Yes
+          - conditions:
+              - condition: trigger
+                id: mobile_yes
+              - condition: template
+                value_template: "{{ trigger.event.data.action == 'RUN_SPRINKLERS' }}"
+            sequence:
+              - variables:
+                  # Start early enough that the whole cycle FINISHES by sunrise.
+                  # The full run is the sum of sprinkler_times in
+                  # configuration/scripts/scripts_sprinklers.yaml (272 min at a
+                  # 1.0x multiplier) plus margin for per-zone start latency.
+                  # Raise this whenever those base times change.
+                  #
+                  # This used to be sunrise-45min, which was only ever enough for
+                  # the first zone. Measured from switch history, zone 4 started at
+                  # 6:01-6:05 AM on every run from Aug 16-23 2026 against sunrises
+                  # of 5:52-5:58 -- so the main-yard sun zones were watering wholly
+                  # in daylight while the shaded zones got the pre-dawn window.
+                  #
+                  # Two changes fix this together: this longer lead, and running
+                  # zones 4/5 first (zone_order in scripts_sprinklers.yaml). The
+                  # lead is deliberately fixed rather than derived from the day's
+                  # multiplier -- that would mean duplicating ~60 lines of forecast
+                  # logic here. Zones 4/5 leading is what makes a fixed lead safe:
+                  # even a 1.25x heat-wave cycle (190 min) only pushes the small
+                  # tail zones past sunrise, never the grass that needs it most.
+                  cycle_lead_minutes: 285
+                  best_time: >-
+                    {% set sunrise_attr = state_attr('sun.sun', 'next_rising') %}
+                    {% if sunrise_attr is not none %}
+                      {% set sunrise = as_timestamp(sunrise_attr) %}
+                      {{ (sunrise - (cycle_lead_minutes * 60)) | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+                    {% else %}
+                      {{ now() | timestamp_custom('%Y-%m-%d %H:%M:%S', true) }}
+                    {% endif %}
+                  best_time_display: >-
+                    {% set sunrise_attr = state_attr('sun.sun', 'next_rising') %}
+                    {% if sunrise_attr is not none %}
+                      {% set sunrise = as_timestamp(sunrise_attr) %}
+                      {{ (sunrise - (cycle_lead_minutes * 60)) | timestamp_custom('%-I:%M %p', true) }}
+                    {% else %}
+                      {{ now() | timestamp_custom('%-I:%M %p', true) }}
+                    {% endif %}
+
+              - action: input_datetime.set_datetime
+                target:
+                  entity_id: input_datetime.sprinkler_run_time
+                data:
+                  datetime: "{{ best_time }}"
+
+              - action: notify.ryan_devices
+                data:
+                  title: "💧 Sprinklers Scheduled"
+                  message: "Sprinklers set for {{ best_time_display }} tomorrow morning."
+                  data:
+                    push:
+                      sound: none
+
+
+          # Scheduled run
+          - conditions:
+              - condition: trigger
+                id: scheduled_run
+            sequence:
+              - action: script.run_all_sprinklers
+              - action: input_datetime.set_datetime
+                target:
+                  entity_id: input_datetime.sprinkler_run_time
+                data:
+                  datetime: "1970-01-01 00:00:00"
+
+
+
+  - alias: "SPRINKLERS - Store daily precipitation history"
+    id: f6737dce-1dd1-48fc-8a89-3bb69d4e9da5
+    trigger:
+      - trigger: time
+        at: "23:59:00"
+    action:
+      # 1. Refresh forecast data so it's up to date
+      - action: weather.get_forecasts
+        data:
+          type: daily
+        target:
+          entity_id: weather.tomorrow_io_home_daily
+        response_variable: daily_forecasts
+
+      # 2. Extract today's precipitation from fresh forecast data
+      - variables:
+          today_precip: >-
+            {% set fc = daily_forecasts['weather.tomorrow_io_home_daily'].forecast or [] %}
+            {% if fc | count > 0 %}
+              {{ fc[0].precipitation | default(0) | float }}
+            {% else %}
+              0
+            {% endif %}
+
+      # 3. Shift stored precipitation values back by one day (oldest first to avoid overwriting)
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.precip_four_days_ago
+        data:
+          value: "{{ states('input_number.precip_three_days_ago') | float(0) }}"
+
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.precip_three_days_ago
+        data:
+          value: "{{ states('input_number.precip_two_days_ago') | float(0) }}"
+
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.precip_two_days_ago
+        data:
+          value: "{{ states('input_number.precip_yesterday') | float(0) }}"
+
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.precip_yesterday
+        data:
+          value: "{{ states('input_number.precip_today') | float(0) }}"
+
+      # 4. Store today's precipitation value
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.precip_today
+        data:
+          value: "{{ today_precip }}"

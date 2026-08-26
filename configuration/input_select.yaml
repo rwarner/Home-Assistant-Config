@@ -13,17 +13,3 @@ harmony_hub:
     - Play Switch
     - Power Off
   icon: mdi:monitor
-# Zone picker for the manual sprinkler test panel (dashboards/views/sprinklers.yaml).
-# IMPORTANT: each option must begin with "Zone <n>" -- script.test_sprinkler_zone
-# parses the number out of position 1 to build switch.rain_bird_sprinkler_<n>.
-sprinkler_test_zone:
-  name: Sprinkler Test Zone
-  options:
-    - Zone 1 Sidewalk Strip
-    - Zone 2 Front Yard & Chimney
-    - Zone 3 Rear Corner
-    - Zone 4 Main Yard A
-    - Zone 5 Main Yard B
-    - Zone 6 Back Drip (unused)
-    - Zone 7 Back Yard
-  icon: mdi:map-marker-radius

@@ -18,6 +18,10 @@ homeassistant:
         - 192.168.2.0/24
   allowlist_external_dirs:
     - /tmp/hass
+  # Feature-grouped config. A package holds everything one feature needs --
+  # helpers, scripts, automations -- in a single file, instead of scattering it
+  # across per-domain includes. Coexists with the includes further down.
+  packages: !include_dir_named packages/
 
 # Enable Home Assistant Cloud functionality
 cloud:
@@ -277,7 +281,5 @@ template: !include_dir_merge_list configuration/template/
 
 cover: !include configuration/cover.yaml
 input_select: !include configuration/input_select.yaml
-input_datetime: !include configuration/input_datetime.yaml
-input_number: !include configuration/input_number.yaml
 scene: !include scenes.yaml
 shell_command: !include configuration/shell_command.yaml
