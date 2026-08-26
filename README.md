@@ -7,7 +7,8 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
 
 ## Current Server Hardware
 
-[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2026.2.3%20-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-24.04.1%20LTS-red) ![Python Version](https://img.shields.io/badge/Python-3.13.11-brightgreen)
+[![HA version](https://img.shields.io/badge/Running%20Home%20Assistant-2026.8.3-darkblue)](https://github.com/home-assistant/home-assistant/releases/latest) ![Operating System](https://img.shields.io/badge/Ubuntu%20Server-24.04.4%20LTS-red) ![Docker](https://img.shields.io/badge/Docker-27.4.1-blue) ![Python Version](https://img.shields.io/badge/Python-3.14.6-brightgreen)
+[![Last commit](https://img.shields.io/github/last-commit/rwarner/Home-Assistant-Config?label=last%20updated&color=darkgreen)](https://github.com/rwarner/Home-Assistant-Config/commits/master) [![Commit activity](https://img.shields.io/github/commit-activity/y/rwarner/Home-Assistant-Config?label=commits%2Fyear&color=darkgreen)](https://github.com/rwarner/Home-Assistant-Config/commits/master)
  - [Intel Core i5-6400 2.7 GHz Quad-Core Processor](https://amzn.to/3C0RaOq)
  - [Jetway NF594-Q170 Mini-ITX Motherboard](https://www.jetwaycomputer.com/NF594.html)
  - [Timetec 16GB SODIMM Ram](https://amzn.to/4gEnCWg)
@@ -60,6 +61,14 @@ Did this help? 🍕 <a href="https://www.buymeacoffee.com/rwarner">Feel free to 
     <tr>
       <td>Victron BLE</td>
       <td>Bluetooth Low Energy integration for Victron battery monitors.</td>
+    </tr>
+    <tr>
+      <td>Browser Mod</td>
+      <td>Turns browsers into controllable devices — used for popups and to force YAML dashboard reloads.</td>
+    </tr>
+    <tr>
+      <td>UniFi Play</td>
+      <td>Control of UniFi Play speakers, including grouping rooms into a zone for multi-room audio.</td>
     </tr>
   </tbody>
 </table>
