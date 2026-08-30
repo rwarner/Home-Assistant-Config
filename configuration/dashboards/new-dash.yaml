@@ -5,15 +5,6 @@ kiosk_mode:
 # https://github.com/custom-cards/button-card
 button_card_templates:
   nav_bar_icons:
-    card_mod:
-      style: |
-        ha-card {
-          background: transparent !important;
-          border: none !important;
-          box-shadow: none !important;
-          backdrop-filter: none !important;
-          -webkit-backdrop-filter: none !important;
-        }
     styles:
         icon:
           - width: 26px
@@ -35,13 +26,16 @@ button_card_templates:
           - align-items: center
           - justify-content: center
         card:
-          - background: >
+          # Read by :host(.nav-btn) in the theme. Setting `background`
+          # directly here does nothing -- button-card applies styles.card as
+          # an inline style, which loses to the theme's !important rule.
+          - --nav-active-bg: >
               [[[
                 return window.location.pathname.includes(variables.path)
-                  ? "rgba(255,255,255,0.08)"
+                  ? "rgba(255,255,255,0.10)"
                   : "transparent";
               ]]]
-          - border-radius: 14px
+          - border-radius: 16px
           - padding: 6px
           - width: 60px
           - border: none

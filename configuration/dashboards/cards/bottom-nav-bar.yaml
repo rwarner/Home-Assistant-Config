@@ -4,22 +4,50 @@ card_mod:
     ha-card {
       position: fixed;
       z-index: 999;
-      height: 60px;
-      padding: 0;
-      border-radius: 20px;
-
-      background: rgba(20, 20, 25, 0.55);
-      backdrop-filter: blur(24px) saturate(140%);
-      -webkit-backdrop-filter: blur(24px) saturate(140%);
-
-      box-shadow:
-        0 -2px 8px rgba(0, 0, 0, 0.25),
-        0 -12px 24px rgba(0, 0, 0, 0.35);
-
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-
+      /* 64 rather than 60 so the active pill clears the bar's edges instead
+         of being sliced flat by overflow: hidden. The grid top-aligns its
+         cells, so the leftover room all collected at the bottom and the pill
+         sat flush against the top border -- the 4px top padding moves it down
+         into that slack. Buttons themselves are untouched. */
+      height: 64px;
+      padding: 4px 8px 0;
       overflow: hidden;
+
+      /* Everything below MUST be !important. The theme's global ha-card rule
+         marks background, border, border-radius and box-shadow !important at
+         the same specificity, so anything unmarked here is silently dropped
+         and the bar renders as an ordinary card. */
+
+      /* Capsule -- exactly half the height, like Apple's floating tab bar. */
+      border-radius: 32px !important;
+
+      /* Tint plus a sheen falling off toward the bottom, sitting on top of
+         the blurred backdrop rather than replacing it. */
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.13) 0%,
+          rgba(255, 255, 255, 0.05) 45%,
+          rgba(255, 255, 255, 0.00) 100%
+        ),
+        rgba(20, 20, 25, 0.50) !important;
+
+      /* Heavier saturation is most of what separates Apple's glass from a
+         plain blur -- colour behind the bar stays vivid instead of washing
+         out. Real refraction needs an SVG feDisplacementMap fed into
+         backdrop-filter, which only Chromium supports, so it is left out
+         rather than rendering differently on the phone and the tablet. */
+      backdrop-filter: blur(30px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+
+      /* Specular rim: a lit top edge, a faint return along the bottom, then
+         one soft ambient shadow instead of two heavy upward-cast ones. */
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.38),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.07),
+        0 8px 32px rgba(0, 0, 0, 0.38) !important;
+
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
     }
 
     /* Mobile: simple left/right */
@@ -63,8 +91,7 @@ card:
         action: navigate
         navigation_path: /new-dash/home
       card_mod:
-        style: |
-          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        class: nav-btn
 
     - type: custom:button-card
       template: nav_bar_icons
@@ -76,8 +103,7 @@ card:
         action: navigate
         navigation_path: /new-dash/lights
       card_mod:
-        style: |
-          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        class: nav-btn
 
     - type: custom:button-card
       template: nav_bar_icons
@@ -89,8 +115,7 @@ card:
         action: navigate
         navigation_path: /new-dash/fans
       card_mod:
-        style: |
-          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        class: nav-btn
 
     - type: custom:button-card
       template: nav_bar_icons
@@ -102,8 +127,7 @@ card:
         action: navigate
         navigation_path: /new-dash/covers
       card_mod:
-        style: |
-          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        class: nav-btn
 
     - type: custom:button-card
       template: nav_bar_icons
@@ -115,8 +139,7 @@ card:
         action: navigate
         navigation_path: /new-dash/camera
       card_mod:
-        style: |
-          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        class: nav-btn
 
     - type: custom:button-card
       template: nav_bar_icons
@@ -128,5 +151,4 @@ card:
         action: navigate
         navigation_path: /new-dash/more
       card_mod:
-        style: |
-          ha-card { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        class: nav-btn

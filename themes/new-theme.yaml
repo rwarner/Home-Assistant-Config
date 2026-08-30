@@ -206,6 +206,18 @@ new-theme:
           backdrop-filter: none !important;
           -webkit-backdrop-filter: none !important;
         }
+        /* Bottom nav buttons. The background has to come through a custom
+           property: button-card writes styles.card as a plain inline style,
+           and the glass rule above is !important, which beats inline. So the
+           active-tab pill was never rendering. */
+        :host(.nav-btn) ha-card {
+          background: var(--nav-active-bg, transparent) !important;
+          border: none !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          transition: background 220ms ease !important;
+        }
         /* Top nav chip centering */
         :host(.top-nav-icons) ha-card {
           --chip-padding: 0px 10px;
