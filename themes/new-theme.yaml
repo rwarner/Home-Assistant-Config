@@ -198,7 +198,13 @@ new-theme:
            vertical-stack-in-card need this or they stack a second translucent
            layer on the container's and read as grey. Replaces the same five
            declarations repeated inline on every such card. */
-        :host(.plain) ha-card {
+        /* Dual selector, per the UIX docs: :host(.plain) ha-card covers cards
+           the Frontend loads inside <hui-card>; ha-card.plain covers custom
+           cards with a divergent structure and cards loaded BY a custom card
+           (auto-entities, vertical-stack-in-card), where UIX sets the class
+           on ha-card itself rather than on the host element. */
+        :host(.plain) ha-card,
+        ha-card.plain {
           background: none !important;
           background-color: transparent !important;
           border: none !important;
@@ -210,7 +216,8 @@ new-theme:
            property: button-card writes styles.card as a plain inline style,
            and the glass rule above is !important, which beats inline. So the
            active-tab pill was never rendering. */
-        :host(.nav-btn) ha-card {
+        :host(.nav-btn) ha-card,
+        ha-card.nav-btn {
           background: var(--nav-active-bg, transparent) !important;
           border: none !important;
           box-shadow: none !important;

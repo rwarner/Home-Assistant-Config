@@ -14,8 +14,7 @@ cards:
           - type: custom:mushroom-chips-card
             alignment: center
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              class: plain
             chips:
               - type: template
                 icon: mdi:thermometer

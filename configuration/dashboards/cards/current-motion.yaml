@@ -14,8 +14,7 @@ filter:
         icon: mdi:motion-sensor
         icon_color: amber
         card_mod:
-          style: |
-            ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+          class: plain
   exclude:
     - entity_id: binary_sensor.motion_camera_doorbell
     - entity_id: binary_sensor.undercabinet_motion_sensor
