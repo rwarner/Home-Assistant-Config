@@ -20,6 +20,8 @@ cards:
           cards:
             - type: custom:mushroom-chips-card
               alignment: center
+              card_mod:
+                class: plain
               chips:
                 - type: template
                   icon: mdi:doorbell-video
@@ -31,7 +33,7 @@ cards:
               background: true
               card_mod:
                 style: |
-                  ha-card { border: none !important; box-shadow: none !important; }
+                  ha-card { background: none !important; border: none !important; box-shadow: none !important; }
 
       # ----------- Package Detected -----------
       - type: conditional
