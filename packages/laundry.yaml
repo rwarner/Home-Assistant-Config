@@ -1,0 +1,251 @@
+###############################################################################
+### PACKAGE - Laundry                                                       ###
+###############################################################################
+#
+# Everything the washer/dryer monitoring needs in one file: the remaining-time
+# template sensors, the announcement scripts and the nine automations that
+# track and announce each machine. These were previously split across
+# configuration/template/sensor/sensor_laundry.yaml,
+# configuration/scripts/scripts_laundry.yaml and
+# automation/rooms/laundry_room.yaml -- filed by what kind of thing each was
+# rather than by what it was for. The first two held nothing but laundry and
+# are gone entirely.
+#
+# The weekly summary that used to sit at the bottom of laundry_room.yaml did
+# NOT come along. It reports energy as well as laundry and resets both
+# counters, so it is a scheduled job rather than laundry-room behaviour; it
+# now lives in automation/time_based/weekly.yaml.
+#
+###############################################################################
+
+template:
+  - sensor:
+    - name: "Washer Remaining Time"
+      unique_id: washer_remaining_time
+      state: >-
+        {% set comp_time = as_timestamp(states('sensor.washer_washer_completion_time'), default=0) %}
+        {% set delta = comp_time - as_timestamp(now()) %}
+        {% set total_mins = (delta / 60) | int(0) %}
+        {% if not is_state('sensor.washer_washer_machine_state', 'run') or delta <= 0 %}
+          Not Running
+        {% elif total_mins >= 60 %}
+          {{ total_mins // 60 }} hour(s) and {{ total_mins % 60 }} minute(s)
+        {% else %}
+          {{ total_mins }} minute(s)
+        {% endif %}
+
+  - sensor:
+    - name: "Dryer Remaining Time"
+      unique_id: dryer_remaining_time
+      state: >-
+        {% set comp_time = as_timestamp(states('sensor.dryer_dryer_completion_time'), default=0) %}
+        {% set delta = comp_time - as_timestamp(now()) %}
+        {% set total_mins = (delta / 60) | int(0) %}
+        {% if not is_state('sensor.dryer_dryer_machine_state', 'run') or delta <= 0 %}
+          Not Running
+        {% elif total_mins >= 60 %}
+          {{ total_mins // 60 }} hour(s) and {{ total_mins % 60 }} minute(s)
+        {% else %}
+          {{ total_mins }} minute(s)
+        {% endif %}
+
+script:
+  announce_washer_done:
+    alias: "Announce Washer Done"
+    mode: single
+    sequence:
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.washer_running
+      - action: script.announce_local
+        data:
+          message: >
+            The washer is done.
+            {% if is_state('sensor.dryer_dryer_machine_state', 'run') %}
+              The dryer has {{ states('sensor.dryer_remaining_time') }} remaining.
+            {% endif %}
+      - action: counter.increment
+        target:
+          entity_id: counter.weekly_washer_cycles
+
+  announce_dryer_done:
+    alias: "Announce Dryer Done"
+    mode: single
+    sequence:
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.dryer_running
+      - action: script.announce_local
+        data:
+          message: >
+            The dryer is done.
+            {% if is_state('sensor.washer_washer_machine_state', 'run') %}
+              {% set text = states('sensor.washer_remaining_time') %}
+              {% set hours = text | regex_findall('(\d+)\s*hour') %}
+              {% set mins = text | regex_findall('(\d+)\s*minute') %}
+              {% set total = (hours[0] | int(0) * 60 if hours else 0) + (mins[0] | int(0) if mins else 0) %}
+              {% set est = (total * 1.3) | round(0) | int %}
+              The washer has about {{ est }} minutes remaining.
+            {% endif %}
+      - action: counter.increment
+        target:
+          entity_id: counter.weekly_dryer_cycles
+
+automation:
+  - alias: LAUNDRY - Track washer running
+    id: a1b2c3d4-laun-wash-running-trk01
+    mode: restart
+    trigger:
+      - trigger: state
+        entity_id: sensor.washer_washer_machine_state
+        to: 'run'
+        for:
+          minutes: 5
+    action:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.washer_running
+
+  - alias: LAUNDRY - Announce washer done
+    id: 98b90d3c-7815-11ee-b962-0242ac120002
+    mode: single
+    trigger:
+      - trigger: state
+        entity_id: sensor.washer_washer_machine_state
+        from: 'run'
+        to: 'stop'
+    condition:
+      - condition: state
+        entity_id: input_boolean.washer_running
+        state: 'on'
+    action:
+      - action: script.announce_washer_done
+
+  - alias: LAUNDRY - Track dryer running
+    id: a1b2c3d4-laun-dryr-running-trk01
+    mode: restart
+    trigger:
+      - trigger: state
+        entity_id: sensor.dryer_dryer_machine_state
+        to: 'run'
+        for:
+          minutes: 5
+    action:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.dryer_running
+
+  - alias: LAUNDRY - Announce dryer done
+    id: 9c564aa4-7815-11ee-b962-0242ac120002
+    mode: single
+    trigger:
+      - trigger: state
+        entity_id: sensor.dryer_dryer_machine_state
+        from: 'run'
+        to: 'stop'
+    condition:
+      - condition: state
+        entity_id: input_boolean.dryer_running
+        state: 'on'
+    action:
+      - action: script.announce_dryer_done
+
+  - alias: LAUNDRY - Resume washer monitoring after restart
+    id: a1b2c3d4-laun-wash-resume-rst01
+    mode: single
+    trigger:
+      - trigger: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.washer_running
+        state: 'on'
+    action:
+      - wait_for_trigger:
+          - trigger: state
+            entity_id: sensor.washer_washer_machine_state
+            to: 'stop'
+        timeout: "04:00:00"
+        continue_on_timeout: false
+      - action: script.announce_washer_done
+
+  - alias: LAUNDRY - Resume dryer monitoring after restart
+    id: a1b2c3d4-laun-dryr-resume-rst01
+    mode: single
+    trigger:
+      - trigger: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.dryer_running
+        state: 'on'
+    action:
+      - wait_for_trigger:
+          - trigger: state
+            entity_id: sensor.dryer_dryer_machine_state
+            to: 'stop'
+        timeout: "04:00:00"
+        continue_on_timeout: false
+      - action: script.announce_dryer_done
+
+  - alias: LAUNDRY - Track washer recently done
+    id: a1b2c3d4-laun-wash-done-track0001
+    mode: restart
+    trigger:
+      - trigger: state
+        entity_id: sensor.washer_washer_machine_state
+        from: 'run'
+        to: 'stop'
+    action:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.washer_recently_done
+      - delay:
+          minutes: 30
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.washer_recently_done
+
+  - alias: LAUNDRY - Clear recently done when running
+    id: a1b2c3d4-laun-done-clear-combined
+    mode: parallel
+    max_exceeded: silent
+    trigger:
+      - trigger: state
+        entity_id: sensor.washer_washer_machine_state
+        to: 'run'
+        id: washer
+      - trigger: state
+        entity_id: sensor.dryer_dryer_machine_state
+        to: 'run'
+        id: dryer
+    action:
+      - choose:
+          - conditions: "{{ trigger.id == 'washer' }}"
+            sequence:
+              - action: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.washer_recently_done
+          - conditions: "{{ trigger.id == 'dryer' }}"
+            sequence:
+              - action: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.dryer_recently_done
+
+  - alias: LAUNDRY - Track dryer recently done
+    id: a1b2c3d4-laun-dryr-done-track001
+    mode: restart
+    trigger:
+      - trigger: state
+        entity_id: sensor.dryer_dryer_machine_state
+        from: 'run'
+        to: 'stop'
+    action:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.dryer_recently_done
+      - delay:
+          minutes: 30
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.dryer_recently_done
