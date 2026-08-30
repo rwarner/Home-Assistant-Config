@@ -14,8 +14,7 @@ cards:
           - type: custom:mushroom-chips-card
             alignment: center
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              class: plain
             chips:
               - type: template
                 icon: mdi:thermometer
@@ -47,8 +46,7 @@ cards:
                   action: more-info
                   entity: sensor.attic_gable_fan_temperature
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
 
           # -- 2nd Floor --
           - type: markdown
@@ -72,8 +70,7 @@ cards:
                   action: more-info
                   entity: sensor.master_bedroom_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Ryan's Office"
                 secondary: "{{ states('sensor.ryans_office_avg_temp') }}°F"
@@ -85,8 +82,7 @@ cards:
                   action: more-info
                   entity: sensor.ryans_office_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Kelly's Office"
                 secondary: "{{ states('sensor.kellys_office_avg_temp') }}°F"
@@ -98,8 +94,7 @@ cards:
                   action: more-info
                   entity: sensor.kellys_office_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Nursery"
                 secondary: "{{ states('sensor.nursery_avg_temp') }}°F"
@@ -111,8 +106,7 @@ cards:
                   action: more-info
                   entity: sensor.nursery_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Upstairs Bath"
                 secondary: "{{ states('sensor.upstairs_bathroom_avg_temp') }}°F"
@@ -124,8 +118,7 @@ cards:
                   action: more-info
                   entity: sensor.upstairs_bathroom_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
 
           # -- 1st Floor --
           - type: markdown
@@ -149,8 +142,7 @@ cards:
                   action: more-info
                   entity: sensor.living_room_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Kitchen"
                 secondary: "{{ states('sensor.kitchen_avg_temp') }}°F"
@@ -162,8 +154,7 @@ cards:
                   action: more-info
                   entity: sensor.kitchen_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Family Room"
                 secondary: "{{ states('sensor.family_room_avg_temp') }}°F"
@@ -175,8 +166,7 @@ cards:
                   action: more-info
                   entity: sensor.family_room_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
           # -- Basement --
           - type: markdown
             content: "#### 🏚️ Basement"
@@ -199,8 +189,7 @@ cards:
                   action: more-info
                   entity: sensor.movie_room_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Laundry Room"
                 secondary: "{{ states('sensor.laundry_room_avg_temp') }}°F"
@@ -212,8 +201,7 @@ cards:
                   action: more-info
                   entity: sensor.laundry_room_avg_temp
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
 
       # ----------- Outside Temp Graph -----------
       - type: custom:mini-graph-card

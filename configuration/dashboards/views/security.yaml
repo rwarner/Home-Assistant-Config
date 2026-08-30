@@ -27,8 +27,7 @@ cards:
           - type: custom:mushroom-chips-card
             alignment: center
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              class: plain
             chips:
               - type: template
                 icon: mdi:lock
@@ -50,15 +49,13 @@ cards:
                 name: Front Door
                 icon: mdi:door
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-lock-card
                 entity: lock.basement_door_deadbolt
                 name: Basement Door
                 icon: mdi:door
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
 
       # ----------- Doors Status -----------
       - type: custom:vertical-stack-in-card
@@ -66,8 +63,7 @@ cards:
           - type: custom:mushroom-chips-card
             alignment: center
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              class: plain
             chips:
               - type: template
                 icon: mdi:door
@@ -94,8 +90,7 @@ cards:
                     icon: mdi:door-open
                     icon_color: red
                     card_mod:
-                      style: |
-                        ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                      class: plain
 
       # ----------- Windows Status -----------
       - type: custom:vertical-stack-in-card
@@ -103,8 +98,7 @@ cards:
           - type: custom:mushroom-chips-card
             alignment: center
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              class: plain
             chips:
               - type: template
                 icon: mdi:window-closed-variant
@@ -131,8 +125,7 @@ cards:
                     icon: mdi:window-open-variant
                     icon_color: amber
                     card_mod:
-                      style: |
-                        ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                      class: plain
 
       # ----------- Smoke & CO Alarms -----------
       - type: custom:vertical-stack-in-card
@@ -140,8 +133,7 @@ cards:
           - type: custom:mushroom-chips-card
             alignment: center
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+              class: plain
             chips:
               - type: template
                 icon: mdi:smoke-detector-variant
@@ -190,8 +182,7 @@ cards:
                   action: more-info
                   entity: binary_sensor.basement_smoke_co_alarm_smoke_detected
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: Entryway
                 secondary: >
@@ -209,8 +200,7 @@ cards:
                   action: more-info
                   entity: binary_sensor.entryway_smoke_co_alarm_smoke_detected
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: 2nd Floor
                 secondary: >
@@ -228,8 +218,7 @@ cards:
                   action: more-info
                   entity: binary_sensor.second_floor_smoke_co_alarm_smoke_detected
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
 
       # Spacer for bottom nav clearance
       - type: custom:button-card

@@ -71,8 +71,7 @@ cards:
               {% else %}#555555
               {% endif %}
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; }
+              class: plain
 
           - type: custom:mushroom-template-card
             primary: >
@@ -87,8 +86,7 @@ cards:
               {% else %}#ef5350
               {% endif %}
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; }
+              class: plain
 
           - type: custom:mushroom-template-card
             primary: >
@@ -106,8 +104,7 @@ cards:
               {% if not is_state('sensor.shed_batteryprotect_output_state', 'on') %}mdi:alert{% endif %}
             badge_color: "#ef5350"
             card_mod:
-              style: |
-                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; }
+              class: plain
 
       # ── Vitals Grid ───────────────────────────────────────────────────────
       - type: grid
