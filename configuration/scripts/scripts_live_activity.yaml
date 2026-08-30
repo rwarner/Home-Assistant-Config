@@ -13,8 +13,13 @@
 #     `critical_text` (top right on the Lock Screen, and always shown in the
 #     Dynamic Island compact view). `message` still carries it for after the
 #     countdown expires.
-#   * progress / progress_max would REPLACE critical_text in that corner, so
-#     they are deliberately never set -- the chronometer draws its own bar.
+#   * progress / progress_max REPLACE critical_text in that corner with a
+#     percentage. Countdown-style callers leave them unset so the stage keeps
+#     that slot and the chronometer draws its own bar. Batch-style callers --
+#     the media cron jobs, which know how many items are done but cannot
+#     predict an end time -- set them INSTEAD of finish, and get a real
+#     progress bar. Setting both is allowed but pointless: the percentage
+#     wins the corner and the stage is lost.
 #   * progress_bar_direction is deliberately NOT set, so the bar keeps the
 #     documented default for a countdown timer and drains toward empty. Every
 #     activity here is a countdown, and a bar travelling the opposite way to
@@ -41,6 +46,8 @@ live_activity:
     icon: {description: "mdi slug"}
     color: {description: "Hex colour for the icon and progress bar"}
     finish: {description: "Unix timestamp the job ends, 0 if unknown"}
+    progress: {description: "Optional current progress, e.g. items done. Use INSTEAD of finish for a batch with no reliable ETA"}
+    progress_max: {description: "Optional total; a bar and percentage appear when both are set"}
     url: {description: "Optional path to open when the card is tapped"}
   sequence:
     - variables:
@@ -50,8 +57,15 @@ live_activity:
                          'notification_icon': icon,
                          'notification_icon_color': color,
                          'url': url | default('/new-dash/home', true)} %}
-          {{ dict(base, chronometer=true, when=finish | int)
-             if (finish | int(0)) > (now() | as_timestamp | int) else base }}
+          {# every optional field needs `default` before a filter: HA's Jinja is
+             strict about undefined NAMES, and `| int(0)` only supplies a
+             fallback for a bad VALUE, not for a variable that was never passed #}
+          {% set fin = finish | default(0) | int %}
+          {% set pmax = progress_max | default(0) | int %}
+          {% set timed = dict(base, chronometer=true, when=fin)
+             if fin > (now() | as_timestamp | int) else base %}
+          {{ dict(timed, progress=progress | default(0) | int, progress_max=pmax)
+             if pmax > 0 else timed }}
     - if: "{{ target in ['ryan', 'both'] }}"
       then:
         - action: notify.mobile_app_ryans_iphone_13_mini

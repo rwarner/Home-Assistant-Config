@@ -133,6 +133,41 @@
                 data:
                   push:
                     sound: none
+        # Live Activity statuses. A batch job knows how many items it has
+        # done but cannot predict when it will finish, so these send
+        # progress/progress_max and no chronometer -- the card shows a real
+        # percentage bar rather than a countdown.
+        #
+        #   live       start or update the card
+        #   live_done  finish it: bar full, green, summary on the message line
+        #   live_clear end it outright
+        #
+        # tag is derived from the job name so each job owns one activity.
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.json.status | default('') in ['live', 'live_done'] }}"
+          sequence:
+            - action: script.live_activity
+              data:
+                target: ryan
+                tag: "media_{{ trigger.json.job | default('job') | slugify }}"
+                title: "{{ trigger.json.title | default(trigger.json.job | default('Media job'), true) }}"
+                stage: "{{ trigger.json.stage | default('', true) }}"
+                detail: "{{ trigger.json.message | default('', true) }}"
+                icon: "{{ trigger.json.icon | default('mdi:filmstrip', true) }}"
+                color: >
+                  {{ '#4CAF50' if trigger.json.status == 'live_done' else '#5E5CE6' }}
+                url: /new-dash/stats
+                finish: 0
+                progress: "{{ trigger.json.progress | default(0) | int }}"
+                progress_max: "{{ trigger.json.progress_max | default(0) | int }}"
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.json.status | default('') == 'live_clear' }}"
+          sequence:
+            - action: script.live_activity_clear
+              data:
+                tag: "media_{{ trigger.json.job | default('job') | slugify }}"
       default:
         - action: logbook.log
           data:
