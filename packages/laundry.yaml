@@ -57,15 +57,6 @@ script:
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.washer_running
-
-      # End the Live Activity. This lives in the script rather than the
-      # announce automation so the resume-after-restart path, which also calls
-      # this script, tears the activity down too.
-      - action: notify.mobile_app_ryans_iphone_13_mini
-        data:
-          message: clear_notification
-          data:
-            tag: washer_cycle
       - action: script.announce_local
         data:
           message: >
@@ -84,15 +75,6 @@ script:
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.dryer_running
-
-      # End the Live Activity. This lives in the script rather than the
-      # announce automation so the resume-after-restart path, which also calls
-      # this script, tears the activity down too.
-      - action: notify.mobile_app_ryans_iphone_13_mini
-        data:
-          message: clear_notification
-          data:
-            tag: dryer_cycle
       - action: script.announce_local
         data:
           message: >
@@ -124,32 +106,6 @@ automation:
         target:
           entity_id: input_boolean.washer_running
 
-      # iOS Live Activity: a Lock Screen / Dynamic Island countdown for the
-      # rest of the cycle. `when` plus `chronometer` hands the finish time to
-      # the phone once and lets it tick down on its own, so nothing here polls
-      # or re-notifies -- which is what keeps this inside Apple's update
-      # budget. The docs warn against automations that react to a frequently
-      # changing entity, and this one fires once per cycle.
-      #
-      # The completion-time sensor reads unavailable while the machine is
-      # idle, so guard on a finish time that is actually in the future --
-      # otherwise a stale value sets a garbage countdown.
-      - variables:
-          finish: "{{ as_timestamp(states('sensor.washer_washer_completion_time'), default=0) | int }}"
-      - condition: template
-        value_template: "{{ finish > (now() | as_timestamp | int) }}"
-      - action: notify.mobile_app_ryans_iphone_13_mini
-        data:
-          title: "Washer"
-          message: "Cycle running"
-          data:
-            tag: washer_cycle
-            live_update: true
-            chronometer: true
-            when: "{{ finish }}"
-            notification_icon: "mdi:washing-machine"
-            notification_icon_color: "#2196F3"
-
   - alias: LAUNDRY - Announce washer done
     id: 98b90d3c-7815-11ee-b962-0242ac120002
     mode: single
@@ -178,32 +134,6 @@ automation:
       - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.dryer_running
-
-      # iOS Live Activity: a Lock Screen / Dynamic Island countdown for the
-      # rest of the cycle. `when` plus `chronometer` hands the finish time to
-      # the phone once and lets it tick down on its own, so nothing here polls
-      # or re-notifies -- which is what keeps this inside Apple's update
-      # budget. The docs warn against automations that react to a frequently
-      # changing entity, and this one fires once per cycle.
-      #
-      # The completion-time sensor reads unavailable while the machine is
-      # idle, so guard on a finish time that is actually in the future --
-      # otherwise a stale value sets a garbage countdown.
-      - variables:
-          finish: "{{ as_timestamp(states('sensor.dryer_dryer_completion_time'), default=0) | int }}"
-      - condition: template
-        value_template: "{{ finish > (now() | as_timestamp | int) }}"
-      - action: notify.mobile_app_ryans_iphone_13_mini
-        data:
-          title: "Dryer"
-          message: "Cycle running"
-          data:
-            tag: dryer_cycle
-            live_update: true
-            chronometer: true
-            when: "{{ finish }}"
-            notification_icon: "mdi:tumble-dryer"
-            notification_icon_color: "#FF9800"
 
   - alias: LAUNDRY - Announce dryer done
     id: 9c564aa4-7815-11ee-b962-0242ac120002
