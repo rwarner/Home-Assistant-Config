@@ -152,7 +152,8 @@ cards:
             - type: custom:mushroom-chips-card
               alignment: center
               card_mod:
-                class: plain
+                style: |
+                  ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
               chips:
                 - type: template
                   icon: mdi:washing-machine
@@ -423,7 +424,8 @@ cards:
                   icon: mdi:door-open
                   icon_color: red
                   card_mod:
-                    class: plain
+                    style: |
+                      ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 
       # ----------- Windows Currently Open ------------
       - type: conditional
@@ -449,7 +451,8 @@ cards:
                   icon: mdi:window-open-variant
                   icon_color: amber
                   card_mod:
-                    class: plain
+                    style: |
+                      ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 
       # ----------- Current Motion ------------
       - !include ../cards/current-motion.yaml
@@ -590,7 +593,8 @@ cards:
           - type: custom:mushroom-chips-card
             alignment: center
             card_mod:
-              class: plain
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
             chips:
               - type: template
                 icon: mdi:brightness-6

@@ -104,7 +104,8 @@ cards:
               {% if not is_state('sensor.shed_batteryprotect_output_state', 'on') %}mdi:alert{% endif %}
             badge_color: "#ef5350"
             card_mod:
-              class: plain
+              style: |
+                ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 
       # ── Vitals Grid ───────────────────────────────────────────────────────
       - type: grid
