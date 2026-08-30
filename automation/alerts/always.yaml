@@ -149,31 +149,39 @@
             - action: notify.ryan_devices
               data:
                 title: "⚡ Home Power Outage"
-                # DELIBERATELY does not use sensor.ups_battery_runtime.
-                #
-                # The UPS's own estimate is optimistic and has already failed us:
-                # on 2026-06-07 sensor.ups_battery_charge hit 0% -- the battery
-                # ran flat -- after the UPS had been advertising roughly twice the
-                # runtime that actually remained. This derived figure is
-                # intentionally the more conservative of the two (it currently
-                # reads ~50m where the UPS claims ~110m).
-                #
-                # Running out of power early is the expensive failure; being told
-                # you have less time than you do is not. Prefer the low estimate.
-                # If you want to recalibrate, lower battery_wh -- do not swap in
-                # the UPS sensor.
+                # Estimate comes from sensor.ups_estimated_runtime, which is
+                # deliberately more conservative than sensor.ups_battery_runtime
+                # -- see the comment on that sensor for why. It moved out of
+                # here so this alert and the Live Activity countdown cannot
+                # drift apart when it is recalibrated.
                 message: >
                   {% set load_pct = states('sensor.ups_load') | float(1) %}
                   {% set charge_pct = states('sensor.ups_battery_charge') | float(0) %}
-                  {% set battery_wh = 188 %}
-                  {% set ups_rated_w = 1320 %}
-                  {# floor at 1W so a zero/absent load reading cannot divide by zero #}
-                  {% set actual_w = [((load_pct / 100) * ups_rated_w), 1] | max %}
-                  {% set est_min = ((charge_pct / 100 * battery_wh) / actual_w * 60) | round(0) | int %}
+                  {% set actual_w = [((load_pct / 100) * 1320), 1] | max %}
+                  {% set est_min = states('sensor.ups_estimated_runtime') | int(0) %}
                   Battery: {{ charge_pct | round(0) }}% · Load: {{ actual_w | round(0) }}W ({{ load_pct | round(0) }}%)
                   Est. runtime: ~{% if est_min >= 60 %}{{ est_min // 60 }}h {{ est_min % 60 }}m{% else %}{{ est_min }}m{% endif %}
+            # Live Activity: a Lock Screen countdown of the conservative
+            # estimate, refreshed every 5 minutes by the automation below as
+            # load and charge move. The server is on the UPS, so HA is alive
+            # for exactly the window this covers.
+            - action: script.live_activity
+              data:
+                target: both
+                tag: ups_outage
+                title: "Power Outage"
+                stage: "{{ states('sensor.ups_battery_charge') | float(0) | round(0) }}% battery"
+                icon: "mdi:power-plug-off"
+                color: "#FF9500"
+                url: /new-dash/stats
+                finish: >
+                  {{ (now() | as_timestamp | int)
+                     + (states('sensor.ups_estimated_runtime') | int(0) * 60) }}
         - conditions: "{{ trigger.id == 'online' }}"
           sequence:
+            - action: script.live_activity_clear
+              data:
+                tag: ups_outage
             - action: notify.ryan_devices
               data:
                 title: "✅ Home Power Restored"
@@ -203,6 +211,36 @@
                   {% set status = states('sensor.ups_status') %}
                   Battery at {{ charge_pct | round(0) }}% while {{ status }}.
                   May indicate a loose connection or degraded battery cell.
+
+- alias: ALERT - UPS outage countdown refresh
+  id: 6f2c9a41-8d3e-4b57-91cc-2a7e5d40b8f3
+  mode: single
+  # Re-push the Live Activity every five minutes while on battery so the
+  # countdown tracks the real drain rate -- load and charge both move during an
+  # outage, so the estimate made at second zero goes stale. A coarse interval is
+  # what the companion docs ask for; the thing they warn against is updating
+  # every second or binding to a frequently changing entity.
+  trigger:
+    - trigger: time_pattern
+      minutes: "/5"
+  condition:
+    - condition: template
+      value_template: "{{ 'On Battery' in states('sensor.ups_status') }}"
+  action:
+    - action: script.live_activity
+      data:
+        target: both
+        tag: ups_outage
+        title: "Power Outage"
+        stage: "{{ states('sensor.ups_battery_charge') | float(0) | round(0) }}% battery"
+        icon: "mdi:power-plug-off"
+        color: >
+          {% set m = states('sensor.ups_estimated_runtime') | int(0) %}
+          {{ '#FF3B30' if m < 15 else '#FF9500' }}
+        url: /new-dash/stats
+        finish: >
+          {{ (now() | as_timestamp | int)
+             + (states('sensor.ups_estimated_runtime') | int(0) * 60) }}
                 data:
                   ttl: 0
                   priority: high

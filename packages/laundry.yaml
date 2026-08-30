@@ -60,79 +60,6 @@ template:
         {% endif %}
 
 script:
-  laundry_live_activity:
-    alias: "Laundry Live Activity"
-    mode: parallel
-    max: 10
-    fields:
-      target: {description: "ryan, kelly or none"}
-      tag: {description: "Activity tag, reused to update it"}
-      title: {description: "Static header -- cannot change once the activity starts"}
-      stage: {description: "Body text for the current stage"}
-      icon: {description: "mdi slug"}
-      color: {description: "Hex colour for the icon"}
-      finish: {description: "Unix timestamp the cycle ends, 0 if unknown"}
-    sequence:
-      # `when` + `chronometer` hand the finish time over once and let the phone
-      # count down by itself, so only a stage change sends anything. The
-      # companion docs warn against automations that update every second or
-      # react to a frequently changing entity; a wash sends about eight times.
-      # Drop both keys once the finish time has passed, otherwise the phone
-      # renders a countdown that has already expired.
-      #
-      # The stage goes in BOTH message and critical_text on purpose. On iOS
-      # the chronometer takes over the message line, so critical_text is the
-      # only slot the stage can show in -- top right on the Lock Screen, and
-      # always visible in the Dynamic Island compact view. message is still
-      # what shows once the countdown is dropped. Deliberately no progress /
-      # progress_max: those would replace critical_text and cost the stage.
-      - variables:
-          payload: >
-            {% set base = {'tag': tag, 'live_update': true,
-                           'critical_text': stage,
-                           'notification_icon': icon,
-                           'notification_icon_color': color} %}
-            {{ dict(base, chronometer=true, when=finish | int)
-               if (finish | int(0)) > (now() | as_timestamp | int) else base }}
-      - if: "{{ target == 'ryan' }}"
-        then:
-          - action: notify.mobile_app_ryans_iphone_13_mini
-            data:
-              title: "{{ title }}"
-              message: "{{ stage }}"
-              data: "{{ payload }}"
-      - if: "{{ target == 'kelly' }}"
-        then:
-          - action: notify.mobile_app_kellys_iphone_15_pro_max
-            data:
-              title: "{{ title }}"
-              message: "{{ stage }}"
-              data: "{{ payload }}"
-
-  laundry_live_activity_clear:
-    alias: "Laundry Live Activity Clear"
-    mode: parallel
-    max: 10
-    fields:
-      tag: {description: "Activity tag to end"}
-    sequence:
-      # Always clear BOTH phones regardless of who owns the cycle. Presence is
-      # read once when the cycle starts, so someone can start a wash alone and
-      # then leave; clearing only the current occupant would strand their
-      # activity until Apple expires it eight hours later. Clearing one that
-      # was never started is harmless.
-      - parallel:
-          - action: notify.mobile_app_ryans_iphone_13_mini
-            data:
-              message: clear_notification
-              data:
-                tag: "{{ tag }}"
-          - action: notify.mobile_app_kellys_iphone_15_pro_max
-            data:
-              message: clear_notification
-              data:
-                tag: "{{ tag }}"
-
   announce_washer_done:
     alias: "Announce Washer Done"
     mode: single
@@ -141,7 +68,7 @@ script:
         target:
           entity_id: input_boolean.washer_running
 
-      - action: script.laundry_live_activity_clear
+      - action: script.live_activity_clear
         data:
           tag: washer_cycle
       - action: input_select.select_option
@@ -168,7 +95,7 @@ script:
         target:
           entity_id: input_boolean.dryer_running
 
-      - action: script.laundry_live_activity_clear
+      - action: script.live_activity_clear
         data:
           tag: dryer_cycle
       - action: input_select.select_option
@@ -229,7 +156,7 @@ automation:
         value_template: >
           {{ states('input_select.washer_activity_target') != 'none'
              and states('sensor.washer_washer_job_state') in {'weight_sensing':'Sensing load','wash':'Washing','rinse':'Rinsing','spin':'Spinning','finish':'Finishing'} }}
-      - action: script.laundry_live_activity
+      - action: script.live_activity
         data:
           target: "{{ states('input_select.washer_activity_target') }}"
           tag: washer_cycle
@@ -292,7 +219,7 @@ automation:
         value_template: >
           {{ states('input_select.dryer_activity_target') != 'none'
              and states('sensor.dryer_dryer_job_state') in {'drying':'Drying','cooling':'Cooling down','finished':'Finished'} }}
-      - action: script.laundry_live_activity
+      - action: script.live_activity
         data:
           target: "{{ states('input_select.dryer_activity_target') }}"
           tag: dryer_cycle
@@ -442,7 +369,7 @@ automation:
         value_template: >
           {{ trigger.to_state.state in {'weight_sensing':'Sensing load','wash':'Washing','rinse':'Rinsing','spin':'Spinning','finish':'Finishing'} }}
     action:
-      - action: script.laundry_live_activity
+      - action: script.live_activity
         data:
           target: "{{ states('input_select.washer_activity_target') }}"
           tag: washer_cycle
@@ -477,7 +404,7 @@ automation:
         value_template: >
           {{ trigger.to_state.state in {'drying':'Drying','cooling':'Cooling down','finished':'Finished'} }}
     action:
-      - action: script.laundry_live_activity
+      - action: script.live_activity
         data:
           target: "{{ states('input_select.dryer_activity_target') }}"
           tag: dryer_cycle

@@ -64,3 +64,32 @@
             | selectattr('state','eq','unavailable')
             | map(attribute='entity_id')
             | list }}
+
+  # Conservative UPS runtime estimate, in minutes.
+  #
+  # DELIBERATELY not sensor.ups_battery_runtime. The UPS's own estimate is
+  # optimistic and has already failed us: on 2026-06-07 sensor.ups_battery_charge
+  # hit 0% -- the battery ran flat -- after the UPS had been advertising roughly
+  # twice the runtime that actually remained. This derived figure is
+  # intentionally the more conservative of the two (it reads ~50m where the UPS
+  # claims ~110m).
+  #
+  # Running out of power early is the expensive failure; being told you have
+  # less time than you do is not. Prefer the low estimate. To recalibrate,
+  # lower battery_wh -- do NOT swap in the UPS sensor.
+  #
+  # Lives here as a sensor rather than inline in the outage alert so the alert
+  # and the Live Activity countdown cannot drift apart when it is recalibrated.
+  - name: "UPS Estimated Runtime"
+    unique_id: ups_estimated_runtime
+    unit_of_measurement: "min"
+    device_class: duration
+    state: >
+      {% set load_pct = states('sensor.ups_load') | float(1) %}
+      {% set charge_pct = states('sensor.ups_battery_charge') | float(0) %}
+      {% set battery_wh = 188 %}
+      {% set ups_rated_w = 1320 %}
+      {# floor at 1W so a zero/absent load reading cannot divide by zero #}
+      {% set actual_w = [((load_pct / 100) * ups_rated_w), 1] | max %}
+      {{ ((charge_pct / 100 * battery_wh) / actual_w * 60) | round(0) | int }}
+

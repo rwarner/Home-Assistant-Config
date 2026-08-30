@@ -1,0 +1,90 @@
+######################################
+### SCRIPTS - Live Activity        ###
+######################################
+#
+# One sender for every iOS Live Activity in the config. Kept out of any single
+# feature package because laundry, sprinklers and the UPS all use it.
+#
+# What the fields actually do on iOS, which the companion docs only spell out
+# in a tip under "Payload anatomy":
+#
+#   * chronometer TAKES OVER the message line. Text put in `message` is
+#     invisible while a countdown runs, so the changing text goes in
+#     `critical_text` (top right on the Lock Screen, and always shown in the
+#     Dynamic Island compact view). `message` still carries it for after the
+#     countdown expires.
+#   * progress / progress_max would REPLACE critical_text in that corner, so
+#     they are deliberately never set -- the chronometer draws its own bar.
+#   * progress_bar_direction is deliberately NOT set, so the bar keeps the
+#     documented default for a countdown timer and drains toward empty. Every
+#     activity here is a countdown, and a bar travelling the opposite way to
+#     the number beside it reads wrong. `increasing` would suit a job whose
+#     bar should fill as it completes; it is plainly wrong for the UPS, where
+#     nothing is completing and the bar represents runtime left.
+#   * title is static; updates cannot change it.
+#
+# `when` + `chronometer` hand the finish time over once and the phone counts
+# down on its own, so a caller only has to send on real state changes. The docs
+# warn that iOS throttles activities updated every second or driven by a
+# frequently changing entity.
+
+live_activity:
+  alias: "Live Activity"
+  mode: parallel
+  max: 10
+  fields:
+    target: {description: "ryan, kelly, both or none"}
+    tag: {description: "Activity tag, reused to update it in place"}
+    title: {description: "Static header -- cannot change once started"}
+    stage: {description: "Short changing text, e.g. the current stage"}
+    icon: {description: "mdi slug"}
+    color: {description: "Hex colour for the icon and progress bar"}
+    finish: {description: "Unix timestamp the job ends, 0 if unknown"}
+    url: {description: "Optional path to open when the card is tapped"}
+  sequence:
+    - variables:
+        payload: >
+          {% set base = {'tag': tag, 'live_update': true,
+                         'critical_text': stage,
+                         'notification_icon': icon,
+                         'notification_icon_color': color,
+                         'url': url | default('/new-dash/home', true)} %}
+          {{ dict(base, chronometer=true, when=finish | int)
+             if (finish | int(0)) > (now() | as_timestamp | int) else base }}
+    - if: "{{ target in ['ryan', 'both'] }}"
+      then:
+        - action: notify.mobile_app_ryans_iphone_13_mini
+          data:
+            title: "{{ title }}"
+            message: "{{ stage }}"
+            data: "{{ payload }}"
+    - if: "{{ target in ['kelly', 'both'] }}"
+      then:
+        - action: notify.mobile_app_kellys_iphone_15_pro_max
+          data:
+            title: "{{ title }}"
+            message: "{{ stage }}"
+            data: "{{ payload }}"
+
+live_activity_clear:
+  alias: "Live Activity Clear"
+  mode: parallel
+  max: 10
+  fields:
+    tag: {description: "Activity tag to end"}
+  sequence:
+    # Always clear BOTH phones whoever owns the activity. Ownership is decided
+    # when a job starts, so the owner may well have left by the time it ends;
+    # clearing only the current occupant would strand their card until Apple
+    # expires it eight hours later. Clearing one that never started is a no-op.
+    - parallel:
+        - action: notify.mobile_app_ryans_iphone_13_mini
+          data:
+            message: clear_notification
+            data:
+              tag: "{{ tag }}"
+        - action: notify.mobile_app_kellys_iphone_15_pro_max
+          data:
+            message: clear_notification
+            data:
+              tag: "{{ tag }}"

@@ -434,10 +434,38 @@ script:
                   data:
                     entity_id: "switch.rain_bird_sprinkler_{{ zone }}"
                     duration: "{{ run_time }}"
+
+                # Live Activity: name the zone now running and count down to
+                # the end of the WHOLE cycle, not just this zone -- the useful
+                # question at 6am is when the yard is finished. One update per
+                # zone, six a night.
+                - action: script.live_activity
+                  data:
+                    target: ryan
+                    tag: sprinkler_cycle
+                    title: "Sprinklers"
+                    stage: >
+                      {{ {1: 'Sidewalk', 2: 'Front + Chimney', 3: 'Rear Corner',
+                          4: 'Main Yard A', 5: 'Main Yard B', 7: 'Back Yard'}
+                         .get(zone, 'Zone ' ~ zone) }}
+                    icon: "mdi:sprinkler-variant"
+                    color: "#30d158"
+                    url: /new-dash/sprinklers
+                    finish: >
+                      {% set ns = namespace(mins=0) %}
+                      {% for z in zone_order[repeat.index - 1:] %}
+                        {% set ns.mins = ns.mins
+                           + ((sprinkler_times[z - 1] * final_multiplier) | round(0) | int) %}
+                      {% endfor %}
+                      {{ (now() | as_timestamp | int) + (ns.mins * 60) }}
+
                 - delay:
                     minutes: "{{ run_time }}"
 
       # 8. Done notification
+      - action: script.live_activity_clear
+        data:
+          tag: sprinkler_cycle
       - action: notify.ryan_devices
         data:
           title: "💧 Sprinklers Done"
