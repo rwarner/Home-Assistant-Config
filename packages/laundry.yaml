@@ -18,6 +18,16 @@
 #
 ###############################################################################
 
+input_select:
+  washer_activity_target:
+    name: Washer Live Activity target
+    icon: mdi:washing-machine
+    options: [none, ryan, kelly]
+  dryer_activity_target:
+    name: Dryer Live Activity target
+    icon: mdi:tumble-dryer
+    options: [none, ryan, kelly]
+
 template:
   - sensor:
     - name: "Washer Remaining Time"
@@ -50,6 +60,79 @@ template:
         {% endif %}
 
 script:
+  laundry_live_activity:
+    alias: "Laundry Live Activity"
+    mode: parallel
+    max: 10
+    fields:
+      target: {description: "ryan, kelly or none"}
+      tag: {description: "Activity tag, reused to update it"}
+      title: {description: "Static header -- cannot change once the activity starts"}
+      stage: {description: "Body text for the current stage"}
+      icon: {description: "mdi slug"}
+      color: {description: "Hex colour for the icon"}
+      finish: {description: "Unix timestamp the cycle ends, 0 if unknown"}
+    sequence:
+      # `when` + `chronometer` hand the finish time over once and let the phone
+      # count down by itself, so only a stage change sends anything. The
+      # companion docs warn against automations that update every second or
+      # react to a frequently changing entity; a wash sends about eight times.
+      # Drop both keys once the finish time has passed, otherwise the phone
+      # renders a countdown that has already expired.
+      #
+      # The stage goes in BOTH message and critical_text on purpose. On iOS
+      # the chronometer takes over the message line, so critical_text is the
+      # only slot the stage can show in -- top right on the Lock Screen, and
+      # always visible in the Dynamic Island compact view. message is still
+      # what shows once the countdown is dropped. Deliberately no progress /
+      # progress_max: those would replace critical_text and cost the stage.
+      - variables:
+          payload: >
+            {% set base = {'tag': tag, 'live_update': true,
+                           'critical_text': stage,
+                           'notification_icon': icon,
+                           'notification_icon_color': color} %}
+            {{ dict(base, chronometer=true, when=finish | int)
+               if (finish | int(0)) > (now() | as_timestamp | int) else base }}
+      - if: "{{ target == 'ryan' }}"
+        then:
+          - action: notify.mobile_app_ryans_iphone_13_mini
+            data:
+              title: "{{ title }}"
+              message: "{{ stage }}"
+              data: "{{ payload }}"
+      - if: "{{ target == 'kelly' }}"
+        then:
+          - action: notify.mobile_app_kellys_iphone_15_pro_max
+            data:
+              title: "{{ title }}"
+              message: "{{ stage }}"
+              data: "{{ payload }}"
+
+  laundry_live_activity_clear:
+    alias: "Laundry Live Activity Clear"
+    mode: parallel
+    max: 10
+    fields:
+      tag: {description: "Activity tag to end"}
+    sequence:
+      # Always clear BOTH phones regardless of who owns the cycle. Presence is
+      # read once when the cycle starts, so someone can start a wash alone and
+      # then leave; clearing only the current occupant would strand their
+      # activity until Apple expires it eight hours later. Clearing one that
+      # was never started is harmless.
+      - parallel:
+          - action: notify.mobile_app_ryans_iphone_13_mini
+            data:
+              message: clear_notification
+              data:
+                tag: "{{ tag }}"
+          - action: notify.mobile_app_kellys_iphone_15_pro_max
+            data:
+              message: clear_notification
+              data:
+                tag: "{{ tag }}"
+
   announce_washer_done:
     alias: "Announce Washer Done"
     mode: single
@@ -57,6 +140,15 @@ script:
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.washer_running
+
+      - action: script.laundry_live_activity_clear
+        data:
+          tag: washer_cycle
+      - action: input_select.select_option
+        target:
+          entity_id: input_select.washer_activity_target
+        data:
+          option: none
       - action: script.announce_local
         data:
           message: >
@@ -75,6 +167,15 @@ script:
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.dryer_running
+
+      - action: script.laundry_live_activity_clear
+        data:
+          tag: dryer_cycle
+      - action: input_select.select_option
+        target:
+          entity_id: input_select.dryer_activity_target
+        data:
+          option: none
       - action: script.announce_local
         data:
           message: >
@@ -106,6 +207,40 @@ automation:
         target:
           entity_id: input_boolean.washer_running
 
+      # Decide who owns this cycle, once. Only send when it is unambiguous
+      # whose laundry it is: if both are home there is no way to tell, and if
+      # neither is home a Lock Screen countdown has no one to act on it.
+      # Held for the whole cycle, so starting a load alone and then going out
+      # keeps the stages arriving rather than freezing them at the door.
+      - action: input_select.select_option
+        target:
+          entity_id: input_select.washer_activity_target
+        data:
+          option: >
+            {% set r = states('sensor.ryan_status') in ['Home','Just Arrived'] %}
+            {% set k = states('sensor.kelly_status') in ['Home','Just Arrived'] %}
+            {{ 'ryan' if r and not k else 'kelly' if k and not r else 'none' }}
+
+      # Kick the activity off at whatever stage the machine is already at.
+      # This automation waits five minutes for `run` to settle, by which time
+      # the first stage has long since fired -- without this the activity
+      # would not appear until the NEXT stage change, 36 minutes into a wash.
+      - condition: template
+        value_template: >
+          {{ states('input_select.washer_activity_target') != 'none'
+             and states('sensor.washer_washer_job_state') in {'weight_sensing':'Sensing load','wash':'Washing','rinse':'Rinsing','spin':'Spinning','finish':'Finishing'} }}
+      - action: script.laundry_live_activity
+        data:
+          target: "{{ states('input_select.washer_activity_target') }}"
+          tag: washer_cycle
+          title: "Washer"
+          stage: >
+            {{ {'weight_sensing':'Sensing load','wash':'Washing','rinse':'Rinsing','spin':'Spinning','finish':'Finishing'}[states('sensor.washer_washer_job_state')] }}
+          icon: "mdi:washing-machine"
+          color: "#2196F3"
+          finish: >
+            {{ as_timestamp(states('sensor.washer_washer_completion_time'), default=0) | int }}
+
   - alias: LAUNDRY - Announce washer done
     id: 98b90d3c-7815-11ee-b962-0242ac120002
     mode: single
@@ -134,6 +269,40 @@ automation:
       - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.dryer_running
+
+      # Decide who owns this cycle, once. Only send when it is unambiguous
+      # whose laundry it is: if both are home there is no way to tell, and if
+      # neither is home a Lock Screen countdown has no one to act on it.
+      # Held for the whole cycle, so starting a load alone and then going out
+      # keeps the stages arriving rather than freezing them at the door.
+      - action: input_select.select_option
+        target:
+          entity_id: input_select.dryer_activity_target
+        data:
+          option: >
+            {% set r = states('sensor.ryan_status') in ['Home','Just Arrived'] %}
+            {% set k = states('sensor.kelly_status') in ['Home','Just Arrived'] %}
+            {{ 'ryan' if r and not k else 'kelly' if k and not r else 'none' }}
+
+      # Kick the activity off at whatever stage the machine is already at.
+      # This automation waits five minutes for `run` to settle, by which time
+      # the first stage has long since fired -- without this the activity
+      # would not appear until the NEXT stage change, 36 minutes into a wash.
+      - condition: template
+        value_template: >
+          {{ states('input_select.dryer_activity_target') != 'none'
+             and states('sensor.dryer_dryer_job_state') in {'drying':'Drying','cooling':'Cooling down','finished':'Finished'} }}
+      - action: script.laundry_live_activity
+        data:
+          target: "{{ states('input_select.dryer_activity_target') }}"
+          tag: dryer_cycle
+          title: "Dryer"
+          stage: >
+            {{ {'drying':'Drying','cooling':'Cooling down','finished':'Finished'}[states('sensor.dryer_dryer_job_state')] }}
+          icon: "mdi:tumble-dryer"
+          color: "#FF9800"
+          finish: >
+            {{ as_timestamp(states('sensor.dryer_dryer_completion_time'), default=0) | int }}
 
   - alias: LAUNDRY - Announce dryer done
     id: 9c564aa4-7815-11ee-b962-0242ac120002
@@ -249,3 +418,73 @@ automation:
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.dryer_recently_done
+
+  - alias: LAUNDRY - Washer live activity stages
+    id: a1b2c3d4-laun-wash-liveactivity01
+    mode: queued
+    max: 6
+    trigger:
+      - trigger: state
+        entity_id: sensor.washer_washer_job_state
+    condition:
+      # Only while this machine's cycle is being tracked, and only for a stage
+      # we have a name for -- this sensor also passes through none, unknown
+      # and unavailable as the machine powers down.
+      - condition: state
+        entity_id: input_boolean.washer_running
+        state: 'on'
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: input_select.washer_activity_target
+            state: none
+      - condition: template
+        value_template: >
+          {{ trigger.to_state.state in {'weight_sensing':'Sensing load','wash':'Washing','rinse':'Rinsing','spin':'Spinning','finish':'Finishing'} }}
+    action:
+      - action: script.laundry_live_activity
+        data:
+          target: "{{ states('input_select.washer_activity_target') }}"
+          tag: washer_cycle
+          title: "Washer"
+          stage: >
+            {{ {'weight_sensing':'Sensing load','wash':'Washing','rinse':'Rinsing','spin':'Spinning','finish':'Finishing'}[trigger.to_state.state] }}
+          icon: "mdi:washing-machine"
+          color: "#2196F3"
+          finish: >
+            {{ as_timestamp(states('sensor.washer_washer_completion_time'), default=0) | int }}
+
+  - alias: LAUNDRY - Dryer live activity stages
+    id: a1b2c3d4-laun-drye-liveactivity01
+    mode: queued
+    max: 6
+    trigger:
+      - trigger: state
+        entity_id: sensor.dryer_dryer_job_state
+    condition:
+      # Only while this machine's cycle is being tracked, and only for a stage
+      # we have a name for -- this sensor also passes through none, unknown
+      # and unavailable as the machine powers down.
+      - condition: state
+        entity_id: input_boolean.dryer_running
+        state: 'on'
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: input_select.dryer_activity_target
+            state: none
+      - condition: template
+        value_template: >
+          {{ trigger.to_state.state in {'drying':'Drying','cooling':'Cooling down','finished':'Finished'} }}
+    action:
+      - action: script.laundry_live_activity
+        data:
+          target: "{{ states('input_select.dryer_activity_target') }}"
+          tag: dryer_cycle
+          title: "Dryer"
+          stage: >
+            {{ {'drying':'Drying','cooling':'Cooling down','finished':'Finished'}[trigger.to_state.state] }}
+          icon: "mdi:tumble-dryer"
+          color: "#FF9800"
+          finish: >
+            {{ as_timestamp(states('sensor.dryer_dryer_completion_time'), default=0) | int }}
