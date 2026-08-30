@@ -194,6 +194,18 @@ new-theme:
           border-radius: 16px !important;
           box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25) !important;
         }
+        /* Opt out of the glass treatment entirely. Cards nested inside a
+           vertical-stack-in-card need this or they stack a second translucent
+           layer on the container's and read as grey. Replaces the same five
+           declarations repeated inline on every such card. */
+        :host(.plain) ha-card {
+          background: none !important;
+          background-color: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+        }
         /* Top nav chip centering */
         :host(.top-nav-icons) ha-card {
           --chip-padding: 0px 10px;

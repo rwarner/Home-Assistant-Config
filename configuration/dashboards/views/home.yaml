@@ -613,40 +613,35 @@ cards:
                 icon: mdi:brightness-5
                 icon_color: deep-purple
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Nursery"
                 secondary: "{{ states('sensor.nursery_motion_sensor_illuminance') }} lx"
                 icon: mdi:brightness-5
                 icon_color: pink
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Office"
                 secondary: "{{ states('sensor.ryans_office_motion_sensor_illuminance') }} lx"
                 icon: mdi:brightness-5
                 icon_color: blue
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Movie Room"
                 secondary: "{{ states('sensor.movie_room_motion_sensor_illuminance') }} lx"
                 icon: mdi:brightness-5
                 icon_color: red
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
               - type: custom:mushroom-template-card
                 primary: "Laundry"
                 secondary: "{{ states('sensor.laundry_motion_sensor_illuminance') }} lx"
                 icon: mdi:brightness-5
                 icon_color: teal
                 card_mod:
-                  style: |
-                    ha-card { background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+                  class: plain
 
       # Spacer for bottom nav clearance
       - type: custom:button-card
