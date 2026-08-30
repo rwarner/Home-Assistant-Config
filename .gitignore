@@ -59,3 +59,6 @@ CLAUDE.md
 
 # Working notes, plans, research, vendored trees -- private, not for git
 docs/
+
+# Local restore point from the card-mod -> UIX migration
+.migration-backup-*/
