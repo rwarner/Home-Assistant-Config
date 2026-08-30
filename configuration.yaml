@@ -66,10 +66,10 @@ lovelace:
 # Enables configuration UI
 config:
 
-http:
-  use_x_forwarded_for: true
-  trusted_proxies:
-    - 127.0.0.1    # Nginx is on the same host
+# http: settings moved into HA's own store on 2026-08-26 (HA 2026.8 migrates
+# them out of YAML). use_x_forwarded_for and trusted_proxies 127.0.0.1/32 for
+# the same-host Nginx are live there and unchanged; the YAML block below them
+# was being ignored, so it is gone. Change these under Settings now, not here.
 
 # View all events in a logbook
 logbook:
