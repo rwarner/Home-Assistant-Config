@@ -37,6 +37,7 @@ live_activity:
     tag: {description: "Activity tag, reused to update it in place"}
     title: {description: "Static header -- cannot change once started"}
     stage: {description: "Short changing text, e.g. the current stage"}
+    detail: {description: "Optional longer body text; falls back to stage. Only visible once the countdown is gone, since chronometer takes over the message line"}
     icon: {description: "mdi slug"}
     color: {description: "Hex colour for the icon and progress bar"}
     finish: {description: "Unix timestamp the job ends, 0 if unknown"}
@@ -56,14 +57,14 @@ live_activity:
         - action: notify.mobile_app_ryans_iphone_13_mini
           data:
             title: "{{ title }}"
-            message: "{{ stage }}"
+            message: "{{ detail | default(stage, true) }}"
             data: "{{ payload }}"
     - if: "{{ target in ['kelly', 'both'] }}"
       then:
         - action: notify.mobile_app_kellys_iphone_15_pro_max
           data:
             title: "{{ title }}"
-            message: "{{ stage }}"
+            message: "{{ detail | default(stage, true) }}"
             data: "{{ payload }}"
 
 live_activity_clear:

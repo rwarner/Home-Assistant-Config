@@ -179,9 +179,31 @@
                      + (states('sensor.ups_estimated_runtime') | int(0) * 60) }}
         - conditions: "{{ trigger.id == 'online' }}"
           sequence:
-            - action: script.live_activity_clear
+            # Finish the card rather than clearing it, so the outage leaves a
+            # record on the Lock Screen instead of just disappearing. finish: 0
+            # drops the chronometer, which frees the message line for the
+            # summary. Apple expires it eight hours after the outage STARTED.
+            - action: script.live_activity
               data:
+                target: both
                 tag: ups_outage
+                title: "Power Outage"
+                stage: "Restored"
+                icon: "mdi:power-plug"
+                color: "#4CAF50"
+                url: /new-dash/stats
+                finish: 0
+                detail: >
+                  {% set secs = (trigger.to_state.last_changed
+                                 - trigger.from_state.last_changed).total_seconds() | int %}
+                  {% set h = secs // 3600 %}
+                  {% set m = (secs % 3600) // 60 %}
+                  Out for
+                  {%- if h > 0 %} {{ h }}h {{ m }}m
+                  {%- elif m > 0 %} {{ m }}m
+                  {%- else %} {{ secs }}s
+                  {%- endif %} ·
+                  battery {{ states('sensor.ups_battery_charge') | float(0) | round(0) }}%
             - action: notify.ryan_devices
               data:
                 title: "✅ Home Power Restored"

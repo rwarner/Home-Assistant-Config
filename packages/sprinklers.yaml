@@ -463,9 +463,36 @@ script:
                     minutes: "{{ run_time }}"
 
       # 8. Done notification
-      - action: script.live_activity_clear
+      #
+      # Update the card to a finished state rather than clearing it. Sending
+      # finish: 0 drops the chronometer, which frees the message line for the
+      # summary -- while a countdown is running it is hidden. The cycle ends
+      # around 08:05 from an 03:33 start, and Apple expires the activity eight
+      # hours after it STARTED, so the finished card sits there through the
+      # morning and is gone by about 11:30 without anything having to clear it.
+      - action: script.live_activity
         data:
+          target: ryan
           tag: sprinkler_cycle
+          title: "Sprinklers"
+          stage: "Complete"
+          icon: "mdi:sprinkler-variant"
+          color: "#4CAF50"
+          url: /new-dash/sprinklers
+          finish: 0
+          detail: >
+            {% set ns = namespace(mins=0, zones=0) %}
+            {% for z in zone_order %}
+              {% set t = (sprinkler_times[z - 1] * final_multiplier) | round(0) | int %}
+              {% if t > 0 %}
+                {% set ns.mins = ns.mins + t %}
+                {% set ns.zones = ns.zones + 1 %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.zones }} zones ·
+            {%- if ns.mins >= 60 %} {{ ns.mins // 60 }}h {{ ns.mins % 60 }}m
+            {%- else %} {{ ns.mins }}m{% endif %} ·
+            {{ final_multiplier | round(2) }}× multiplier
       - action: notify.ryan_devices
         data:
           title: "💧 Sprinklers Done"

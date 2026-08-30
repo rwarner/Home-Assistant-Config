@@ -64,13 +64,35 @@ script:
     alias: "Announce Washer Done"
     mode: single
     sequence:
+      # Finish the card rather than clearing it, matching the sprinkler and
+      # outage cards. finish: 0 drops the chronometer, which frees the message
+      # line for the summary. Apple expires it eight hours after the cycle
+      # started, so it sits there for the rest of the day and then goes.
+      #
+      # This runs BEFORE the boolean is turned off: its last_changed is the
+      # only record of when the cycle started, and turning it off resets that.
+      # The boolean goes on five minutes into the run, so the figure is tracked
+      # time rather than wall-clock, which is close enough to be useful.
+      - action: script.live_activity
+        data:
+          target: "{{ states('input_select.washer_activity_target') }}"
+          tag: washer_cycle
+          title: "Washer"
+          stage: "Complete"
+          icon: "mdi:washing-machine"
+          color: "#4CAF50"
+          finish: 0
+          detail: >
+            {% set secs = (now() - states.input_boolean.washer_running.last_changed)
+                          .total_seconds() | int %}
+            {% set h = secs // 3600 %}{% set mn = (secs % 3600) // 60 %}
+            Complete · ran
+            {%- if h > 0 %} {{ h }}h {{ mn }}m
+            {%- else %} {{ mn }}m{% endif %}
+
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.washer_running
-
-      - action: script.live_activity_clear
-        data:
-          tag: washer_cycle
       - action: input_select.select_option
         target:
           entity_id: input_select.washer_activity_target
@@ -91,13 +113,35 @@ script:
     alias: "Announce Dryer Done"
     mode: single
     sequence:
+      # Finish the card rather than clearing it, matching the sprinkler and
+      # outage cards. finish: 0 drops the chronometer, which frees the message
+      # line for the summary. Apple expires it eight hours after the cycle
+      # started, so it sits there for the rest of the day and then goes.
+      #
+      # This runs BEFORE the boolean is turned off: its last_changed is the
+      # only record of when the cycle started, and turning it off resets that.
+      # The boolean goes on five minutes into the run, so the figure is tracked
+      # time rather than wall-clock, which is close enough to be useful.
+      - action: script.live_activity
+        data:
+          target: "{{ states('input_select.dryer_activity_target') }}"
+          tag: dryer_cycle
+          title: "Dryer"
+          stage: "Complete"
+          icon: "mdi:tumble-dryer"
+          color: "#4CAF50"
+          finish: 0
+          detail: >
+            {% set secs = (now() - states.input_boolean.dryer_running.last_changed)
+                          .total_seconds() | int %}
+            {% set h = secs // 3600 %}{% set mn = (secs % 3600) // 60 %}
+            Complete · ran
+            {%- if h > 0 %} {{ h }}h {{ mn }}m
+            {%- else %} {{ mn }}m{% endif %}
+
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.dryer_running
-
-      - action: script.live_activity_clear
-        data:
-          tag: dryer_cycle
       - action: input_select.select_option
         target:
           entity_id: input_select.dryer_activity_target
