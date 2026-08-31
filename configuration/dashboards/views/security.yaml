@@ -49,13 +49,13 @@ cards:
                 name: Front Door
                 icon: mdi:door
                 card_mod:
-                  class: plain
+                  class: surface
               - type: custom:mushroom-lock-card
                 entity: lock.basement_door_deadbolt
                 name: Basement Door
                 icon: mdi:door
                 card_mod:
-                  class: plain
+                  class: surface
 
       # ----------- Doors Status -----------
       - type: custom:vertical-stack-in-card

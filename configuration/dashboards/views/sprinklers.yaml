@@ -55,7 +55,7 @@ cards:
             cards:
               - type: custom:mushroom-template-card
                 card_mod:
-                  class: plain
+                  class: tappable
                 primary: 3 min
                 secondary: pattern
                 icon: mdi:eye-outline
@@ -70,7 +70,7 @@ cards:
                     value: 3
               - type: custom:mushroom-template-card
                 card_mod:
-                  class: plain
+                  class: tappable
                 primary: 15 min
                 secondary: soak
                 icon: mdi:water-outline
@@ -85,7 +85,7 @@ cards:
                     value: 15
               - type: custom:mushroom-template-card
                 card_mod:
-                  class: plain
+                  class: tappable
                 primary: 35 min
                 secondary: catch test
                 icon: mdi:cup-outline
@@ -100,7 +100,7 @@ cards:
                     value: 35
               - type: custom:mushroom-template-card
                 card_mod:
-                  class: plain
+                  class: tappable
                 primary: 60 min
                 secondary: full
                 icon: mdi:water
@@ -128,7 +128,7 @@ cards:
               # so the button must say so rather than looking tappable.
               - type: custom:mushroom-template-card
                 card_mod:
-                  class: plain
+                  class: tappable
                 primary: >
                   {% set ns = namespace(on=0) %}
                   {% for z in range(1, 8) %}
@@ -159,7 +159,7 @@ cards:
 
               - type: custom:mushroom-template-card
                 card_mod:
-                  class: plain
+                  class: tappable
                 primary: Stop All
                 secondary: >
                   {% set ns = namespace(any=false) %}

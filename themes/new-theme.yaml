@@ -212,6 +212,51 @@ new-theme:
           backdrop-filter: none !important;
           -webkit-backdrop-filter: none !important;
         }
+        /* Tappable. `plain` strips a card back to nothing, which is right for
+           a label sitting inside a container but wrong for anything you are
+           meant to press -- it reads as text. This gives back just enough to
+           say "button": a surface a shade lighter than the container it sits
+           on, a hairline edge, and a press response.
+
+           The press feedback is the part that actually sells it. A static
+           panel can look like a button; only something that reacts to a
+           finger proves it is one. */
+        /* `surface` is `tappable` without the press response: for a card that
+           CONTAINS controls rather than being one -- a lock card with its own
+           Lock/Unlock buttons, a select, a slider. It earns the same definition
+           and inset so it does not vanish into the panel, but shrinking on
+           press would promise an action the card body does not perform. The
+           press feedback belongs to whatever inside it is actually pressable. */
+        :host(.surface) ha-card,
+        ha-card.surface,
+        :host(.tappable) ha-card,
+        ha-card.tappable {
+          background: rgba(255, 255, 255, 0.06) !important;
+          border: 1px solid rgba(255, 255, 255, 0.11) !important;
+          border-radius: 14px !important;
+          /* Inset from the container's edge. A button whose border runs into
+             the edge of the panel it sits in reads as part of the panel; the
+             gap is what separates it. Applied per button rather than as
+             container padding so it travels with the class wherever it is
+             used, and so the labels either side of it stay full width.
+
+             Kept deliberately small because a horizontal margin DOUBLES at
+             every internal boundary: two buttons side by side in a grid put
+             3px + 3px between them on top of the grid's own gap, while the
+             outer edges get 3px. Container padding would give an even inset,
+             but it would have to be repeated on every section instead of
+             riding along with the class. */
+          margin: 2px 3px !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          transition: background 120ms ease, transform 120ms ease !important;
+        }
+        :host(.tappable) ha-card:active,
+        ha-card.tappable:active {
+          background: rgba(255, 255, 255, 0.14) !important;
+          transform: scale(0.97);
+        }
         /* Bottom nav buttons. The background has to come through a custom
            property: button-card writes styles.card as a plain inline style,
            and the glass rule above is !important, which beats inline. So the
