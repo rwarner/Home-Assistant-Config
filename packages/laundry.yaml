@@ -80,7 +80,7 @@ script:
           title: "Washer"
           stage: "Complete"
           icon: "mdi:washing-machine"
-          color: "#4CAF50"
+          state: done
           finish: 0
           detail: >
             {% set secs = (now() - states.input_boolean.washer_running.last_changed)
@@ -129,7 +129,7 @@ script:
           title: "Dryer"
           stage: "Complete"
           icon: "mdi:tumble-dryer"
-          color: "#4CAF50"
+          state: done
           finish: 0
           detail: >
             {% set secs = (now() - states.input_boolean.dryer_running.last_changed)
@@ -208,7 +208,8 @@ automation:
           stage: >
             {{ {'weight_sensing':'Sensing load','wash':'Washing','rinse':'Rinsing','spin':'Spinning','finish':'Finishing'}[states('sensor.washer_washer_job_state')] }}
           icon: "mdi:washing-machine"
-          color: "#2196F3"
+          state: running
+          silent: true
           finish: >
             {{ as_timestamp(states('sensor.washer_washer_completion_time'), default=0) | int }}
 
@@ -271,7 +272,8 @@ automation:
           stage: >
             {{ {'drying':'Drying','cooling':'Cooling down','finished':'Finished'}[states('sensor.dryer_dryer_job_state')] }}
           icon: "mdi:tumble-dryer"
-          color: "#FF9800"
+          state: running
+          silent: true
           finish: >
             {{ as_timestamp(states('sensor.dryer_dryer_completion_time'), default=0) | int }}
 
@@ -421,7 +423,8 @@ automation:
           stage: >
             {{ {'weight_sensing':'Sensing load','wash':'Washing','rinse':'Rinsing','spin':'Spinning','finish':'Finishing'}[trigger.to_state.state] }}
           icon: "mdi:washing-machine"
-          color: "#2196F3"
+          state: running
+          silent: true
           finish: >
             {{ as_timestamp(states('sensor.washer_washer_completion_time'), default=0) | int }}
 
@@ -456,6 +459,7 @@ automation:
           stage: >
             {{ {'drying':'Drying','cooling':'Cooling down','finished':'Finished'}[trigger.to_state.state] }}
           icon: "mdi:tumble-dryer"
-          color: "#FF9800"
+          state: running
+          silent: true
           finish: >
             {{ as_timestamp(states('sensor.dryer_dryer_completion_time'), default=0) | int }}

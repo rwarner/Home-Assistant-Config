@@ -159,10 +159,13 @@
                 stage: "{{ trigger.json.stage | default('', true) }}"
                 detail: "{{ trigger.json.message | default('', true) }}"
                 icon: "{{ trigger.json.icon | default('mdi:filmstrip', true) }}"
-                color: >
+                state: >
                   {% set st = trigger.json.status %}
-                  {{ '#4CAF50' if st == 'live_done'
-                     else '#FF3B30' if st == 'live_fail' else '#5E5CE6' }}
+                  {{ 'done' if st == 'live_done'
+                     else 'fail' if st == 'live_fail' else 'running' }}
+                # Per-film updates through a long batch: routine, so priority 5.
+                # Ignored when the activity starts, which is what we want.
+                silent: true
                 url: /new-dash/stats
                 finish: 0
                 progress: "{{ trigger.json.progress | default(0) | int }}"

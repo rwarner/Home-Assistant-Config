@@ -44,24 +44,54 @@ live_activity:
     stage: {description: "Short changing text, e.g. the current stage"}
     detail: {description: "Optional longer body text; falls back to stage. Only visible once the countdown is gone, since chronometer takes over the message line"}
     icon: {description: "mdi slug"}
-    color: {description: "Hex colour for the icon and progress bar"}
+    state: {description: "running | done | warn | fail. Drives the colour -- prefer this over passing a hex"}
+    color: {description: "Optional hex override. Leave unset and let `state` decide"}
+    silent: {description: "true for routine updates: priority 5 instead of 10, so iOS is less likely to throttle. Ignored when the activity starts"}
     finish: {description: "Unix timestamp the job ends, 0 if unknown"}
     progress: {description: "Optional current progress, e.g. items done. Use INSTEAD of finish for a batch with no reliable ETA"}
     progress_max: {description: "Optional total; a bar and percentage appear when both are set"}
     url: {description: "Optional path to open when the card is tapped"}
   sequence:
     - variables:
+        # Colour says STATE, not identity -- the icon already says which thing
+        # this is, so a washer and a sprinkler running both read the same and
+        # you learn four colours instead of nine. Apple's system palette, dark
+        # variants, since the card is dark.
+        #
+        #   running  blue    happening, nothing needed from you
+        #   done     green   finished cleanly
+        #   warn     orange  wants attention: an outage, a window left open
+        #   fail     red     stopped badly
+        #
+        # `color` still overrides for anything genuinely bespoke.
+        palette:
+          running: "#0A84FF"
+          done: "#30D158"
+          warn: "#FF9F0A"
+          fail: "#FF453A"
         payload: >
           {% set base = {'tag': tag, 'live_update': true,
                          'critical_text': stage,
                          'notification_icon': icon,
-                         'notification_icon_color': color,
+                         'notification_icon_color':
+                           color | default('', true)
+                           or palette.get(state | default('running', true), palette['running']),
                          'url': url | default('/new-dash/home', true)} %}
           {# every optional field needs `default` before a filter: HA's Jinja is
              strict about undefined NAMES, and `| int(0)` only supplies a
              fallback for a bad VALUE, not for a variable that was never passed #}
           {% set fin = finish | default(0) | int %}
           {% set pmax = progress_max | default(0) | int %}
+          {# warn and fail tint the whole card, not just the icon: an outage, an
+             open window or a dead job should be unmistakable without reading
+             it. The tint matches the icon's colour family rather than being
+             red for both, so an amber warning does not sit on a red card.
+             running and done keep the default black -- a card shouting for
+             attention only works if the ordinary ones do not. #}
+          {% set tint = {'warn': '#2A1B00', 'fail': '#2C0B0B'} %}
+          {% set base = dict(base, background_color=tint[state], text_color='#FFFFFF')
+             if (state | default('')) in tint else base %}
+          {% set base = dict(base, silent=true) if silent | default(false) else base %}
           {% set timed = dict(base, chronometer=true, when=fin)
              if fin > (now() | as_timestamp | int) else base %}
           {{ dict(timed, progress=progress | default(0) | int, progress_max=pmax)

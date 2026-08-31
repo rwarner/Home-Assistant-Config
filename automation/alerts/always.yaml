@@ -172,7 +172,7 @@
                 title: "Power Outage"
                 stage: "{{ states('sensor.ups_battery_charge') | float(0) | round(0) }}% battery"
                 icon: "mdi:power-plug-off"
-                color: "#FF9500"
+                state: warn
                 url: /new-dash/stats
                 finish: >
                   {{ (now() | as_timestamp | int)
@@ -190,7 +190,7 @@
                 title: "Power Outage"
                 stage: "Restored"
                 icon: "mdi:power-plug"
-                color: "#4CAF50"
+                state: done
                 url: /new-dash/stats
                 finish: 0
                 detail: >
@@ -256,9 +256,13 @@
         title: "Power Outage"
         stage: "{{ states('sensor.ups_battery_charge') | float(0) | round(0) }}% battery"
         icon: "mdi:power-plug-off"
-        color: >
-          {% set m = states('sensor.ups_estimated_runtime') | int(0) %}
-          {{ '#FF3B30' if m < 15 else '#FF9500' }}
+        # Escalates to the failure colour under fifteen minutes: at that point
+        # it is no longer "the power is out", it is "the server is about to go".
+        state: >
+          {{ 'fail' if (states('sensor.ups_estimated_runtime') | int(0)) < 15 else 'warn' }}
+        # Routine progress, not an alert -- priority 5 so a long outage's worth
+        # of five-minute refreshes cannot get the activity throttled.
+        silent: true
         url: /new-dash/stats
         finish: >
           {{ (now() | as_timestamp | int)
@@ -576,3 +580,58 @@
 #
 # The folder_watcher integration itself is left configured but unused; nothing
 # listens to its events any more.
+
+- alias: ALERT - Windows open Live Activity
+  id: 7b41e0c9-3a52-4d18-9f6b-c8e07a1d2b54
+  mode: queued
+  max: 5
+  max_exceeded: silent
+  # A persistent card naming which windows are open, cleared when the last one
+  # shuts. Neither a countdown nor a batch -- the third shape iOS supports, a
+  # state you want to glance at, which the companion docs give as "a security
+  # alarm state".
+  #
+  # Lives here rather than beside the window announcements in while_home.yaml
+  # because those are deliberately home-only, and an open window matters MORE
+  # when nobody is in: it goes to both phones regardless of presence.
+  #
+  # The trigger renders the SET of open windows, not a count, so it also fires
+  # when one closes as another opens -- a count alone would miss that.
+  triggers:
+    - trigger: template
+      value_template: >
+        {{ expand('binary_sensor.house_windows')
+           | selectattr('state', 'eq', 'on')
+           | map(attribute='name') | sort | join(',') }}
+  actions:
+    - variables:
+        open_windows: >
+          {{ expand('binary_sensor.house_windows')
+             | selectattr('state', 'eq', 'on')
+             | map(attribute='name')
+             | map('replace', ' Sensor', '')
+             | map('replace', ' Window', '')
+             | sort | list }}
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ open_windows | count > 0 }}"
+          sequence:
+            - action: script.live_activity
+              data:
+                target: both
+                tag: windows_open
+                title: "Windows"
+                stage: >
+                  {{ open_windows | count }} open
+                detail: "{{ open_windows | join(', ') }}"
+                icon: "mdi:window-open-variant"
+                state: warn
+                url: /new-dash/security
+                finish: 0
+      default:
+        # Last one shut. Clearing an activity that already expired is a no-op.
+        - action: script.live_activity_clear
+          data:
+            tag: windows_open
+
