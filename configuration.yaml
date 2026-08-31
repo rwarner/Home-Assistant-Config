@@ -93,6 +93,13 @@ recorder:
       - number.*_nspanel_*
       - select.*_nspanel_*
       - button.*_nspanel_*
+    entities:
+      # Derived live-only value: it recomputes whenever load or charge moves,
+      # so it churns about twice as fast as either input, and its history is
+      # worthless -- it is a pure function of two sensors that ARE recorded, so
+      # any past value can be recalculated. Only the current reading matters,
+      # to the outage alert and its Live Activity countdown.
+      - sensor.ups_estimated_runtime
 
 notify:
   - name: ryan_devices
